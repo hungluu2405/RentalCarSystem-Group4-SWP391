@@ -7,13 +7,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/hello")
+@WebServlet("/home")
 public class HelloServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Gửi dữ liệu sang JSP
-        request.setAttribute("message", "Xin chào từ Servlet!");
-        request.getRequestDispatcher("hello.jsp").forward(request, response);
+
+        request.getRequestDispatcher("/view/homePage/home.jsp").forward(request, response);
     }
 }
