@@ -1,7 +1,7 @@
 package util;
 
 import dao.DBContext;
-import dao.UserDAO;
+import dao.implement.UserDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
