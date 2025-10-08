@@ -1,10 +1,7 @@
-package controller;
+package controller.authentication;
 
-import dao.UserDAO;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.nio.charset.StandardCharsets;
-import java.math.BigInteger;
+import dao.implement.UserDAO;
+
 import java.io.IOException;
 import java.sql.Date;
 import jakarta.servlet.ServletException;
