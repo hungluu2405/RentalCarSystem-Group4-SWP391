@@ -1,27 +1,27 @@
 package model;
 
-import java.util.Date;
-
 public class User {
     private int userId;
     private int roleId;
     private String email;
-    private String password;
-    boolean is_email_verified;
-    Date created_at;
+    private String password; // Lưu ý: Trong thực tế, mật khẩu nên được băm (hashed)
+    private String fullName; // Lấy từ bảng USER_PROFILE
+    private String roleName; // Lấy từ bảng ROLE
 
+    // Constructors
     public User() {
     }
 
-    public User(int userId, int roleId, String email, String password, boolean is_email_verified, Date created_at) {
+    public User(int userId, int roleId, String email, String password, String fullName, String roleName) {
         this.userId = userId;
         this.roleId = roleId;
         this.email = email;
         this.password = password;
-        this.is_email_verified = is_email_verified;
-        this.created_at = created_at;
+        this.fullName = fullName;
+        this.roleName = roleName;
     }
 
+    // Getters and Setters
     public int getUserId() {
         return userId;
     }
@@ -54,19 +54,19 @@ public class User {
         this.password = password;
     }
 
-    public boolean isIs_email_verified() {
-        return is_email_verified;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setIs_email_verified(boolean is_email_verified) {
-        this.is_email_verified = is_email_verified;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

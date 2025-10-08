@@ -5,6 +5,7 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    
 
     <groupId>com.carrental</groupId>
     <artifactId>CarRentalSystem</artifactId>
@@ -27,6 +28,7 @@
             <version>5.0.0</version>
             <scope>provided</scope>
         </dependency>
+        
 
         <!-- JSTL for JSP -->
         <dependency>
