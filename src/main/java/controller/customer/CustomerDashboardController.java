@@ -1,13 +1,19 @@
 package controller.customer;
 
 import dao.implement.BookingDAO;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import model.Booking;
+
+// Import model mới và xóa model Booking không cần thiết
+import model.BookingDetail;
 import model.User;
+import model.UserProfile;
 
 @WebServlet("/customer/customerDashboard")
 public class CustomerDashboardController extends HttpServlet {
@@ -18,35 +24,41 @@ public class CustomerDashboardController extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        // TẠO MOCK USER CHO DEMO
+        // Dữ liệu mock user vẫn giữ nguyên để test
         User mockUser = new User();
-        mockUser.setUserId(1);
+        mockUser.setUserId(2);
         mockUser.setEmail("demo@carrental.com");
+        UserProfile mockProfile = new UserProfile();
+        mockProfile.setFullName("Monica Lucas");
+        mockUser.setUserProfile(mockProfile);
         session.setAttribute("user", mockUser);
 
-        // LẤY USER TỪ SESSION
         User user = (User) session.getAttribute("user");
 
-        // (Không cần redirect login nữa trong giai đoạn demo)
-        // if (user == null) {
-        //     response.sendRedirect(request.getContextPath() + "/login.jsp");
-        //     return;
-        // }
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         BookingDAO bookingDAO = new BookingDAO();
 
-        int upcoming = bookingDAO.countByStatus(user.getUserId(), "upcoming");
+        // Các hàm đếm vẫn giữ nguyên
+        int upcoming = bookingDAO.countByStatus(user.getUserId(), "Pending");
         int total = bookingDAO.countByUser(user.getUserId());
-        int cancelled = bookingDAO.countByStatus(user.getUserId(), "cancelled");
+        int cancelled = bookingDAO.countByStatus(user.getUserId(), "Cancelled");
 
-        List<Booking> recentBookings = bookingDAO.getRecentBookings(user.getUserId(), 5);
+        // === THAY ĐỔI CHÍNH NẰM Ở ĐÂY ===
+        // Gọi phương thức mới getRecentBookingDetails để lấy danh sách chi tiết
+        List<BookingDetail> recentBookings = bookingDAO.getRecentBookingDetails(user.getUserId(), 5);
+        // ================================
 
-        request.setAttribute("user", user);
+        // Gửi dữ liệu qua JSP
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
         request.setAttribute("cancelled", cancelled);
-        request.setAttribute("recentBookings", recentBookings);
+        request.setAttribute("recentBookings", recentBookings); // Gửi danh sách chi tiết qua JSP
 
+        // Chuyển tiếp đến file JSP
         request.getRequestDispatcher("/view/customer/customerDashboard.jsp").forward(request, response);
     }
 }
