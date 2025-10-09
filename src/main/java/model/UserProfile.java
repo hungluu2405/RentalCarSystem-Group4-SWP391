@@ -15,6 +15,15 @@ public class UserProfile {
     // Constructors
     public UserProfile() {
     }
+    
+    // Constructor đầy đủ tham số (đây là cái bạn đang thiếu)
+    public UserProfile(String fullName, String phone, Date dob, String gender, String driverLicenseNumber) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.dob = dob;
+        this.gender = gender;
+        this.driverLicenseNumber = driverLicenseNumber;
+    }
 
     // Getters and Setters
     public int getProfileId() {
