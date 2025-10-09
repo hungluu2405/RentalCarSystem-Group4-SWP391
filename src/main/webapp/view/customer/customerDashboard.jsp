@@ -55,7 +55,7 @@
                                 <table class="table de-table">
                                     <thead>
                                     <tr>
-                                        <th scope="col"><span class="fs-12 text-gray">Order ID</span></th>
+<th scope="col"><span class="fs-12 text-gray">Order ID</span></th>
                                         <th scope="col"><span class="fs-12 text-gray">Car Name</span></th>
                                         <th scope="col"><span class="fs-12 text-gray">Pick Up Location</span></th>
                                         <th scope="col"><span class="fs-12 text-gray">Drop Off Location</span></th>
@@ -97,7 +97,7 @@
                                 <div class="d-img">
                                     <img src="${pageContext.request.contextPath}/images/cars/jeep-renegade.jpg" class="img-fluid" alt="">
                                 </div>
-                                <div class="d-info">
+<div class="d-info">
                                     <div class="d-text">
                                         <h4>Jeep Renegade</h4>
                                     </div>
