@@ -353,8 +353,20 @@
                                         <div class="col-lg-4 col-md-6 mb30">
                                             <div class="de-item">
                                                 <div class="d-img">
-                                                    <img src="${pageContext.request.contextPath}/images/cars/${car.imageUrl}" class="img-fluid" alt="${car.brand}">
+                                                    <c:choose>
+                                                        <c:when test="${not empty car.images}">
+                                                            <img src="${pageContext.request.contextPath}/${car.images[0].imageUrl}" 
+                                                                 class="img-fluid" 
+                                                                 alt="Ảnh xe ${car.brand} ${car.model}">
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <img src="${pageContext.request.contextPath}/default.jpg" 
+                                                                 class="img-fluid" 
+                                                                 alt="No Image">
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
+
                                                 <div class="d-info">
                                                     <div class="d-text">
                                                         <%-- DÒNG TIÊU ĐỀ XE --%>
