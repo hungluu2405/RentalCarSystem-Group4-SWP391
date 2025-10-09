@@ -1,7 +1,11 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import model.Address;
@@ -10,20 +14,15 @@ import model.UserProfile;
 
 public class UserDAO extends DBContext {
 
-    public UserDAO() {
-        connection = getConnection(); // bắt buộc có dòng này
-    }
-
-    /**
-     * Kiểm tra thông tin đăng nhập của người dùng bằng email và password.
-     */
+    // Góp ý: Nên chuyển phương thức này sang một lớp tiện ích riêng, ví dụ: SecurityUtils.java
+    // để tách biệt rõ ràng chức năng (DAO chỉ nên thao tác với CSDL).
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashed = md.digest(password.getBytes());
             StringBuilder sb = new StringBuilder();
             for (byte b : hashed) {
-                sb.append(String.format("%02x", b)); // chuyển byte -> hex
+                sb.append(String.format("%02x", b));
             }
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
@@ -31,14 +30,20 @@ public class UserDAO extends DBContext {
         }
     }
 
+    /**
+     * Kiểm tra thông tin đăng nhập.
+     * Cập nhật để trả về đối tượng User đã được liên kết với UserProfile.
+     */
     public User checkLogin(String email, String password) {
-        String sql = "SELECT u.USER_ID, u.ROLE_ID, u.EMAIL, u.PASSWORD, p.FULL_NAME, r.NAME as ROLE_NAME "
-                + "FROM [USER] u "
-                + "JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
-                + "JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
-                + "WHERE u.EMAIL = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        // Lấy tất cả thông tin cần thiết từ cả 3 bảng
+        String sql = "SELECT u.*, p.*, r.NAME as ROLE_NAME "
+                   + "FROM [USER] u "
+                   + "JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
+                   + "JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
+                   + "WHERE u.EMAIL = ?";
+        try (Connection conn = getConnection(); // Sử dụng try-with-resources để tự động đóng kết nối
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
 
@@ -46,19 +51,33 @@ public class UserDAO extends DBContext {
                 String storedHash = rs.getString("PASSWORD");
                 String inputHash = hashPassword(password);
 
-                // So sánh hash trong DB và hash nhập vào
                 if (storedHash.equals(inputHash)) {
-                    return new User(
-                            rs.getInt("USER_ID"),
-                            rs.getInt("ROLE_ID"),
-                            rs.getString("EMAIL"),
-                            storedHash,
-                            rs.getString("FULL_NAME"),
-                            rs.getString("ROLE_NAME")
-                    );
+                    // Tạo đối tượng User và UserProfile từ ResultSet
+                    UserProfile profile = new UserProfile();
+                    profile.setProfileId(rs.getInt("PROFILE_ID"));
+                    profile.setUserId(rs.getInt("USER_ID"));
+                    profile.setFullName(rs.getString("FULL_NAME"));
+                    profile.setPhone(rs.getString("PHONE"));
+                    profile.setDob(rs.getDate("DOB"));
+                    profile.setGender(rs.getString("GENDER"));
+                    profile.setDriverLicenseNumber(rs.getString("DRIVER_LICENSE_NUMBER"));
+                    profile.setIsVerified(rs.getBoolean("IS_VERIFIED"));
+
+                    User user = new User();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setRoleId(rs.getInt("ROLE_ID"));
+                    user.setEmail(rs.getString("EMAIL"));
+                    user.setPassword(storedHash); // Lưu lại mật khẩu đã hash
+                    user.setIsEmailVerified(rs.getBoolean("IS_EMAIL_VERIFIED"));
+                    user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                    
+                    // Liên kết profile vào user
+                    user.setUserProfile(profile);
+                    
+                    return user;
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Lỗi khi kiểm tra đăng nhập: " + e.getMessage());
             e.printStackTrace();
         }
@@ -66,123 +85,166 @@ public class UserDAO extends DBContext {
     }
 
     /**
-     * Tìm kiếm người dùng trong database bằng địa chỉ email.
+     * Tìm kiếm người dùng bằng email.
+     * Cũng được cập nhật để trả về đối tượng User hoàn chỉnh.
      */
     public User findUserByEmail(String email) {
-        String sql = "SELECT u.USER_ID, u.ROLE_ID, u.EMAIL, u.PASSWORD, p.FULL_NAME, r.NAME as ROLE_NAME "
-                + "FROM [USER] u "
-                + "LEFT JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
-                + "LEFT JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
-                + "WHERE u.EMAIL = ?";
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
+        String sql = "SELECT u.*, p.* FROM [USER] u LEFT JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID WHERE u.EMAIL = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement st = conn.prepareStatement(sql)) {
+            
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new User(
-                        rs.getInt("USER_ID"),
-                        rs.getInt("ROLE_ID"),
-                        rs.getString("EMAIL"),
-                        rs.getString("PASSWORD"),
-                        rs.getString("FULL_NAME"),
-                        rs.getString("ROLE_NAME")
-                );
+                // Tái sử dụng logic tương tự như checkLogin
+                UserProfile profile = new UserProfile();
+                profile.setProfileId(rs.getInt("PROFILE_ID"));
+                profile.setUserId(rs.getInt("USER_ID"));
+                profile.setFullName(rs.getString("FULL_NAME"));
+                // (Bạn có thể thêm các trường khác của profile nếu cần)
+
+                User user = new User();
+                user.setUserId(rs.getInt("USER_ID"));
+                user.setRoleId(rs.getInt("ROLE_ID"));
+                user.setEmail(rs.getString("EMAIL"));
+                user.setPassword(rs.getString("PASSWORD"));
+                user.setIsEmailVerified(rs.getBoolean("IS_EMAIL_VERIFIED"));
+                user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                
+                user.setUserProfile(profile);
+                return user;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     /**
-     * Đăng ký người dùng mới từ form.
+     * Đăng ký người dùng mới.
+     * Cập nhật signature và logic để phù hợp với model mới.
      */
-    public boolean registerUser(User user, UserProfile profile, Address address) {
-        if (findUserByEmail(user.getEmail()) != null) {
-            return false; // Email đã tồn tại
+    public boolean registerUser(User user, Address address) {
+        // Lấy profile từ đối tượng user
+        UserProfile profile = user.getUserProfile();
+        if (profile == null) {
+            // Profile là bắt buộc, không thể đăng ký nếu thiếu
+            return false; 
         }
 
-        String insertUserSql = "INSERT INTO [USER] (ROLE_ID, EMAIL, PASSWORD, IS_EMAIL_VERIFIED) VALUES (?, ?, ?, 1)";
-
-        String insertProfileSql = "INSERT INTO USER_PROFILE (USER_ID, FULL_NAME, PHONE, DOB, GENDER, DRIVER_LICENSE_NUMBER) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertUserSql = "INSERT INTO [USER] (ROLE_ID, EMAIL, PASSWORD, IS_EMAIL_VERIFIED, CREATED_AT) VALUES (?, ?, ?, ?, ?)";
+        String insertProfileSql = "INSERT INTO USER_PROFILE (USER_ID, FULL_NAME, PHONE, DOB, GENDER, DRIVER_LICENSE_NUMBER, IS_VERIFIED) VALUES (?, ?, ?, ?, ?, ?, ?)";
         String insertAddressSql = "INSERT INTO ADDRESS (USER_ID, ADDRESS_LINE, CITY, PROVINCE, POSTAL_CODE, COUNTRY) VALUES (?, ?, ?, ?, ?, ?)";
-
+        
+        Connection conn = null;
         try {
-            connection.setAutoCommit(false); // Bắt đầu transaction
+            conn = getConnection();
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
             // 1. Thêm vào bảng USER
-            PreparedStatement userSt = connection.prepareStatement(insertUserSql, PreparedStatement.RETURN_GENERATED_KEYS);
-            userSt.setInt(1, user.getRoleId()); // dùng role id được truyền từ servlet
+            try (PreparedStatement userSt = conn.prepareStatement(insertUserSql, Statement.RETURN_GENERATED_KEYS)) {
+                userSt.setInt(1, user.getRoleId());
+                userSt.setString(2, user.getEmail());
+                userSt.setString(3, user.getPassword());
+                userSt.setBoolean(4, user.isIsEmailVerified()); // Lấy từ object
+                userSt.setTimestamp(5, user.getCreatedAt());   // Lấy từ object
+                userSt.executeUpdate();
 
-            userSt.setString(2, user.getEmail());
-            userSt.setString(3, user.getPassword());
-            userSt.executeUpdate();
+                try (ResultSet generatedKeys = userSt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int newUserId = generatedKeys.getInt(1);
 
-            ResultSet generatedKeys = userSt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int newUserId = generatedKeys.getInt(1);
+                        // 2. Thêm vào bảng USER_PROFILE
+                        try (PreparedStatement profileSt = conn.prepareStatement(insertProfileSql)) {
+                            profileSt.setInt(1, newUserId);
+                            profileSt.setString(2, profile.getFullName());
+                            profileSt.setString(3, profile.getPhone());
+                            profileSt.setDate(4, profile.getDob());
+                            profileSt.setString(5, profile.getGender());
+                            profileSt.setString(6, profile.getDriverLicenseNumber());
+                            profileSt.setBoolean(7, profile.isIsVerified()); // Thêm trường isVerified
+                            profileSt.executeUpdate();
+                        }
 
-                // 2. Thêm vào bảng USER_PROFILE
-                PreparedStatement profileSt = connection.prepareStatement(insertProfileSql);
-                profileSt.setInt(1, newUserId);
-                profileSt.setString(2, profile.getFullName());
-                profileSt.setString(3, profile.getPhone());
-                profileSt.setDate(4, profile.getDob());
-                profileSt.setString(5, profile.getGender());
-                profileSt.setString(6, profile.getDriverLicenseNumber());
-                profileSt.executeUpdate();
+                        // 3. Thêm vào bảng ADDRESS (Nếu có)
+                        if (address != null) {
+                            try (PreparedStatement addressSt = conn.prepareStatement(insertAddressSql)) {
+                                addressSt.setInt(1, newUserId);
+                                addressSt.setString(2, address.getAddressLine());
+                                addressSt.setString(3, address.getCity());
+                                addressSt.setString(4, address.getProvince()); // Giả sử lớp Address có getProvince()
+                                addressSt.setString(5, address.getPostalCode());
+                                addressSt.setString(6, address.getCountry());
+                                addressSt.executeUpdate();
+                            }
+                        }
 
-                // 3. Thêm vào bảng ADDRESS
-                PreparedStatement addressSt = connection.prepareStatement(insertAddressSql);
-                addressSt.setInt(1, newUserId);
-                addressSt.setString(2, address.getAddressLine());
-                addressSt.setString(3, address.getCity());
-                addressSt.setString(4, address.getProvince());
-                addressSt.setString(5, address.getPostalCode());
-                addressSt.setString(6, address.getCountry());
-                addressSt.executeUpdate();
-
-                connection.commit(); // Hoàn tất transaction
-                return true;
+                        conn.commit(); // Hoàn tất transaction
+                        return true;
+                    }
+                }
             }
-        } catch (Exception e) {
-            try {
-                connection.rollback(); // Hoàn tác nếu có lỗi
-            } catch (Exception ex) {
-                ex.printStackTrace();
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Hoàn tác nếu có lỗi
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
             e.printStackTrace();
         } finally {
-            try {
-                connection.setAutoCommit(true); // Trả lại trạng thái mặc định
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true); // Trả lại trạng thái mặc định
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return false;
     }
-
+    
+    /**
+     * Thay đổi mật khẩu cho người dùng.
+     * @param email Email của người dùng
+     * @param oldPassword Mật khẩu cũ (chưa hash)
+     * @param newPassword Mật khẩu mới (chưa hash)
+     * @return true nếu đổi thành công, false nếu mật khẩu cũ không đúng.
+     */
     public boolean changePassword(String email, String oldPassword, String newPassword) {
-        try {
-            String sqlSelect = "SELECT PASSWORD FROM [USER] WHERE EMAIL = ?";
-            PreparedStatement psSelect = connection.prepareStatement(sqlSelect);
+        String sqlSelect = "SELECT PASSWORD FROM [USER] WHERE EMAIL = ?";
+        String sqlUpdate = "UPDATE [USER] SET PASSWORD = ? WHERE EMAIL = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement psSelect = conn.prepareStatement(sqlSelect)) {
+
             psSelect.setString(1, email);
             ResultSet rs = psSelect.executeQuery();
+
+            // Kiểm tra xem người dùng có tồn tại không và lấy mật khẩu đã hash
             if (rs.next()) {
-                String hashOld = rs.getString("PASSWORD");
-                if (hashOld.equals(hashPassword(oldPassword))) {
-                    String sqlUpdate = "UPDATE [USER] SET PASSWORD = ? WHERE EMAIL = ?";
-                    PreparedStatement psUpdate = connection.prepareStatement(sqlUpdate);
-                    psUpdate.setString(1, hashPassword(newPassword));
-                    psUpdate.setString(2, email);
-                    psUpdate.executeUpdate();
-                    return true;
+                String storedHashedPassword = rs.getString("PASSWORD");
+                String hashedOldPassword = hashPassword(oldPassword); // Hash mật khẩu cũ người dùng nhập vào
+
+                // So sánh mật khẩu cũ đã hash với mật khẩu trong DB
+                if (storedHashedPassword.equals(hashedOldPassword)) {
+                    // Nếu khớp, cập nhật mật khẩu mới đã được hash
+                    try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate)) {
+                        psUpdate.setString(1, hashPassword(newPassword)); // Hash mật khẩu mới
+                        psUpdate.setString(2, email);
+                        
+                        int rowsAffected = psUpdate.executeUpdate();
+                        return rowsAffected > 0; // Trả về true nếu có dòng được cập nhật
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        // Trả về false nếu có lỗi hoặc mật khẩu cũ không đúng
         return false;
     }
-
 }

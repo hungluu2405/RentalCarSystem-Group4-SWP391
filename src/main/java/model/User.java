@@ -1,27 +1,24 @@
 package model;
 
+import java.sql.Timestamp; // Sử dụng Timestamp cho CREATED_AT để có cả ngày và giờ
+
 public class User {
     private int userId;
     private int roleId;
     private String email;
-    private String password; // Lưu ý: Trong thực tế, mật khẩu nên được băm (hashed)
-    private String fullName; // Lấy từ bảng USER_PROFILE
-    private String roleName; // Lấy từ bảng ROLE
+    private String password;
+    private boolean isEmailVerified; // Thuộc tính này cần setter
+    private Timestamp createdAt;     // Thuộc tính này cần setter
+    
+    // Mối quan hệ: Một User CÓ MỘT UserProfile
+    private UserProfile userProfile; // Thuộc tính này cần setter
 
     // Constructors
     public User() {
     }
-
-    public User(int userId, int roleId, String email, String password, String fullName, String roleName) {
-        this.userId = userId;
-        this.roleId = roleId;
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-        this.roleName = roleName;
-    }
-
-    // Getters and Setters
+    
+    // Getters and Setters (Đầy đủ)
+    
     public int getUserId() {
         return userId;
     }
@@ -54,19 +51,30 @@ public class User {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    // PHƯƠNG THỨC BỊ THIẾU DẪN ĐẾN LỖI
+    public boolean isIsEmailVerified() { // Getter
+        return isEmailVerified;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setIsEmailVerified(boolean isEmailVerified) { // Setter
+        this.isEmailVerified = isEmailVerified;
     }
 
-    public String getRoleName() {
-        return roleName;
+    // PHƯƠNG THỨC BỊ THIẾU DẪN ĐẾN LỖI
+    public Timestamp getCreatedAt() { // Getter
+        return createdAt;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setCreatedAt(Timestamp createdAt) { // Setter
+        this.createdAt = createdAt;
+    }
+
+    // PHƯƠNG THỨC BỊ THIẾU DẪN ĐẾN LỖI
+    public UserProfile getUserProfile() { // Getter
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) { // Setter
+        this.userProfile = userProfile;
     }
 }
