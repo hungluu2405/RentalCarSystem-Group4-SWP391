@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 /**
  *
  * @author ADMIN
@@ -206,20 +207,18 @@ public abstract class GenericDAO<T> extends DBContext {
      * @return
      * @throws SQLException
      */
+    // Thêm 2 import này vào đầu file GenericDAO.java nếu chưa có
+
+
     private static Object getFieldValue(ResultSet rs, Field field) throws SQLException {
 
         Class<?> fieldType = field.getType();
         String fieldName = field.getName();
 
-        // Kiểm tra xem fieldType có phải là một collection (như List, Set, ...) hay không
-        if (Collection.class.isAssignableFrom(fieldType)) {
-            return null; // Bỏ qua và không xử lý gì nữa
-        } // Kiểm tra xem fieldType có phải là một Map hay không
-        else if (Map.class.isAssignableFrom(fieldType)) {
-            return null; // Bỏ qua và không xử lý gì nữa
+        if (Collection.class.isAssignableFrom(fieldType) || Map.class.isAssignableFrom(fieldType)) {
+            return null;
         }
 
-        // Kiểm tra kiểu dữ liệu và convert sang đúng kiểu
         if (fieldType == String.class) {
             return rs.getString(fieldName);
         } else if (fieldType == int.class || fieldType == Integer.class) {
@@ -232,8 +231,19 @@ public abstract class GenericDAO<T> extends DBContext {
             return rs.getBoolean(fieldName);
         } else if (fieldType == float.class || fieldType == Float.class) {
             return rs.getFloat(fieldName);
-        } else if ( fieldType == Timestamp.class) {
+        } else if (fieldType == Timestamp.class) {
             return rs.getTimestamp(fieldName);
+
+            // --- BỔ SUNG PHẦN NÀY ---
+        } else if (fieldType == LocalDate.class) {
+            // Lấy kiểu DATE từ SQL và chuyển thành LocalDate
+            return rs.getObject(fieldName, LocalDate.class);
+
+        } else if (fieldType == LocalDateTime.class) {
+            // Lấy kiểu DATETIME/DATETIME2/TIMESTAMP từ SQL và chuyển thành LocalDateTime
+            return rs.getObject(fieldName, LocalDateTime.class);
+            // ----------------------
+
         } else {
             return rs.getObject(fieldName);
         }
