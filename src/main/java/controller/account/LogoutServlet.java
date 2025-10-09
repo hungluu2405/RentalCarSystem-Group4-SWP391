@@ -1,4 +1,6 @@
-package controller.authentication;
+
+package controller.account;
+
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;

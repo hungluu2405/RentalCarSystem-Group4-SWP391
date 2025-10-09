@@ -1,4 +1,6 @@
-package controller.authentication;
+
+package controller.account;
+
 
 import dao.implement.UserDAO;
 import java.io.IOException;

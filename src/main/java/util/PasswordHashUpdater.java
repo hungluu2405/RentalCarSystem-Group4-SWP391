@@ -24,7 +24,7 @@ public class PasswordHashUpdater {
 
                 // Chỉ hash nếu mật khẩu chưa được mã hóa (độ dài ngắn)
                 if (plainPassword != null && plainPassword.length() < 64) {
-                    String hashed = UserDAO.hashPassword(plainPassword);
+                    String hashed = SecurityUtils.hashPassword(plainPassword);
                     PreparedStatement updateStmt = conn.prepareStatement(updateSQL);
                     updateStmt.setString(1, hashed);
                     updateStmt.setInt(2, userId);

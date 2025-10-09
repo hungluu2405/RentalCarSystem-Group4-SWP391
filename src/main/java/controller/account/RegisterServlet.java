@@ -1,54 +1,50 @@
-package controller.authentication;
+
+
+
+
+
+package controller.account;
 
 import dao.implement.UserDAO;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Random;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Address;
 import model.User;
 import model.UserProfile;
+import util.EmailUtil;
+import util.ResetCodeStore;
 
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
+@WebServlet(urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Lấy thông tin tài khoản
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String rePassword = request.getParameter("re_password");
-
-        // Lấy thông tin cá nhân
+        // ... Lấy tất cả các trường khác từ form ...
         String fullName = request.getParameter("full_name");
         String phone = request.getParameter("phone");
         String dobString = request.getParameter("dob");
         String gender = request.getParameter("gender");
         String licenseNumber = request.getParameter("driver_license_number");
-
-        // Lấy thông tin địa chỉ
         String addressLine = request.getParameter("address_line");
         String city = request.getParameter("city");
         String country = request.getParameter("country");
         String postalCode = request.getParameter("postal_code");
-
-        if (!password.equals(rePassword)) {
-            request.setAttribute("error", "Passwords do not match!");
-            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
-            return;
-        }
-
+        
         UserDAO userDAO = new UserDAO();
         if (userDAO.findUserByEmail(email) != null) {
             request.setAttribute("error", "Email already exists!");
@@ -56,31 +52,24 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        String roleIdStr = request.getParameter("role_id");
-        int roleId = 3; // mặc định là Customer
-        if (roleIdStr != null && !roleIdStr.isEmpty()) {
-            roleId = Integer.parseInt(roleIdStr);
-        }
-
-        String hashedPassword = UserDAO.hashPassword(password);
-        // Tạo các đối tượng model
         User user = new User();
         user.setEmail(email);
-        user.setPassword(hashedPassword);
-        user.setRoleId(roleId);
+        user.setPassword(password);
 
         Date dob = (dobString != null && !dobString.isEmpty()) ? Date.valueOf(dobString) : null;
         UserProfile profile = new UserProfile(fullName, phone, dob, gender, licenseNumber);
+        Address address = new Address(addressLine, city, city, postalCode, country);
 
-        Address address = new Address(addressLine, city, city, postalCode, country); // Dùng city cho cả city và province
+        String otp = String.format("%06d", new Random().nextInt(999999));
+        ResetCodeStore.saveCode(email, otp);
 
-        boolean isSuccess = userDAO.registerUser(user, profile, address);
+        EmailUtil.sendEmail(email, "Verify Your Email for Rentaly", "Your verification code is: <h2><b>" + otp + "</b></h2>");
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("temp_user", user);
+        session.setAttribute("temp_profile", profile);
+        session.setAttribute("temp_address", address);
 
-        if (isSuccess) {
-            response.sendRedirect(request.getContextPath() + "/login?register=success");
-        } else {
-            request.setAttribute("error", "An error occurred during registration. Please try again.");
-            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
-        }
+        response.sendRedirect(request.getContextPath() + "/verify-email?email=" + email);
     }
 }

@@ -115,15 +115,8 @@
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/index-6.html">Homepage 6</a></li>
                                             </ul>
                                         </li>
-                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/cars.jsp">Cars</a>
-                                            <ul>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars.jsp">Cars List 1</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/02_dark-cars.html">Cars List 1 Dark</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars-list.html">Cars List 2</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/02_dark-cars-list.html">Cars List 2 Dark</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/car-single.html">Cars Single</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/02_dark-car-single.html">Cars Single Dark</a></li>
-                                            </ul>
+                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Cars</a>
+                                            
                                         </li>
                                         <li><a class="menu-item" href="${pageContext.request.contextPath}/quick-booking.html">Booking</a>
                                             <ul>
