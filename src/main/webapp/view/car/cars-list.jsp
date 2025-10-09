@@ -1,146 +1,320 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="zxx">
+    <head>
+        <title>Rentaly - Cars List</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
+        <style>
+            /* Layout danh sách xe */
+            .de-item-list {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                overflow: hidden;
+                transition: transform 0.3s;
+                background: #fff;
+            }
+            .de-item-list:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+            .d-img img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+            .d-info {
+                padding: 15px;
+                flex-grow: 1;
+            }
+            .d-text h4 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            .d-atr-group ul {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .d-atr-group ul li {
+                flex: 1 1 45%;
+                background: #f7f7f7;
+                padding: 8px;
+                border-radius: 5px;
+                font-size: 0.9rem;
+            }
+            .d-price {
+                padding: 15px;
+                text-align: center;
+                font-weight: bold;
+            }
 
-<jsp:include page="/view/common/customer/_head_and_top_header.jsp" />
+            .btn-main {
+                background-color: #6CC84C; /* xanh lá tươi */
+                color: white;
+                border-radius: 8px;
+                padding: 8px 16px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
 
-<div class="no-bottom no-top" id="content">
-    <div id="top"></div>
-    
-    <!-- Subheader -->
-    <section id="subheader" class="jarallax text-light">
-        <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
-        <div class="center-y relative text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <h1>Cars</h1>
+            .btn-main:hover {
+                background-color: #57A83A; /* xanh lá đậm khi hover */
+            }
+
+
+            /* User menu */
+            .menu_side_area, .de-flex-col, .de-flex {
+                overflow: visible !important;
+            }
+            .my-user-menu {
+                position: relative;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .my-user-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                border: none;
+                background: #f2f2f2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                padding: 0;
+            }
+            .my-user-btn i {
+                font-size: 18px;
+                color: #333;
+            }
+            .my-user-dropdown {
+                position: absolute;
+                top: calc(100% + 6px);
+                right: 0;
+                min-width: 160px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+                padding: 6px 0;
+                z-index: 9999;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-6px);
+                transition: opacity .12s ease, transform .12s ease, visibility .12s;
+                pointer-events: none;
+            }
+            .my-user-dropdown .menu-item {
+                display: block;
+                padding: 10px 14px;
+                color: #333;
+                text-decoration: none;
+                font-size: 14px;
+            }
+            .my-user-dropdown .menu-item:hover {
+                background: #f6f6f6;
+            }
+            .my-user-menu.open .my-user-dropdown,
+            .my-user-menu:hover .my-user-dropdown {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <header class="transparent scroll-light has-topbar">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="de-flex sm-pt10">
+                                <div class="de-flex-col">
+                                    <div id="logo">
+                                        <a href="${pageContext.request.contextPath}/home">
+                                            <img class="logo-1" src="${pageContext.request.contextPath}/images/logo.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="de-flex-col header-col-mid">
+                                    <ul id="mainmenu">
+                                        <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/cars">Cars</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/account-profile">My Account</a></li>
+                                        <li><a href="${pageContext.request.contextPath}/contact">Contact</a></li>
+                                    </ul>
+                                </div>
+                                <div class="de-flex-col">
+                                    <div class="menu_side_area">
+                                        <c:choose>
+                                            <c:when test="${not empty sessionScope.user}">
+                                                <div id="myUserMenu" class="my-user-menu">
+                                                    <button id="myUserBtn" class="my-user-btn" type="button" title="Tài khoản">
+                                                        <i class="fa fa-user"></i>
+                                                    </button>
+                                                    <div class="my-user-dropdown">
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/account-profile">Tài khoản</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password">Đổi mật khẩu</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a>
+                                                    </div>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="${pageContext.request.contextPath}/login" class="btn-main">Sign In</a>
+                                                <a href="${pageContext.request.contextPath}/register" class="btn-main">Sign Up</a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <span id="menu-btn"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </header>
 
-    <!-- Cars Section -->
-    <section id="section-cars" class="pt-4 pb-5">
-        <div class="container">
-            <div class="row">
-                <!-- Sidebar Filter -->
-                <div class="col-lg-3 mb-4">
-                    <form action="${pageContext.request.contextPath}/cars" method="GET" class="p-3" style="background: #f5f5f5; border-radius: 10px;">
-                        <h4 class="mb-3">Filter Cars</h4>
-
-                        <!-- Vehicle Type -->
-                        <div class="mb-3">
-                            <h5>Vehicle Type</h5>
-                            <c:forEach var="type" items="${carTypeList}">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="typeId" id="type_${type.typeId}" value="${type.typeId}" 
-                                        ${param.typeId == type.typeId ? 'checked' : ''}>
-                                    <label class="form-check-label" for="type_${type.typeId}">${type.name}</label>
-                                </div>
-                            </c:forEach>
+            <div class="no-bottom no-top zebra" id="content">
+                <section id="subheader" class="jarallax text-light">
+                    <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
+                    <div class="center-y relative text-center">
+                        <div class="container">
+                            <h1>Cars</h1>
                         </div>
+                    </div>
+                </section>
 
-                        <!-- Brand -->
-                        <div class="mb-3">
-                            <h5>Brand</h5>
-                            <input type="text" name="brand" class="form-control" placeholder="e.g. Toyota" value="${param.brand}">
-                        </div>
-
-                        <!-- Model -->
-                        <div class="mb-3">
-                            <h5>Model</h5>
-                            <input type="text" name="model" class="form-control" placeholder="e.g. Vios" value="${param.model}">
-                        </div>
-
-                        <!-- Capacity -->
-                        <div class="mb-3">
-                            <h5>Capacity</h5>
-                            <input type="number" name="capacity" class="form-control" placeholder="e.g. 4" value="${param.capacity}">
-                        </div>
-
-                        <!-- Price -->
-                        <div class="mb-3">
-                            <h5>Price ($)</h5>
-                            <div class="d-flex gap-2">
-                                <input type="number" name="minPrice" class="form-control" placeholder="Min" value="${param.minPrice}">
-                                <input type="number" name="maxPrice" class="form-control" placeholder="Max" value="${param.maxPrice}">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 mt-2">Filter Cars</button>
-                    </form>
-                </div>
-
-                <!-- Car List -->
-                <div class="col-lg-9">
-                    <div class="row">
-                        <c:if test="${empty carList}">
-                            <div class="col-12">
-                                <div class="alert alert-warning text-center">No cars found matching your criteria.</div>
-                            </div>
-                        </c:if>
-
-                        <c:forEach var="car" items="${carList}">
-                            <div class="col-lg-12 mb-4">
-                                <div class="card shadow-sm border-0 hover-shadow" style="border-radius: 10px; overflow: hidden;">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <img src="${pageContext.request.contextPath}/${not empty car.imageUrl ? car.imageUrl : 'images/cars/default.jpg'}" class="img-fluid" alt="${car.brand} ${car.model}">
+                <section id="section-cars">
+                    <div class="container">
+                        <div class="row">
+                            <!-- Filter sidebar -->
+                            <div class="col-lg-3 mb-4">
+                                <div class="item_filter_group">
+                                    <h4>Vehicle Type</h4>
+                                    <div class="de_form">
+                                        <div class="de_checkbox">
+                                            <input id="vehicle_type_1" type="checkbox" value="Car">
+                                            <label for="vehicle_type_1">Car</label>
                                         </div>
-                                        <div class="col-md-5">
-                                            <div class="card-body">
-                                                <h5 class="card-title">${car.brand} ${car.model}</h5>
-                                                <ul class="list-unstyled mb-0">
-                                                    <li><strong>Seats:</strong> ${car.capacity}</li>
-                                                    <li><strong>Transmission:</strong> ${car.transmission}</li>
-                                                    <li><strong>Fuel:</strong> ${car.fuelType}</li>
-                                                    <li><strong>Type:</strong> ${car.carTypeName}</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3 d-flex flex-column justify-content-center align-items-center p-3">
-                                            <h5 class="text-primary">$${car.pricePerDay}/day</h5>
-                                            <a href="${pageContext.request.contextPath}/car-details?id=${car.carId}" class="btn btn-success mt-2 w-100">Rent Now</a>
+                                        <div class="de_checkbox">
+                                            <input id="vehicle_type_2" type="checkbox" value="Van">
+                                            <label for="vehicle_type_2">Van</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </c:forEach>
+
+                            <!-- Car list -->
+                            <div class="col-lg-9">
+                                <div class="row g-3">
+                                    <c:forEach var="car" items="${carList}">
+                                        <div class="col-md-6 col-lg-4 d-flex">
+                                            <div class="de-item-list">
+                                                <div class="d-img">
+                                                    <img src="${pageContext.request.contextPath}/images/cars/${car.imageUrl}" class="img-fluid" alt="${car.model}">
+                                                </div>
+                                                <div class="d-info">
+                                                    <div class="d-text">
+                                                        <h4>${car.brand} ${car.model}</h4>
+                                                        <div class="d-atr-group">
+                                                            <ul class="d-atr">
+                                                                <li><span>Seats:</span> ${car.capacity}</li>
+                                                                <li><span>Transmission:</span> ${car.transmission}</li>
+                                                                <li><span>Fuel:</span> ${car.fuelType}</li>
+                                                                <li><span>Type:</span> ${car.carTypeName}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-price">
+                                                    Daily rate from <span>$${car.pricePerDay}</span><br>
+                                                    <a class="btn-main" href="car-single.jsp?id=${car.carId}">Rent Now</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
             </div>
+
+            <footer class="text-light">
+                <div class="container text-center">
+                    <p>Copyright 2025 - Rentaly</p>
+                </div>
+            </footer>
         </div>
-    </section>
-</div>
 
-<jsp:include page="/view/common/customer/_footer_and_scripts.jsp" />
+        <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+        <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 
-<style>
-    /* Hover effect pastel */
-    .hover-shadow:hover {
-        transform: translateY(-3px);
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15) !important;
-    }
-    #section-cars .card {
-        background-color: #fff8f0;
-    }
-    #section-cars h5 {
-        color: #333;
-    }
-    #section-cars .btn-primary {
-        background-color: #ff9f80;
-        border: none;
-    }
-    #section-cars .btn-primary:hover {
-        background-color: #ff7f50;
-    }
-    #section-cars .btn-success {
-        background-color: #80cfff;
-        border: none;
-    }
-    #section-cars .btn-success:hover {
-        background-color: #3399ff;
-    }
-</style>
+        <script>
+            // User menu toggle với delay giống /home
+            (function () {
+                var menu = document.getElementById('myUserMenu');
+                if (menu) {
+                    var btn = document.getElementById('myUserBtn');
+                    var hideTimeout = null;
+
+                    btn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        var isOpen = menu.classList.contains('open');
+                        if (isOpen) {
+                            menu.classList.remove('open');
+                            btn.setAttribute('aria-expanded', 'false');
+                        } else {
+                            menu.classList.add('open');
+                            btn.setAttribute('aria-expanded', 'true');
+                        }
+                    });
+
+                    menu.addEventListener('mouseenter', function () {
+                        if (hideTimeout) {
+                            clearTimeout(hideTimeout);
+                            hideTimeout = null;
+                        }
+                        menu.classList.add('open');
+                        btn.setAttribute('aria-expanded', 'true');
+                    });
+
+                    menu.addEventListener('mouseleave', function () {
+                        if (hideTimeout)
+                            clearTimeout(hideTimeout);
+                        hideTimeout = setTimeout(function () {
+                            menu.classList.remove('open');
+                            btn.setAttribute('aria-expanded', 'false');
+                        }, 250); // Delay 250ms giống /home
+                    });
+
+                    document.addEventListener('click', function (e) {
+                        if (!menu.contains(e.target)) {
+                            menu.classList.remove('open');
+                            btn.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+
+                    document.addEventListener('keydown', function (e) {
+                        if (e.key === 'Escape') {
+                            menu.classList.remove('open');
+                            btn.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                }
+            })();
+        </script>
+
+    </body>
+</html>
