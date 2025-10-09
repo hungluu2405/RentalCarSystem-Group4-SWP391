@@ -104,7 +104,7 @@ public class UserDAO extends GenericDAO<User> {
     public boolean registerUser(User user, UserProfile profile, Address address) {
         if (findUserByEmail(user.getEmail()) != null) return false;
 
-        String insertUserSql = "INSERT INTO [USER] (ROLE_ID, EMAIL, PASSWORD) VALUES (?, ?, ?)";
+        String insertUserSql = "INSERT INTO [USER] (ROLE_ID, EMAIL, PASSWORD, IS_EMAIL_VERIFIED) VALUES (?, ?, ?, 1)";
         String insertProfileSql = "INSERT INTO USER_PROFILE (USER_ID, FULL_NAME, PHONE, DOB, GENDER, DRIVER_LICENSE_NUMBER) VALUES (?, ?, ?, ?, ?, ?)";
         String insertAddressSql = "INSERT INTO ADDRESS (USER_ID, ADDRESS_LINE, CITY, PROVINCE, POSTAL_CODE, COUNTRY) VALUES (?, ?, ?, ?, ?, ?)";
         
