@@ -13,7 +13,7 @@ import model.UserProfile;
 import util.SecurityUtils;
 
 public class UserDAO extends GenericDAO<User> {
-    
+
     public UserDAO() {
         connection = getConnection(); // bắt buộc có dòng này
     }
@@ -46,10 +46,10 @@ public class UserDAO extends GenericDAO<User> {
 
     public User checkLogin(String email, String password) {
         String sql = "SELECT u.*, p.FULL_NAME, r.NAME as ROLE_NAME "
-                   + "FROM [USER] u "
-                   + "JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
-                   + "JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
-                   + "WHERE u.EMAIL = ?";
+                + "FROM [USER] u "
+                + "JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
+                + "JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
+                + "WHERE u.EMAIL = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
@@ -63,7 +63,7 @@ public class UserDAO extends GenericDAO<User> {
                     user.setUserId(rs.getInt("USER_ID"));
                     user.setRoleId(rs.getInt("ROLE_ID"));
                     user.setEmail(rs.getString("EMAIL"));
-                    
+
                     UserProfile profile = new UserProfile();
                     profile.setFullName(rs.getString("FULL_NAME"));
                     user.setUserProfile(profile);
@@ -86,11 +86,11 @@ public class UserDAO extends GenericDAO<User> {
                 User user = new User();
                 user.setUserId(rs.getInt("USER_ID"));
                 user.setEmail(rs.getString("EMAIL"));
-                
+
                 UserProfile profile = new UserProfile();
                 profile.setFullName(rs.getString("FULL_NAME"));
                 user.setUserProfile(profile);
-                
+
                 return user;
             }
         } catch (SQLException e) {
@@ -100,14 +100,14 @@ public class UserDAO extends GenericDAO<User> {
     }
 
     // --- CÁC PHƯƠNG THỨC ĐĂNG KÝ VÀ CẬP NHẬT ---
-    
+
     public boolean registerUser(User user, UserProfile profile, Address address) {
         if (findUserByEmail(user.getEmail()) != null) return false;
 
         String insertUserSql = "INSERT INTO [USER] (ROLE_ID, EMAIL, PASSWORD, IS_EMAIL_VERIFIED) VALUES (?, ?, ?, 1)";
         String insertProfileSql = "INSERT INTO USER_PROFILE (USER_ID, FULL_NAME, PHONE, DOB, GENDER, DRIVER_LICENSE_NUMBER) VALUES (?, ?, ?, ?, ?, ?)";
         String insertAddressSql = "INSERT INTO ADDRESS (USER_ID, ADDRESS_LINE, CITY, PROVINCE, POSTAL_CODE, COUNTRY) VALUES (?, ?, ?, ?, ?, ?)";
-        
+
         try {
             connection.setAutoCommit(false);
             int customerRoleId = 2;
@@ -124,7 +124,7 @@ public class UserDAO extends GenericDAO<User> {
                 try (ResultSet generatedKeys = userSt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int newUserId = generatedKeys.getInt(1);
-                        
+
                         try (PreparedStatement profileSt = connection.prepareStatement(insertProfileSql)) {
                             profileSt.setInt(1, newUserId);
                             profileSt.setString(2, profile.getFullName());
@@ -144,7 +144,7 @@ public class UserDAO extends GenericDAO<User> {
                             addressSt.setString(6, address.getCountry());
                             addressSt.executeUpdate();
                         }
-                        
+
                         connection.commit();
                         return true;
                     }
@@ -173,7 +173,7 @@ public class UserDAO extends GenericDAO<User> {
         }
         return false;
     }
-    
+
     public void updatePassword(int userId, String newPassword) {
         String sql = "UPDATE [USER] SET PASSWORD = ?, RESET_TOKEN = NULL, TOKEN_EXPIRY = NULL WHERE USER_ID = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
