@@ -201,6 +201,10 @@
                                         <p style="color:green;">Registration successful! You can now sign in.</p>
                                         <% } %>
 
+                                        <% if ("success".equals(request.getParameter("reset"))) { %>
+                                        <p style="color:green;">Password has been reset successfully. Please log in.</p>
+                                        <% } %>
+
                                         <%-- Hi?n th? thông báo l?i ??ng nh?p --%>
                                         <p style="color:red;">${requestScope.error}</p>
 
@@ -214,6 +218,9 @@
                                                 <input type="password" name="password" id="password" class="form-control" placeholder="Your Password" required />
                                             </div>
 
+                                            <div class="text-end mt-2">
+                                                <a href="${pageContext.request.contextPath}/forgot-password">Forgot Password?</a>
+                                            </div>
                                             <div class="spacer-10"></div>
 
                                             <div id="submit">
@@ -224,6 +231,8 @@
                                         <div class="mt-3 text-center">
                                             <span>Don't have an account? <a href="${pageContext.request.contextPath}/register">Sign Up</a></span>
                                         </div>
+
+                                        <div class="spacer-10"></div>
 
                                         <div class="title-line">Or&nbsp;sign&nbsp;in&nbsp;with</div>
                                         <div class="row g-2">

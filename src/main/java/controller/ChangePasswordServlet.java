@@ -1,6 +1,6 @@
 package controller;
 
-import dao.UserDAO;
+import dao.implement.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -78,3 +78,4 @@ public class ChangePasswordServlet extends HttpServlet {
         }
     }
 }
+
