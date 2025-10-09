@@ -9,16 +9,16 @@ public class User {
     private String password;
     private boolean isEmailVerified; // Thuộc tính này cần setter
     private Timestamp createdAt;     // Thuộc tính này cần setter
-    
+
     // Mối quan hệ: Một User CÓ MỘT UserProfile
     private UserProfile userProfile; // Thuộc tính này cần setter
 
     // Constructors
     public User() {
     }
-    
+
     // Getters and Setters (Đầy đủ)
-    
+
     public int getUserId() {
         return userId;
     }
