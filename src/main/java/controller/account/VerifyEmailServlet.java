@@ -31,7 +31,7 @@ public class VerifyEmailServlet extends HttpServlet {
             User user = (User) session.getAttribute("temp_user");
             UserProfile profile = (UserProfile) session.getAttribute("temp_profile");
             Address address = (Address) session.getAttribute("temp_address");
-            
+
             if (user != null) {
                 UserDAO userDAO = new UserDAO();
                 boolean isSuccess = userDAO.registerUser(user, profile, address);
@@ -44,8 +44,8 @@ public class VerifyEmailServlet extends HttpServlet {
                     request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
                 }
             } else {
-                 request.setAttribute("error", "Session expired. Please register again.");
-                 request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
+                request.setAttribute("error", "Session expired. Please register again.");
+                request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
             }
         } else {
             request.setAttribute("error", "Incorrect or expired code.");
