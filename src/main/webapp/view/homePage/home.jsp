@@ -189,9 +189,9 @@
                                                     </button>
 
                                                     <div class="my-user-dropdown" role="menu" aria-labelledby="myUserBtn">
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/account-profile" role="menuitem">Tài khoản</a>
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Đổi mật khẩu</a>
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Đăng xuất</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/account-profile" role="menuitem">Profile</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Change Password</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Sign Out</a>
                                                     </div>
                                                 </div>
 
