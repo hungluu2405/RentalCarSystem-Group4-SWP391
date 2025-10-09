@@ -286,9 +286,9 @@
                             <div class="col-lg-3">
                                 <div class="de-price text-center">
                                     Rental Price/Day
-                                    <h3>
+                                    <h2>
                                         <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
-                                    </h3>
+                                    </h2>
                                 </div>
                                 <div class="spacer-30"></div>
                                 
