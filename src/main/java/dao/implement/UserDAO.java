@@ -175,7 +175,7 @@ public class UserDAO extends GenericDAO<User> {
     }
 
     public void updatePassword(int userId, String newPassword) {
-        String sql = "UPDATE [USER] SET PASSWORD = ?, RESET_TOKEN = NULL, TOKEN_EXPIRY = NULL WHERE USER_ID = ?";
+        String sql = "UPDATE [USER] SET PASSWORD = ? WHERE USER_ID = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, SecurityUtils.hashPassword(newPassword)); // Mã hóa mật khẩu mới
             st.setInt(2, userId);
