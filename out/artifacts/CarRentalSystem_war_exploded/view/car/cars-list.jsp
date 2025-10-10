@@ -1,12 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="dao.implement.CarDAO, model.CarViewModel, java.util.List" %>
+
+
+
 <%
     CarDAO carDAO = new CarDAO();
 
     String name = request.getParameter("name");
     String brand = request.getParameter("brand");
-    String modelParam = request.getParameter("model");
+    String typeParam = request.getParameter("type");
     String capacity = request.getParameter("capacity");
     String fuel = request.getParameter("fuel");
     String price = request.getParameter("price");
@@ -17,18 +22,19 @@
         try { currentPage = Integer.parseInt(request.getParameter("page")); } catch(Exception e){ currentPage = 1; }
     }
 
-    List<CarViewModel> carList = carDAO.findCars(name, brand, modelParam, capacity, fuel, price, currentPage, pageSize);
-    int totalCars = carDAO.countCars(name, brand, modelParam, capacity, fuel, price);
+    List<CarViewModel> carList = carDAO.findCars(name, brand, typeParam, capacity, fuel, price, currentPage, pageSize);
+    int totalCars = carDAO.countCars(name, brand, typeParam, capacity, fuel, price);
     int totalPages = (int)Math.ceil(totalCars*1.0 / pageSize);
 
+
     List<String> brands = carDAO.getAllBrands();
-    List<String> models = carDAO.getAllModels();
+    List<String> types = carDAO.getAllTypes();
     List<Integer> capacities = carDAO.getAllCapacities();
     List<String> fuels = carDAO.getAllFuelTypes();
 
     request.setAttribute("carList", carList);
     request.setAttribute("brands", brands);
-    request.setAttribute("models", models);
+    request.setAttribute("types", types);
     request.setAttribute("capacities", capacities);
     request.setAttribute("fuels", fuels);
     request.setAttribute("currentPage", currentPage);
@@ -50,6 +56,7 @@
         <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
         <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     </head>
 
     <body>
@@ -101,9 +108,9 @@
                                                     </button>
 
                                                     <div class="my-user-dropdown" role="menu" aria-labelledby="myUserBtn">
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/account-profile" role="menuitem">Tài khoản</a>
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Đổi mật khẩu</a>
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Đăng xuất</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/account-profile" role="menuitem">Profile</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Change Password</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Sign Out</a>
                                                     </div>
                                                 </div>
 
@@ -290,14 +297,18 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Model</label>
-                                                <select name="model" class="form-control">
-                                                    <option value="">All Models</option>
-                                                    <c:forEach var="m" items="${models}">
-                                                        <option value="${m}" ${m==param.model?'selected':''}>${m}</option>
+                                                <label class="form-label">Type</label>
+                                                <select name="type" class="form-control">
+                                                    <option value="">All Types</option>
+                                                    <c:forEach var="t" items="${typeList}">
+                                                        <c:set var="parts" value="${fn:split(t, ':')}" />
+                                                        <option value="${parts[0]}" ${parts[0]==param.type ? 'selected' : ''}>
+                                                            ${parts[1]}
+                                                        </option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
+
 
                                             <div class="mb-3">
                                                 <label class="form-label">Seats</label>
@@ -320,7 +331,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Max Price ($/day)</label>
+                                                <label class="form-label">Max Price (VND/day)</label>
                                                 <input type="number" name="price" class="form-control" value="${param.price}" min="0">
                                             </div>
 
@@ -384,9 +395,11 @@
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div>
                                                                 <span class="fs-6 text-muted">Daily rate from</span>
-                                                                <h5 class="fw-bold mb-0">$${car.pricePerDay}</h5>
+                                                                <h5 class="fw-bold mb-0">
+                                                                    <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
+                                                                </h5>
                                                             </div>
-                                                            <a class="btn-main" href="car-single.jsp?id=${car.carId}">Rent Now</a>
+                                                            <a class="btn-main" href="${pageContext.request.contextPath}/car-single?id=${car.carId}">Rent Now</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -400,7 +413,7 @@
                                         <c:forEach var="i" begin="1" end="${totalPages}">
                                             <li class="page-item ${i==currentPage?'active':''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&model=${param.model}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">${i}</a>
+                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">${i}</a>
                                             </li>
                                         </c:forEach>
                                     </ul>
