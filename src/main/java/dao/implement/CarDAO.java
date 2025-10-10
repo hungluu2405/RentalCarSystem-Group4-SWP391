@@ -10,7 +10,7 @@ import model.CarImage;
 public class CarDAO extends DBContext {
 
     // Lấy danh sách xe có filter và phân trang
-     public List<CarViewModel> findCars(String name, String brand, String typeIdStr,
+    public List<CarViewModel> findCars(String name, String brand, String typeIdStr,
             String capacity, String fuel, String price,
             int page, int pageSize) {
         List<CarViewModel> list = new ArrayList<>();
@@ -209,7 +209,7 @@ public class CarDAO extends DBContext {
         return list;
     }
 
-     public List<String> getAllTypes() {
+    public List<String> getAllTypes() {
         List<String> types = new ArrayList<>();
         String sql = "SELECT TYPE_ID, NAME FROM CAR_TYPE ORDER BY NAME";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
@@ -264,4 +264,43 @@ public class CarDAO extends DBContext {
         }
         return null;
     }
+
+    public List<CarViewModel> findTopBookedCars(int limit) {
+        List<CarViewModel> cars = new ArrayList<>();
+
+        // Ghép trực tiếp biến limit vào TOP (SQL Server không hỗ trợ TOP ?)
+        String sql = "SELECT TOP " + limit + " "
+                + "c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.PRICE_PER_DAY, "
+                + "ct.NAME AS CarTypeName, "
+                + "(SELECT TOP 1 ci.IMAGE_URL FROM CAR_IMAGE ci WHERE ci.CAR_ID = c.CAR_ID ORDER BY ci.IMAGE_ID) AS ImageUrl, "
+                + "COUNT(b.BOOKING_ID) AS booking_count "
+                + "FROM CAR c "
+                + "JOIN CAR_TYPE ct ON c.TYPE_ID = ct.TYPE_ID "
+                + "LEFT JOIN BOOKING b ON c.CAR_ID = b.CAR_ID "
+                + "WHERE c.AVAILABILITY = 1 "
+                + "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.PRICE_PER_DAY, ct.NAME "
+                + "ORDER BY booking_count DESC";
+
+        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
+
+            while (rs.next()) {
+                CarViewModel car = new CarViewModel();
+                car.setCarId(rs.getInt("CAR_ID"));
+                car.setBrand(rs.getString("BRAND"));
+                car.setModel(rs.getString("MODEL"));
+                car.setCapacity(rs.getInt("CAPACITY"));
+                car.setTransmission(rs.getString("TRANSMISSION"));
+                car.setFuelType(rs.getString("FUEL_TYPE"));
+                car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                car.setCarTypeName(rs.getString("CarTypeName"));
+                car.setImageUrl(rs.getString("ImageUrl"));
+                cars.add(car);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cars;
+    }
+
 }
