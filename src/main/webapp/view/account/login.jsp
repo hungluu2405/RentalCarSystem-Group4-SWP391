@@ -237,8 +237,9 @@
                                         <div class="title-line">Or&nbsp;sign&nbsp;in&nbsp;with</div>
                                         <div class="row g-2">
                                             <div class="col-lg-6">
-                                                <a class="btn-sc btn-fullwidth mb10" href="#"><img src="${pageContext.request.contextPath}/images/svg/google_icon.svg" alt="">Google</a>
-                                            </div>
+                                                <a class="btn-sc btn-fullwidth mb10" href="${pageContext.request.contextPath}/login-google">
+                                                    <img src="${pageContext.request.contextPath}/images/svg/google_icon.svg" alt="">Google
+                                                </a>                                            </div>
                                             <div class="col-lg-6">
                                                 <a class="btn-sc btn-fullwidth mb10" href="#"><img src="${pageContext.request.contextPath}/images/svg/facebook_icon.svg" alt="">Facebook</a>
                                             </div>
