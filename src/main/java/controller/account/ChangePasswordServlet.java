@@ -1,4 +1,3 @@
-
 package controller.account;
 
 import dao.implement.UserDAO;
@@ -36,19 +35,33 @@ public class ChangePasswordServlet extends HttpServlet {
         String newPass = request.getParameter("newPassword");
         String confirmPass = request.getParameter("confirmPassword");
 
-        if (!newPass.equals(confirmPass)) {
-            request.setAttribute("error", "New passwords do not match!");
+        // --- Password validation ---
+        if (newPass == null || newPass.isEmpty()) {
+            request.setAttribute("error", "New password cannot be empty!");
             request.getRequestDispatcher("view/account/change-password.jsp").forward(request, response);
             return;
         }
 
+        if (newPass.length() < 6) {
+            request.setAttribute("error", "Password must be at least 6 characters long!");
+            request.getRequestDispatcher("view/account/change-password.jsp").forward(request, response);
+            return;
+        }
+
+        if (!newPass.equals(confirmPass)) {
+            request.setAttribute("error", "Confirm password does not match!");
+            request.getRequestDispatcher("view/account/change-password.jsp").forward(request, response);
+            return;
+        }
+
+        // --- Update password ---
         UserDAO dao = new UserDAO();
         boolean success = dao.changePassword(user.getEmail(), oldPass, newPass);
 
         if (success) {
             request.setAttribute("message", "Password changed successfully!");
         } else {
-            request.setAttribute("error", "Old password incorrect!");
+            request.setAttribute("error", "Incorrect old password!");
         }
 
         request.getRequestDispatcher("view/account/change-password.jsp").forward(request, response);
