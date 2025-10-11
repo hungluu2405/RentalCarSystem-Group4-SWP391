@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,17 +35,9 @@
       <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Navbar Search -->
+    
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for..." aria-label="Search"
-          aria-describedby="basic-addon2">
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="button">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
+
     </form>
 
     <!-- Navbar -->
@@ -225,151 +218,23 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Ví d? d? li?u m?u -->
-          <tr>
-            <td>1</td>
-            <td>Admin</td>
-            <td>Nguyen Van A</td>
-            <td>0901234567</td>
-            <td>1995-06-21</td>
-            <td>Male</td>
-            <td>B123456789</td>
-            <td>admin@example.com</td>
-            <td>2024-01-15 10:22:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Customer</td>
-            <td>Tran Van B</td>
-            <td>0912345678</td>
-            <td>1998-12-03</td>
-            <td>Female</td>
-            <td>C987654321</td>
-            <td>sp@example.com</td>
-            <td>2024-02-10 14:45:00</td>
-          </tr>
-        </tbody>
+        <c:forEach var="u" items="${listU}">
+          <c:if test="${u.userProfile.profileId != 0}">
+            <tr>
+              <td>${u.userProfile.profileId}</td>
+              <td>${u.roleName}</td>
+              <td>${u.userProfile.fullName}</td>
+              <td>${u.userProfile.phone}</td>
+              <td>${u.userProfile.dob}</td>
+              <td>${u.userProfile.gender}</td>
+              <td>${u.userProfile.driverLicenseNumber}</td>
+              <td>${u.email}</td>
+              <td>${u.createdAt}</td>
+            </tr>
+          </c:if>
+        </c:forEach>
+      </tbody>
+
       </table>
     </div>
   </div>

@@ -194,7 +194,7 @@
                                                         <c:choose>
                                                             <%-- Giả sử: 1 = Admin --%>
                                                             <c:when test="${sessionScope.user.roleId == 1}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/admin/dashboard" role="menuitem">Tài khoản Admin</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/accountDB" role="menuitem">Tài khoản Admin</a>
                                                             </c:when>
 
                                                             <%-- Giả sử: 2 = Car Owner --%>
