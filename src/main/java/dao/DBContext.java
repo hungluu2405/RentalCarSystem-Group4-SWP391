@@ -13,7 +13,7 @@ public class DBContext {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
             // JDBC URL cho SQL Server
-            String url = "jdbc:sqlserver://GUDBOYVH:1433;databaseName=CarRentalDB;encrypt=false";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=CarRentalDB;encrypt=false";
             String user = "sa";        // user SQL Server
             String password = "123"; // pass SQL Server
 
