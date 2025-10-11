@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class UserProfileDAO extends DBContext {
 
-    /** ✅ Lấy thông tin profile theo userId */
+    /**  Lấy thông tin profile theo userId */
     public UserProfile findByUserId(int userId) {
         String sql = "SELECT * FROM [dbo].[USER_PROFILE] WHERE USER_ID = ?";
         try (Connection conn = getConnection();
