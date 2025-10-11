@@ -12,7 +12,7 @@ public class User {
 
     // Mối quan hệ: Một User CÓ MỘT UserProfile
     private UserProfile userProfile; // Thuộc tính này cần setter
-
+    private String roleName;// cần để lấy ra tên role trong dashboard
     // Constructors
     public User() {
     }
@@ -77,4 +77,14 @@ public class User {
     public void setUserProfile(UserProfile userProfile) { // Setter
         this.userProfile = userProfile;
     }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+    
+    
 }
