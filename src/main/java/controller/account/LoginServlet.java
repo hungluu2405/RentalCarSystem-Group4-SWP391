@@ -41,8 +41,17 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             
+            int role = user.getRoleId(); // hoặc user.getUserRole() nếu bạn đặt tên khác
+
+            if (role == 1) {
+                // Chuyển hướng đến dashboard admin
+                response.sendRedirect(request.getContextPath() + "/accountDB");
+            } else {
+                // Người dùng thường -> về trang home
+                response.sendRedirect(request.getContextPath() + "/home");
+            }
             // Chuyển hướng về trang chủ một cách an toàn
-            response.sendRedirect(request.getContextPath() + "/home"); 
+//            response.sendRedirect(request.getContextPath() + "/home"); 
         }
     }
 }
