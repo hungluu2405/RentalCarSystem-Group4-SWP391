@@ -8,11 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "AuthFilter", urlPatterns = {
+/**
+ * Ensures a logged-in user exists before allowing access to protected routes.
+ */
+@WebFilter(filterName = "RequireLoginFilter", urlPatterns = {
         "/customer/*",
         "/change-password"
 })
-public class AuthFilter extends HttpFilter {
+public class RequireLoginFilter extends HttpFilter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
