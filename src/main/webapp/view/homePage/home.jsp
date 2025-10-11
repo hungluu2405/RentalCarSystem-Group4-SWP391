@@ -205,7 +205,7 @@
 
                                                             <%-- Giả sử: 3 = Customer --%>
                                                             <c:when test="${sessionScope.user.roleId == 3}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/customer/customerDashboard" role="menuitem">Tài khoản của tôi</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/customer/profile" role="menuitem">Tài khoản của tôi</a>
                                                             </c:when>
 
                                                             <%-- Trường hợp mặc định nếu không khớp role nào --%>
