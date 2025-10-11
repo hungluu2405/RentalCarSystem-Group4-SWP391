@@ -28,6 +28,7 @@ public class CustomerOrderController extends HttpServlet {
         User mockUser = new User();
         mockUser.setUserId(2);
         mockUser.setEmail("demo@carrental.com");
+        mockUser.setRoleId(3); // Customer role for mock session data
         UserProfile mockProfile = new UserProfile();
         mockProfile.setFullName("Monica Lucas");
         mockUser.setUserProfile(mockProfile);
