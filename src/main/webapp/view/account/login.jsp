@@ -1,9 +1,3 @@
-<%
-    if (session.getAttribute("user") != null) {
-        response.sendRedirect(request.getContextPath() + "/home"); 
-        return;
-    }
-%>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -196,7 +190,7 @@
                                         <h4>Login</h4>
                                         <div class="spacer-10"></div>
 
-                                        <%-- Hi?n th? thông báo ??ng ký thành công --%>
+                                        <%-- Hi?n th? thï¿½ng bï¿½o ??ng kï¿½ thï¿½nh cï¿½ng --%>
                                         <% if ("success".equals(request.getParameter("register"))) { %>
                                         <p style="color:green;">Registration successful! You can now sign in.</p>
                                         <% } %>
@@ -205,7 +199,7 @@
                                         <p style="color:green;">Password has been reset successfully. Please log in.</p>
                                         <% } %>
 
-                                        <%-- Hi?n th? thông báo l?i ??ng nh?p --%>
+                                        <%-- Hi?n th? thï¿½ng bï¿½o l?i ??ng nh?p --%>
                                         <p style="color:red;">${requestScope.error}</p>
 
                                         <form id="form_login" class="form-border" method="post" action="${pageContext.request.contextPath}/login">
