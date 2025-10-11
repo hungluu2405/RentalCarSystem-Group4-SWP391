@@ -15,8 +15,8 @@ import model.BookingDetail;
 import model.User;
 import model.UserProfile;
 
-@WebServlet("/customer/customerDashboard")
-public class CustomerDashboardController extends HttpServlet {
+@WebServlet("/customer/customerOrder")
+public class CustomerOrderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,6 +60,6 @@ public class CustomerDashboardController extends HttpServlet {
         request.setAttribute("recentBookings", recentBookings); // Gửi danh sách chi tiết qua JSP
 
         // Chuyển tiếp đến file JSP
-        request.getRequestDispatcher("/view/customer/customerDashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
     }
 }
