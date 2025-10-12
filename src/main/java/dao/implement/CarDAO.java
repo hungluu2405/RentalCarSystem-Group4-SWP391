@@ -155,8 +155,9 @@ public class CarDAO extends DBContext {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -169,28 +170,37 @@ public class CarDAO extends DBContext {
     public List<CarViewModel> getCarsByOwner(int ownerId) {
         List<CarViewModel> list = new ArrayList<>();
         String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.PRICE_PER_DAY, c.CAPACITY, " +
-                "c.TRANSMISSION, c.FUEL_TYPE, t.NAME AS CAR_TYPE_NAME, i.IMAGE_URL " +
+                "c.TRANSMISSION, c.FUEL_TYPE, t.NAME AS CAR_TYPE_NAME, " +
+                "i.IMAGE_URL, c.YEAR, c.LICENSE_PLATE, c.DESCRIPTION, c.AVAILABILITY " +
                 "FROM CAR c " +
                 "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
-                "LEFT JOIN CAR_IMAGE i ON c.CAR_ID = i.CAR_ID " +
-                "WHERE c.OWNER_ID = ?";
+                "LEFT JOIN ( " +
+                "    SELECT CAR_ID, MIN(IMAGE_URL) AS IMAGE_URL " +
+                "    FROM CAR_IMAGE " +
+                "    GROUP BY CAR_ID " +
+                ") i ON c.CAR_ID = i.CAR_ID " +
+                "WHERE c.OWNER_ID = ? " +
+                "ORDER BY c.CAR_ID DESC";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                CarViewModel car = new CarViewModel();
-                car.setCarId(rs.getInt("CAR_ID"));
-                car.setBrand(rs.getString("BRAND"));
-                car.setModel(rs.getString("MODEL"));
-                car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
-                car.setCapacity(rs.getInt("CAPACITY"));
-                car.setTransmission(rs.getString("TRANSMISSION"));
-                car.setFuelType(rs.getString("FUEL_TYPE"));
-                car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
-                car.setImageUrl(rs.getString("IMAGE_URL") != null ? rs.getString("IMAGE_URL") : "default.jpg");
-                list.add(car);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CarViewModel car = new CarViewModel();
+
+                    car.setCarId(rs.getInt("CAR_ID"));
+                    car.setBrand(rs.getString("BRAND"));
+                    car.setModel(rs.getString("MODEL"));
+                    car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                    car.setCapacity(rs.getInt("CAPACITY"));
+                    car.setTransmission(rs.getString("TRANSMISSION"));
+                    car.setFuelType(rs.getString("FUEL_TYPE"));
+                    car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+                    car.setImageUrl(rs.getString("IMAGE_URL") != null ? rs.getString("IMAGE_URL") : "default.jpg");
+
+                    list.add(car);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -56,7 +56,7 @@
                         <div class="row">
                             <!-- STATISTICS -->
 
-                            <div class="col-lg-4 col-6 mb25">
+                            <div class="col-lg-3 col-6 mb25">
                                 <div class="card padding30 rounded-5">
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-car"></i>
@@ -65,24 +65,30 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 col-6 mb25">
+                            <div class="col-lg-3 col-6 mb25">
                                 <div class="card padding30 rounded-5">
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-calendar"></i>
                                     </div>
-                                    <span class="h1 mb0">${totalBookings}</span><span
-                                        class="text-gray">Total Bookings</span>
+                                    <span class="h1 mb0">${totalBookings}</span><span class="text-gray">Total Bookings</span>
                                 </div>
                             </div>
 
-
-                            <div class="col-lg-4 col-6 mb25">
+                            <div class="col-lg-3 col-6 mb25">
                                 <div class="card padding30 rounded-5">
                                     <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-money"></i>
+                                        <i class="fa id-color fa-2x fa-toggle-on"></i>
                                     </div>
-                                    <span class="h1 mb0">${totalRevenue}</span><span
-                                        class="text-gray">Total Revenue</span>
+                                    <span class="h1 mb0">${activeBookings}</span><span class="text-gray">Active booking</span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-6 mb25">
+                                <div class="card padding30 rounded-5">
+                                    <div class="symbol mb40">
+                                        <i class="fa id-color fa-2x fa-ban"></i>
+                                    </div>
+                                    <span class="h1 mb0">${cancelledBookings}</span><span class="text-gray">Cancel booking</span>
                                 </div>
                             </div>
                         </div>
@@ -146,12 +152,12 @@
                     </div>
                 </div>
             </div>
-<%--    </div> --%>
-    </section>
-</div>
+            <%--    </div> --%>
+        </section>
+    </div>
 
-<!-- FOOTER -->
-<jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
+    <!-- FOOTER -->
+    <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 
 </body>
 </html>
