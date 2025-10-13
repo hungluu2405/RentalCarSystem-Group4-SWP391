@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -116,7 +117,7 @@
                                             </ul>
                                         </li>
                                         <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Cars</a>
-                                            
+
                                         </li>
                                         <li><a class="menu-item" href="${pageContext.request.contextPath}/quick-booking.html">Booking</a>
                                             <ul>
@@ -194,7 +195,7 @@
                                                         <c:choose>
                                                             <%-- Giả sử: 1 = Admin --%>
                                                             <c:when test="${sessionScope.user.roleId == 1}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/admin/dashboard" role="menuitem">Tài khoản Admin</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/accountDB" role="menuitem">Tài khoản Admin</a>
                                                             </c:when>
 
                                                             <%-- Giả sử: 2 = Car Owner --%>
@@ -204,7 +205,7 @@
 
                                                             <%-- Giả sử: 3 = Customer --%>
                                                             <c:when test="${sessionScope.user.roleId == 3}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/customer/customerDashboard" role="menuitem">Tài khoản của tôi</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/customer/profile" role="menuitem">Tài khoản của tôi</a>
                                                             </c:when>
 
                                                             <%-- Trường hợp mặc định nếu không khớp role nào --%>
@@ -213,7 +214,7 @@
                                                             </c:otherwise>
                                                         </c:choose>
 
-                                                            <%-- Các link còn lại thì giữ nguyên --%>
+                                                        <%-- Các link còn lại thì giữ nguyên --%>
                                                         <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Đổi mật khẩu</a>
                                                         <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Đăng xuất</a>
                                                     </div>
@@ -803,161 +804,35 @@
 
                             <div id="items-carousel" class="owl-carousel wow fadeIn">
 
-                                <div class="col-lg-12">
-                                    <div class="de-item mb30">
-                                        <div class="d-img">
-                                            <img src="${pageContext.request.contextPath}/images/cars/jeep-renegade.jpg" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="d-info">
-                                            <div class="d-text">
-                                                <h4>Jeep Renegade</h4>
-                                                <div class="d-item_like">
-                                                    <i class="fa fa-heart"></i><span>74</span>
-                                                </div>
-                                                <div class="d-atr-group">
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">5</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/2-green.svg" alt="">2</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">4</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">SUV</span>
-                                                </div>
-                                                <div class="d-price">
-                                                    Daily rate from <span>$265</span>
-                                                    <a class="btn-main" href="${pageContext.request.contextPath}/car-single.html">Rent Now</a>
-                                                </div>
+                                <%-- Sử dụng JSTL để lặp qua danh sách topBookedCars --%>
+                                <c:forEach var="car" items="${topBookedCars}">
+                                    <div class="col-lg-12">
+                                        <div class="de-item mb30">
+                                            <div class="d-img">
+                                                <img src="${pageContext.request.contextPath}/${not empty car.imageUrl ? car.imageUrl : 'images/cars/default.jpg'}" class="img-fluid" alt="${car.brand} ${car.model}">
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            <div class="d-info">
+                                                <div class="d-text">
+                                                    <h4>${car.brand} ${car.model}</h4>
+                                                    <div class="d-atr-group">
+                                                        <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">${car.capacity}</span>
+                                                        <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">${car.transmission}</span>
+                                                        <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">${car.carTypeName}</span>
+                                                    </div>
+                                                    <div class="d-price">
+                                                        <h3 class="fw-bold mb-0">
+                                                            <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
+                                                        </h3>
+                                                        <a class="btn-main" href=${pageContext.request.contextPath}/car-single?id=${car.carId}>Rent Now</a>
+                                                    </div>
 
-                                <div class="col-lg-12">
-                                    <div class="de-item mb30">
-                                        <div class="d-img">
-                                            <img src="${pageContext.request.contextPath}/images/cars/bmw-m5.jpg" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="d-info">
-                                            <div class="d-text">
-                                                <h4>BMW M2</h4>
-                                                <div class="d-item_like">
-                                                    <i class="fa fa-heart"></i><span>36</span>
-                                                </div>
-                                                <div class="d-atr-group">
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">5</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/2-green.svg" alt="">2</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">4</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">Sedan</span>
-                                                </div>
-                                                <div class="d-price">
-                                                    Daily rate from <span>$244</span>
-                                                    <a class="btn-main" href="${pageContext.request.contextPath}/car-single.html">Rent Now</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:forEach>
 
-                                <div class="col-lg-12">
-                                    <div class="de-item mb30">
-                                        <div class="d-img">
-                                            <img src="${pageContext.request.contextPath}/images/cars/ferrari-enzo.jpg" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="d-info">
-                                            <div class="d-text">
-                                                <h4>Ferarri Enzo</h4>
-                                                <div class="d-item_like">
-                                                    <i class="fa fa-heart"></i><span>85</span>
-                                                </div>
-                                                <div class="d-atr-group">
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">5</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/2-green.svg" alt="">2</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">4</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">Exotic Car</span>
-                                                </div>
-                                                <div class="d-price">
-                                                    Daily rate from <span>$167</span>
-                                                    <a class="btn-main" href="${pageContext.request.contextPath}/car-single.html">Rent Now</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-lg-12">
-                                    <div class="de-item mb30">
-                                        <div class="d-img">
-                                            <img src="${pageContext.request.contextPath}/images/cars/ford-raptor.jpg" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="d-info">
-                                            <div class="d-text">
-                                                <h4>Ford Raptor</h4>
-                                                <div class="d-item_like">
-                                                    <i class="fa fa-heart"></i><span>59</span>
-                                                </div>
-                                                <div class="d-atr-group">
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">5</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/2-green.svg" alt="">2</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">4</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">Truck</span>
-                                                </div>
-                                                <div class="d-price">
-                                                    Daily rate from <span>$147</span>
-                                                    <a class="btn-main" href="${pageContext.request.contextPath}/car-single.html">Rent Now</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="de-item mb30">
-                                        <div class="d-img">
-                                            <img src="${pageContext.request.contextPath}/images/cars/mini-cooper.jpg" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="d-info">
-                                            <div class="d-text">
-                                                <h4>Mini Cooper</h4>
-                                                <div class="d-item_like">
-                                                    <i class="fa fa-heart"></i><span>19</span>
-                                                </div>
-                                                <div class="d-atr-group">
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">5</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/2-green.svg" alt="">2</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">4</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">Hatchback</span>
-                                                </div>
-                                                <div class="d-price">
-                                                    Daily rate from <span>$238</span>
-                                                    <a class="btn-main" href="${pageContext.request.contextPath}/car-single.html">Rent Now</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="de-item mb30">
-                                        <div class="d-img">
-                                            <img src="${pageContext.request.contextPath}/images/cars/vw-polo.jpg" class="img-fluid" alt="">
-                                        </div>
-                                        <div class="d-info">
-                                            <div class="d-text">
-                                                <h4>VW Polo</h4>
-                                                <div class="d-item_like">
-                                                    <i class="fa fa-heart"></i><span>79</span>
-                                                </div>
-                                                <div class="d-atr-group">
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">5</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/2-green.svg" alt="">2</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">4</span>
-                                                    <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/4-green.svg" alt="">Hatchback</span>
-                                                </div>
-                                                <div class="d-price">
-                                                    Daily rate from <span>$106</span>
-                                                    <a class="btn-main" href="${pageContext.request.contextPath}/car-single.html">Rent Now</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                             </div>
 
