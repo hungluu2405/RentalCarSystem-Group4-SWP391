@@ -80,9 +80,10 @@
                     <%-- Sidebar --%>
                     <div class="col-lg-3 mb30">
                         <%-- Sửa lại đuôi file thành .jspf --%>
-                        <jsp:include page="../common/carOwner/_sidebarOwner.jsp">
-                            <jsp:param name="activePage" value="manageMyCar"/>
-                        </jsp:include>
+                            <jsp:include page="../common/carOwner/_sidebarOwner.jsp">
+                                <jsp:param name="activePage" value="manageMyCar"/>
+                            </jsp:include>
+
                     </div>
 
                     <!-- MAIN CONTENT -->
