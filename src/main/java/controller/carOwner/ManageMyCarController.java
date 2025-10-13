@@ -52,10 +52,10 @@ public class ManageMyCarController extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         // Gửi dữ liệu sang JSP
-        request.setAttribute("carList", carList);
+        request.setAttribute("MyCarList", carList);
         request.setAttribute("activePage", "manageMyCar");
 
         // Forward đến trang JSP
-        request.getRequestDispatcher("/view/carOwner/My_cars_list.jsp").forward(request, response);
+        request.getRequestDispatcher("/view//carOwner/My_cars_list.jsp").forward(request, response);
     }
 }
