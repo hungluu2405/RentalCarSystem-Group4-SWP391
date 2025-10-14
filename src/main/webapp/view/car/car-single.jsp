@@ -6,7 +6,7 @@
 <html lang="vi">
 
     <head>
-        <title>${car.brand} ${car.model} - Vehicle Fleet</title>
+        <title>${car.model} - Vehicle Fleet</title>
         <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -268,6 +268,7 @@
                 <section id="section-car-details">
                     <div class="container">
                         <div class="row g-5">
+                            <!-- Cột hình ảnh -->
                             <div class="col-lg-6">
                                 <div id="slider-carousel" class="owl-carousel">
                                     <c:forEach var="img" items="${car.images}">
@@ -278,9 +279,9 @@
                                 </div>
                             </div>
 
+                            <!-- Cột thông tin kỹ thuật -->
                             <div class="col-lg-3">
-                                <h3>${car.brand} ${car.model}</h3>
-                                <p>${car.description}</p>
+                                <h3>${car.model}</h3>
                                 <div class="spacer-10"></div>
                                 <h4>Specifications</h4>
                                 <div class="de-spec">
@@ -303,6 +304,7 @@
                                 </div>
                             </div>
 
+                            <!-- Cột giá và nút đặt xe -->
                             <div class="col-lg-3">
                                 <div class="de-price text-center">
                                     Rental Price/Day
@@ -312,92 +314,101 @@
                                 </div>
                                 <div class="spacer-30"></div>
 
-
                                 <a href="${pageContext.request.contextPath}/make-booking?carId=${car.carId}" class="btn-main btn-fullwidth">Rent Now</a>
+                            </div>
+                        </div>
 
+                        <!-- Dòng mô tả chiếm ngang ảnh + thông tin -->
+                        <div class="row mt-4">
+                            <div class="col-lg-9">
+                                <h3 class="mb-3" style="font-weight: 600;">Description</h4>
+                                <p style="font-size: 1.1rem; line-height: 1.6; text-align: justify;">
+                                    ${car.description}
+                                </p>
                             </div>
                         </div>
                     </div>
+                </section>
+
+
             </div>
-        </section>
-    </div>
 
-    <a href="#" id="back-to-top"></a>
+            <a href="#" id="back-to-top"></a>
 
-    <!-- Footer -->
-    <footer class="text-light">
-        <div class="container">
-            <div class="row g-custom-x">
-                <div class="col-lg-3">
-                    <div class="widget">
-                        <h5>About Rentaly</h5>
-                        <p>Where quality meets affordability. We provide top-notch vehicles at minimum expense to ensure your journey is smooth and enjoyable.</p>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="widget">
-                        <h5>Contact Info</h5>
-                        <address class="s1">
-                            <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
-                            <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
-                            <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
-                            <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
-                        </address>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <h5>Quick Links</h5>
-                    <div class="widget">
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">News</a></li>
-                            <li><a href="#">Partners</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="widget">
-                        <h5>Social Network</h5>
-                        <div class="social-icons">
-                            <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-rss fa-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="subfooter">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="de-flex">
-                            <div class="de-flex-col">
-                                <a href="#">© 2025 Rentaly by Designesia</a>
+            <!-- Footer -->
+            <footer class="text-light">
+                <div class="container">
+                    <div class="row g-custom-x">
+                        <div class="col-lg-3">
+                            <div class="widget">
+                                <h5>About Rentaly</h5>
+                                <p>Where quality meets affordability. We provide top-notch vehicles at minimum expense to ensure your journey is smooth and enjoyable.</p>
                             </div>
-                            <ul class="menu-simple">
-                                <li><a href="#">Terms &amp; Conditions</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                            </ul>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="widget">
+                                <h5>Contact Info</h5>
+                                <address class="s1">
+                                    <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
+                                    <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
+                                    <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
+                                    <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
+                                </address>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <h5>Quick Links</h5>
+                            <div class="widget">
+                                <ul>
+                                    <li><a href="#">About</a></li>
+                                    <li><a href="#">Blog</a></li>
+                                    <li><a href="#">Careers</a></li>
+                                    <li><a href="#">News</a></li>
+                                    <li><a href="#">Partners</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="widget">
+                                <h5>Social Network</h5>
+                                <div class="social-icons">
+                                    <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                                    <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
+                                    <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
+                                    <a href="#"><i class="fa fa-rss fa-lg"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="subfooter">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="de-flex">
+                                    <div class="de-flex-col">
+                                        <a href="#">© 2025 Rentaly by Designesia</a>
+                                    </div>
+                                    <ul class="menu-simple">
+                                        <li><a href="#">Terms &amp; Conditions</a></li>
+                                        <li><a href="#">Privacy Policy</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
         </div>
-    </footer>
 
-</div>
+        <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+        <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 
-<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
-<script src="${pageContext.request.contextPath}/js/designesia.js"></script>
-
-</body>
+    </body>
 </html>
