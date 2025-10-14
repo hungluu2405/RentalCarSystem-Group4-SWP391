@@ -377,7 +377,7 @@
                                                         <c:when test="${not empty car.images}">
                                                             <img src="${pageContext.request.contextPath}/${car.images[0].imageUrl}" 
                                                                  class="img-fluid" 
-                                                                 alt="Ảnh xe ${car.brand} ${car.model}">
+                                                                 alt="Ảnh xe ${car.model}">
                                                         </c:when>
                                                         <c:otherwise>
                                                             <img src="${pageContext.request.contextPath}/default.jpg" 
@@ -390,7 +390,7 @@
                                                 <div class="d-info">
                                                     <div class="d-text">
                                                         <%-- DÒNG TIÊU ĐỀ XE --%>
-                                                        <h4>${car.brand} ${car.model}</h4>
+                                                        <h4>${car.model}</h4>
 
                                                         <%-- LƯỚI THUỘC TÍNH 2X2 --%>
                                                         <div class="row g-2 my-3">
