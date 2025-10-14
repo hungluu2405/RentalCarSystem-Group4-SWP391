@@ -19,12 +19,6 @@
 <div id="wrapper">
     <div id="de-preloader"></div>
     <jsp:include page="../common/carOwner/_headerOwner.jsp"/>
-    <!-- MAIN WRAPPER -->
-    <%--    <div class="container-fluid py-5">--%>
-    <%--        <div class="container">--%>
-
-    <%--            <!-- SIDEBAR -->--%>
-    <%--            <div class="row">--%>
 
     <div class="no-bottom no-top zebra" id="content">
         <div id="top"></div>
