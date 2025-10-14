@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,13 +28,13 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="${pageContext.request.contextPath}/home">Car rental system</a>
+    <a class="navbar-brand mr-1" href="index.html">Car rental system</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
 
-    
+    <!-- Navbar Search -->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 
     </form>
@@ -120,7 +119,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a style="font-size: 30px; font-weight: bold;">Account List</a>
+            <a style="font-size: 30px; font-weight: bold;">Car List</a>
           </li>
           
         </ol>
@@ -195,55 +194,41 @@
 
 
 
-       <!-- DataTables Example -->
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- Cars Data Table -->
 <div class="card mb-3">
   <div class="card-header">
-    <i class="fas fa-table"></i>
-    User Profile Table
+    <i class="fas fa-car"></i>
+    Car Management
   </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead class="thead-dark">
           <tr>
-            <th>Profile ID</th>
-            <th>Role</th>
-            <th>Full Name</th>
-            <th>Phone</th>
-            <th>Date of Birth</th>
-            <th>Gender</th>
-            <th>Driver License</th>
-            <th>Email</th>
-            <th>Created At</th>
+            <th>Car ID</th>
+            <th>Owner Name</th>
+            <th>Type</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>License Plate</th>
+            <th>Capacity</th>
+            <th>Fuel Type</th>
+            <th>Price/Day</th>
+            <th>Availability</th>
           </tr>
         </thead>
-        <tbody>
-        <c:forEach var="u" items="${listU}">
-          <c:if test="${u.userProfile.profileId != 0}">
-            <tr>
-              <td>${u.userProfile.profileId}</td>
-              <td>${u.roleName}</td>
-              <td>${u.userProfile.fullName}</td>
-              <td>${u.userProfile.phone}</td>
-              <td>${u.userProfile.dob}</td>
-              <td>${u.userProfile.gender}</td>
-              <td>${u.userProfile.driverLicenseNumber}</td>
-              <td>${u.email}</td>
-              <td>${u.createdAt}</td>
-            </tr>
-          </c:if>
-        </c:forEach>
-      </tbody>
 
+        
       </table>
     </div>
   </div>
-  <div class="card-footer small text-muted">
-    Car Rental System
-  </div>
 </div>
-<!-- /.container-fluid -->
 
+      <!-- /.container-fluid -->
 
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
