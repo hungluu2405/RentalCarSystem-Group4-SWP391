@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"", "/"})
+//@WebServlet(urlPatterns = {"", "/"})
 public class RootRedirectServlet extends HttpServlet {
 
     @Override
