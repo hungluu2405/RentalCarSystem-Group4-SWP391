@@ -3,7 +3,6 @@ package controller.account;
 import dao.implement.UserDAO;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.regex.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -45,21 +44,18 @@ public class CreateGoogleAccountServlet extends HttpServlet {
 
         // --- Kiểm tra mật khẩu ---
         if (password == null || password.isEmpty()) {
-            request.setAttribute("error", "Password cannot be empty!");
-            request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
+            forwardWithError("Password cannot be empty!", request, response);
             return;
         }
 
         if (!password.equals(rePassword)) {
-            request.setAttribute("error", "Passwords do not match!");
-            request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
+            forwardWithError("Passwords do not match!", request, response);
             return;
         }
 
         // Kiểm tra mật khẩu
         if (password.length() < 6) {
-            request.setAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự!");
-            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
+            forwardWithError("Mật khẩu phải có ít nhất 6 ký tự!", request, response);
             return;
         }
 
@@ -68,8 +64,7 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         try {
             roleId = Integer.parseInt(roleIdStr);
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "Please select a valid role.");
-            request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
+            forwardWithError("Please select a valid role.", request, response);
             return;
         }
 
@@ -96,11 +91,25 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         boolean isSuccess = userDAO.registerUser(user, profile, address);
 
         if (isSuccess) {
+            User newUser = userDAO.findUserByEmail(googleUser.getEmail());
+            session.removeAttribute("googleUser");
             session.invalidate();
-            response.sendRedirect(request.getContextPath() + "/login?register=success");
+
+            if (newUser != null) {
+                HttpSession newSession = request.getSession(true);
+                newSession.setAttribute("user", newUser);
+                response.sendRedirect(request.getContextPath() + "/home");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/login");
+            }
         } else {
-            request.setAttribute("error", "Error creating account. Please try again.");
-            request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
+            forwardWithError("Error creating account. Please try again.", request, response);
         }
+    }
+
+    private void forwardWithError(String message, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("error", message);
+        request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
     }
 }
