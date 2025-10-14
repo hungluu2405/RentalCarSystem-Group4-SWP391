@@ -1,26 +1,62 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
+############################
+# ✅ Universal .gitignore for Java Web Projects
+# (IntelliJ + Tomcat + Maven + Eclipse)
+############################
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.tar.gz
+*.zip
+*.log
+
+### Build directories ###
+/out/
+/out/artifacts/
+/out/production/
+/target/
+/build/
+/dist/
+/tmp/
+/bin/
+/generated/
+
 !**/src/main/**/target/
 !**/src/test/**/target/
-.kotlin
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Maven ###
+.mvn/
+mvnw
+mvnw.cmd
+
+### Gradle ###
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
 
 ### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
-*.iws
-*.iml
-*.ipr
 
 ### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
 ### NetBeans ###
 /nbproject/private/
@@ -28,12 +64,23 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+### OS files ###
 .DS_Store
+Thumbs.db
+
+### Kotlin ###
+.kotlin
+
+### Logs / Temp ###
+*.bak
+*.tmp
+*.swp
+*.orig
+
+############################
+# ✅ End of .gitignore
+############################
