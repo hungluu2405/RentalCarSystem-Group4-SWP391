@@ -1,185 +1,134 @@
 package dao.implement;
 
 import dao.DBContext;
-import dao.GenericDAO;
 import model.Booking;
-import model.BookingDetail; // Import model mới
+import model.BookingDetail;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-public class BookingDAO extends GenericDAO<Booking> {
+public class BookingDAO extends DBContext {
 
-    //================================================================================
-    // CÁC PHƯƠNG THỨC KẾ THỪA TỪ GENERICDAO (DÙNG CHO CÁC TÁC VỤ CƠ BẢN)
-    //================================================================================
+    // ============================================================
+    // 1️⃣ INSERT BOOKING
+    // ============================================================
+    public boolean insert(Booking booking) {
+        String sql = """
+            INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
-    @Override
-    public List<Booking> findAll() {
-        return queryGenericDAO(Booking.class);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, booking.getCarId());
+            ps.setInt(2, booking.getUserId());
+            ps.setObject(3, booking.getStartDate());
+            ps.setObject(4, booking.getEndDate());
+            ps.setDouble(5, booking.getTotalPrice());
+            ps.setString(6, booking.getStatus());
+            ps.setTimestamp(7, Timestamp.valueOf(booking.getCreatedAt()));
+            ps.setString(8, booking.getLocation());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("❌ Insert booking failed: " + e.getMessage());
+            return false;
+        }
     }
 
-    @Override
-    public int insert(Booking booking) {
-        return insertGenericDAO(booking);
-    }
+    // ============================================================
+    // 2️⃣ CHECK CAR AVAILABILITY (tránh trùng lịch)
+    // ============================================================
+    public boolean isCarAvailable(int carId, LocalDate start, LocalDate end) {
+        String sql = """
+            SELECT COUNT(*) FROM BOOKING
+            WHERE CAR_ID = ? AND STATUS IN ('Pending', 'Approved')
+              AND (
+                    (START_DATE <= ? AND END_DATE >= ?)
+                 OR (START_DATE <= ? AND END_DATE >= ?)
+                 OR (START_DATE >= ? AND END_DATE <= ?)
+              )
+        """;
 
-    //================================================================================
-    // CÁC PHƯƠNG THỨC ĐẾM (VẪN DÙNG GENERICDAO VÌ TRUY VẤN ĐƠN GIẢN)
-    //================================================================================
-
-    /**
-     * Đếm tổng số booking của một người dùng.
-     */
-    public int countByUser(int userId) {
-        String sql = "SELECT COUNT(*) FROM BOOKING WHERE userId = ?";
-        Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("userId", userId);
-        return findTotalRecordGenericDAO(Booking.class, sql, parameters);
-    }
-
-    /**
-     * Đếm số booking theo trạng thái của một người dùng.
-     */
-    public int countByStatus(int userId, String status) {
-        String sql = "SELECT COUNT(*) FROM BOOKING WHERE userId = ? AND status = ?";
-        Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("userId", userId);
-        parameters.put("status", status);
-        return findTotalRecordGenericDAO(Booking.class, sql, parameters);
-    }
-
-    //================================================================================
-    // PHƯƠNG THỨC RIÊNG CHO DASHBOARD (KHÔNG DÙNG GENERICDAO VÌ CẦN JOIN VÀ MAP TÙY CHỈNH)
-    //================================================================================
-
-    /**
-     * Lấy danh sách các booking gần nhất với thông tin chi tiết (tên xe, địa điểm...).
-     */
-    public List<BookingDetail> getRecentBookingDetails(int userId, int limit) {
-        List<BookingDetail> bookingDetails = new ArrayList<>();
-        String sql = "SELECT TOP (?) " +
-                "    b.bookingId, " +
-                "    c.MODEL AS carName, " +
-                "    b.pickUpLocation, " +
-                "    b.dropOffLocation, " +
-                "    b.START_DATE, " +
-                "    b.END_DATE, " +
-                "    b.status " +
-                "FROM BOOKING b " +
-                "JOIN CAR c ON b.carId = c.CAR_ID " +
-                "WHERE b.userId = ? " +
-                "ORDER BY b.create_at DESC";
-
-        try (PreparedStatement st = getConnection().prepareStatement(sql)) {
-            st.setInt(1, limit);
-            st.setInt(2, userId);
-
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    BookingDetail detail = new BookingDetail();
-                    detail.setBookingId(rs.getInt("bookingId"));
-                    detail.setCarName(rs.getString("carName"));
-                    detail.setPickUpLocation(rs.getString("pickUpLocation"));
-                    detail.setDropOffLocation(rs.getString("dropOffLocation"));
-                    detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
-                    detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
-                    detail.setStatus(rs.getString("status"));
-
-                    bookingDetails.add(detail);
-                }
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            ps.setObject(2, end);
+            ps.setObject(3, start);
+            ps.setObject(4, start);
+            ps.setObject(5, end);
+            ps.setObject(6, start);
+            ps.setObject(7, end);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 0; // true nếu xe trống
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("❌ Check availability failed: " + e.getMessage());
         }
-        return bookingDetails;
+        return false;
     }
 
-    // ======================= OWNER DASHBOARD ==========================
+    // ============================================================
+    // 3️⃣ LẤY BOOKING THEO USER & STATUS
+    // ============================================================
+    public List<BookingDetail> getBookingsByUserAndStatus(int userId, String status) {
+        List<BookingDetail> list = new ArrayList<>();
+        String sql = """
+            SELECT 
+                b.BOOKING_ID,
+                c.MODEL AS carName,
+                b.START_DATE, b.END_DATE, b.TOTAL_PRICE,
+                b.STATUS, b.LOCATION
+            FROM BOOKING b
+            JOIN CAR c ON b.CAR_ID = c.CAR_ID
+            WHERE b.USER_ID = ? AND b.STATUS = ?
+            ORDER BY b.CREATED_AT DESC
+        """;
 
-    /**
-     * Đếm tổng số đơn thuê của tất cả xe thuộc một chủ xe.
-     */
-    public int countByOwner(int ownerId) {
-        String sql = "SELECT COUNT(*) " +
-                "FROM BOOKING b " +
-                "JOIN CAR c ON b.carId = c.CAR_ID " +
-                "WHERE c.OWNER_ID = ?";
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setInt(1, ownerId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    /**
-     * Đếm số đơn thuê theo trạng thái của tất cả xe thuộc một chủ xe.
-     */
-    public int countByOwnerAndStatus(int ownerId, String status) {
-        String sql = "SELECT COUNT(*) " +
-                "FROM BOOKING b " +
-                "JOIN CAR c ON b.carId = c.CAR_ID " +
-                "WHERE c.OWNER_ID = ? AND b.status = ?";
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setInt(1, ownerId);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
             ps.setString(2, status);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getDate("START_DATE").toLocalDate());
+                detail.setEndDate(rs.getDate("END_DATE").toLocalDate());
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Get booking list failed: " + e.getMessage());
+        }
+        return list;
+    }
+    // Lấy giá xe để tính tổng tiền
+    public double getCarPrice(int carId) {
+        String sql = "SELECT PRICE_PER_DAY FROM CAR WHERE CAR_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getDouble("PRICE_PER_DAY");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
     }
 
-    /**
-     * Lấy danh sách các đơn thuê gần nhất cho xe của chủ xe.
-     */
-    public List<BookingDetail> getRecentBookingsByOwner(int ownerId, int limit) {
-        List<BookingDetail> bookingDetails = new ArrayList<>();
-        String sql = "SELECT TOP (?) " +
-                "    b.bookingId, " +
-                "    c.MODEL AS carName, " +
-                "    b.pickUpLocation, " +
-                "    b.dropOffLocation, " +
-                "    b.START_DATE, " +
-                "    b.END_DATE, " +
-                "    b.status " +
-                "FROM BOOKING b " +
-                "JOIN CAR c ON b.carId = c.CAR_ID " +
-                "WHERE c.OWNER_ID = ? " +
-                "ORDER BY b.create_at DESC";
-
-        try (PreparedStatement st = getConnection().prepareStatement(sql)) {
-            st.setInt(1, limit);
-            st.setInt(2, ownerId);
-
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    BookingDetail detail = new BookingDetail();
-                    detail.setBookingId(rs.getInt("bookingId"));
-                    detail.setCarName(rs.getString("carName"));
-                    detail.setPickUpLocation(rs.getString("pickUpLocation"));
-                    detail.setDropOffLocation(rs.getString("dropOffLocation"));
-                    detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
-                    detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
-                    detail.setStatus(rs.getString("status"));
-                    bookingDetails.add(detail);
-                }
-            }
+    // Cập nhật trạng thái booking
+    public boolean updateStatus(int bookingId, String status) {
+        String sql = "UPDATE BOOKING SET STATUS = ? WHERE BOOKING_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, bookingId);
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return bookingDetails;
+        return false;
     }
-
-
 }

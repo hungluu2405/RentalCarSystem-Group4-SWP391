@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 
+
     <head>
         <title>${car.model} - Vehicle Fleet</title>
         <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
@@ -280,7 +281,7 @@
                             </div>
 
                             <!-- Cột thông tin kỹ thuật -->
-                            <div class="col-lg-3">
+                            <div class="col-lg-2">
                                 <h3>${car.model}</h3>
                                 <div class="spacer-10"></div>
                                 <h4>Specifications</h4>
@@ -305,7 +306,7 @@
                             </div>
 
                             <!-- Cột giá và nút đặt xe -->
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                                 <div class="de-price text-center">
                                     Rental Price/Day
                                     <h2>
@@ -314,7 +315,68 @@
                                 </div>
                                 <div class="spacer-30"></div>
 
-                                <a href="${pageContext.request.contextPath}/make-booking?carId=${car.carId}" class="btn-main btn-fullwidth">Rent Now</a>
+                                <form action="${pageContext.request.contextPath}/booking" method="post" class="booking-form p-3 rounded shadow-sm bg-light">
+                                    <input type="hidden" name="carId" value="${car.carId}"/>
+
+                                    <!-- Thời gian nhận -->
+                                    <div class="form-group mb-3">
+                                        <label class="fw-bold mb-1">Ngày nhận xe</label>
+                                        <input type="date" name="startDate" class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="fw-bold mb-1">Giờ nhận xe</label>
+                                        <select name="startTime" class="form-select" required>
+                                            <option value="" disabled selected>-- Chọn giờ nhận --</option>
+                                            <c:forEach var="hour" begin="6" end="22">
+                                                <option value="${hour < 10 ? '0' : ''}${hour}:00">
+                                                        ${hour < 10 ? '0' : ''}${hour}:00
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                    <!-- Thời gian trả -->
+                                    <div class="form-group mb-3">
+                                        <label class="fw-bold mb-1">Ngày trả xe</label>
+                                        <input type="date" name="endDate" class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="fw-bold mb-1">Giờ trả xe</label>
+                                        <select name="endTime" class="form-select" required>
+                                            <option value="" disabled selected>-- Chọn giờ trả --</option>
+                                            <c:forEach var="hour" begin="6" end="22">
+                                                <option value="${hour < 10 ? '0' : ''}${hour}:00">
+                                                        ${hour < 10 ? '0' : ''}${hour}:00
+                                                </option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label class="fw-bold mb-1">Địa điểm nhận & trả xe</label>
+                                        <div class="p-3 border rounded bg-light">
+                                            <i class="fa fa-map-marker text-success me-2"></i>
+<%--                                            ${car.location}--%>
+                                        </div>
+                                        <small class="text-muted">
+                                            Xe chỉ nhận & trả tại địa chỉ cố định này.
+                                        </small>
+                                    </div>
+
+
+                                    <!-- Submit -->
+                                    <button type="submit" class="btn-main btn-fullwidth">Đặt xe ngay</button>
+
+                                    <c:if test="${not empty error}">
+                                        <div class="alert alert-danger mt-3">${error}</div>
+                                    </c:if>
+
+                                    <c:if test="${not empty message}">
+                                        <div class="alert alert-success mt-3">${message}</div>
+                                    </c:if>
+                                </form>
+
                             </div>
                         </div>
 
@@ -409,6 +471,10 @@
 
         <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
         <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+
+
+
+
 
     </body>
 </html>
