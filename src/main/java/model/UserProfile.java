@@ -10,13 +10,13 @@ public class UserProfile {
     private Date dob;
     private String gender;
     private String driverLicenseNumber;
-    private boolean isVerified; // Thêm thuộc tính này từ CSDL
+    private boolean isVerified;
+    private String profileImage; // ✅ Thêm thuộc tính này
 
     // Constructors
     public UserProfile() {
     }
-    
-    // Constructor đầy đủ tham số (đây là cái bạn đang thiếu)
+
     public UserProfile(String fullName, String phone, Date dob, String gender, String driverLicenseNumber) {
         this.fullName = fullName;
         this.phone = phone;
@@ -25,7 +25,7 @@ public class UserProfile {
         this.driverLicenseNumber = driverLicenseNumber;
     }
 
-    // Getters and Setters
+    // === Getters & Setters ===
     public int getProfileId() {
         return profileId;
     }
@@ -88,5 +88,14 @@ public class UserProfile {
 
     public void setIsVerified(boolean isVerified) {
         this.isVerified = isVerified;
+    }
+
+    // ✅ Getter & Setter mới cho profileImage
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }
