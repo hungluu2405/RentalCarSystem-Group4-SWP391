@@ -26,7 +26,8 @@
     <div class="spacer-20"></div>
     <ul class="menu-col">
         <li>
-            <a href="${pageContext.request.contextPath}/owner/ownerDashboard" class="${activePage == 'dashboard' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/owner/ownerDashboard"
+               class="${activePage == 'dashboard' ? 'active' : ''}">
                 <i class="fa fa-home"></i> Dashboard
             </a>
         </li>
