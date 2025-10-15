@@ -17,6 +17,11 @@ public class Car {
     private String description;
     private boolean availability;
 
+    private String location;
+    private String carOwnerName; // FULL_NAME từ USER_PROFILE
+    private String typeName;     // NAME từ CAR_TYPE
+
+
     public Car() {}
 
     // Getters và Setters
@@ -58,4 +63,22 @@ public class Car {
 
     public boolean isAvailability() { return availability; }    
     public void setAvailability(boolean availability) { this.availability = availability; }
+
+    public String getCarOwnerName() {
+        return carOwnerName;
+    }
+
+    public void setCarOwnerName(String carOwnerName) {
+        this.carOwnerName = carOwnerName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+    
+    
 }

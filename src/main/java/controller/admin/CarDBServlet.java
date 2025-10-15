@@ -18,6 +18,14 @@ public class CarDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // 1️⃣ Tạo DAO để lấy danh sách người dùng
+        CarDAO carDAO = new CarDAO();
+        List<Car> listC = carDAO.getAllCarsForAdmin();
+
+        // 2️⃣ Gửi danh sách sang JSP
+        request.setAttribute("listC", listC);
+
+        // 3️⃣ Forward sang JSP hiển thị
 
         request.getRequestDispatcher("/view/admin/Cardashboard.jsp").forward(request, response);
     }

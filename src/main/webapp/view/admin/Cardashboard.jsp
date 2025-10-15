@@ -222,7 +222,34 @@
           </tr>
         </thead>
 
-        
+        <tbody>
+          <c:forEach var="car" items="${listC}">
+            <tr>
+              <td>${car.carId}</td>
+              <td>${car.carOwnerName}</td>
+              <td>${car.typeName}</td>
+              <td>${car.brand}</td>
+              <td>${car.model}</td>
+              <td>${car.year}</td>
+              <td>${car.licensePlate}</td>
+              <td>${car.capacity}</td>
+              <td>${car.fuelType}</td>
+              <td>${car.pricePerDay}</td>
+              <td>${car.availability}</td>
+<!--              <td>
+                <c:choose>
+                  <c:when test="${car.availability}">
+                    <span class="badge badge-success">Available</span>
+                  </c:when>
+                  <c:otherwise>
+                    <span class="badge badge-danger">Unavailable</span>
+                  </c:otherwise>
+                </c:choose>
+              </td>-->
+            </tr>
+          </c:forEach>
+        </tbody>
+
       </table>
     </div>
   </div>
