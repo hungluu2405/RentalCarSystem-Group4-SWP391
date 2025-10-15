@@ -8,25 +8,26 @@ import model.CarViewModel;
 import model.User;
 import service.BookingService;
 import dao.implement.CarDAO;
-import model.Car;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @WebServlet("/booking")
 public class BookingController extends HttpServlet {
 
     private final BookingService bookingService = new BookingService();
     private final CarDAO carDAO = new CarDAO();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
-            // Lấy dữ liệu từ form
-
+            // =============== LẤY DỮ LIỆU TỪ FORM ===============
             String carIdStr = request.getParameter("carId");
             String startDateStr = request.getParameter("startDate");
             String endDateStr = request.getParameter("endDate");
@@ -34,23 +35,26 @@ public class BookingController extends HttpServlet {
             String dropoffTimeStr = request.getParameter("dropoffTime");
             String location = request.getParameter("location");
 
-            // Kiểm tra dữ liệu bắt buộc
+            // ⭐ THÊM: Nhận các tham số giá từ JavaScript
+            String calculatedDiscountStr = request.getParameter("calculatedDiscount");
+            String finalCalculatedPriceStr = request.getParameter("finalCalculatedPrice");
+            String appliedPromoCode = request.getParameter("appliedPromoCode");
+
+            // =============== KIỂM TRA INPUT ===============
             if (carIdStr == null || startDateStr == null || endDateStr == null ||
                     pickupTimeStr == null || dropoffTimeStr == null ||
                     carIdStr.isEmpty() || startDateStr.isEmpty() ||
                     endDateStr.isEmpty() || pickupTimeStr.isEmpty() ||
                     dropoffTimeStr.isEmpty()) {
 
-                request.setAttribute("error", "Vui lòng điền đầy đủ thông tin đặt xe!");
-                request.getRequestDispatcher("/car-single.jsp").forward(request, response);
+                request.setAttribute("error", "⚠️ Vui lòng điền đầy đủ thông tin đặt xe!");
+                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
                 return;
             }
 
             int carId = Integer.parseInt(carIdStr);
 
-
-            //  Kiểm tra user đăng nhập
-
+            // =============== KIỂM TRA USER ĐĂNG NHẬP ===============
             User user = (User) request.getSession().getAttribute("user");
             if (user == null) {
                 response.sendRedirect(request.getContextPath() + "/login");
@@ -59,20 +63,15 @@ public class BookingController extends HttpServlet {
 
             int userId = user.getUserId();
 
-
-            //  Chuyển đổi dữ liệu ngày & giờ
-
+            // =============== CHUYỂN ĐỔI DỮ LIỆU NGÀY GIỜ ===============
             LocalDate startDate = LocalDate.parse(startDateStr);
             LocalDate endDate = LocalDate.parse(endDateStr);
 
-            // Format "HH:mm" hoặc "HH:mm:ss"
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm[:ss]");
             LocalTime pickupTime = LocalTime.parse(pickupTimeStr, timeFormatter);
             LocalTime dropoffTime = LocalTime.parse(dropoffTimeStr, timeFormatter);
 
-            // =============================
-            //  Tạo đối tượng Booking
-            // =============================
+            // =============== TẠO ĐỐI TƯỢNG BOOKING ===============
             Booking booking = new Booking();
             booking.setCarId(carId);
             booking.setUserId(userId);
@@ -84,12 +83,9 @@ public class BookingController extends HttpServlet {
             booking.setStatus("Pending");
             booking.setCreatedAt(LocalDateTime.now());
 
-
-
-
-            // Kiểm tra logic ngày thuê
+            // =============== VALIDATE LOGIC NGÀY THUÊ ===============
             if (startDate.isBefore(LocalDate.now())) {
-                request.setAttribute("error", "❌ Ngày bắt đầu không được nhỏ hơn ngày hiện tại!");
+                request.setAttribute("error", "❌ Ngày nhận xe không được nhỏ hơn hôm nay!");
                 CarViewModel car = carDAO.getCarById(carId);
                 request.setAttribute("car", car);
                 request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
@@ -104,30 +100,61 @@ public class BookingController extends HttpServlet {
                 return;
             }
 
+            // ⭐ QUAN TRỌNG: Sử dụng giá đã tính từ frontend
+            double finalPrice;
+            double discountAmount = 0;
 
-            //  Gọi service xử lý logic
+            if (finalCalculatedPriceStr != null && !finalCalculatedPriceStr.isEmpty()) {
+                // Sử dụng giá từ frontend (đã áp discount)
+                finalPrice = Double.parseDouble(finalCalculatedPriceStr);
 
-            boolean success = bookingService.createBooking(booking);
+                if (calculatedDiscountStr != null && !calculatedDiscountStr.isEmpty()) {
+                    discountAmount = Double.parseDouble(calculatedDiscountStr);
+                }
+            } else {
+                // Fallback: tính toán như cũ nếu không có giá từ frontend
+                finalPrice = calculatePrice(booking, carId);
+            }
+
+            booking.setTotalPrice(finalPrice);
+
+            // ⭐ THÊM: Sử dụng mã khuyến mãi từ form
+            String finalPromoCode = (appliedPromoCode != null && !appliedPromoCode.trim().isEmpty()) ? appliedPromoCode.trim() : null;
+
+            // =============== GỌI SERVICE XỬ LÝ BOOKING ===============
+            String result = bookingService.createBooking(booking, finalPromoCode, discountAmount);
+
+            // Lấy lại thông tin xe để hiển thị lại trang chi tiết
             CarViewModel car = carDAO.getCarById(carId);
             request.setAttribute("car", car);
 
-            // Xử lý kết quả phản hồi
-
-            if (success) {
+            // =============== XỬ LÝ KẾT QUẢ ===============
+            if (result.equals("success")) {
                 request.setAttribute("message", "✅ Đặt xe thành công! Vui lòng chờ chủ xe duyệt.");
             } else {
-                request.setAttribute("error", "❌ Xe đã có người thuê trong thời gian này. Vui lòng chọn thời gian khác.");
+                request.setAttribute("error", result);
             }
 
-            // Quay lại trang chi tiết xe
             request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            // In lỗi ra log server và hiển thị thông báo dễ hiểu
-            request.setAttribute("error", "⚠️ Đã xảy ra lỗi khi đặt xe: " + e.getMessage());
+            request.setAttribute("error", "⚠️ Lỗi đặt xe: " + e.getMessage());
             request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
-
         }
+    }
+
+    // Hàm tính giá fallback
+    private double calculatePrice(Booking booking, int carId) {
+        CarDAO carDAO = new CarDAO();
+        double pricePerDay = carDAO.getCarPrice(carId);
+
+        long hours = ChronoUnit.HOURS.between(
+                booking.getStartDate().atTime(booking.getPickupTime()),
+                booking.getEndDate().atTime(booking.getDropoffTime())
+        );
+        if (hours <= 0) hours = 1;
+
+        return (pricePerDay / 24.0) * hours;
     }
 }
