@@ -15,13 +15,14 @@ public class CarViewModel {
     private String description;
     private String imageUrl;           // thêm trường ảnh chính
     private List<CarImage> images;     // thêm danh sách ảnh phụ (nếu có)
+private String location;
 
     public CarViewModel() {}
 
     // Constructor đầy đủ 10 tham số (nếu cần cho DAO)
-    public CarViewModel(int carId, String brand, String model, BigDecimal pricePerDay,
-                        int capacity, String transmission, String fuelType,
-                        String carTypeName, String description, String imageUrl) {
+
+
+    public CarViewModel(int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String carTypeName, String description, String imageUrl, List<CarImage> images, String location) {
         this.carId = carId;
         this.brand = brand;
         this.model = model;
@@ -32,6 +33,16 @@ public class CarViewModel {
         this.carTypeName = carTypeName;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.images = images;
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     // Getters và Setters
