@@ -20,9 +20,7 @@ public class Car {
     private String carOwnerName; // FULL_NAME từ USER_PROFILE
     private String typeName;     // NAME từ CAR_TYPE
 
-    private String location;
-    private String carOwnerName; // FULL_NAME từ USER_PROFILE
-    private String typeName;     // NAME từ CAR_TYPE
+
 
 
     public Car() {}
@@ -46,21 +44,7 @@ public class Car {
         this.typeName = typeName;
     }
 
-    public String getCarOwnerName() {
-        return carOwnerName;
-    }
 
-    public void setCarOwnerName(String carOwnerName) {
-        this.carOwnerName = carOwnerName;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
 
     public String getLocation() {
         return location;
