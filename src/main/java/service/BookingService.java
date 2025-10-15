@@ -2,7 +2,11 @@ package service;
 
 import dao.implement.BookingDAO;
 import dao.implement.CarDAO;
+import dao.implement.PromotionDAO;
+import dao.implement.BookingPromotionDAO;
 import model.Booking;
+import model.Promotion;
+import model.BookingPromotion;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,72 +16,92 @@ public class BookingService {
 
     private final BookingDAO bookingDAO = new BookingDAO();
     private final CarDAO carDAO = new CarDAO();
+    private final PromotionDAO promoDAO = new PromotionDAO();
+    private final BookingPromotionDAO bookingPromoDAO = new BookingPromotionDAO();
 
     /**
-     * Tạo booking mới (khi user đặt xe)
+     * Tạo booking mới, có hỗ trợ áp dụng mã giảm giá
      */
-    public boolean createBooking(Booking booking) {
+    /**
+     * Tạo booking mới, sử dụng giá đã tính từ frontend
+     */
+    public String createBooking(Booking booking, String promoCode, double frontendDiscount) {
 
         LocalDate today = LocalDate.now();
 
+        // 1️⃣ Kiểm tra logic ngày
         if (booking.getStartDate().isBefore(today)) {
-            System.out.println("❌ Ngày bắt đầu nhỏ hơn ngày hiện tại!");
-            return false;
+            return "❌ Ngày nhận xe không được nhỏ hơn ngày hiện tại!";
         }
-
         if (booking.getEndDate().isBefore(booking.getStartDate())) {
-            System.out.println("❌ Ngày kết thúc nhỏ hơn ngày bắt đầu!");
-            return false;
+            return "❌ Ngày trả xe phải sau ngày nhận xe!";
         }
 
-
-        // 1️⃣ Kiểm tra xe có bị trùng lịch không
+        // 2️⃣ Kiểm tra xe có bị trùng lịch không
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
                 booking.getEndDate()
         );
-
         if (!available) {
-            return false; // Xe đã có người thuê trong khoảng thời gian này
+            return "❌ Xe đã có người thuê trong thời gian này!";
         }
 
-        // 2️⃣ Tính tổng tiền thuê (theo giờ)
-        double pricePerDay = carDAO.getCarPrice(booking.getCarId());
-        long hours = ChronoUnit.HOURS.between(
-                booking.getStartDate().atTime(booking.getPickupTime()),
-                booking.getEndDate().atTime(booking.getDropoffTime())
-        );
-        if (hours <= 0) hours = 1;
+        double discountAmount = frontendDiscount;
+        double finalPrice = booking.getTotalPrice();
 
-        double total = (pricePerDay / 24.0) * hours;
-        booking.setTotalPrice(total);
+        // 3️⃣ VALIDATE mã khuyến mãi (nếu có)
+        if (promoCode != null && !promoCode.trim().isEmpty()) {
+            Promotion promo = promoDAO.findByCode(promoCode.trim());
+            if (promo == null) {
+                return "❌ Mã khuyến mãi không tồn tại!";
+            }
 
-        // 3️⃣ Set trạng thái ban đầu
+            if (!promo.isActive()) {
+                return "❌ Mã khuyến mãi đã bị ngừng hoạt động!";
+            }
+
+            if (promo.getStartDate().isAfter(today) || promo.getEndDate().isBefore(today)) {
+                return "❌ Mã khuyến mãi đã hết hạn!";
+            }
+
+            // Không tính lại discount, chỉ validate mã
+        }
+
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
-        // 4️⃣ Lưu booking vào DB
-        return bookingDAO.insert(booking);
+        // 4️⃣ Lưu booking
+        boolean success = bookingDAO.insert(booking);
+
+        if (!success) {
+            return "❌ Đặt xe thất bại, vui lòng thử lại!";
+        }
+
+        // 5️⃣ Nếu có mã khuyến mãi, lưu vào bảng BOOKING_PROMOTION
+        if (discountAmount > 0 && promoCode != null && !promoCode.trim().isEmpty()) {
+            Promotion promo = promoDAO.findByCode(promoCode.trim());
+            BookingPromotion bp = new BookingPromotion();
+            bp.setBookingId(booking.getBookingId());
+            bp.setPromoId(promo.getPromoId());
+            bp.setDiscountAmount(discountAmount);
+            bp.setFinalPrice(finalPrice);
+            bp.setAppliedAt(LocalDateTime.now());
+            bp.setStatus("Applied");
+            bookingPromoDAO.insert(bp);
+        }
+
+        return "success";
     }
 
-    /**
-     * Chủ xe duyệt đơn thuê
-     */
     public boolean approveBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Approved");
     }
 
-    /**
-     * Chủ xe từ chối đơn thuê
-     */
     public boolean rejectBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Rejected");
     }
 
-    /**
-     * Khách hàng thanh toán xong
-     */
     public boolean completeBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Paid");
     }
