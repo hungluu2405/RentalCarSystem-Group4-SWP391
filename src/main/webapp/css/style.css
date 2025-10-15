@@ -18698,3 +18698,120 @@ img {
         top: -21px;
     }
 }
+
+     /* Tổng thể section */
+ #section-car-details .container {
+     max-width: 100%;
+     padding-right: 40px;
+     padding-left: 40px;
+ }
+
+/* Cột phải (form) */
+#section-car-details .col-lg-4 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Hộp giá thuê */
+/* ==== PRICE BOX STYLE ==== */
+.de-price {
+    background: linear-gradient(135deg, #f6f7fb 0%, #ffffff 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px 28px;
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    margin-bottom: 22px;
+    margin-left: auto;
+}
+
+.de-price h2 {
+    color: #0b1736;
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin: 8px 0 0;
+    letter-spacing: -0.5px;
+}
+
+.de-price small,
+.de-price span,
+.de-price p {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.de-price:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+    transition: all 0.25s ease;
+}
+
+
+/* Form đặt xe */
+.booking-form {
+    width: 100%;
+    max-width: 380px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 30px;
+    border: 1px solid #e4e4e4;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.booking-form:hover {
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Label + Input */
+.booking-form label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1c1c1c;
+}
+
+.booking-form input,
+.booking-form select {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    transition: border-color 0.15s ease;
+}
+
+.booking-form input:focus,
+.booking-form select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.1rem rgba(25, 135, 84, 0.25);
+}
+
+/* Nút đặt xe */
+.booking-form button {
+    background: #2ecc71;
+    border: none;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 12px 0;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 10px;
+    transition: background 0.2s ease;
+}
+
+.booking-form button:hover {
+    background: #28b864;
+}
+
+/* Chữ phụ (ghi chú) */
+.booking-form small.text-muted {
+    font-size: 0.8rem;
+    color: #777 !important;
+}
+
