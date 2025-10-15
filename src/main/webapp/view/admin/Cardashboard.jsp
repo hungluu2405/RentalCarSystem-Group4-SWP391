@@ -3,35 +3,35 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>SB Admin - Dashboard</title>
+    <title>SB Admin - Dashboard</title>
 
-  <!-- Custom fonts for this template-->
-  <link href="${pageContext.request.contextPath}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom fonts for this template-->
+    <link href="${pageContext.request.contextPath}/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-  <!-- Page level plugin CSS-->
-  <link href="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Page level plugin CSS-->
+    <link href="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
-  <!-- Custom styles for this template-->
-  <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/colReorder-bootstrap4.css">
+    <link rel="stylesheet" href="css/colReorder-bootstrap4.css">
 
 </head>
 
 <body id="page-top">
 
-  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
     <a class="navbar-brand mr-1" href="index.html">Car rental system</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
-      <i class="fas fa-bars"></i>
+        <i class="fas fa-bars"></i>
     </button>
 
     <!-- Navbar Search -->
@@ -41,258 +41,284 @@
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-bell fa-fw"></i>
-          
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-envelope fa-fw"></i>
-          
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user-circle fa-fw"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="#">Settings</a>
-          <a class="dropdown-item" href="#">Activity Log</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
-        </div>
-      </li>
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-envelope fa-fw"></i>
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle fa-fw"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="#">Activity Log</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            </div>
+        </li>
     </ul>
 
-  </nav>
+</nav>
 
-  <div id="wrapper">
+<div id="wrapper">
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="accountDB">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="accountDB">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Account</span></a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link" href="CarDB">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>List car</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Booking history</span></a>
-      </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="accountDB">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="accountDB">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Account</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="CarDB">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>List car</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="tables.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Booking history</span></a>
+        </li>
     </ul>
-        
+
 
     <div id="content-wrapper">
 
-      <div class="container-fluid">
+        <div class="container-fluid">
 
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a style="font-size: 30px; font-weight: bold;">Car List</a>
-          </li>
-          
-        </ol>
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a style="font-size: 30px; font-weight: bold;">Car List</a>
+                </li>
 
-        <!-- Icon Cards-->
-        <div class="row">
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-primary o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fas fa-fw fa-comments"></i>
-                </div>
-                <div class="mr-5">26 New Messages!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
+            </ol>
+
+            <!-- Icon Cards-->
+            <div class="row">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-primary o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-comments"></i>
+                            </div>
+                            <div class="mr-5">26 New Messages!</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" href="#">
+                            <span class="float-left">View Details</span>
+                            <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-warning o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fas fa-fw fa-list"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="mr-5">11 New Tasks!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-warning o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-list"></i>
+                            </div>
+                            <div class="mr-5">11 New Tasks!</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" href="#">
+                            <span class="float-left">View Details</span>
+                            <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-success o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fas fa-fw fa-shopping-cart"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="mr-5">123 New Orders!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-success o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-shopping-cart"></i>
+                            </div>
+                            <div class="mr-5">123 New Orders!</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" href="#">
+                            <span class="float-left">View Details</span>
+                            <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-danger o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fas fa-fw fa-life-ring"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="mr-5">13 New Tickets!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
+                <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="card text-white bg-danger o-hidden h-100">
+                        <div class="card-body">
+                            <div class="card-body-icon">
+                                <i class="fas fa-fw fa-life-ring"></i>
+                            </div>
+                            <div class="mr-5">13 New Tickets!</div>
+                        </div>
+                        <a class="card-footer text-white clearfix small z-1" href="#">
+                            <span class="float-left">View Details</span>
+                            <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
-              </a>
+                        </a>
+                    </div>
+                </div>
             </div>
-          </div>
+
+
+
+            <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+            <!-- Cars Data Table -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-car"></i>
+                    Car Management
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Car ID</th>
+                                <th>Owner Name</th>
+                                <th>Type</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>License Plate</th>
+                                <th>Capacity</th>
+                                <th>Fuel Type</th>
+                                <th>Price/Day</th>
+                                <th>Availability</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <c:forEach var="car" items="${listC}">
+                                <tr>
+                                    <td>${car.carId}</td>
+                                    <td>${car.carOwnerName}</td>
+                                    <td>${car.typeName}</td>
+                                    <td>${car.brand}</td>
+                                    <td>${car.model}</td>
+                                    <td>${car.year}</td>
+                                    <td>${car.licensePlate}</td>
+                                    <td>${car.capacity}</td>
+                                    <td>${car.fuelType}</td>
+                                    <td>${car.pricePerDay}</td>
+                                    <td>${car.availability}</td>
+                                    <!--              <td>
+                <c:choose>
+                  <c:when test="${car.availability}">
+                    <span class="badge badge-success">Available</span>
+                  </c:when>
+                  <c:otherwise>
+                    <span class="badge badge-danger">Unavailable</span>
+                  </c:otherwise>
+                </c:choose>
+              </td>-->
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- /.container-fluid -->
+
+            <!-- Sticky Footer -->
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright   Your Website 2019</span>
+                    </div>
+                </div>
+            </footer>
+
         </div>
+        <!-- /.content-wrapper -->
 
-
-
-        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<!-- Cars Data Table -->
-<div class="card mb-3">
-  <div class="card-header">
-    <i class="fas fa-car"></i>
-    Car Management
-  </div>
-
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-        <thead class="thead-dark">
-          <tr>
-            <th>Car ID</th>
-            <th>Owner Name</th>
-            <th>Type</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>License Plate</th>
-            <th>Capacity</th>
-            <th>Fuel Type</th>
-            <th>Price/Day</th>
-            <th>Availability</th>
-          </tr>
-        </thead>
-
-
-
-      </table>
     </div>
-  </div>
-</div>
+    <!-- /#wrapper -->
 
-      <!-- /.container-fluid -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-      <!-- Sticky Footer -->
-      <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright � Your Website 2019</span>
-          </div>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"> </span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/logout">Logout</a>
+                </div>
+            </div>
         </div>
-      </footer>
-
     </div>
-    <!-- /.content-wrapper -->
 
-  </div>
-  <!-- /#wrapper -->
+    <!-- Bootstrap core JavaScript-->
+    <script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    <!-- Core plugin JavaScript-->
+    <script src="${pageContext.request.contextPath}/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">�</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="${pageContext.request.contextPath}/logout">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
+    <!-- Page level plugin JavaScript-->
+    <script src="${pageContext.request.contextPath}/vendor/chart.js/Chart.min.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.js"></script>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
-  <script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="${pageContext.request.contextPath}/js/sb-admin.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="${pageContext.request.contextPath}/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Page level plugin JavaScript-->
-  <script src="${pageContext.request.contextPath}/vendor/chart.js/Chart.min.js"></script>
-  <script src="${pageContext.request.contextPath}/vendor/datatables/jquery.dataTables.js"></script>
-  <script src="${pageContext.request.contextPath}/vendor/datatables/dataTables.bootstrap4.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="${pageContext.request.contextPath}/js/sb-admin.min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
-
-  <!-- Demo scripts for this page-->
-  <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
-  <script src="${pageContext.request.contextPath}/js/demo/chart-area-demo.js"></script>
-  <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
+    <!-- Demo scripts for this page-->
+    <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/js/demo/chart-area-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 
 
 </body>
