@@ -334,61 +334,6 @@ public class CarDAO extends DBContext {
         return 0;
     }
 
-    
-    public List<Car> getAllCarsForAdmin() {
-    List<Car> cars = new ArrayList<>();
-
-    String sql = """
-        SELECT 
-            c.CAR_ID,
-            u.FULL_NAME AS CAR_OWNER_NAME,
-            t.NAME AS TYPE_NAME,        
-            c.MODEL,
-            c.BRAND,
-            c.YEAR,
-            c.LICENSE_PLATE,
-            c.CAPACITY,
-            c.FUEL_TYPE,
-            c.PRICE_PER_DAY,
-            c.AVAILABILITY
-        FROM [CarRentalDB].[dbo].[CAR] AS c
-        JOIN [CarRentalDB].[dbo].[CAR_TYPE] AS t
-            ON c.TYPE_ID = t.TYPE_ID
-        JOIN [CarRentalDB].[dbo].[USER_PROFILE] AS u
-            ON c.USER_ID = u.USER_ID
-        ORDER BY c.CAR_ID ASC
-    """;
-
-    try (Connection conn = getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-
-        while (rs.next()) {
-            Car car = new Car();
-            car.setCarId(rs.getInt("CAR_ID"));
-            car.setModel(rs.getString("MODEL"));
-            car.setBrand(rs.getString("BRAND"));
-            car.setYear(rs.getInt("YEAR"));
-            car.setLicensePlate(rs.getString("LICENSE_PLATE"));
-            car.setCapacity(rs.getInt("CAPACITY"));
-            car.setFuelType(rs.getString("FUEL_TYPE"));
-            car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
-            car.setAvailability(rs.getBoolean("AVAILABILITY"));
-
-            // Thông tin join thêm
-            car.setTypeName(rs.getString("TYPE_NAME"));
-            car.setCarOwnerName(rs.getString("CAR_OWNER_NAME"));
-
-            cars.add(car);
-        }
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    return cars;
-}
-
 
     /**
      * Lấy danh sách xe mà chủ xe đang sở hữu.

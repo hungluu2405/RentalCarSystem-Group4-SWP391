@@ -222,33 +222,7 @@
           </tr>
         </thead>
 
-        <tbody>
-          <c:forEach var="car" items="${listC}">
-            <tr>
-              <td>${car.carId}</td>
-              <td>${car.carOwnerName}</td>
-              <td>${car.typeName}</td>
-              <td>${car.brand}</td>
-              <td>${car.model}</td>
-              <td>${car.year}</td>
-              <td>${car.licensePlate}</td>
-              <td>${car.capacity}</td>
-              <td>${car.fuelType}</td>
-              <td>${car.pricePerDay}</td>
-              <td>${car.availability}</td>
-<!--              <td>
-                <c:choose>
-                  <c:when test="${car.availability}">
-                    <span class="badge badge-success">Available</span>
-                  </c:when>
-                  <c:otherwise>
-                    <span class="badge badge-danger">Unavailable</span>
-                  </c:otherwise>
-                </c:choose>
-              </td>-->
-            </tr>
-          </c:forEach>
-        </tbody>
+
 
       </table>
     </div>
@@ -261,7 +235,7 @@
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
+            <span>Copyright ï¿½ Your Website 2019</span>
           </div>
         </div>
       </footer>
@@ -285,7 +259,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+            <span aria-hidden="true">ï¿½</span>
           </button>
         </div>
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
