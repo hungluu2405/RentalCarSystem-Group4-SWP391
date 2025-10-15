@@ -326,7 +326,7 @@
 
                                     <div class="form-group mb-3">
                                         <label class="fw-bold mb-1">Giờ nhận xe</label>
-                                        <select name="startTime" class="form-select" required>
+                                        <select name="pickupTime" class="form-select" required>
                                             <option value="" disabled selected>-- Chọn giờ nhận --</option>
                                             <c:forEach var="hour" begin="6" end="22">
                                                 <option value="${hour < 10 ? '0' : ''}${hour}:00">
@@ -343,7 +343,7 @@
 
                                     <div class="form-group mb-3">
                                         <label class="fw-bold mb-1">Giờ trả xe</label>
-                                        <select name="endTime" class="form-select" required>
+                                        <select name="dropoffTime" class="form-select" required>
                                             <option value="" disabled selected>-- Chọn giờ trả --</option>
                                             <c:forEach var="hour" begin="6" end="22">
                                                 <option value="${hour < 10 ? '0' : ''}${hour}:00">
@@ -357,7 +357,7 @@
                                         <label class="fw-bold mb-1">Địa điểm nhận & trả xe</label>
                                         <div class="p-3 border rounded bg-light">
                                             <i class="fa fa-map-marker text-success me-2"></i>
-<%--                                            ${car.location}--%>
+                                            ${car.location}
                                         </div>
                                         <small class="text-muted">
                                             Xe chỉ nhận & trả tại địa chỉ cố định này.

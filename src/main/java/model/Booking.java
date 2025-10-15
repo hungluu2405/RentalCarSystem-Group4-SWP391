@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Booking {
     private int bookingId;
@@ -13,14 +14,13 @@ public class Booking {
     private String status;
     private LocalDateTime createdAt;
     private String location;
+    private LocalTime pickupTime;
+    private LocalTime dropoffTime;
 
     public Booking() {
     }
 
-    public Booking(int bookingId, int carId, int userId,
-                   LocalDate startDate, LocalDate endDate,
-                   double totalPrice, String status,
-                   LocalDateTime createdAt, String location) {
+    public Booking(int bookingId, int carId, int userId, LocalDate startDate, LocalDate endDate, double totalPrice, String status, LocalDateTime createdAt, String location, LocalTime pickupTime, LocalTime dropoffTime) {
         this.bookingId = bookingId;
         this.carId = carId;
         this.userId = userId;
@@ -30,6 +30,24 @@ public class Booking {
         this.status = status;
         this.createdAt = createdAt;
         this.location = location;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
+    }
+
+    public LocalTime getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(LocalTime pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public LocalTime getDropoffTime() {
+        return dropoffTime;
+    }
+
+    public void setDropoffTime(LocalTime dropoffTime) {
+        this.dropoffTime = dropoffTime;
     }
 
     public int getBookingId() {

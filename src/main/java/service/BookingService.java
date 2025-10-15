@@ -14,10 +14,24 @@ public class BookingService {
     private final CarDAO carDAO = new CarDAO();
 
     /**
-     * Xử lý khi user nhấn “Đặt xe”
+     * Tạo booking mới (khi user đặt xe)
      */
     public boolean createBooking(Booking booking) {
-        // 1️⃣ Kiểm tra xem xe có bị trùng lịch không
+
+        LocalDate today = LocalDate.now();
+
+        if (booking.getStartDate().isBefore(today)) {
+            System.out.println("❌ Ngày bắt đầu nhỏ hơn ngày hiện tại!");
+            return false;
+        }
+
+        if (booking.getEndDate().isBefore(booking.getStartDate())) {
+            System.out.println("❌ Ngày kết thúc nhỏ hơn ngày bắt đầu!");
+            return false;
+        }
+
+
+        // 1️⃣ Kiểm tra xe có bị trùng lịch không
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
@@ -28,36 +42,41 @@ public class BookingService {
             return false; // Xe đã có người thuê trong khoảng thời gian này
         }
 
-        // 2️⃣ Tính tổng tiền thuê xe
-//        double pricePerDay =carDAO.getCarPrice(booking.getCarId());
-        long days = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
-        if (days <= 0) days = 1; // ít nhất 1 ngày thuê
-//        booking.setTotalPrice(pricePerDay * days);
+        // 2️⃣ Tính tổng tiền thuê (theo giờ)
+        double pricePerDay = carDAO.getCarPrice(booking.getCarId());
+        long hours = ChronoUnit.HOURS.between(
+                booking.getStartDate().atTime(booking.getPickupTime()),
+                booking.getEndDate().atTime(booking.getDropoffTime())
+        );
+        if (hours <= 0) hours = 1;
 
-        // 3️⃣ Set trạng thái ban đầu (chờ duyệt)
+        double total = (pricePerDay / 24.0) * hours;
+        booking.setTotalPrice(total);
+
+        // 3️⃣ Set trạng thái ban đầu
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
-        // 4️⃣ Thêm booking vào DB
+        // 4️⃣ Lưu booking vào DB
         return bookingDAO.insert(booking);
     }
 
     /**
-     * Duyệt đơn thuê xe (Owner)
+     * Chủ xe duyệt đơn thuê
      */
     public boolean approveBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Approved");
     }
 
     /**
-     * Từ chối đơn thuê xe (Owner)
+     * Chủ xe từ chối đơn thuê
      */
     public boolean rejectBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Rejected");
     }
 
     /**
-     * Cập nhật trạng thái thành “Paid” sau khi thanh toán thành công
+     * Khách hàng thanh toán xong
      */
     public boolean completeBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Paid");

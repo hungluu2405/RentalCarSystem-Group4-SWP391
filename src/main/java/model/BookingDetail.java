@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class BookingDetail {
     private int bookingId;
@@ -10,9 +11,38 @@ public class BookingDetail {
     private LocalDate endDate;
     private String status;
     private double totalPrice;    // ✅ hiển thị giá tổng (từ bảng booking)
-
+    private LocalTime pickupTime;
+    private LocalTime dropoffTime;
     // Constructors
     public BookingDetail() {}
+
+    public BookingDetail(int bookingId, String carName, String location, LocalDate startDate, LocalDate endDate, String status, double totalPrice, LocalTime pickupTime, LocalTime dropoffTime) {
+        this.bookingId = bookingId;
+        this.carName = carName;
+        this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
+    }
+
+    public LocalTime getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(LocalTime pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public LocalTime getDropoffTime() {
+        return dropoffTime;
+    }
+
+    public void setDropoffTime(LocalTime dropoffTime) {
+        this.dropoffTime = dropoffTime;
+    }
 
     // Getters & Setters
     public int getBookingId() {
