@@ -20,6 +20,9 @@ public class Car {
     private String carOwnerName; // FULL_NAME từ USER_PROFILE
     private String typeName;     // NAME từ CAR_TYPE
 
+
+
+
     public Car() {}
 
     public Car(int carId, int ownerId, int typeId, String model, String brand, int year, String licensePlate, int capacity, String transmission, String fuelType, BigDecimal pricePerDay, String description, boolean availability, String location, String carOwnerName, String typeName) {
@@ -41,21 +44,7 @@ public class Car {
         this.typeName = typeName;
     }
 
-    public String getCarOwnerName() {
-        return carOwnerName;
-    }
 
-    public void setCarOwnerName(String carOwnerName) {
-        this.carOwnerName = carOwnerName;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
 
     public String getLocation() {
         return location;
@@ -104,4 +93,22 @@ public class Car {
 
     public boolean isAvailability() { return availability; }    
     public void setAvailability(boolean availability) { this.availability = availability; }
+
+    public String getCarOwnerName() {
+        return carOwnerName;
+    }
+
+    public void setCarOwnerName(String carOwnerName) {
+        this.carOwnerName = carOwnerName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+    
+    
 }
