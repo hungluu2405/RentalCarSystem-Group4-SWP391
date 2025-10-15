@@ -235,8 +235,8 @@
                         <td>${car.capacity}</td>
                         <td>${car.fuelType}</td>
                         <td>${car.pricePerDay}</td>
-                        <td>${car.availability}</td>
-                        <!--              <td>
+
+                <td>
                 <c:choose>
                   <c:when test="${car.availability}">
                     <span class="badge badge-success">Available</span>
@@ -245,7 +245,7 @@
                     <span class="badge badge-danger">Unavailable</span>
                   </c:otherwise>
                 </c:choose>
-              </td>-->
+              </td>
                     </tr>
                 </c:forEach>
                 </tbody>
