@@ -16,6 +16,9 @@ public class Car {
     private BigDecimal pricePerDay;
     private String description;
     private boolean availability;
+    private String location;
+    private String carOwnerName; // FULL_NAME từ USER_PROFILE
+    private String typeName;     // NAME từ CAR_TYPE
 
     private String location;
     private String carOwnerName; // FULL_NAME từ USER_PROFILE
@@ -23,6 +26,49 @@ public class Car {
 
 
     public Car() {}
+
+    public Car(int carId, int ownerId, int typeId, String model, String brand, int year, String licensePlate, int capacity, String transmission, String fuelType, BigDecimal pricePerDay, String description, boolean availability, String location, String carOwnerName, String typeName) {
+        this.carId = carId;
+        this.ownerId = ownerId;
+        this.typeId = typeId;
+        this.model = model;
+        this.brand = brand;
+        this.year = year;
+        this.licensePlate = licensePlate;
+        this.capacity = capacity;
+        this.transmission = transmission;
+        this.fuelType = fuelType;
+        this.pricePerDay = pricePerDay;
+        this.description = description;
+        this.availability = availability;
+        this.location = location;
+        this.carOwnerName = carOwnerName;
+        this.typeName = typeName;
+    }
+
+    public String getCarOwnerName() {
+        return carOwnerName;
+    }
+
+    public void setCarOwnerName(String carOwnerName) {
+        this.carOwnerName = carOwnerName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     // Getters và Setters
     public int getCarId() { return carId; }
