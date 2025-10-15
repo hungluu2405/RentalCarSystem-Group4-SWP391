@@ -50,14 +50,14 @@ public class CustomerOrderController extends HttpServlet {
 
         // === THAY ĐỔI CHÍNH NẰM Ở ĐÂY ===
         // Gọi phương thức mới getRecentBookingDetails để lấy danh sách chi tiết
-        List<BookingDetail> recentBookings = bookingDAO.getRecentBookingDetails(user.getUserId(), 5);
+//        List<BookingDetail> recentBookings = bookingDAO.getRecentBookingDetails(user.getUserId(), 5);
         // ================================
 
         // Gửi dữ liệu qua JSP
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
         request.setAttribute("cancelled", cancelled);
-        request.setAttribute("recentBookings", recentBookings); // Gửi danh sách chi tiết qua JSP
+//        request.setAttribute("recentBookings", recentBookings); // Gửi danh sách chi tiết qua JSP
 
         // Chuyển tiếp đến file JSP
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);

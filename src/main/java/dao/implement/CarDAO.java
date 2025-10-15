@@ -1,7 +1,6 @@
 package dao.implement;
 
 import dao.DBContext;
-
 import java.sql.*;
 import java.util.*;
 import java.math.BigDecimal;
@@ -13,11 +12,11 @@ public class CarDAO extends DBContext {
 
     // Lấy danh sách xe có filter và phân trang
     public List<CarViewModel> findCars(String name, String brand, String typeIdStr,
-            String capacity, String fuel, String price,
-            int page, int pageSize) {
+                                       String capacity, String fuel, String price,
+                                       int page, int pageSize) {
         List<CarViewModel> list = new ArrayList<>();
         String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.PRICE_PER_DAY, c.CAPACITY, "
-                + "c.TRANSMISSION, c.FUEL_TYPE, t.NAME AS CAR_TYPE_NAME, "
+                + "c.TRANSMISSION, c.FUEL_TYPE, c.LOCATION, t.NAME AS CAR_TYPE_NAME, "
                 + "(SELECT TOP 1 IMAGE_URL FROM CAR_IMAGE WHERE CAR_ID = c.CAR_ID) AS IMAGE_URL "
                 + "FROM CAR c "
                 + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID WHERE 1=1";
@@ -80,6 +79,7 @@ public class CarDAO extends DBContext {
                 car.setTransmission(rs.getString("TRANSMISSION"));
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+                car.setLocation(rs.getString("LOCATION")); // ✅ thêm location
 
                 List<CarImage> images = new ArrayList<>();
                 String imageUrl = rs.getString("IMAGE_URL");
@@ -102,7 +102,7 @@ public class CarDAO extends DBContext {
 
     // countCars version
     public int countCars(String name, String brand, String typeIdStr,
-            String capacity, String fuel, String price) {
+                         String capacity, String fuel, String price) {
         String sql = "SELECT COUNT(*) FROM CAR c "
                 + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID WHERE 1=1";
 
@@ -228,7 +228,7 @@ public class CarDAO extends DBContext {
         String sql = "SELECT TYPE_ID, NAME FROM CAR_TYPE ORDER BY NAME";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                types.add(rs.getInt("TYPE_ID") + ":" + rs.getString("NAME")); // có thể dùng format "id:name" để frontend dễ lấy
+                types.add(rs.getInt("TYPE_ID") + ":" + rs.getString("NAME"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,6 +255,7 @@ public class CarDAO extends DBContext {
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setCarTypeName(rs.getString("TYPE_NAME"));
                 car.setDescription(rs.getString("DESCRIPTION"));
+                car.setLocation(rs.getString("LOCATION")); // ✅ thêm dòng này
 
                 // Lấy danh sách ảnh
                 List<CarImage> images = new ArrayList<>();
@@ -282,9 +283,8 @@ public class CarDAO extends DBContext {
     public List<CarViewModel> findTopBookedCars(int limit) {
         List<CarViewModel> cars = new ArrayList<>();
 
-        // Ghép trực tiếp biến limit vào TOP (SQL Server không hỗ trợ TOP ?)
         String sql = "SELECT TOP " + limit + " "
-                + "c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.PRICE_PER_DAY, "
+                + "c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.LOCATION, c.PRICE_PER_DAY, "
                 + "ct.NAME AS CarTypeName, "
                 + "(SELECT TOP 1 ci.IMAGE_URL FROM CAR_IMAGE ci WHERE ci.CAR_ID = c.CAR_ID ORDER BY ci.IMAGE_ID) AS ImageUrl, "
                 + "COUNT(b.BOOKING_ID) AS booking_count "
@@ -292,7 +292,7 @@ public class CarDAO extends DBContext {
                 + "JOIN CAR_TYPE ct ON c.TYPE_ID = ct.TYPE_ID "
                 + "LEFT JOIN BOOKING b ON c.CAR_ID = b.CAR_ID "
                 + "WHERE c.AVAILABILITY = 1 "
-                + "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.PRICE_PER_DAY, ct.NAME "
+                + "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.PRICE_PER_DAY, c.LOCATION, ct.NAME "
                 + "ORDER BY booking_count DESC";
 
         try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
@@ -307,6 +307,7 @@ public class CarDAO extends DBContext {
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
                 car.setCarTypeName(rs.getString("CarTypeName"));
+                car.setLocation(rs.getString("LOCATION")); // ✅ thêm dòng này
                 car.setImageUrl(rs.getString("ImageUrl"));
                 cars.add(car);
             }
@@ -317,9 +318,6 @@ public class CarDAO extends DBContext {
         return cars;
     }
 
-    /**
-     * Đếm tổng số xe mà chủ xe đang sở hữu.
-     */
     public int countCarsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM CAR WHERE OWNER_ID = ?";
         try (Connection conn = getConnection();
@@ -395,7 +393,7 @@ public class CarDAO extends DBContext {
      */
     public List<CarViewModel> getCarsByOwner(int ownerId) {
         List<CarViewModel> list = new ArrayList<>();
-        String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.PRICE_PER_DAY, c.CAPACITY, " +
+        String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
                 "c.TRANSMISSION, c.FUEL_TYPE, t.NAME AS CAR_TYPE_NAME, i.IMAGE_URL " +
                 "FROM CAR c " +
                 "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
@@ -416,6 +414,7 @@ public class CarDAO extends DBContext {
                 car.setTransmission(rs.getString("TRANSMISSION"));
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+                car.setLocation(rs.getString("LOCATION")); // ✅ thêm dòng này
                 car.setImageUrl(rs.getString("IMAGE_URL") != null ? rs.getString("IMAGE_URL") : "default.jpg");
                 list.add(car);
             }
@@ -425,8 +424,17 @@ public class CarDAO extends DBContext {
         return list;
     }
 
-
-
-
-
+    public double getCarPrice(int carId) {
+        String sql = "SELECT PRICE_PER_DAY FROM CAR WHERE CAR_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("PRICE_PER_DAY");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

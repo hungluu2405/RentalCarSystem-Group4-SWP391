@@ -6,7 +6,9 @@ import java.sql.SQLException;
 
 public class DBContext {
     protected Connection connection;
-
+    public DBContext() {
+        this.connection = getConnection(); // 👈 dòng này phải nằm TRONG constructor
+    }
     public Connection getConnection() {
         try {
             // Load SQL Server Driver
@@ -15,7 +17,7 @@ public class DBContext {
             // JDBC URL cho SQL Server
             String url = "jdbc:sqlserver://localhost:1433;databaseName=CarRentalDB;encrypt=false";
             String user = "sa";        // user SQL Server
-            String password = "12345678"; // pass SQL Server
+            String password = "123456"; // pass SQL Server
 
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("✅ Kết nối SQL Server thành công!");
