@@ -6,24 +6,26 @@
 <html lang="vi">
 
 <head>
-    <title>${car.model} - Vehicle Fleet</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <jsp:include page="../common/customer/_head.jsp"/>
+<%--    <title>${car.model} - Vehicle Fleet</title>--%>
+<%--    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">--%>
+<%--    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">--%>
+<%--    <meta content="width=device-width, initial-scale=1.0" name="viewport">--%>
 
-    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
-    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"
-          type="text/css">
+<%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">--%>
+<%--    <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css">--%>
+<%--    <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">--%>
+<%--    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">--%>
+<%--    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">--%>
+<%--    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"--%>
+<%--          type="text/css">--%>
 </head>
 
 <body>
 <div id="wrapper">
     <!-- Header -->
-    <header class="transparent scroll-light has-topbar">
+<%--    <header class="transparent scroll-light has-topbar">--%>
+    <jsp:include page="../common/customer/_header.jsp"/>
         <%-- giữ nguyên header cũ --%>
     </header>
 
