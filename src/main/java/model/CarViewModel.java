@@ -13,16 +13,16 @@ public class CarViewModel {
     private String fuelType;
     private String carTypeName;
     private String description;
-    private String imageUrl;           // thêm trường ảnh chính
-    private List<CarImage> images;     // thêm danh sách ảnh phụ (nếu có)
-private String location;
+    private String imageUrl;
+    private List<CarImage> images;
+    private String location;
+    private String licensePlate;
 
-    public CarViewModel() {}
+    public CarViewModel() {
+    }
 
-    // Constructor đầy đủ 10 tham số (nếu cần cho DAO)
 
-
-    public CarViewModel(int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String carTypeName, String description, String imageUrl, List<CarImage> images, String location) {
+    public CarViewModel(int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String carTypeName, String description, String imageUrl, List<CarImage> images, String location, String licensePlate) {
         this.carId = carId;
         this.brand = brand;
         this.model = model;
@@ -35,6 +35,15 @@ private String location;
         this.imageUrl = imageUrl;
         this.images = images;
         this.location = location;
+        this.licensePlate = licensePlate;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public String getLocation() {
@@ -46,36 +55,91 @@ private String location;
     }
 
     // Getters và Setters
-    public int getCarId() { return carId; }
-    public void setCarId(int carId) { this.carId = carId; }
+    public int getCarId() {
+        return carId;
+    }
 
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
 
-    public String getModel() { return model; }
-    public void setModel(String model) { this.model = model; }
+    public String getBrand() {
+        return brand;
+    }
 
-    public BigDecimal getPricePerDay() { return pricePerDay; }
-    public void setPricePerDay(BigDecimal pricePerDay) { this.pricePerDay = pricePerDay; }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public String getModel() {
+        return model;
+    }
 
-    public String getTransmission() { return transmission; }
-    public void setTransmission(String transmission) { this.transmission = transmission; }
+    public void setModel(String model) {
+        this.model = model;
+    }
 
-    public String getFuelType() { return fuelType; }
-    public void setFuelType(String fuelType) { this.fuelType = fuelType; }
+    public BigDecimal getPricePerDay() {
+        return pricePerDay;
+    }
 
-    public String getCarTypeName() { return carTypeName; }
-    public void setCarTypeName(String carTypeName) { this.carTypeName = carTypeName; }
+    public void setPricePerDay(BigDecimal pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public int getCapacity() {
+        return capacity;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
 
-    public List<CarImage> getImages() { return images; }
-    public void setImages(List<CarImage> images) { this.images = images; }
+    public String getTransmission() {
+        return transmission;
+    }
+
+    public void setTransmission(String transmission) {
+        this.transmission = transmission;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public String getCarTypeName() {
+        return carTypeName;
+    }
+
+    public void setCarTypeName(String carTypeName) {
+        this.carTypeName = carTypeName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<CarImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<CarImage> images) {
+        this.images = images;
+    }
 }

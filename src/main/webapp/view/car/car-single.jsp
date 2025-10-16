@@ -264,10 +264,9 @@
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 
-<!-- 🟦 Script tính toán giá và áp mã khuyến mãi -->
 <script>
-    // Biến toàn cục
-    let currentTotal = parseFloat(document.getElementById("priceValue").dataset.total);
+    // Lấy giá thuê gốc mỗi ngày từ input ẩn (giá này không bao giờ thay đổi)
+    const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value);
     let appliedPromo = null;
 
     // Tính tổng tiền dựa trên số ngày
@@ -275,25 +274,42 @@
         const startDate = document.querySelector('input[name="startDate"]').value;
         const endDate = document.querySelector('input[name="endDate"]').value;
 
+        // LUÔN LUÔN DÙNG GIÁ GỐC KHÔNG ĐỔI
+        const pricePerDay = ORIGINAL_PRICE_PER_DAY;
+
         if (!startDate || !endDate) {
-            return currentTotal;
+            // Nếu thiếu ngày, trả về giá 1 ngày
+            return pricePerDay;
         }
 
         const start = new Date(startDate);
         const end = new Date(endDate);
-        const timeDiff = end - start;
-        const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-        if (days <= 0) {
-            return currentTotal;
+        // 1. Kiểm tra ngày hợp lệ
+        if (end < start) {
+            document.getElementById("promoMessage").innerHTML = "❌ Ngày trả xe không được trước ngày nhận!";
+            document.getElementById("promoMessage").className = "text-danger mt-2 d-block";
+            return pricePerDay;
         }
 
-        const pricePerDay = parseFloat(document.getElementById("priceValue").dataset.total);
+        const timeDiff = end - start;
+        // 2. TÍNH LẠI SỐ NGÀY: làm tròn lên để tính cả ngày đầu tiên và đảm bảo thuê ít nhất 1 ngày.
+        let days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+        // Đảm bảo số ngày thuê tối thiểu là 1 nếu ngày hợp lệ
+        if (days <= 0 && timeDiff >= 0) {
+            days = 1;
+        }
+
         const newTotal = days * pricePerDay;
 
-        // Cập nhật hiển thị phí thuê xe
+        // Cập nhật hiển thị phí thuê xe (KHÔNG GHI ĐÈ data-total hoặc giá gốc)
         document.getElementById("priceValue").textContent = newTotal.toLocaleString('vi-VN');
-        document.getElementById("priceValue").dataset.total = newTotal;
+
+        // Xóa thông báo lỗi nếu ngày đã hợp lệ
+        if (document.getElementById("promoMessage").innerHTML.includes("Ngày trả xe")) {
+            document.getElementById("promoMessage").innerHTML = "";
+        }
 
         return newTotal;
     }
@@ -301,9 +317,8 @@
     // Cập nhật giá khi thay đổi ngày
     function updatePriceOnDateChange() {
         const newTotal = calculateTotal();
-        currentTotal = newTotal;
 
-        // Nếu có mã khuyến mãi, tính lại
+        // Nếu có mã khuyến mãi đã áp dụng, tính lại
         if (appliedPromo) {
             applyPromoCode(appliedPromo.code, newTotal);
         } else {
@@ -311,8 +326,8 @@
         }
     }
 
-    // Áp dụng mã khuyến mãi
-    function applyPromoCode(code, total = currentTotal) {
+    // Áp dụng mã khuyến mãi (Giữ nguyên logic API)
+    function applyPromoCode(code, total = calculateTotal()) {
         const msg = document.getElementById("promoMessage");
         const contextPath = "${pageContext.request.contextPath}";
 
@@ -321,6 +336,11 @@
             msg.className = "text-danger mt-2 d-block";
             return;
         }
+
+        // Tạm thời hiển thị đang xử lý và xóa lỗi ngày nếu có
+        msg.innerHTML = "Đang kiểm tra mã...";
+        msg.className = "text-info mt-2 d-block";
+
 
         const url = contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total;
 
@@ -389,6 +409,9 @@
                 document.getElementById("applyPromo").click();
             }
         });
+
+        // Khởi tạo giá trị ban đầu nếu các trường ngày đã được điền sẵn
+        updatePriceOnDateChange();
     });
 </script>
 </body>
