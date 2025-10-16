@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: tunge
-  Date: 10/9/2025
-  Time: 11:06 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -23,12 +16,11 @@
     <div class="no-bottom no-top zebra" id="content">
         <div id="top"></div>
         <section id="subheader" class="jarallax text-light">
-            <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img"
-                 alt="">
+            <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img" alt="">
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Car Owner Dashboard</h1></div>
+                        <div class="col-md-12 text-center"><h1>Car Owner Booking Dashboard</h1></div>
                     </div>
                 </div>
             </div>
@@ -37,122 +29,132 @@
         <section id="section-cars" class="bg-gray-100">
             <div class="container">
                 <div class="row">
-                    <%-- Sidebar --%>
+                    <!-- SIDEBAR -->
                     <div class="col-lg-3 mb30">
-                        <%-- Sửa lại đuôi file thành .jspf --%>
                         <jsp:include page="../common/carOwner/_sidebarOwner.jsp">
-                            <jsp:param name="activePage" value="profile"/>
+                            <jsp:param name="activePage" value="ownerBooking"/>
                         </jsp:include>
                     </div>
 
                     <!-- MAIN CONTENT -->
                     <div class="col-lg-9">
+                        <!-- STATISTICS -->
                         <div class="row">
-                            <!-- STATISTICS -->
-
                             <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
+                                <div class="card padding30 rounded-5 text-center">
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-car"></i>
                                     </div>
-                                    <span class="h1 mb0">${totalCars}</span><span class="text-gray">Total Cars</span>
+                                    <span class="h1 mb0">${totalCars}</span><br>
+                                    <span class="text-gray">Total Cars</span>
                                 </div>
                             </div>
-
                             <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
+                                <div class="card padding30 rounded-5 text-center">
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-calendar"></i>
                                     </div>
-                                    <span class="h1 mb0">${totalBookings}</span><span class="text-gray">Total Bookings</span>
+                                    <span class="h1 mb0">${totalBookings}</span><br>
+                                    <span class="text-gray">Total Bookings</span>
                                 </div>
                             </div>
-
                             <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
+                                <div class="card padding30 rounded-5 text-center">
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-toggle-on"></i>
                                     </div>
-                                    <span class="h1 mb0">${activeBookings}</span><span class="text-gray">Active booking</span>
+                                    <span class="h1 mb0">${activeBookings}</span><br>
+                                    <span class="text-gray">Active Bookings</span>
                                 </div>
                             </div>
-
                             <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
+                                <div class="card padding30 rounded-5 text-center">
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-ban"></i>
                                     </div>
-                                    <span class="h1 mb0">${cancelledBookings}</span><span class="text-gray">Cancel booking</span>
+                                    <span class="h1 mb0">${cancelledBookings}</span><br>
+                                    <span class="text-gray">Cancelled Bookings</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- RECENT BOOKINGS -->
-                        <h5 class="fw-bold mb-3 text-secondary">My Recent Bookings</h5>
-                        <div class="table-responsive">
+                        <!-- PENDING BOOKINGS -->
+                        <h5 class="fw-bold mt-5 mb-3 text-secondary">Pending Booking Requests</h5>
+                        <div class="table-responsive mb-5">
                             <table class="table table-bordered align-middle text-center">
                                 <thead class="table-light">
                                 <tr>
                                     <th>Booking ID</th>
-                                    <th>Image</th>
-                                    <th>Car's name</th>
+                                    <th>Car Name</th>
                                     <th>Customer</th>
-                                    <th>Pick Up</th>
-                                    <th>Drop Off</th>
+                                    <th>Phone</th>
+                                    <th>Location</th>
+                                    <th>Pickup Time</th>
+                                    <th>Dropoff Time</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
-                                    <th>Price</th>
+                                    <th>Total Price ($)</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:choose>
-                                    <c:when test="${not empty recentBookings}">
-                                        <c:forEach var="b" items="${recentBookings}">
+                                    <c:when test="${not empty pendingBookings}">
+                                        <c:forEach var="b" items="${pendingBookings}">
                                             <tr>
                                                 <td>#${b.bookingId}</td>
-                                                <td>
-                                                    <img src="${b.car.imageUrl}" alt="${b.car.name}"
-                                                         class="car-image"
-                                                         style="width: 80px; height: 50px; object-fit: cover; border-radius: 6px;"/>
-                                                </td>
                                                 <td>${b.carName}</td>
-                                                <td>${b.customerName}</td>
-                                                <td>${b.pickUpLocation}</td>
-                                                <td>${b.dropOffLocation}</td>
+                                                <td>${b.customerProfile.fullName}</td>
+                                                <td>${b.customerProfile.phone}</td>
+                                                <td>${b.location}</td>
+                                                <td>${b.pickupTime}</td>
+                                                <td>${b.dropoffTime}</td>
                                                 <td>${b.startDate}</td>
                                                 <td>${b.endDate}</td>
-                                                <td>${b.price}</td>
+                                                <td>${b.totalPrice}</td>
                                                 <td>
-                                                    <div class="badge rounded-pill
-                                                            ${b.status eq 'Completed' ? 'bg-success' : 
-                                                              b.status eq 'Cancelled' ? 'bg-danger' : 'bg-warning'}">
+                                                    <div class="badge
+                                ${b.status eq 'Pending' ? 'bg-warning text-dark' :
+                                  b.status eq 'Accepted' ? 'bg-success' :
+                                  b.status eq 'Rejected' ? 'bg-danger' : 'bg-secondary'}">
                                                             ${b.status}
                                                     </div>
+                                                </td>
+                                                <td>
+                                                    <form method="post" action="${pageContext.request.contextPath}/owner/dashboard"
+                                                          class="d-flex justify-content-center gap-2">
+                                                        <input type="hidden" name="bookingId" value="${b.bookingId}">
+                                                        <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">
+                                                            Accept
+                                                        </button>
+                                                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">
+                                                            Reject
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
                                         <tr>
-                                            <td colspan="10" class="text-muted">No recent bookings found.</td>
+                                            <td colspan="12" class="text-muted">No pending booking requests.</td>
                                         </tr>
                                     </c:otherwise>
-
                                 </c:choose>
                                 </tbody>
                             </table>
                         </div>
+
+
                     </div>
                 </div>
             </div>
-            <%--    </div> --%>
         </section>
     </div>
 
     <!-- FOOTER -->
     <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
-
+</div>
 </body>
 </html>
-
