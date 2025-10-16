@@ -124,18 +124,29 @@ public class BookingController extends HttpServlet {
             // =============== GỌI SERVICE XỬ LÝ BOOKING ===============
             String result = bookingService.createBooking(booking, finalPromoCode, discountAmount);
 
-            // Lấy lại thông tin xe để hiển thị lại trang chi tiết
-            CarViewModel car = carDAO.getCarById(carId);
-            request.setAttribute("car", car);
-
             // =============== XỬ LÝ KẾT QUẢ ===============
             if (result.equals("success")) {
-                request.setAttribute("message", "✅ Đặt xe thành công! Vui lòng chờ chủ xe duyệt.");
-            } else {
-                request.setAttribute("error", result);
-            }
+                // ✅ BOOKING THÀNH CÔNG - Chuyển sang trang confirmation
+                HttpSession session = request.getSession();
+                session.setAttribute("confirmedBooking", booking);
 
-            request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+                // Lưu thông tin giảm giá vào session
+                if (discountAmount > 0) {
+                    session.setAttribute("bookingDiscount", discountAmount);
+                }
+                if (finalPromoCode != null) {
+                    session.setAttribute("bookingPromoCode", finalPromoCode);
+                }
+
+                response.sendRedirect(request.getContextPath() + "/booking-confirmation");
+
+            } else {
+                //  BOOKING THẤT BẠI - Hiển thị lỗi trên trang booking
+                CarViewModel car = carDAO.getCarById(carId);
+                request.setAttribute("car", car);
+                request.setAttribute("error", result);
+                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
