@@ -21,11 +21,11 @@
 
     <li class="nav-item">
         <a class="nav-link" href="CarDB">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-car"></i>
             <span>List car</span></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="bookingDB">
             <i class="fas fa-fw fa-table"></i>
             <span>Booking history</span></a>
     </li>
