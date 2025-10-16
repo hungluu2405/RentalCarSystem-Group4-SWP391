@@ -225,10 +225,13 @@ public class CarDAO extends DBContext {
     }
 
     // Lấy chi tiết xe theo ID, có cả description và ảnh
+    // Trong lớp CarDAO.java
+
     public CarViewModel getCarById(int carId) {
         String sql = "SELECT c.*, t.NAME AS TYPE_NAME "
                 + "FROM CAR c JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
                 + "WHERE c.CAR_ID = ?";
+
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, carId);
             ResultSet rs = ps.executeQuery();
@@ -243,7 +246,8 @@ public class CarDAO extends DBContext {
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setCarTypeName(rs.getString("TYPE_NAME"));
                 car.setDescription(rs.getString("DESCRIPTION"));
-                car.setLocation(rs.getString("LOCATION")); // ✅ thêm dòng này
+                car.setLocation(rs.getString("LOCATION"));
+                car.setLicensePlate(rs.getString("LICENSE_PLATE"));
 
                 // Lấy danh sách ảnh
                 List<CarImage> images = new ArrayList<>();
@@ -267,6 +271,7 @@ public class CarDAO extends DBContext {
         }
         return null;
     }
+
 
     public List<CarViewModel> findTopBookedCars(int limit) {
         List<CarViewModel> cars = new ArrayList<>();
@@ -342,7 +347,7 @@ public class CarDAO extends DBContext {
                 car.setTransmission(rs.getString("TRANSMISSION"));
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
-                car.setLocation(rs.getString("LOCATION")); // ✅ thêm dòng này
+                car.setLocation(rs.getString("LOCATION")); //
                 car.setImageUrl(rs.getString("IMAGE_URL") != null ? rs.getString("IMAGE_URL") : "default.jpg");
                 list.add(car);
             }
