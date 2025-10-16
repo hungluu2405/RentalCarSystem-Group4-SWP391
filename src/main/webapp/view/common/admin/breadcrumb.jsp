@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-        <a style="font-size: 30px; font-weight: bold;">Account List</a>
+        <a style="font-size: 30px; font-weight: bold;">Dashboard</a>
     </li>
 
 </ol>
