@@ -26,24 +26,24 @@ public class PromotionController extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         if (code == null || code.trim().isEmpty()) {
-            out.print("{\"error\": \"Vui lòng nhập mã khuyến mãi!\"}");
+            out.print("{\"error\": \"Please enter a promotion code!\"}");
             return;
         }
 
         Promotion promo = promoDAO.findByCode(code.trim());
         if (promo == null) {
-            out.print("{\"error\": \"Mã khuyến mãi không tồn tại!\"}");
+            out.print("{\"error\": \"Invalid promotion code!\"}");
             return;
         }
 
         LocalDate today = LocalDate.now();
         if (promo.getStartDate().isAfter(today) || promo.getEndDate().isBefore(today)) {
-            out.print("{\"error\": \"Mã khuyến mãi đã hết hạn!\"}");
+            out.print("{\"error\": \"This promotion code is not valid at this time.!\"}");
             return;
         }
 
         if (!promo.isActive()) {
-            out.print("{\"error\": \"Mã khuyến mãi đã bị vô hiệu hóa!\"}");
+            out.print("{\"error\": \"This promotion code is no longer active!\"}");
             return;
         }
 

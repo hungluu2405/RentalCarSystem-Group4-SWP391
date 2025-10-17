@@ -196,7 +196,7 @@
                                                                class="btn btn-sm btn-danger">Cancel</a>
                                                         </c:if>
                                                         <c:if test="${order.status == 'Approved'}">
-                                                            <a href="#" class="btn btn-sm btn-info">Chi tiết</a>
+                                                            <a href="#" class="btn btn-sm btn-info">Payment</a>
                                                         </c:if>
                                                     </td>
                                                 </tr>
