@@ -25,12 +25,12 @@ public class CancelBookingServlet extends HttpServlet {
                 boolean success = bookingService.cancelBooking(bookingId);
 
                 if (success) {
-                    request.getSession().setAttribute("message", "Đơn hàng #"+bookingId+" đã được hủy thành công!");
+                    request.getSession().setAttribute("message", "Booking #"+bookingId+" has been canceled successfully!");
                 } else {
-                    request.getSession().setAttribute("error", "Lỗi: Không thể hủy đơn hàng #"+bookingId+". Vui lòng thử lại.");
+                    request.getSession().setAttribute("error", "Error: Could not cancel booking #"+bookingId+". Please try again.");
                 }
             } catch (NumberFormatException e) {
-                request.getSession().setAttribute("error", "ID đơn hàng không hợp lệ.");
+                request.getSession().setAttribute("error", "Invalid booking ID.");
             }
         }
 
