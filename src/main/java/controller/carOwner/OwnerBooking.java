@@ -11,12 +11,14 @@ import model.BookingDetail;
 import model.CarViewModel;
 import model.User;
 import model.UserProfile;
+import service.BookingService;
 
 @WebServlet("/owner/ownerBooking")
 public class OwnerBooking extends HttpServlet {
 
     private final CarDAO carDAO = new CarDAO();
     private final BookingDAO bookingDAO = new BookingDAO();
+    private final BookingService bookingService = new BookingService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,7 +28,7 @@ public class OwnerBooking extends HttpServlet {
 
         // Mock user để test
         User mockCarOwner = new User();
-        mockCarOwner.setUserId(3);
+        mockCarOwner.setUserId(1);
         mockCarOwner.setEmail("owner@carrental.com");
         UserProfile profile = new UserProfile();
         profile.setFullName("Peter Parker");
@@ -76,60 +78,25 @@ public class OwnerBooking extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
             return;
         }
-
         int bookingId = Integer.parseInt(bookingIdStr);
-        String newStatus = null;
+        boolean result = false;
 
-        switch (action.toLowerCase()) {
-            case "accept":
-                newStatus = "Accepted";
-                break;
-            case "reject":
-                newStatus = "Rejected";
-                break;
-            case "changed":
-                newStatus = "Changed";
-                break;
-            default:
-                break;
+        if (action != null) {
+            switch (action.toLowerCase()) {
+                case "accept":
+                    result = bookingService.approveBooking(bookingId);
+                    break;
+                case "reject":
+                    result = bookingService.rejectBooking(bookingId);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        if (newStatus != null) {
-            bookingDAO.updateBookingStatus(bookingId, newStatus);
-        }
-
-        // ✅ Quay lại dashboard
+        // ✅ Sau khi cập nhật xong, quay lại trang danh sách
         response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
+
     }
 
-
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//
-//        String action = request.getParameter("action");
-//        String bookingIdStr = request.getParameter("bookingId");
-//
-//        if (bookingIdStr == null || bookingIdStr.isEmpty()) {
-//            response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
-//            return;
-//        }
-//
-//        int bookingId = Integer.parseInt(bookingIdStr);
-//        String newStatus = null;
-//
-//        if ("accept".equalsIgnoreCase(action)) {
-//            newStatus = "Accepted";
-//        } else if ("reject".equalsIgnoreCase(action)) {
-//            newStatus = "Rejected";
-//        }
-//
-//        if (newStatus != null) {
-//            bookingDAO.updateBookingStatus(bookingId, newStatus);
-//        }
-//
-//        // ✅ Quay lại dashboard sau khi cập nhật
-//        response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
-//
-//    }
 }
