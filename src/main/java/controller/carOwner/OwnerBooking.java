@@ -46,9 +46,9 @@ public class OwnerBooking extends HttpServlet {
 
         // 🔹 Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
-        int totalBookings = bookingDAO.countByOwner(ownerId);
-        int activeBookings = bookingDAO.countByOwnerAndStatus(ownerId, "Active");
-        int cancelledBookings = bookingDAO.countByOwnerAndStatus(ownerId, "Cancelled");
+        int totalBookings = carDAO.countTotalBookingsByOwner(ownerId);
+        int activeBookings = carDAO.countApprovedBookingsByOwner(ownerId);
+        int cancelledBookings = carDAO.countRejectedBookingsByOwner(ownerId);
 
         // 🔹 Lấy danh sách xe và booking
         List<CarViewModel> myCars = carDAO.getCarsByOwner(ownerId);
