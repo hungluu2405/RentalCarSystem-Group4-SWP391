@@ -17,10 +17,16 @@ public class Booking {
     private LocalTime pickupTime;
     private LocalTime dropoffTime;
 
+    private String carModel;
+    private String userFullName;
     public Booking() {
     }
 
-    public Booking(int bookingId, int carId, int userId, LocalDate startDate, LocalDate endDate, double totalPrice, String status, LocalDateTime createdAt, String location, LocalTime pickupTime, LocalTime dropoffTime) {
+    public String getCarModel() {
+        return carModel;
+    }
+
+    public Booking(int bookingId, int carId, int userId, LocalDate startDate, LocalDate endDate, double totalPrice, String status, LocalDateTime createdAt, String location, LocalTime pickupTime, LocalTime dropoffTime, String carModel, String userFullName) {
         this.bookingId = bookingId;
         this.carId = carId;
         this.userId = userId;
@@ -32,6 +38,20 @@ public class Booking {
         this.location = location;
         this.pickupTime = pickupTime;
         this.dropoffTime = dropoffTime;
+        this.carModel = carModel;
+        this.userFullName = userFullName;
+    }
+
+    public void setCarModel(String carModel) {
+        this.carModel = carModel;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 
     public LocalTime getPickupTime() {

@@ -109,6 +109,6 @@ public class Car {
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-    
-    
+
+
 }
