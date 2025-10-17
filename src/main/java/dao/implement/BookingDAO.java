@@ -275,6 +275,12 @@ public class BookingDAO extends DBContext {
                 detail.setLocation(rs.getString("LOCATION"));
                 detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 list.add(detail);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
     // Lấy danh sách yêu cầu booking của chủ xe
 
     public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
@@ -329,6 +335,59 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
+    public List<Booking> getAllBookings() throws SQLException {
+        List<Booking> list = new ArrayList<>();
+        String sql = """
+        SELECT b.BOOKING_ID, c.MODEL, u.FULL_NAME, 
+               b.START_DATE, b.END_DATE, b.TOTAL_PRICE, 
+               b.STATUS, b.CREATED_AT, b.PICKUP_TIME, b.DROPOFF_TIME,
+               b.CAR_ID, b.USER_ID
+        FROM BOOKING b
+        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        ORDER BY b.BOOKING_ID DESC
+    """;
 
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Booking b = new Booking();
+
+                b.setBookingId(rs.getInt("BOOKING_ID"));
+                b.setCarId(rs.getInt("CAR_ID"));
+                b.setUserId(rs.getInt("USER_ID"));
+                b.setStartDate(rs.getDate("START_DATE").toLocalDate());
+                b.setEndDate(rs.getDate("END_DATE").toLocalDate());
+                b.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                b.setStatus(rs.getString("STATUS"));
+
+                Timestamp createdAt = rs.getTimestamp("CREATED_AT");
+                if (createdAt != null) {
+                    b.setCreatedAt(createdAt.toLocalDateTime());
+                }
+
+
+
+                Time pickup = rs.getTime("PICKUP_TIME");
+                if (pickup != null) {
+                    b.setPickupTime(pickup.toLocalTime());
+                }
+
+                Time dropoff = rs.getTime("DROPOFF_TIME");
+                if (dropoff != null) {
+                    b.setDropoffTime(dropoff.toLocalTime());
+                }
+
+
+                b.setCarModel(rs.getString("MODEL"));
+                b.setUserFullName(rs.getString("FULL_NAME"));
+
+                list.add(b);
+            }
+        }
+        return list;
+    }
+    
 
 }
