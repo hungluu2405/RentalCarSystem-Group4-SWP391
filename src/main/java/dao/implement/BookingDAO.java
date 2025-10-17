@@ -333,18 +333,7 @@ public class BookingDAO extends DBContext {
         return list;
     }
 
-    // Cập nhật trạng thái bookin
-    public boolean updateBookingStatus(int bookingId, String newStatus) {
-        String sql = "UPDATE BOOKING SET STATUS = ? WHERE BOOKING_ID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, newStatus);
-            ps.setInt(2, bookingId);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+
 
 
 
