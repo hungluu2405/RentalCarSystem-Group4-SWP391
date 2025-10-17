@@ -3,6 +3,7 @@ package dao.implement;
 import dao.DBContext;
 import model.Booking;
 import model.BookingDetail;
+import model.UserProfile;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -284,6 +285,98 @@ public class BookingDAO extends DBContext {
 
                 list.add(b);
             }
+
+
+
+    // =========================================
+// LẤY TẤT CẢ BOOKING CHI TIẾT THEO USER ID
+// =========================================
+    public List<BookingDetail> getBookingDetailsByUserId(int userId, int limit) {
+        List<BookingDetail> list = new ArrayList<>();
+        String sql = """
+        SELECT TOP (?) 
+               b.BOOKING_ID, 
+               c.MODEL + ' ' + c.BRAND AS carName, -- 👈 Nối chuỗi để có tên xe đầy đủ
+               b.START_DATE, b.END_DATE, 
+               b.PICKUP_TIME, b.DROPOFF_TIME, 
+               b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        ORDER BY b.CREATED_AT DESC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ps.setInt(2, userId);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                // ... (Mapping các trường giống như hàm getRecentBookingDetails)
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
+    // Lấy danh sách yêu cầu booking của chủ xe
+
+    public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
+        List<BookingDetail> list = new ArrayList<>();
+        String sql = """
+        SELECT 
+            b.BOOKING_ID,
+            c.BRAND + ' ' + c.MODEL AS carName,
+            u.FULL_NAME AS customerName,
+            u.PHONE AS customerPhone,
+            b.START_DATE,
+            b.END_DATE,
+            b.PICKUP_TIME,
+            b.DROPOFF_TIME,
+            b.LOCATION,
+            b.TOTAL_PRICE,
+            b.STATUS
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+        WHERE c.USER_ID = ?
+        ORDER BY b.BOOKING_ID DESC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail bd = new BookingDetail();
+                UserProfile up = new UserProfile();
+
+                // === Booking detail ===
+                bd.setBookingId(rs.getInt("BOOKING_ID"));
+                bd.setCarName(rs.getString("carName"));
+                bd.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                bd.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                bd.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                bd.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                bd.setLocation(rs.getString("LOCATION"));
+                bd.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                bd.setStatus(rs.getString("STATUS"));
+
+                // === Customer info ===
+                up.setFullName(rs.getString("customerName"));
+                up.setPhone(rs.getString("customerPhone"));
+
+                // Gắn thông tin userProfile vào booking detail
+                bd.setCustomerProfile(up);
+
+                list.add(bd);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return list;
     }
