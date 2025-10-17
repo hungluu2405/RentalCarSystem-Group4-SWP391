@@ -288,21 +288,6 @@ public class BookingDAO extends DBContext {
                 bd.setCustomerProfile(up);
 
                 list.add(bd);
-
-//                BookingDetail bd = new BookingDetail();
-//                UserProfile up = new UserProfile();
-//                bd.setBookingId(rs.getInt("BOOKING_ID"));
-//                bd.setCarName(rs.getString("carName"));
-//                up.setFullName(rs.getString("customerName"));
-//                up.setPhone(rs.getString("customerPhone"));
-//                bd.setStartDate(rs.getObject("START_DATE", LocalDate.class));
-//                bd.setEndDate(rs.getObject("END_DATE", LocalDate.class));
-//                bd.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
-//                bd.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
-//                bd.setLocation(rs.getString("LOCATION"));
-//                bd.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
-//                bd.setStatus(rs.getString("STATUS"));
-//                list.add(bd);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -322,6 +307,7 @@ public class BookingDAO extends DBContext {
             return false;
         }
     }
+
 
 
 }
