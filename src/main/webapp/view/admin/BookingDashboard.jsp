@@ -28,7 +28,7 @@
 
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="${pageContext.request.contextPath}/home">Car rental system</a>
+    <a class="navbar-brand mr-1" href="index.html">Car rental system</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -76,42 +76,25 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
                             <tr>
-                                <th>Booking ID</th>
-                                <th>User Name</th>
-                                <th>Car Model</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Pickup Time</th>
-                                <th>Dropoff Time</th>
-                                <th>Total Price</th>
-                                <th>Status</th>
-                                <th>Created At</th>
+                                <th>Car ID</th>
+                                <th>Owner Name</th>
+                                <th>Type</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>License Plate</th>
+                                <th>Capacity</th>
+                                <th>Fuel Type</th>
+                                <th>Price/Day</th>
+                                <th>Availability</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <c:forEach var="b" items="${listB}">
-                                <tr>
-                                    <td>${b.bookingId}</td>
-                                    <td>${b.userFullName}</td>
-                                    <td>${b.carModel}</td>
-                                    <td>${b.startDate}</td>
-                                    <td>${b.endDate}</td>
-                                    <td>${b.pickupTime}</td>
-                                    <td>${b.dropoffTime}</td>
-                                    <td>${b.totalPrice}</td>
-                                    <td>${b.status}</td>
-                                    <td>${b.createdAt}</td>
-                                </tr>
-                            </c:forEach>
+
                             </tbody>
+
                         </table>
-                    </div>
-                </div>
-
-
-
-                </table>
                     </div>
                 </div>
             </div>
