@@ -44,41 +44,6 @@ public class UserDAO extends GenericDAO<User> {
         return list.isEmpty() ? null : list.get(0);
     }
 
-    // --- CÁC PHƯƠNG THỨC XÁC THỰC VÀ TÌM KIẾM ---
-
-    public User checkLogin(String email, String password) {
-        String sql = "SELECT u.*, p.FULL_NAME, r.NAME as ROLE_NAME "
-                + "FROM [USER] u "
-                + "JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
-                + "JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
-                + "WHERE u.EMAIL = ?";
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, email);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                String storedHash = rs.getString("PASSWORD");
-                String inputHash = SecurityUtils.hashPassword(password);
-
-                if (storedHash.equals(inputHash)) {
-                    User user = new User();
-                    user.setUserId(rs.getInt("USER_ID"));
-                    user.setRoleId(rs.getInt("ROLE_ID"));
-                    user.setEmail(rs.getString("EMAIL"));
-
-                    UserProfile profile = new UserProfile();
-                    profile.setFullName(rs.getString("FULL_NAME"));
-                    user.setUserProfile(profile);
-
-                    return user;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public User findUserByEmail(String email) {
         String sql = "SELECT u.*, p.FULL_NAME FROM [USER] u LEFT JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID WHERE u.EMAIL = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -101,26 +66,62 @@ public class UserDAO extends GenericDAO<User> {
         return null;
     }
 
+    public User checkLoginByEmailOrUsername(String loginKey, String password) {
+        String sql = "SELECT u.*, p.FULL_NAME, r.NAME as ROLE_NAME "
+                + "FROM [USER] u "
+                + "JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID "
+                + "JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID "
+                + "WHERE u.EMAIL = ? OR u.USER_NAME = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, loginKey);
+            st.setString(2, loginKey);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                String storedHash = rs.getString("PASSWORD");
+                String inputHash = SecurityUtils.hashPassword(password);
+
+                if (storedHash.equals(inputHash)) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setUsername(rs.getString("USER_NAME"));
+                    user.setEmail(rs.getString("EMAIL"));
+                    user.setRoleId(rs.getInt("ROLE_ID"));
+
+                    UserProfile profile = new UserProfile();
+                    profile.setFullName(rs.getString("FULL_NAME"));
+                    user.setUserProfile(profile);
+                    user.setRoleName(rs.getString("ROLE_NAME"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // --- CÁC PHƯƠNG THỨC ĐĂNG KÝ VÀ CẬP NHẬT ---
-
     public boolean registerUser(User user, UserProfile profile, Address address) {
-        if (findUserByEmail(user.getEmail()) != null) return false;
+        if (findUserByEmail(user.getEmail()) != null || findUserByUsername(user.getUsername()) != null) {
+            return false;
+        }
 
-        String insertUserSql = "INSERT INTO [USER] (ROLE_ID, EMAIL, PASSWORD, IS_EMAIL_VERIFIED) VALUES (?, ?, ?, 1)";
+        String insertUserSql = "INSERT INTO [USER] (ROLE_ID, USER_NAME, EMAIL, PASSWORD, IS_EMAIL_VERIFIED) VALUES (?, ?, ?, ?, 1)";
         String insertProfileSql = "INSERT INTO USER_PROFILE (USER_ID, FULL_NAME, PHONE, DOB, GENDER, DRIVER_LICENSE_NUMBER) VALUES (?, ?, ?, ?, ?, ?)";
         String insertAddressSql = "INSERT INTO ADDRESS (USER_ID, ADDRESS_LINE, CITY, PROVINCE, POSTAL_CODE, COUNTRY) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             connection.setAutoCommit(false);
-            int customerRoleId = 2;
 
-            // Mã hóa mật khẩu trước khi lưu
             String hashedPassword = SecurityUtils.hashPassword(user.getPassword());
 
             try (PreparedStatement userSt = connection.prepareStatement(insertUserSql, Statement.RETURN_GENERATED_KEYS)) {
-                userSt.setInt(1, customerRoleId);
-                userSt.setString(2, user.getEmail());
-                userSt.setString(3, hashedPassword);
+                userSt.setInt(1, user.getRoleId());
+                userSt.setString(2, user.getUsername());
+                userSt.setString(3, user.getEmail());
+                userSt.setString(4, hashedPassword);
                 userSt.executeUpdate();
 
                 try (ResultSet generatedKeys = userSt.getGeneratedKeys()) {
@@ -153,17 +154,27 @@ public class UserDAO extends GenericDAO<User> {
                 }
             }
         } catch (SQLException e) {
-            try { connection.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         } finally {
-            try { connection.setAutoCommit(true); } catch (SQLException e) { e.printStackTrace(); }
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
 
     public boolean changePassword(String email, String oldPassword, String newPassword) {
         User user = findUserByEmail(email);
-        if (user == null) return false;
+        if (user == null) {
+            return false;
+        }
 
         String sql = "UPDATE [USER] SET PASSWORD = ? WHERE EMAIL = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -187,7 +198,7 @@ public class UserDAO extends GenericDAO<User> {
             e.printStackTrace();
         }
     }
-    
+
     public List<User> getAllUsersForAdmin() {
         List<User> users = new ArrayList<>();
 
@@ -214,8 +225,7 @@ public class UserDAO extends GenericDAO<User> {
             ORDER BY u.USER_ID ASC
         """;
 
-        try (PreparedStatement st = connection.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 // ----- Tạo đối tượng User -----
@@ -254,8 +264,24 @@ public class UserDAO extends GenericDAO<User> {
         return users;
     }
 
-
-
-
+    public User findUserByUsername(String username) {
+        String sql = "SELECT * FROM [USER] WHERE USERNAME = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("USER_ID"));
+                user.setUsername(rs.getString("USER_NAME"));
+                user.setEmail(rs.getString("EMAIL"));
+                user.setPassword(rs.getString("PASSWORD"));
+                user.setRoleId(rs.getInt("ROLE_ID"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

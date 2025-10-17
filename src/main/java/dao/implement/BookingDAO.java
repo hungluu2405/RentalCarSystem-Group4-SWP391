@@ -239,6 +239,43 @@ public class BookingDAO extends DBContext {
     }
 
 
+
+    // =========================================
+// LẤY TẤT CẢ BOOKING CHI TIẾT THEO USER ID
+// =========================================
+    public List<BookingDetail> getBookingDetailsByUserId(int userId, int limit) {
+        List<BookingDetail> list = new ArrayList<>();
+        String sql = """
+        SELECT TOP (?) 
+               b.BOOKING_ID, 
+               c.MODEL + ' ' + c.BRAND AS carName, -- 👈 Nối chuỗi để có tên xe đầy đủ
+               b.START_DATE, b.END_DATE, 
+               b.PICKUP_TIME, b.DROPOFF_TIME, 
+               b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        ORDER BY b.CREATED_AT DESC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ps.setInt(2, userId);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                // ... (Mapping các trường giống như hàm getRecentBookingDetails)
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
     // Lấy danh sách yêu cầu booking của chủ xe
 
     public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {

@@ -33,6 +33,9 @@ public class RegisterServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
+        // 🟩 Lấy thêm username
+        String username = request.getParameter("username");
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String fullName = request.getParameter("full_name");
@@ -44,20 +47,30 @@ public class RegisterServlet extends HttpServlet {
         String city = request.getParameter("city");
         String country = request.getParameter("country");
         String postalCode = request.getParameter("postal_code");
+        String roleParam = request.getParameter("role_id");
 
-        // Check required fields
-        if (email == null || email.isEmpty() ||
-            password == null || password.isEmpty() ||
-            fullName == null || fullName.isEmpty() ||
-            phone == null || phone.isEmpty() ||
-            dobString == null || dobString.isEmpty() ||
-            gender == null || gender.isEmpty() ||
-            licenseNumber == null || licenseNumber.isEmpty() ||
-            addressLine == null || addressLine.isEmpty() ||
-            city == null || city.isEmpty() ||
-            country == null || country.isEmpty()) {
+        // 🟩 Kiểm tra trống
+        if (username == null || username.isEmpty()
+                || email == null || email.isEmpty()
+                || password == null || password.isEmpty()
+                || fullName == null || fullName.isEmpty()
+                || phone == null || phone.isEmpty()
+                || dobString == null || dobString.isEmpty()
+                || gender == null || gender.isEmpty()
+                || licenseNumber == null || licenseNumber.isEmpty()
+                || addressLine == null || addressLine.isEmpty()
+                || city == null || city.isEmpty()
+                || country == null || country.isEmpty()
+                || roleParam == null || roleParam.isEmpty()) {
 
             request.setAttribute("error", "Please fill in all required fields!");
+            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
+            return;
+        }
+
+        // 🟩 Validate username (chỉ cho chữ, số, _ , từ 4–20 ký tự)
+        if (!username.matches("^[a-zA-Z0-9_]{4,20}$")) {
+            request.setAttribute("error", "Username must be 4–20 characters and contain only letters, numbers or underscore!");
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
             return;
         }
@@ -103,7 +116,7 @@ public class RegisterServlet extends HttpServlet {
         }
 
         // Validate gender
-        if (!gender.equalsIgnoreCase("male") && !gender.equalsIgnoreCase("female")) {
+        if (!gender.equalsIgnoreCase("male") && !gender.equalsIgnoreCase("female") && !gender.equalsIgnoreCase("other")) {
             request.setAttribute("error", "Invalid gender value!");
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
             return;
@@ -115,19 +128,40 @@ public class RegisterServlet extends HttpServlet {
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
             return;
         }
+        
+        // 🟩 Parse roleId
+        int roleId;
+        try {
+            roleId = Integer.parseInt(roleParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid role selected!");
+            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
+            return;
+        }
+
+
+        UserDAO userDAO = new UserDAO();
+
+        // 🟩 Kiểm tra trùng username
+        if (userDAO.findUserByUsername(username) != null) {
+            request.setAttribute("error", "This username is already taken!");
+            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
+            return;
+        }
 
         // Check if email already exists
-        UserDAO userDAO = new UserDAO();
         if (userDAO.findUserByEmail(email) != null) {
             request.setAttribute("error", "This email is already registered!");
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
             return;
         }
 
-        // Create User, Profile, and Address objects
+        // 🟩 Gán username cho User
         User user = new User();
+        user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
+        user.setRoleId(roleId);
 
         UserProfile profile = new UserProfile(fullName, phone, dob, gender, licenseNumber);
         Address address = new Address(addressLine, city, city, postalCode, country);
