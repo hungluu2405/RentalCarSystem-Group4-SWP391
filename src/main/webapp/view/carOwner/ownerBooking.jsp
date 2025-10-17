@@ -113,21 +113,22 @@
                                                 <td>${b.startDate}</td>
                                                 <td>${b.endDate}</td>
                                                 <td>${b.totalPrice}</td>
+
+                                                <!-- STATUS -->
                                                 <td>
                                                     <div class="badge
-                                                    ${b.status eq 'Pending' ? 'bg-warning text-dark' :
-                                                      b.status eq 'Accepted' ? 'bg-success' :
-                                                      b.status eq 'Rejected' ? 'bg-danger' :
-                                                      b.status eq 'Changed' ? 'bg-info text-dark' :
-                                                      'bg-secondary'}">
+                                ${b.status eq 'Pending' ? 'bg-warning text-dark' :
+                                  b.status eq 'Approved' ? 'bg-success' :
+                                  b.status eq 'Rejected' ? 'bg-danger' :
+                                  'bg-secondary'}">
                                                             ${b.status}
                                                     </div>
                                                 </td>
 
-                                                <!-- ACTION BUTTONS -->
+                                                <!-- ACTION -->
                                                 <td class="action-cell">
                                                     <c:choose>
-                                                        <%-- Pending: Accept / Reject --%>
+                                                        <%-- Nếu đang Pending thì hiển thị nút Accept / Reject --%>
                                                         <c:when test="${b.status eq 'Pending'}">
                                                             <form method="post" action="${pageContext.request.contextPath}/owner/ownerBooking"
                                                                   class="d-flex justify-content-center gap-2">
@@ -137,29 +138,22 @@
                                                             </form>
                                                         </c:when>
 
-                                                        <%-- Accepted or Rejected: show Changed --%>
-                                                        <c:when test="${b.status eq 'Accepted' || b.status eq 'Rejected'}">
-                                                            <form method="post" action="${pageContext.request.contextPath}/owner/ownerBooking"
-                                                                  class="d-flex justify-content-center">
-                                                                <input type="hidden" name="bookingId" value="${b.bookingId}">
-                                                                <button type="submit" name="action" value="changed" class="btn btn-info btn-sm">Changed</button>
-                                                            </form>
+                                                        <%-- Nếu Approved --%>
+                                                        <c:when test="${b.status eq 'Approved'}">
+                                                            <button class="btn btn-success btn-sm" disabled>Approved</button>
                                                         </c:when>
 
-                                                        <%-- Changed: show Change action again --%>
-                                                        <c:when test="${b.status eq 'Changed'}">
-                                                            <button class="btn btn-primary btn-sm change-btn" data-id="${b.bookingId}">
-                                                                Change action again
-                                                            </button>
+                                                        <%-- Nếu Rejected --%>
+                                                        <c:when test="${b.status eq 'Rejected'}">
+                                                            <button class="btn btn-danger btn-sm" disabled>Rejected</button>
                                                         </c:when>
 
+                                                        <%-- Trường hợp khác --%>
                                                         <c:otherwise>
                                                             <span class="text-muted">N/A</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
-
-
                                             </tr>
                                         </c:forEach>
                                     </c:when>
@@ -175,6 +169,7 @@
 
 
 
+
                     </div>
                 </div>
             </div>
@@ -184,28 +179,6 @@
     <!-- FOOTER -->
     <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
-<!-- ========== SCRIPT CHO NÚT CHANGE ACTION AGAIN ========== -->
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".change-btn").forEach(btn => {
-            btn.addEventListener("click", function(e) {
-                e.preventDefault();
-                const row = btn.closest("tr");
-                const actionCell = row.querySelector(".action-cell");
-
-                // Hiển lại 2 nút Accept / Reject
-                actionCell.innerHTML = `
-                <form method="post" action="${pageContext.request.contextPath}/owner/ownerBooking"
-                      class="d-flex justify-content-center gap-2">
-                    <input type="hidden" name="bookingId" value="${btn.dataset.id}">
-                    <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
-                    <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
-                </form>
-            `;
-            });
-        });
-    });
-</script>
 
 </body>
 </html>
