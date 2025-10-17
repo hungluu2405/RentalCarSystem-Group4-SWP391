@@ -29,7 +29,11 @@ public class CreateGoogleAccountServlet extends HttpServlet {
             return;
         }
 
-        // --- Lấy thông tin từ form ---
+        request.setCharacterEncoding("UTF-8");
+
+        // 🟩 Lấy thêm username
+        String username = request.getParameter("username");
+
         String password = request.getParameter("password");
         String rePassword = request.getParameter("re_password");
         String phone = request.getParameter("phone");
@@ -42,6 +46,17 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         String country = request.getParameter("country");
         String postalCode = request.getParameter("postal_code");
 
+        // 🟩 Kiểm tra username
+        if (username == null || username.isEmpty()) {
+            forwardWithError("Username cannot be empty!", request, response);
+            return;
+        }
+
+        if (!username.matches("^[a-zA-Z0-9_]{4,20}$")) {
+            forwardWithError("Username must be 4–20 characters and contain only letters, numbers, or underscore!", request, response);
+            return;
+        }
+
         // --- Kiểm tra mật khẩu ---
         if (password == null || password.isEmpty()) {
             forwardWithError("Password cannot be empty!", request, response);
@@ -53,9 +68,8 @@ public class CreateGoogleAccountServlet extends HttpServlet {
             return;
         }
 
-        // Kiểm tra mật khẩu
         if (password.length() < 6) {
-            forwardWithError("Mật khẩu phải có ít nhất 6 ký tự!", request, response);
+            forwardWithError("Password must be at least 6 characters long!", request, response);
             return;
         }
 
@@ -71,10 +85,39 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         // --- Chuyển đổi ngày sinh ---
         Date dob = (dobString != null && !dobString.isEmpty()) ? Date.valueOf(dobString) : null;
 
+        // --- Validate gender ---
+        if (gender != null && !gender.isEmpty() &&
+            !gender.equalsIgnoreCase("male") &&
+            !gender.equalsIgnoreCase("female") &&
+            !gender.equalsIgnoreCase("other")) {
+            forwardWithError("Invalid gender value!", request, response);
+            return;
+        }
+
+        // --- Validate license number ---
+        if (licenseNumber != null && !licenseNumber.isEmpty() && !licenseNumber.matches("^\\d{12}$")) {
+            forwardWithError("Driver’s license number must contain exactly 12 digits!", request, response);
+            return;
+        }
+
+        // --- Kiểm tra username trùng ---
+        UserDAO userDAO = new UserDAO();
+        if (userDAO.findUserByUsername(username) != null) {
+            forwardWithError("This username is already taken!", request, response);
+            return;
+        }
+
+        // --- Kiểm tra email trùng ---
+        if (userDAO.findUserByEmail(googleUser.getEmail()) != null) {
+            forwardWithError("This email is already registered!", request, response);
+            return;
+        }
+
         // --- Tạo các model ---
         User user = new User();
+        user.setUsername(username);
         user.setEmail(googleUser.getEmail());
-        user.setPassword(password); // Sẽ được hash trong DAO
+        user.setPassword(password); // DAO sẽ hash
         user.setRoleId(roleId);
 
         UserProfile profile = new UserProfile();
@@ -87,7 +130,6 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         Address address = new Address(addressLine, city, city, postalCode, country);
 
         // --- Gọi DAO ---
-        UserDAO userDAO = new UserDAO();
         boolean isSuccess = userDAO.registerUser(user, profile, address);
 
         if (isSuccess) {
