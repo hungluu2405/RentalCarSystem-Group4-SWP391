@@ -45,14 +45,28 @@ public class UserDAO extends GenericDAO<User> {
     }
 
     public User findUserByEmail(String email) {
-        String sql = "SELECT u.*, p.FULL_NAME FROM [USER] u LEFT JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID WHERE u.EMAIL = ?";
+        String sql = """
+        SELECT 
+            u.USER_ID, u.USER_NAME, u.EMAIL, u.PASSWORD, 
+            u.ROLE_ID, r.NAME AS ROLE_NAME,
+            p.FULL_NAME
+        FROM [USER] u
+        LEFT JOIN ROLE r ON u.ROLE_ID = r.ROLE_ID
+        LEFT JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID
+        WHERE u.EMAIL = ?
+    """;
+
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 User user = new User();
                 user.setUserId(rs.getInt("USER_ID"));
+                user.setUsername(rs.getString("USER_NAME"));
                 user.setEmail(rs.getString("EMAIL"));
+                user.setPassword(rs.getString("PASSWORD"));
+                user.setRoleId(rs.getInt("ROLE_ID"));
+                user.setRoleName(rs.getString("ROLE_NAME"));
 
                 UserProfile profile = new UserProfile();
                 profile.setFullName(rs.getString("FULL_NAME"));
