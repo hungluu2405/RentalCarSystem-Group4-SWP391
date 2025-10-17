@@ -100,4 +100,14 @@ public class BookingDetail {
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
+    private UserProfile customerProfile;
+
+    public UserProfile getCustomerProfile() {
+        return customerProfile;
+    }
+
+    public void setCustomerProfile(UserProfile customerProfile) {
+        this.customerProfile = customerProfile;
+    }
+
 }
