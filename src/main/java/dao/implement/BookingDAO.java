@@ -192,7 +192,7 @@ public class BookingDAO extends DBContext {
                    c.MODEL AS carName,
                    b.START_DATE, b.END_DATE, 
                    b.PICKUP_TIME, b.DROPOFF_TIME, 
-                   b.TOTAL_PRICE, b.STATUS, b.LOCATION
+                   b.TOTAL_PRICE, b.STATUS
             FROM BOOKING b
             JOIN CAR c ON b.CAR_ID = c.CAR_ID
             WHERE c.OWNER_ID = ?
@@ -213,7 +213,6 @@ public class BookingDAO extends DBContext {
                 detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));   // 👈 thêm
                 detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class)); // 👈 thêm
                 detail.setStatus(rs.getString("STATUS"));
-                detail.setLocation(rs.getString("LOCATION"));
                 detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 list.add(detail);
             }
@@ -290,7 +289,6 @@ public class BookingDAO extends DBContext {
             b.END_DATE,
             b.PICKUP_TIME,
             b.DROPOFF_TIME,
-            b.LOCATION,
             b.TOTAL_PRICE,
             b.STATUS
         FROM BOOKING b
@@ -314,7 +312,6 @@ public class BookingDAO extends DBContext {
                 bd.setEndDate(rs.getObject("END_DATE", LocalDate.class));
                 bd.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
                 bd.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
-                bd.setLocation(rs.getString("LOCATION"));
                 bd.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 bd.setStatus(rs.getString("STATUS"));
 
@@ -332,9 +329,6 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
-
-
-
 
 
 }
