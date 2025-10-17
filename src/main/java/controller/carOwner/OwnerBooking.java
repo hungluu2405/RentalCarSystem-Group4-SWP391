@@ -12,7 +12,7 @@ import model.CarViewModel;
 import model.User;
 import model.UserProfile;
 
-@WebServlet("/owner/dashboard")
+@WebServlet("/owner/ownerBooking")
 public class OwnerBooking extends HttpServlet {
 
     private final CarDAO carDAO = new CarDAO();
@@ -80,17 +80,56 @@ public class OwnerBooking extends HttpServlet {
         int bookingId = Integer.parseInt(bookingIdStr);
         String newStatus = null;
 
-        if ("accept".equalsIgnoreCase(action)) {
-            newStatus = "Accepted";
-        } else if ("reject".equalsIgnoreCase(action)) {
-            newStatus = "Rejected";
+        switch (action.toLowerCase()) {
+            case "accept":
+                newStatus = "Accepted";
+                break;
+            case "reject":
+                newStatus = "Rejected";
+                break;
+            case "changed":
+                newStatus = "Changed";
+                break;
+            default:
+                break;
         }
 
         if (newStatus != null) {
             bookingDAO.updateBookingStatus(bookingId, newStatus);
         }
 
-        // ✅ Quay lại dashboard sau khi cập nhật
+        // ✅ Quay lại dashboard
         response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
     }
+
+
+//    @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//
+//        String action = request.getParameter("action");
+//        String bookingIdStr = request.getParameter("bookingId");
+//
+//        if (bookingIdStr == null || bookingIdStr.isEmpty()) {
+//            response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
+//            return;
+//        }
+//
+//        int bookingId = Integer.parseInt(bookingIdStr);
+//        String newStatus = null;
+//
+//        if ("accept".equalsIgnoreCase(action)) {
+//            newStatus = "Accepted";
+//        } else if ("reject".equalsIgnoreCase(action)) {
+//            newStatus = "Rejected";
+//        }
+//
+//        if (newStatus != null) {
+//            bookingDAO.updateBookingStatus(bookingId, newStatus);
+//        }
+//
+//        // ✅ Quay lại dashboard sau khi cập nhật
+//        response.sendRedirect(request.getContextPath() + "/owner/ownerBooking");
+//
+//    }
 }
