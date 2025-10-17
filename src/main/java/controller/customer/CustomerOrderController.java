@@ -32,24 +32,22 @@ public class CustomerOrderController extends HttpServlet {
         }
 
         BookingDAO bookingDAO = new BookingDAO();
-        int userId = user.getUserId(); // 👈 Lấy userId động từ Session
+        int userId = user.getUserId();
 
-        // Các hàm đếm (giữ nguyên, dùng userId động)
+
         int upcoming = bookingDAO.countByStatus(userId, "Pending");
         int total = bookingDAO.countByUser(userId);
         int cancelled = bookingDAO.countByStatus(userId, "Cancelled");
 
-        // === THAY ĐỔI CHÍNH: LẤY DỮ LIỆU ĐỘNG ===
-        // Lấy tất cả đơn hàng (để chia tab Current/History trong JSP)
-        // Chúng ta lấy 100 đơn hàng gần nhất (hoặc tùy bạn đặt limit)
+
         List<BookingDetail> allBookings = bookingDAO.getBookingDetailsByUserId(userId, 100);
-        // LƯU Ý: BookingDAO chưa có hàm getBookingDetailsByUserId, chúng ta sẽ sửa ở bước 2
+
 
         // Gửi dữ liệu qua JSP
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
         request.setAttribute("cancelled", cancelled);
-        request.setAttribute("allBookings", allBookings); // 👈 Gửi toàn bộ danh sách
+        request.setAttribute("allBookings", allBookings);
 
         // Chuyển tiếp đến file JSP
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);

@@ -22,7 +22,7 @@ public class BookingConfirmationServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Booking booking = (Booking) session.getAttribute("confirmedBooking");
 
-        // Loại bỏ các lệnh in ra console
+
 
         if (booking == null) {
             // Nếu không có booking trong session, redirect về trang chủ
@@ -30,12 +30,12 @@ public class BookingConfirmationServlet extends HttpServlet {
             return;
         }
 
-        // Lấy thông tin xe
+
         CarViewModel car = carDAO.getCarById(booking.getCarId());
         request.setAttribute("car", car);
         request.setAttribute("booking", booking);
 
-        // Lấy thông tin giảm giá nếu có
+
         Double discount = (Double) session.getAttribute("bookingDiscount");
         String promoCode = (String) session.getAttribute("bookingPromoCode");
 
@@ -46,7 +46,7 @@ public class BookingConfirmationServlet extends HttpServlet {
             request.setAttribute("promoCode", promoCode);
         }
 
-        // Xóa thông tin booking khỏi session sau khi hiển thị
+
         session.removeAttribute("confirmedBooking");
         session.removeAttribute("bookingDiscount");
         session.removeAttribute("bookingPromoCode");

@@ -144,17 +144,17 @@
                                                         <c:choose>
                                                             <%-- Giả sử: 1 = Admin --%>
                                                             <c:when test="${sessionScope.user.roleId == 1}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/accountDB" role="menuitem">Tài khoản Admin</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/accountDB" role="menuitem">Admin Account</a>
                                                             </c:when>
 
                                                             <%-- Giả sử: 2 = Car Owner --%>
                                                             <c:when test="${sessionScope.user.roleId == 2}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/owner/dashboard" role="menuitem">Tài khoản Chủ xe</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/owner/dashboard" role="menuitem">My Account</a>
                                                             </c:when>
 
                                                             <%-- Giả sử: 3 = Customer --%>
                                                             <c:when test="${sessionScope.user.roleId == 3}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/customer/profile" role="menuitem">Tài khoản của tôi</a>
+                                                                <a class="menu-item" href="${pageContext.request.contextPath}/customer/profile" role="menuitem">My Account</a>
                                                             </c:when>
 
                                                             <%-- Trường hợp mặc định nếu không khớp role nào --%>
@@ -164,8 +164,8 @@
                                                         </c:choose>
 
                                                         <%-- Các link còn lại thì giữ nguyên --%>
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Đổi mật khẩu</a>
-                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Đăng xuất</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/change-password" role="menuitem">Change Password</a>
+                                                        <a class="menu-item" href="${pageContext.request.contextPath}/logout" role="menuitem">Log Out</a>
                                                     </div>
                                                 </div>
 
