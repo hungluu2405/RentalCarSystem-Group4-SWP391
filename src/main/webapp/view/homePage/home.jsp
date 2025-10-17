@@ -748,17 +748,24 @@
                                 <span class="subtitle">Enjoy Your Ride</span>
                                 <h2>Our Vehicle Fleet</h2>
                                 <p>Driving your dreams to reality with an exquisite fleet of versatile vehicles for unforgettable journeys.</p>
+
+                                <!-- Nút xem tất cả xe -->
+                                <div class="spacer-10"></div>
+                                <a href="${pageContext.request.contextPath}/cars" class="btn-main">View All Cars</a>
+
                                 <div class="spacer-20"></div>
                             </div>
 
                             <div id="items-carousel" class="owl-carousel wow fadeIn">
 
-                                <%-- Sử dụng JSTL để lặp qua danh sách topBookedCars --%>
+                                <%-- Lặp qua danh sách xe nổi bật --%>
                                 <c:forEach var="car" items="${topBookedCars}">
                                     <div class="col-lg-12">
                                         <div class="de-item mb30">
                                             <div class="d-img">
-                                                <img src="${pageContext.request.contextPath}/${not empty car.imageUrl ? car.imageUrl : 'images/cars/default.jpg'}" class="img-fluid" alt="${car.brand} ${car.model}">
+                                                <img src="${pageContext.request.contextPath}/${not empty car.imageUrl ? car.imageUrl : 'images/cars/default.jpg'}"
+                                                     class="img-fluid"
+                                                     alt="${car.brand} ${car.model}">
                                             </div>
                                             <div class="d-info">
                                                 <div class="d-text">
@@ -772,22 +779,22 @@
                                                         <h3 class="fw-bold mb-0">
                                                             <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
                                                         </h3>
-                                                        <a class="btn-main" href=${pageContext.request.contextPath}/car-single?id=${car.carId}>Rent Now</a>
+                                                        <a class="btn-main"
+                                                           href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
+                                                            Rent Now
+                                                        </a>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </c:forEach>
 
-
-
                             </div>
-
                         </div>
                     </div>
                 </section>
+
 
                 <section class="text-light jarallax" aria-label="section">
                     <img src="${pageContext.request.contextPath}/images/background/3.jpg" alt="" class="jarallax-img">
