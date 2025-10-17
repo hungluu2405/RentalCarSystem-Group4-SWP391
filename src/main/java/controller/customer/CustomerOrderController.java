@@ -24,16 +24,6 @@ public class CustomerOrderController extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        // Dữ liệu mock user vẫn giữ nguyên để test
-        User mockUser = new User();
-        mockUser.setUserId(2);
-        mockUser.setEmail("demo@carrental.com");
-        mockUser.setRoleId(3); // Customer role for mock session data
-        UserProfile mockProfile = new UserProfile();
-        mockProfile.setFullName("Monica Lucas");
-        mockUser.setUserProfile(mockProfile);
-        session.setAttribute("user", mockUser);
-
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -42,22 +32,24 @@ public class CustomerOrderController extends HttpServlet {
         }
 
         BookingDAO bookingDAO = new BookingDAO();
+        int userId = user.getUserId(); // 👈 Lấy userId động từ Session
 
-        // Các hàm đếm vẫn giữ nguyên
-        int upcoming = bookingDAO.countByStatus(user.getUserId(), "Pending");
-        int total = bookingDAO.countByUser(user.getUserId());
-        int cancelled = bookingDAO.countByStatus(user.getUserId(), "Cancelled");
+        // Các hàm đếm (giữ nguyên, dùng userId động)
+        int upcoming = bookingDAO.countByStatus(userId, "Pending");
+        int total = bookingDAO.countByUser(userId);
+        int cancelled = bookingDAO.countByStatus(userId, "Cancelled");
 
-        // === THAY ĐỔI CHÍNH NẰM Ở ĐÂY ===
-        // Gọi phương thức mới getRecentBookingDetails để lấy danh sách chi tiết
-//        List<BookingDetail> recentBookings = bookingDAO.getRecentBookingDetails(user.getUserId(), 5);
-        // ================================
+        // === THAY ĐỔI CHÍNH: LẤY DỮ LIỆU ĐỘNG ===
+        // Lấy tất cả đơn hàng (để chia tab Current/History trong JSP)
+        // Chúng ta lấy 100 đơn hàng gần nhất (hoặc tùy bạn đặt limit)
+        List<BookingDetail> allBookings = bookingDAO.getBookingDetailsByUserId(userId, 100);
+        // LƯU Ý: BookingDAO chưa có hàm getBookingDetailsByUserId, chúng ta sẽ sửa ở bước 2
 
         // Gửi dữ liệu qua JSP
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
         request.setAttribute("cancelled", cancelled);
-//        request.setAttribute("recentBookings", recentBookings); // Gửi danh sách chi tiết qua JSP
+        request.setAttribute("allBookings", allBookings); // 👈 Gửi toàn bộ danh sách
 
         // Chuyển tiếp đến file JSP
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
