@@ -104,18 +104,7 @@
                                 </div>
                                 <div class="de-flex-col header-col-mid">
                                     <ul id="mainmenu">
-                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/index.jsp">Home</a>
-                                            <ul>
-                                                <li><a class="menu-item new" href="${pageContext.request.contextPath}/02_dark-index-1.html">Homepage 1 Dark</a></li>
-                                                <li><a class="menu-item new" href="${pageContext.request.contextPath}/02_dark-index-2.html">Homepage 2 Dark</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index.jsp">Homepage Main</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index-2.html">Homepage 2</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index-3.html">Homepage 3</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index-4.html">Homepage 4</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index-5.html">Homepage 5</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index-6.html">Homepage 6</a></li>
-                                            </ul>
-                                        </li>
+
                                         <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Cars</a>
 
                                         </li>
@@ -125,14 +114,7 @@
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/booking.html">Booking</a></li>
                                             </ul>
                                         </li>
-                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/account-dashboard.html">My Account</a>
-                                            <ul>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/account-dashboard.html">Dashboard</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/account-profile.html">My Profile</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/account-booking.html">My Orders</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/account-favorite.html">My Favorite Cars</a></li>
-                                            </ul>
-                                        </li>
+
                                         <li><a class="menu-item" href="#">Pages</a>
                                             <ul>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About Us</a></li>
@@ -142,42 +124,9 @@
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/404.html">Page 404</a></li>
                                             </ul>
                                         </li>
-                                        <li><a class="menu-item" href="#">News</a>
-                                            <ul>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/news-standart-right-sidebar.html">News Standard</a>
-                                                    <ul>
-                                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/news-standart-right-sidebar.html">Right Sidebar</a></li>
-                                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/news-standart-left-sidebar.html">Left Sidebar</a></li>
-                                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/news-standart-no-sidebar.html">No Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/news-grid-right-sidebar.html">News Grid</a>
-                                                    <ul>
-                                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/news-grid-right-sidebar.html">Right Sidebar</a></li>
-                                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/news-grid-left-sidebar.html">Left Sidebar</a></li>
-                                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/news-grid-no-sidebar.html">No Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="menu-item" href="#">Elements</a>
-                                            <ul>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/preloader.html">Preloader</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/icon-boxes.html">Icon Boxes</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/badge.html">Badge</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/counters.html">Counters</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/gallery-popup.html">Gallery Popup</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/icons-elegant.html">Icons Elegant</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/icons-etline.html">Icons Etline</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/icons-font-awesome.html">Icons Font Awesome</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/map.html">Map</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/modal.html">Modal</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/popover.html">Popover</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/tabs.html">Tabs</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/tooltips.html">Tooltips</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+
+
+
                                 </div>
                                 <div class="de-flex-col">
                                     <div class="menu_side_area">
@@ -1166,10 +1115,7 @@
                 <div class="sc-icon">RTL</div><span class="sc-val">Click to Enable</span>
             </div>
         </div>
-        <div id="purchase-now">
-            <a href="https://themeforest.net/cart/configure_before_adding/44940477" target="_blank"><span>$</span>25</a>
-            <div class="pn-hover">Buy Now</div>
-        </div>
+
         <!-- Javascript Files
         ================================================== -->
         <script src="js/plugins.js"></script>
