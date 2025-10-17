@@ -105,4 +105,8 @@ public class BookingService {
     public boolean completeBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Paid");
     }
+
+    public boolean cancelBooking(int bookingId) {
+        return bookingDAO.updateStatus(bookingId, "Cancelled");
+    }
 }
