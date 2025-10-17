@@ -27,7 +27,7 @@ public class BookingController extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            // =============== LẤY DỮ LIỆU TỪ FORM ===============
+
             String carIdStr = request.getParameter("carId");
             String startDateStr = request.getParameter("startDate");
             String endDateStr = request.getParameter("endDate");
@@ -35,26 +35,26 @@ public class BookingController extends HttpServlet {
             String dropoffTimeStr = request.getParameter("dropoffTime");
             String location = request.getParameter("location");
 
-            // ⭐ THÊM: Nhận các tham số giá từ JavaScript
+
             String calculatedDiscountStr = request.getParameter("calculatedDiscount");
             String finalCalculatedPriceStr = request.getParameter("finalCalculatedPrice");
             String appliedPromoCode = request.getParameter("appliedPromoCode");
 
-            // =============== KIỂM TRA INPUT ===============
+
             if (carIdStr == null || startDateStr == null || endDateStr == null ||
                     pickupTimeStr == null || dropoffTimeStr == null ||
                     carIdStr.isEmpty() || startDateStr.isEmpty() ||
                     endDateStr.isEmpty() || pickupTimeStr.isEmpty() ||
                     dropoffTimeStr.isEmpty()) {
 
-                request.setAttribute("error", "⚠️ Vui lòng điền đầy đủ thông tin đặt xe!");
+                request.setAttribute("error", "Please fill in the booking information completely!");
                 request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
                 return;
             }
 
             int carId = Integer.parseInt(carIdStr);
 
-            // =============== KIỂM TRA USER ĐĂNG NHẬP ===============
+
             User user = (User) request.getSession().getAttribute("user");
             if (user == null) {
                 response.sendRedirect(request.getContextPath() + "/login");
@@ -63,7 +63,7 @@ public class BookingController extends HttpServlet {
 
             int userId = user.getUserId();
 
-            // =============== CHUYỂN ĐỔI DỮ LIỆU NGÀY GIỜ ===============
+
             LocalDate startDate = LocalDate.parse(startDateStr);
             LocalDate endDate = LocalDate.parse(endDateStr);
 
@@ -71,7 +71,7 @@ public class BookingController extends HttpServlet {
             LocalTime pickupTime = LocalTime.parse(pickupTimeStr, timeFormatter);
             LocalTime dropoffTime = LocalTime.parse(dropoffTimeStr, timeFormatter);
 
-            // =============== TẠO ĐỐI TƯỢNG BOOKING ===============
+
             Booking booking = new Booking();
             booking.setCarId(carId);
             booking.setUserId(userId);
@@ -83,9 +83,9 @@ public class BookingController extends HttpServlet {
             booking.setStatus("Pending");
             booking.setCreatedAt(LocalDateTime.now());
 
-            // =============== VALIDATE LOGIC NGÀY THUÊ ===============
+
             if (startDate.isBefore(LocalDate.now())) {
-                request.setAttribute("error", "❌ Ngày nhận xe không được nhỏ hơn hôm nay!");
+                request.setAttribute("error", "❌ The pick-up date cannot be in the past!");
                 CarViewModel car = carDAO.getCarById(carId);
                 request.setAttribute("car", car);
                 request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
@@ -93,14 +93,14 @@ public class BookingController extends HttpServlet {
             }
 
             if (endDate.isBefore(startDate)) {
-                request.setAttribute("error", "❌ Ngày trả xe phải sau ngày nhận xe!");
+                request.setAttribute("error", "❌ The drop-off date must be after the pick-up date!");
                 CarViewModel car = carDAO.getCarById(carId);
                 request.setAttribute("car", car);
                 request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
                 return;
             }
 
-            // ⭐ QUAN TRỌNG: Sử dụng giá đã tính từ frontend
+
             double finalPrice;
             double discountAmount = 0;
 
@@ -118,15 +118,15 @@ public class BookingController extends HttpServlet {
 
             booking.setTotalPrice(finalPrice);
 
-            // ⭐ THÊM: Sử dụng mã khuyến mãi từ form
+
             String finalPromoCode = (appliedPromoCode != null && !appliedPromoCode.trim().isEmpty()) ? appliedPromoCode.trim() : null;
 
-            // =============== GỌI SERVICE XỬ LÝ BOOKING ===============
+
             String result = bookingService.createBooking(booking, finalPromoCode, discountAmount);
 
             // =============== XỬ LÝ KẾT QUẢ ===============
             if (result.equals("success")) {
-                // ✅ BOOKING THÀNH CÔNG - Chuyển sang trang confirmation
+
                 HttpSession session = request.getSession();
                 session.setAttribute("confirmedBooking", booking);
 
@@ -150,7 +150,7 @@ public class BookingController extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "⚠️ Lỗi đặt xe: " + e.getMessage());
+            request.setAttribute("error", "⚠️ Booking Failed: " + e.getMessage());
             request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
         }
     }

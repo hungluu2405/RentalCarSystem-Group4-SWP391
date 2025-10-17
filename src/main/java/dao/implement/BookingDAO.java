@@ -264,7 +264,7 @@ public class BookingDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 BookingDetail detail = new BookingDetail();
-                // ... (Mapping các trường giống như hàm getRecentBookingDetails)
+
                 detail.setBookingId(rs.getInt("BOOKING_ID"));
                 detail.setCarName(rs.getString("carName"));
                 detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
