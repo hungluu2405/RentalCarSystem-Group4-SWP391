@@ -276,6 +276,12 @@ public class BookingDAO extends DBContext {
                 detail.setLocation(rs.getString("LOCATION"));
                 detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 list.add(detail);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
     // Lấy danh sách yêu cầu booking của chủ xe
 
     public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
