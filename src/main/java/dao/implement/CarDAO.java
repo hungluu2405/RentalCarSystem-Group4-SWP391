@@ -310,9 +310,12 @@ public class CarDAO extends DBContext {
 
         return cars;
     }
+    // ==========================
+    // ĐẾM SỐ LƯỢNG BOOKING THEO CHỦ XE THEO SIDEBAROWNER
+    // ==========================
 
     public int countCarsByOwner(int ownerId) {
-        String sql = "SELECT COUNT(*) FROM CAR WHERE OWNER_ID = ?";
+        String sql = "SELECT COUNT(*) FROM CAR WHERE USER_ID = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
@@ -324,6 +327,59 @@ public class CarDAO extends DBContext {
         return 0;
     }
 
+ //Hàm đếm tổng số lượng tất cả các booking (đặt xe)
+
+    public int countTotalBookingsByOwner(int ownerId) {
+        String sql = "SELECT COUNT(*) " +
+                "FROM BOOKING b " +
+                "JOIN CAR c ON b.CAR_ID = c.CAR_ID " +
+                " JOIN USER_PROFILE up ON b.USER_ID = up.USER_ID "+
+                "WHERE c.USER_ID = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+//Hàm đếm số lượng booking đã được chấp nhận (Approved)
+    public int countApprovedBookingsByOwner(int ownerId) {
+        String sql = "SELECT COUNT(*) " +
+                "FROM BOOKING b " +
+                "JOIN CAR c ON b.CAR_ID = c.CAR_ID " +
+                "WHERE c.USER_ID = ? AND b.STATUS = 'Approved'";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    //Hàm đếm số lượng booking đã bị từ chối (Rejected)
+    public int countRejectedBookingsByOwner(int ownerId) {
+        String sql = "SELECT COUNT(*) " +
+                "FROM BOOKING b " +
+                "JOIN CAR c ON b.CAR_ID = c.CAR_ID " +
+                "WHERE c.USER_ID = ? AND b.STATUS = 'Rejected'";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+// OWNER_ID
+
     public List<CarViewModel> getCarsByOwner(int ownerId) {
         List<CarViewModel> list = new ArrayList<>();
         String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
@@ -331,7 +387,7 @@ public class CarDAO extends DBContext {
                 "FROM CAR c " +
                 "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
                 "LEFT JOIN CAR_IMAGE i ON c.CAR_ID = i.CAR_ID " +
-                "WHERE c.OWNER_ID = ?";
+                "WHERE c.USER_ID = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
