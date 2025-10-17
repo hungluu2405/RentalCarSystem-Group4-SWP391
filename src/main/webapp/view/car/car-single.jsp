@@ -5,414 +5,408 @@
 <!DOCTYPE html>
 <html lang="vi">
 
-<head>
-    <jsp:include page="../common/customer/_head.jsp"/>
-<%--    <title>${car.model} - Vehicle Fleet</title>--%>
-<%--    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">--%>
-<%--    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">--%>
-<%--    <meta content="width=device-width, initial-scale=1.0" name="viewport">--%>
+    <head>
+        <jsp:include page="../common/customer/_head.jsp"/>
+        <%--    <title>${car.model} - Vehicle Fleet</title>--%>
+        <%--    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">--%>
+        <%--    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">--%>
+        <%--    <meta content="width=device-width, initial-scale=1.0" name="viewport">--%>
 
-<%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">--%>
-<%--    <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css">--%>
-<%--    <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">--%>
-<%--    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">--%>
-<%--    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">--%>
-<%--    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"--%>
-<%--          type="text/css">--%>
-</head>
+        <%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">--%>
+        <%--    <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css">--%>
+        <%--    <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">--%>
+        <%--    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">--%>
+        <%--    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">--%>
+        <%--    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"--%>
+        <%--          type="text/css">--%>
+    </head>
 
-<body>
-<div id="wrapper">
-    <!-- Header -->
-<%--    <header class="transparent scroll-light has-topbar">--%>
-    <jsp:include page="../common/customer/_header.jsp"/>
-        <%-- giữ nguyên header cũ --%>
-    </header>
+    <body>
+        <div id="wrapper">
+            <!-- Header -->
+            <%--    <header class="transparent scroll-light has-topbar">--%>
+            <jsp:include page="../common/customer/_header.jsp"/>
+            <%-- giữ nguyên header cũ --%>
+        </header>
 
-    <!-- Content -->
-    <div class="no-bottom no-top zebra" id="content">
-        <div id="top"></div>
+        <!-- Content -->
+        <div class="no-bottom no-top zebra" id="content">
+            <div id="top"></div>
 
-        <!-- Banner -->
-        <section id="subheader" class="jarallax text-light">
-            <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
-            <div class="center-y relative text-center">
-                <div class="container">
-                    <h1>Vehicle Fleet</h1>
+            <!-- Banner -->
+            <section id="subheader" class="jarallax text-light">
+                <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
+                <div class="center-y relative text-center">
+                    <div class="container">
+                        <h1>Vehicle Fleet</h1>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Car Details -->
-        <section id="section-car-details">
-            <div class="container">
-                <div class="row g-5">
+            <!-- Car Details -->
+            <section id="section-car-details" class="py-5">
+                <div class="container-fluid px-5">
+                    <div class="row g-5 align-items-start">
 
-                    <!-- 🟩 Cột hình ảnh -->
-                    <div class="col-lg-6">
-                        <div id="slider-carousel" class="owl-carousel">
-                            <c:forEach var="img" items="${car.images}">
-                                <div class="item">
-                                    <img src="${pageContext.request.contextPath}/${img.imageUrl}"
-                                         alt="Ảnh xe ${car.brand} ${car.model}">
-                                </div>
-                            </c:forEach>
-                        </div>
-
-                        <!-- 🟩 Description moved here -->
-                        <div class="mt-4 border-top pt-3">
-                            <h3 class="mb-3" style="font-weight:600;">Description</h3>
-                            <p style="font-size:1.1rem;line-height:1.6;text-align:justify;">
-                                ${car.description}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 🟦 Cột thông tin kỹ thuật -->
-                    <div class="col-lg-2">
-                        <h3>${car.model}</h3>
-                        <div class="spacer-10"></div>
-                        <h4>Specifications</h4>
-                        <div class="de-spec">
-                            <div class="d-row"><span class="d-title">Type</span><span
-                                    class="d-value">${car.carTypeName}</span></div>
-                            <div class="d-row"><span class="d-title">Seat</span><span
-                                    class="d-value">${car.capacity}</span></div>
-                            <div class="d-row"><span class="d-title">Transmission</span><span
-                                    class="d-value">${car.transmission}</span></div>
-                            <div class="d-row"><span class="d-title">Fuel</span><span
-                                    class="d-value">${car.fuelType}</span></div>
-                        </div>
-                    </div>
-
-                    <!-- 🟧 Cột giá và form đặt xe -->
-                    <div class="col-lg-4">
-                        <div class="de-price text-center">
-                            Rental Price/Day
-                            <h2><fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND"
-                                                  maxFractionDigits="0"/></h2>
-                        </div>
-                        <div class="spacer-30"></div>
-
-                        <form action="${pageContext.request.contextPath}/booking" method="post"
-                              class="booking-form p-3 rounded shadow-sm bg-light">
-                            <input type="hidden" name="carId" value="${car.carId}"/>
-
-                            <!-- CÁC INPUT ẨN MỚI THÊM -->
-                            <input type="hidden" id="calculatedDiscount" name="calculatedDiscount" value="0">
-                            <input type="hidden" id="appliedPromoCode" name="appliedPromoCode" value="">
-                            <input type="hidden" id="finalCalculatedPrice" name="finalCalculatedPrice" value="${car.pricePerDay}">
-                            <input type="hidden" id="originalPrice" name="originalPrice" value="${car.pricePerDay}">
-
-                            <!-- Thời gian nhận -->
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Ngày nhận xe</label>
-                                <input type="date" name="startDate" class="form-control" required>
+                        <!-- 🟩 Cột hình ảnh + mô tả -->
+                        <div class="col-lg-5">
+                            <div id="slider-carousel" class="owl-carousel" style="max-width:100%; margin:auto;">
+                                <c:forEach var="img" items="${car.images}">
+                                    <div class="item text-center">
+                                        <img src="${pageContext.request.contextPath}/${img.imageUrl}"
+                                             alt="Ảnh xe ${car.brand} ${car.model}"
+                                             class="rounded shadow-sm"
+                                             style="max-width:100%; height:auto; object-fit:contain;">
+                                    </div>
+                                </c:forEach>
                             </div>
 
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Giờ nhận xe</label>
-                                <select name="pickupTime" class="form-select" required>
-                                    <option value="" disabled selected>-- Chọn giờ nhận --</option>
-                                    <c:forEach var="hour" begin="6" end="22">
-                                        <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-
-                            <!-- Thời gian trả -->
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Ngày trả xe</label>
-                                <input type="date" name="endDate" class="form-control" required>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Giờ trả xe</label>
-                                <select name="dropoffTime" class="form-select" required>
-                                    <option value="" disabled selected>-- Chọn giờ trả --</option>
-                                    <c:forEach var="hour" begin="6" end="22">
-                                        <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Địa điểm nhận & trả xe</label>
-                                <div class="p-3 border rounded bg-light">
-                                    <i class="fa fa-map-marker text-success me-2"></i>
-                                    ${car.location}
-                                </div>
-                                <small class="text-muted">Xe chỉ nhận & trả tại địa chỉ cố định này.</small>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Mã khuyến mãi</label>
-                                <div class="input-group">
-                                    <input type="text" id="promoCode" name="promoCode" class="form-control"
-                                           placeholder="Nhập mã khuyến mãi...">
-                                    <button type="button" id="applyPromo" class="btn btn-success">Áp dụng</button>
-                                </div>
-                                <small id="promoMessage" class="text-danger mt-2 d-block"></small>
-                            </div>
-
-                            <div class="border rounded p-3 bg-white mb-3">
-                                <p>Phí thuê xe:
-                                    <span id="priceValue" data-total="${car.pricePerDay}">
-                                            <fmt:formatNumber value="${car.pricePerDay}" type="number"
-                                                              maxFractionDigits="0"/>
-                                        </span>₫
+                            <!-- Mô tả -->
+                            <div class="mt-4 border-top pt-3">
+                                <h3 class="mb-3 fw-semibold">Description</h3>
+                                <p style="font-size:1.05rem; line-height:1.6; text-align:justify;">
+                                    ${car.description}
                                 </p>
-                                <p>Giảm giá: <span id="discount">0</span>₫</p>
-                                <h5 class="fw-bold text-success">Tổng cộng:
-                                    <span id="finalPrice">
-                                            <fmt:formatNumber value="${car.pricePerDay}" type="number"
-                                                              maxFractionDigits="0"/>
-                                        </span>₫
-                                </h5>
+                            </div>
+                        </div>
+
+                        <!-- 🟦 Cột thông tin kỹ thuật (rộng hơn) -->
+                        <div class="col-lg-3">
+                            <h3 class="fw-bold mb-3">${car.model}</h3>
+                            <h4 class="text-secondary mb-3">Specifications</h4>
+                            <div class="de-spec p-3 rounded border bg-light shadow-sm">
+                                <div class="d-row mb-2"><span class="d-title">Type:</span><span class="d-value">${car.carTypeName}</span></div>
+                                <div class="d-row mb-2"><span class="d-title">Seat:</span><span class="d-value">${car.capacity}</span></div>
+                                <div class="d-row mb-2"><span class="d-title">Transmission:</span><span class="d-value">${car.transmission}</span></div>
+                                <div class="d-row"><span class="d-title">Fuel:</span><span class="d-value">${car.fuelType}</span></div>
+                            </div>
+                        </div>
+
+                        <!-- 🟧 Cột giá và form đặt xe -->
+                        <div class="col-lg-4">
+                            <div class="de-price text-center border rounded p-3 bg-white shadow-sm">
+                                <span class="text-muted">Rental Price/Day</span>
+                                <h2 class="text-success mt-2">
+                                    <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
+                                </h2>
                             </div>
 
-                            <button type="submit" class="btn-main btn-fullwidth">Đặt xe ngay</button>
+                            <div class="spacer-30"></div>
 
-                            <c:if test="${not empty error}">
-                                <div class="alert alert-danger mt-3">${error}</div>
-                            </c:if>
-                            <c:if test="${not empty message}">
-                                <div class="alert alert-success mt-3">${message}</div>
-                            </c:if>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
+                            <form action="${pageContext.request.contextPath}/booking" method="post"
+                                  class="booking-form p-4 rounded shadow-sm bg-light border">
+                                <input type="hidden" name="carId" value="${car.carId}"/>
+                                <input type="hidden" id="calculatedDiscount" name="calculatedDiscount" value="0">
+                                <input type="hidden" id="appliedPromoCode" name="appliedPromoCode" value="">
+                                <input type="hidden" id="finalCalculatedPrice" name="finalCalculatedPrice" value="${car.pricePerDay}">
+                                <input type="hidden" id="originalPrice" name="originalPrice" value="${car.pricePerDay}">
 
-    <a href="#" id="back-to-top"></a>
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold mb-1">Ngày nhận xe</label>
+                                    <input type="date" name="startDate" class="form-control" required>
+                                </div>
 
-    <!-- Footer -->
-    <footer class="text-light">
-        <div class="container">
-            <div class="row g-custom-x">
-                <div class="col-lg-3">
-                    <div class="widget">
-                        <h5>About Rentaly</h5>
-                        <p>Where quality meets affordability. We provide top-notch vehicles at minimum expense to ensure
-                            your journey is smooth and enjoyable.</p>
-                    </div>
-                </div>
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold mb-1">Giờ nhận xe</label>
+                                    <select name="pickupTime" class="form-select" required>
+                                        <option value="" disabled selected>-- Chọn giờ nhận --</option>
+                                        <c:forEach var="hour" begin="6" end="22">
+                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
 
-                <div class="col-lg-3">
-                    <div class="widget">
-                        <h5>Contact Info</h5>
-                        <address class="s1">
-                            <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
-                            <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
-                            <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
-                            <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a
-                                    href="#">Download Brochure</a></span>
-                        </address>
-                    </div>
-                </div>
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold mb-1">Ngày trả xe</label>
+                                    <input type="date" name="endDate" class="form-control" required>
+                                </div>
 
-                <div class="col-lg-3">
-                    <h5>Quick Links</h5>
-                    <div class="widget">
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">News</a></li>
-                            <li><a href="#">Partners</a></li>
-                        </ul>
-                    </div>
-                </div>
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold mb-1">Giờ trả xe</label>
+                                    <select name="dropoffTime" class="form-select" required>
+                                        <option value="" disabled selected>-- Chọn giờ trả --</option>
+                                        <c:forEach var="hour" begin="6" end="22">
+                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
 
-                <div class="col-lg-3">
-                    <div class="widget">
-                        <h5>Social Network</h5>
-                        <div class="social-icons">
-                            <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
-                            <a href="#"><i class="fa fa-rss fa-lg"></i></a>
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold mb-1">Địa điểm nhận & trả xe</label>
+                                    <div class="p-3 border rounded bg-white">
+                                        <i class="fa fa-map-marker text-success me-2"></i>
+                                        ${car.location}
+                                    </div>
+                                    <small class="text-muted">Xe chỉ nhận & trả tại địa chỉ cố định này.</small>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="fw-bold mb-1">Mã khuyến mãi</label>
+                                    <div class="input-group">
+                                        <input type="text" id="promoCode" name="promoCode" class="form-control"
+                                               placeholder="Nhập mã khuyến mãi...">
+                                        <button type="button" id="applyPromo" class="btn btn-success">Áp dụng</button>
+                                    </div>
+                                    <small id="promoMessage" class="text-danger mt-2 d-block"></small>
+                                </div>
+
+                                <div class="border rounded p-3 bg-white mb-3">
+                                    <p>Phí thuê xe:
+                                        <span id="priceValue" data-total="${car.pricePerDay}">
+                                            <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0"/>
+                                        </span>₫
+                                    </p>
+                                    <p>Giảm giá: <span id="discount">0</span>₫</p>
+                                    <h5 class="fw-bold text-success">Tổng cộng:
+                                        <span id="finalPrice">
+                                            <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0"/>
+                                        </span>₫
+                                    </h5>
+                                </div>
+
+                                <button type="submit" class="btn-main btn-fullwidth">Đặt xe ngay</button>
+
+                                <c:if test="${not empty error}">
+                                    <div class="alert alert-danger mt-3">${error}</div>
+                                </c:if>
+                                <c:if test="${not empty message}">
+                                    <div class="alert alert-success mt-3">${message}</div>
+                                </c:if>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
         </div>
 
-        <div class="subfooter">
+        <a href="#" id="back-to-top"></a>
+
+        <!-- Footer -->
+        <footer class="text-light">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="de-flex">
-                            <div class="de-flex-col">
-                                <a href="#">© 2025 Rentaly by Designesia</a>
-                            </div>
-                            <ul class="menu-simple">
-                                <li><a href="#">Terms &amp; Conditions</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
+                <div class="row g-custom-x">
+                    <div class="col-lg-3">
+                        <div class="widget">
+                            <h5>About Rentaly</h5>
+                            <p>Where quality meets affordability. We provide top-notch vehicles at minimum expense to ensure
+                                your journey is smooth and enjoyable.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="widget">
+                            <h5>Contact Info</h5>
+                            <address class="s1">
+                                <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
+                                <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
+                                <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
+                                <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a
+                                        href="#">Download Brochure</a></span>
+                            </address>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <h5>Quick Links</h5>
+                        <div class="widget">
+                            <ul>
+                                <li><a href="#">About</a></li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Careers</a></li>
+                                <li><a href="#">News</a></li>
+                                <li><a href="#">Partners</a></li>
                             </ul>
                         </div>
                     </div>
+
+                    <div class="col-lg-3">
+                        <div class="widget">
+                            <h5>Social Network</h5>
+                            <div class="social-icons">
+                                <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
+                                <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
+                                <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
+                                <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
+                                <a href="#"><i class="fa fa-rss fa-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
-</div>
 
-<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
-<script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+            <div class="subfooter">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="de-flex">
+                                <div class="de-flex-col">
+                                    <a href="#">© 2025 Rentaly by Designesia</a>
+                                </div>
+                                <ul class="menu-simple">
+                                    <li><a href="#">Terms &amp; Conditions</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
 
-<script>
-    // Lấy giá thuê gốc mỗi ngày từ input ẩn (giá này không bao giờ thay đổi)
-    const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value);
-    let appliedPromo = null;
+    <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+    <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 
-    // Tính tổng tiền dựa trên số ngày
-    function calculateTotal() {
-        const startDate = document.querySelector('input[name="startDate"]').value;
-        const endDate = document.querySelector('input[name="endDate"]').value;
+    <script>
+        // Lấy giá thuê gốc mỗi ngày từ input ẩn (giá này không bao giờ thay đổi)
+        const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value);
+        let appliedPromo = null;
 
-        // LUÔN LUÔN DÙNG GIÁ GỐC KHÔNG ĐỔI
-        const pricePerDay = ORIGINAL_PRICE_PER_DAY;
+        // Tính tổng tiền dựa trên số ngày
+        function calculateTotal() {
+            const startDate = document.querySelector('input[name="startDate"]').value;
+            const endDate = document.querySelector('input[name="endDate"]').value;
 
-        if (!startDate || !endDate) {
-            // Nếu thiếu ngày, trả về giá 1 ngày
-            return pricePerDay;
-        }
+            // LUÔN LUÔN DÙNG GIÁ GỐC KHÔNG ĐỔI
+            const pricePerDay = ORIGINAL_PRICE_PER_DAY;
 
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        // 1. Kiểm tra ngày hợp lệ
-        if (end < start) {
-            document.getElementById("promoMessage").innerHTML = "❌ Ngày trả xe không được trước ngày nhận!";
-            document.getElementById("promoMessage").className = "text-danger mt-2 d-block";
-            return pricePerDay;
-        }
-
-        const timeDiff = end - start;
-        // 2. TÍNH LẠI SỐ NGÀY: làm tròn lên để tính cả ngày đầu tiên và đảm bảo thuê ít nhất 1 ngày.
-        let days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-        // Đảm bảo số ngày thuê tối thiểu là 1 nếu ngày hợp lệ
-        if (days <= 0 && timeDiff >= 0) {
-            days = 1;
-        }
-
-        const newTotal = days * pricePerDay;
-
-        // Cập nhật hiển thị phí thuê xe (KHÔNG GHI ĐÈ data-total hoặc giá gốc)
-        document.getElementById("priceValue").textContent = newTotal.toLocaleString('vi-VN');
-
-        // Xóa thông báo lỗi nếu ngày đã hợp lệ
-        if (document.getElementById("promoMessage").innerHTML.includes("Ngày trả xe")) {
-            document.getElementById("promoMessage").innerHTML = "";
-        }
-
-        return newTotal;
-    }
-
-    // Cập nhật giá khi thay đổi ngày
-    function updatePriceOnDateChange() {
-        const newTotal = calculateTotal();
-
-        // Nếu có mã khuyến mãi đã áp dụng, tính lại
-        if (appliedPromo) {
-            applyPromoCode(appliedPromo.code, newTotal);
-        } else {
-            resetPromoDisplay(newTotal);
-        }
-    }
-
-    // Áp dụng mã khuyến mãi (Giữ nguyên logic API)
-    function applyPromoCode(code, total = calculateTotal()) {
-        const msg = document.getElementById("promoMessage");
-        const contextPath = "${pageContext.request.contextPath}";
-
-        if (!code) {
-            msg.innerHTML = "⚠️ Vui lòng nhập mã khuyến mãi!";
-            msg.className = "text-danger mt-2 d-block";
-            return;
-        }
-
-        // Tạm thời hiển thị đang xử lý và xóa lỗi ngày nếu có
-        msg.innerHTML = "Đang kiểm tra mã...";
-        msg.className = "text-info mt-2 d-block";
-
-
-        const url = contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total;
-
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Response data:", data);
-
-                if (data.error) {
-                    msg.innerHTML = "❌ " + data.error;
-                    msg.className = "text-danger mt-2 d-block";
-                    appliedPromo = null;
-                    resetPromoDisplay(total);
-                } else if (data.success) {
-                    msg.innerHTML = `✅ Áp dụng mã <b>${code}</b> giảm ${data.rate}%`;
-                    msg.className = "text-success mt-2 d-block";
-                    appliedPromo = { code: code, rate: data.rate };
-                    updatePriceDisplay(data.discount, data.finalPrice, total);
-                }
-            })
-            .catch(error => {
-                console.error("Fetch error:", error);
-                msg.innerHTML = "❌ Có lỗi khi áp mã, vui lòng thử lại!";
-                msg.className = "text-danger mt-2 d-block";
-            });
-    }
-
-    // Cập nhật hiển thị giá
-    function updatePriceDisplay(discount, finalPrice, originalTotal) {
-        document.getElementById("discount").textContent = discount.toLocaleString('vi-VN');
-        document.getElementById("finalPrice").textContent = finalPrice.toLocaleString('vi-VN');
-
-        // Cập nhật các input ẩn
-        document.getElementById("calculatedDiscount").value = discount;
-        document.getElementById("appliedPromoCode").value = appliedPromo ? appliedPromo.code : "";
-        document.getElementById("finalCalculatedPrice").value = finalPrice;
-    }
-
-    // Reset hiển thị
-    function resetPromoDisplay(total) {
-        document.getElementById("discount").textContent = "0";
-        document.getElementById("finalPrice").textContent = total.toLocaleString('vi-VN');
-
-        // Reset các input ẩn
-        document.getElementById("calculatedDiscount").value = 0;
-        document.getElementById("appliedPromoCode").value = "";
-        document.getElementById("finalCalculatedPrice").value = total;
-    }
-
-    // Event listeners
-    document.addEventListener("DOMContentLoaded", function() {
-        // Áp mã khi click nút
-        document.getElementById("applyPromo").addEventListener("click", function() {
-            const code = document.getElementById("promoCode").value.trim();
-            applyPromoCode(code);
-        });
-
-        // Tính toán lại khi thay đổi ngày
-        document.querySelector('input[name="startDate"]').addEventListener("change", updatePriceOnDateChange);
-        document.querySelector('input[name="endDate"]').addEventListener("change", updatePriceOnDateChange);
-
-        // Enter để áp mã
-        document.getElementById("promoCode").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                document.getElementById("applyPromo").click();
+            if (!startDate || !endDate) {
+                // Nếu thiếu ngày, trả về giá 1 ngày
+                return pricePerDay;
             }
-        });
 
-        // Khởi tạo giá trị ban đầu nếu các trường ngày đã được điền sẵn
-        updatePriceOnDateChange();
-    });
-</script>
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            // 1. Kiểm tra ngày hợp lệ
+            if (end < start) {
+                document.getElementById("promoMessage").innerHTML = "❌ Ngày trả xe không được trước ngày nhận!";
+                document.getElementById("promoMessage").className = "text-danger mt-2 d-block";
+                return pricePerDay;
+            }
+
+            const timeDiff = end - start;
+            // 2. TÍNH LẠI SỐ NGÀY: làm tròn lên để tính cả ngày đầu tiên và đảm bảo thuê ít nhất 1 ngày.
+            let days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+            // Đảm bảo số ngày thuê tối thiểu là 1 nếu ngày hợp lệ
+            if (days <= 0 && timeDiff >= 0) {
+                days = 1;
+            }
+
+            const newTotal = days * pricePerDay;
+
+            // Cập nhật hiển thị phí thuê xe (KHÔNG GHI ĐÈ data-total hoặc giá gốc)
+            document.getElementById("priceValue").textContent = newTotal.toLocaleString('vi-VN');
+
+            // Xóa thông báo lỗi nếu ngày đã hợp lệ
+            if (document.getElementById("promoMessage").innerHTML.includes("Ngày trả xe")) {
+                document.getElementById("promoMessage").innerHTML = "";
+            }
+
+            return newTotal;
+        }
+
+        // Cập nhật giá khi thay đổi ngày
+        function updatePriceOnDateChange() {
+            const newTotal = calculateTotal();
+
+            // Nếu có mã khuyến mãi đã áp dụng, tính lại
+            if (appliedPromo) {
+                applyPromoCode(appliedPromo.code, newTotal);
+            } else {
+                resetPromoDisplay(newTotal);
+            }
+        }
+
+        // Áp dụng mã khuyến mãi (Giữ nguyên logic API)
+        function applyPromoCode(code, total = calculateTotal()) {
+            const msg = document.getElementById("promoMessage");
+            const contextPath = "${pageContext.request.contextPath}";
+
+            if (!code) {
+                msg.innerHTML = "⚠️ Vui lòng nhập mã khuyến mãi!";
+                msg.className = "text-danger mt-2 d-block";
+                return;
+            }
+
+            // Tạm thời hiển thị đang xử lý và xóa lỗi ngày nếu có
+            msg.innerHTML = "Đang kiểm tra mã...";
+            msg.className = "text-info mt-2 d-block";
+
+
+            const url = contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total;
+
+            fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Response data:", data);
+
+                        if (data.error) {
+                            msg.innerHTML = "❌ " + data.error;
+                            msg.className = "text-danger mt-2 d-block";
+                            appliedPromo = null;
+                            resetPromoDisplay(total);
+                        } else if (data.success) {
+                            msg.innerHTML = `✅ Áp dụng mã <b>${code}</b> giảm ${data.rate}%`;
+                            msg.className = "text-success mt-2 d-block";
+                            appliedPromo = {code: code, rate: data.rate};
+                            updatePriceDisplay(data.discount, data.finalPrice, total);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Fetch error:", error);
+                        msg.innerHTML = "❌ Có lỗi khi áp mã, vui lòng thử lại!";
+                        msg.className = "text-danger mt-2 d-block";
+                    });
+        }
+
+        // Cập nhật hiển thị giá
+        function updatePriceDisplay(discount, finalPrice, originalTotal) {
+            document.getElementById("discount").textContent = discount.toLocaleString('vi-VN');
+            document.getElementById("finalPrice").textContent = finalPrice.toLocaleString('vi-VN');
+
+            // Cập nhật các input ẩn
+            document.getElementById("calculatedDiscount").value = discount;
+            document.getElementById("appliedPromoCode").value = appliedPromo ? appliedPromo.code : "";
+            document.getElementById("finalCalculatedPrice").value = finalPrice;
+        }
+
+        // Reset hiển thị
+        function resetPromoDisplay(total) {
+            document.getElementById("discount").textContent = "0";
+            document.getElementById("finalPrice").textContent = total.toLocaleString('vi-VN');
+
+            // Reset các input ẩn
+            document.getElementById("calculatedDiscount").value = 0;
+            document.getElementById("appliedPromoCode").value = "";
+            document.getElementById("finalCalculatedPrice").value = total;
+        }
+
+        // Event listeners
+        document.addEventListener("DOMContentLoaded", function () {
+            // Áp mã khi click nút
+            document.getElementById("applyPromo").addEventListener("click", function () {
+                const code = document.getElementById("promoCode").value.trim();
+                applyPromoCode(code);
+            });
+
+            // Tính toán lại khi thay đổi ngày
+            document.querySelector('input[name="startDate"]').addEventListener("change", updatePriceOnDateChange);
+            document.querySelector('input[name="endDate"]').addEventListener("change", updatePriceOnDateChange);
+
+            // Enter để áp mã
+            document.getElementById("promoCode").addEventListener("keypress", function (e) {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    document.getElementById("applyPromo").click();
+                }
+            });
+
+            // Khởi tạo giá trị ban đầu nếu các trường ngày đã được điền sẵn
+            updatePriceOnDateChange();
+        });
+    </script>
 </body>
 </html>

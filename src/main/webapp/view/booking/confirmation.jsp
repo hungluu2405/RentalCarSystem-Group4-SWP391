@@ -164,7 +164,7 @@
                                         <h4>🚗 Thông tin xe</h4>
                                         <div class="info-row">
                                             <span class="info-label">Xe:</span>
-                                            <span class="info-value">${car.brand} ${car.model}</span>
+                                            <span class="info-value">${car.model}</span>
                                         </div>
                                         <div class="info-row">
                                             <span class="info-label">Biển số:</span>
