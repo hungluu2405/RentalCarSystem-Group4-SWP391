@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import model.Car;
 import model.CarViewModel;
 import model.CarImage;
+import model.CarType;
 
 public class CarDAO extends DBContext {
 
@@ -223,6 +224,61 @@ public class CarDAO extends DBContext {
         }
         return types;
     }
+
+    // Lấy danh sách tất cả loại xe
+    public List<CarType> getAllCarTypes() {
+        List<CarType> list = new ArrayList<>();
+        String sql = "SELECT TYPE_ID, NAME, DESCRIPTION FROM CAR_TYPE";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                CarType ct = new CarType();
+                ct.setTypeId(rs.getInt("TYPE_ID"));
+                ct.setName(rs.getString("NAME"));
+                ct.setDescription(rs.getString("DESCRIPTION"));
+                list.add(ct);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Lấy danh sách truyền động (Transmission)
+    public List<String> getAllTransmissions() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT TRANSMISSION FROM CAR WHERE TRANSMISSION IS NOT NULL";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(rs.getString("TRANSMISSION"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Lấy danh sách loại nhiên liệu (Fuel type)
+    public List<String> getAllFuelTypess() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT FUEL_TYPE FROM CAR WHERE FUEL_TYPE IS NOT NULL";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(rs.getString("FUEL_TYPE"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+
 
     // Lấy chi tiết xe theo ID, có cả description và ảnh
     // Trong lớp CarDAO.java
