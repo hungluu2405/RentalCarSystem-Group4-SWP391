@@ -17,14 +17,13 @@ public class AccountDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1️⃣ Tạo DAO để lấy danh sách người dùng
         UserDAO userDAO = new UserDAO();
         List<User> listU = userDAO.getAllUsersForAdmin();
+        int totalUsers = userDAO.countAllUsers();
 
-        // 2️⃣ Gửi danh sách sang JSP
         request.setAttribute("listU", listU);
+        request.setAttribute("totalUsers",totalUsers);
 
-        // 3️⃣ Forward sang JSP hiển thị
         request.getRequestDispatcher("/view/admin/accountdashboard.jsp").forward(request, response);
     }
 
