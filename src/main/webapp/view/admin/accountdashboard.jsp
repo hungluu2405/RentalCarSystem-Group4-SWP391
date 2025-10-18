@@ -66,7 +66,7 @@
        <!-- DataTables Example -->
 <div class="card mb-3">
   <div class="card-header">
-    <i class="fas fa-table"></i>
+    <i class="fas fa-id-card"></i>
     User Profile Table
   </div>
   <div class="card-body">
