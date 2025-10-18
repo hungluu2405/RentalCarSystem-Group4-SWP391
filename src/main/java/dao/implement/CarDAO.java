@@ -523,5 +523,20 @@ public class CarDAO extends DBContext {
             e.printStackTrace();
         }
     }
+    public int countAllCars() {
+        String sql = "SELECT COUNT(*) AS total FROM [CAR]";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
 
 }
