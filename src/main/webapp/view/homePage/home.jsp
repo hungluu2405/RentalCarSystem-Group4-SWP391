@@ -22,6 +22,7 @@
         <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
         <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet" type="text/css">
         <style>
+            /* === CSS CŨ (USER ICON & MAIN BUTTONS) === */
             .user-icon {
                 display: flex;
                 justify-content: center;
@@ -29,7 +30,7 @@
                 width: 45px;
                 height: 45px;
                 border-radius: 50%;
-                background-color: #6c63ff; /* màu tím pastel */
+                background-color: #6c63ff;
                 transition: all 0.3s ease;
             }
 
@@ -40,7 +41,7 @@
             }
 
             .user-icon:hover {
-                background-color: #574bff; /* tím đậm khi hover */
+                background-color: #574bff;
                 transform: scale(1.05);
             }
 
@@ -57,7 +58,97 @@
                 background-color: #574bff;
             }
 
+            /* === CSS MỚI & SỬA LỖI FORM TÌM KIẾM TỐI GIẢN (CĂN CHỈNH CUỐI CÙNG) === */
 
+            /* 1. QUY TẮC CĂN GIỮA VÀ GIỚI HẠN ĐỘ RỘNG (Mở rộng tối đa) */
+            .search-container-wrapper {
+                max-width: 95%; /* Giữ nguyên 95% để gần sát mép */
+                margin: 0 auto;
+            }
+
+            /* Điều chỉnh padding theme cũ và BO TRÒN GÓC */
+            .p-4.rounded-3.shadow-soft {
+                padding: 15px !important;
+                border-radius: 10px !important;
+            }
+
+            /* 2. CẤU TRÚC FLEXBOX CHÍNH */
+            .main-search-form-simplified {
+                padding: 0;
+            }
+
+            .search-form-grid-simplified {
+                display: flex;
+                gap: 10px; /* Giảm gap */
+                align-items: flex-end; /* 🚨 SỬA LẠI: Đảm bảo căn chỉnh các input ở cuối */
+                padding: 5px;
+            }
+
+            /* 3. ĐỊNH DẠNG INPUT GROUPS (Rất quan trọng để làm gọn) */
+            .input-group-simplified {
+                flex-grow: 1;
+                min-width: 100px;
+                text-align: left;
+                padding-top: 0;
+                margin-bottom: 0; /* Xóa margin đáy nếu có */
+            }
+
+            /* Kẻ dọc cho các cột giữa */
+            .input-group-simplified:not(.search-button-group-simplified):not(.location-group-simplified) {
+                border-right: 1px solid #eee;
+                padding-right: 20px;
+            }
+
+            .location-group-simplified {
+                flex-grow: 2;
+                min-width: 200px;
+                border-right: 1px solid #eee;
+                padding-right: 20px;
+            }
+
+            /* 4. STYLE CHỮ VÀ INPUT (Làm gọn) */
+            .input-group-simplified label {
+                font-weight: 500;
+                display: block;
+                margin-bottom: 0; /* 🚨 SỬA LẠI: Xóa margin giữa label và input */
+                color: #555;
+                font-size: 13px;
+            }
+
+            .input-group-simplified input, .input-group-simplified select {
+                border: none;
+                padding: 4px 0; /* 🚨 SỬA LẠI: Giảm padding dọc để input mỏng hơn */
+                width: 100%;
+                font-size: 15px;
+                font-weight: bold;
+                color: #000;
+                border-bottom: 1px solid transparent; /* Đảm bảo không có border dưới */
+                cursor: pointer;
+                /* THÊM QUY TẮC QUAN TRỌNG: Loại bỏ background/border theme cũ */
+                background-color: transparent !important;
+            }
+
+            .input-group-simplified select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+            /* 5. NÚT TÌM KIẾM (Kéo giãn toàn bộ chiều cao) */
+            .btn-search-final {
+                background: #4DC0B5;
+                color: white;
+                padding: 0 20px; /* Xóa padding dọc, dùng height để kiểm soát */
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                min-width: 100px;
+                height: 50px; /* 🚨 SỬA LẠI: Đặt height cố định để nó bằng chiều cao của hàng input */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
         </style>
     </head>
 
@@ -328,184 +419,56 @@
 
                             <div class="col-lg-12">
                                 <div class="spacer-single sm-hide"></div>
-                                <div class="p-4 rounded-3 shadow-soft" data-bgcolor="#ffffff">
 
+                                <div class="form-wrapper-center">
+                                    <div class="p-4 rounded-3 shadow-soft" data-bgcolor="#ffffff">
 
-                                    <form name="contactForm" id='contact_form' method="post">
-                                        <div id="step-1" class="row">
-                                            <div class="col-lg-6 mb30">
-                                                <h5>What is your vehicle type?</h5>
+                                        <form action="${pageContext.request.contextPath}/cars" method="get" class="main-search-form-simplified">
 
-                                                <div class="de_form de_radio row g-3">
-                                                    <div class="radio-img col-lg-3 col-sm-3 col-6">
-                                                        <input id="radio-1a" name="Car_Type" type="radio" value="Residential" checked="checked">
-                                                        <label for="radio-1a"><img src="${pageContext.request.contextPath}/images/select-form/car.png" alt="">Car</label>
-                                                    </div>
+                                            <div class="search-form-grid-simplified">
 
-                                                    <div class="radio-img col-lg-3 col-sm-3 col-6">
-                                                        <input id="radio-1b" name="Car_Type" type="radio" value="Office">
-                                                        <label for="radio-1b"><img src="${pageContext.request.contextPath}/images/select-form/van.png" alt="">Van</label>
-                                                    </div>
-
-                                                    <div class="radio-img col-lg-3 col-sm-3 col-6">
-                                                        <input id="radio-1c" name="Car_Type" type="radio" value="Commercial">
-                                                        <label for="radio-1c"><img src="${pageContext.request.contextPath}/images/select-form/minibus.png" alt="">Minibus</label>
-                                                    </div>
-
-                                                    <div class="radio-img col-lg-3 col-sm-3 col-6">
-                                                        <input id="radio-1d" name="Car_Type" type="radio" value="Retail">
-                                                        <label for="radio-1d"><img src="${pageContext.request.contextPath}/images/select-form/sportscar.png" alt="">Prestige</label>
-                                                    </div>
+                                                <div class="input-group-simplified location-group-simplified">
+                                                    <label for="location">Pickup and return location</label>
+                                                    <input type="text" id="autocomplete_location" name="location" placeholder="Chọn địa điểm tìm xe" class="form-control" required>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-lg-6">
-                                                <div class="row">
-                                                    <div class="col-lg-6 mb20">
-                                                        <h5>Pick Up Location</h5>
-                                                        <input type="text" name="PickupLocation" onfocus="geolocate()" placeholder="Enter your pickup location" id="autocomplete" autocomplete="off" class="form-control">
-
-                                                        <div class="jls-address-preview jls-address-preview--hidden">
-                                                            <div class="jls-address-preview__header">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6 mb20">
-                                                        <h5>Drop Off Location</h5>
-                                                        <input type="text" name="DropoffLocation" onfocus="geolocate()" placeholder="Enter your dropoff location" id="autocomplete2" autocomplete="off" class="form-control">
-
-                                                        <div class="jls-address-preview jls-address-preview--hidden">
-                                                            <div class="jls-address-preview__header">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6 mb20">
-                                                        <h5>Pick Up Date & Time</h5>
-                                                        <div class="date-time-field">
-                                                            <input type="text" id="date-picker" name="Pick Up Date" value="">
-                                                            <select name="Pick Up Time" id="pickup-time">
-                                                                <option selected disabled value="Select time">Time</option>
-                                                                <option value="00:00">00:00</option>
-                                                                <option value="00:30">00:30</option>
-                                                                <option value="01:00">01:00</option>
-                                                                <option value="01:30">01:30</option>
-                                                                <option value="02:00">02:00</option>
-                                                                <option value="02:30">02:30</option>
-                                                                <option value="03:00">03:00</option>
-                                                                <option value="03:30">03:30</option>
-                                                                <option value="04:00">04:00</option>
-                                                                <option value="04:30">04:30</option>
-                                                                <option value="05:00">05:00</option>
-                                                                <option value="05:30">05:30</option>
-                                                                <option value="06:00">06:00</option>
-                                                                <option value="06:30">06:30</option>
-                                                                <option value="07:00">07:00</option>
-                                                                <option value="07:30">07:30</option>
-                                                                <option value="08:00">08:00</option>
-                                                                <option value="08:30">08:30</option>
-                                                                <option value="09:00">09:00</option>
-                                                                <option value="09:30">09:30</option>
-                                                                <option value="10:00">10:00</option>
-                                                                <option value="10:30">10:30</option>
-                                                                <option value="11:00">11:00</option>
-                                                                <option value="11:30">11:30</option>
-                                                                <option value="12:00">12:00</option>
-                                                                <option value="12:30">12:30</option>
-                                                                <option value="13:00">13:00</option>
-                                                                <option value="13:30">13:30</option>
-                                                                <option value="14:00">14:00</option>
-                                                                <option value="14:30">14:30</option>
-                                                                <option value="15:00">15:00</option>
-                                                                <option value="15:30">15:30</option>
-                                                                <option value="16:00">16:00</option>
-                                                                <option value="16:30">16:30</option>
-                                                                <option value="17:00">17:00</option>
-                                                                <option value="17:30">17:30</option>
-                                                                <option value="18:00">18:00</option>
-                                                                <option value="18:30">18:30</option>
-                                                                <option value="19:00">19:00</option>
-                                                                <option value="19:30">19:30</option>
-                                                                <option value="20:00">20:00</option>
-                                                                <option value="20:30">20:30</option>
-                                                                <option value="21:00">21:00</option>
-                                                                <option value="21:30">21:30</option>
-                                                                <option value="22:00">22:00</option>
-                                                                <option value="22:30">22:30</option>
-                                                                <option value="23:00">23:00</option>
-                                                                <option value="23:30">23:30</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6 mb20">
-                                                        <h5>Return Date & Time</h5>
-                                                        <div class="date-time-field">
-                                                            <input type="text" id="date-picker-2" name="Collection Date" value="">
-                                                            <select name="Collection Time" id="collection-time">
-                                                                <option selected disabled value="Select time">Time</option>
-                                                                <option value="00:00">00:00</option>
-                                                                <option value="00:30">00:30</option>
-                                                                <option value="01:00">01:00</option>
-                                                                <option value="01:30">01:30</option>
-                                                                <option value="02:00">02:00</option>
-                                                                <option value="02:30">02:30</option>
-                                                                <option value="03:00">03:00</option>
-                                                                <option value="03:30">03:30</option>
-                                                                <option value="04:00">04:00</option>
-                                                                <option value="04:30">04:30</option>
-                                                                <option value="05:00">05:00</option>
-                                                                <option value="05:30">05:30</option>
-                                                                <option value="06:00">06:00</option>
-                                                                <option value="06:30">06:30</option>
-                                                                <option value="07:00">07:00</option>
-                                                                <option value="07:30">07:30</option>
-                                                                <option value="08:00">08:00</option>
-                                                                <option value="08:30">08:30</option>
-                                                                <option value="09:00">09:00</option>
-                                                                <option value="09:30">09:30</option>
-                                                                <option value="10:00">10:00</option>
-                                                                <option value="10:30">10:30</option>
-                                                                <option value="11:00">11:00</option>
-                                                                <option value="11:30">11:30</option>
-                                                                <option value="12:00">12:00</option>
-                                                                <option value="12:30">12:30</option>
-                                                                <option value="13:00">13:00</option>
-                                                                <option value="13:30">13:30</option>
-                                                                <option value="14:00">14:00</option>
-                                                                <option value="14:30">14:30</option>
-                                                                <option value="15:00">15:00</option>
-                                                                <option value="15:30">15:30</option>
-                                                                <option value="16:00">16:00</option>
-                                                                <option value="16:30">16:30</option>
-                                                                <option value="17:00">17:00</option>
-                                                                <option value="17:30">17:30</option>
-                                                                <option value="18:00">18:00</option>
-                                                                <option value="18:30">18:30</option>
-                                                                <option value="19:00">19:00</option>
-                                                                <option value="19:30">19:30</option>
-                                                                <option value="20:00">20:00</option>
-                                                                <option value="20:30">20:30</option>
-                                                                <option value="21:00">21:00</option>
-                                                                <option value="21:30">21:30</option>
-                                                                <option value="22:00">22:00</option>
-                                                                <option value="22:30">22:30</option>
-                                                                <option value="23:00">23:00</option>
-                                                                <option value="23:30">23:30</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
+                                                <div class="input-group-simplified">
+                                                    <label for="pickupDate">Pickup Date</label>
+                                                    <input type="date" id="pickupDate" name="startDate" class="form-control" required>
                                                 </div>
+
+                                                <div class="input-group-simplified">
+                                                    <label for="pickupTime">Pickup Time</label>
+                                                    <select id="pickupTime" name="pickupTime" class="form-control" required>
+                                                        <option selected disabled value="">Select Time</option>
+                                                        <c:forEach var="hour" begin="6" end="22">
+                                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-group-simplified">
+                                                    <label for="returnDate">Return Date</label>
+                                                    <input type="date" id="returnDate" name="endDate" class="form-control" required>
+                                                </div>
+
+                                                <div class="input-group-simplified">
+                                                    <label for="returnTime">Return Time</label>
+                                                    <select id="returnTime" name="dropoffTime" class="form-control" required>
+                                                        <option selected disabled value="">Select Time</option>
+                                                        <c:forEach var="hour" begin="6" end="22">
+                                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
+
+                                                <div class="search-button-group-simplified">
+                                                    <button type="submit" id='send_message' value='Find a Vehicle' class="btn-search-final">Search</button>
+                                                </div>
+
                                             </div>
-
-                                            <div class="col-lg-12">
-                                                <input type='submit' id='send_message' value='Find a Vehicle' class="btn-main pull-right">
-                                            </div>
-
-                                        </div>
-
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
 
