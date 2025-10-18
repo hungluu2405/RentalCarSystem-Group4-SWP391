@@ -2,8 +2,8 @@ package controller.carOwner;
 
 import dao.implement.CarDAO;
 import model.Car;
-import model.CarImage;
 import model.User;
+import model.CarType;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -12,6 +12,7 @@ import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @WebServlet("/owner/addCar")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,     // 1MB
@@ -24,6 +25,15 @@ public class AddCarController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<CarType> carTypes = carDAO.getAllCarTypes();
+        List<String> fuelTypes = carDAO.getAllFuelTypess();
+        List<String> transmissions = carDAO.getAllTransmissions();
+
+        // Gán vào request để JSP hiển thị
+        request.setAttribute("carTypes", carTypes);
+        request.setAttribute("fuelTypes", fuelTypes);
+        request.setAttribute("transmissions", transmissions);
+
         // Hiển thị form thêm xe
         request.getRequestDispatcher("/view/carOwner/addCar.jsp").forward(request, response);
     }
