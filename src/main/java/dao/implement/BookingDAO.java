@@ -388,6 +388,18 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
-    
+    public int countAllBookings(){
+        String sql = "SELECT COUNT(*) AS total FROM [Booking]";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()){
+            if (rs.next()){
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
 
 }
