@@ -375,13 +375,13 @@
                                                 <div class="d-img">
                                                     <c:choose>
                                                         <c:when test="${not empty car.images}">
-                                                            <img src="${pageContext.request.contextPath}/${car.images[0].imageUrl}" 
-                                                                 class="img-fluid" 
+                                                            <img src="${pageContext.request.contextPath}/${car.images[0].imageUrl}"
+                                                                 class="img-fluid"
                                                                  alt="Ảnh xe ${car.model}">
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <img src="${pageContext.request.contextPath}/default.jpg" 
-                                                                 class="img-fluid" 
+                                                            <img src="${pageContext.request.contextPath}/default.jpg"
+                                                                 class="img-fluid"
                                                                  alt="No Image">
                                                         </c:otherwise>
                                                     </c:choose>
@@ -433,7 +433,7 @@
 
                                         <!-- Nút về đầu -->
                                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" 
+                                            <a class="page-link"
                                                href="cars?page=1&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">«</a>
                                         </li>
 
@@ -490,7 +490,7 @@
 
                                         <!-- Nút đến cuối -->
                                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a class="page-link" 
+                                            <a class="page-link"
                                                href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">»</a>
                                         </li>
                                     </ul>
@@ -504,7 +504,7 @@
                                             <input type="hidden" name="capacity" value="${param.capacity}">
                                             <input type="hidden" name="fuel" value="${param.fuel}">
                                             <input type="hidden" name="price" value="${param.price}">
-                                            <input type="number" name="page" min="1" max="${totalPages}" 
+                                            <input type="number" name="page" min="1" max="${totalPages}"
                                                    class="form-control form-control-sm" placeholder="Trang..." style="width:80px;">
                                             <button type="submit" class="btn btn-primary btn-sm ms-2">Go</button>
                                         </form>
