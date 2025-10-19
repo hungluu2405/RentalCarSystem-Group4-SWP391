@@ -95,6 +95,6 @@ public class AddCarController extends HttpServlet {
         }
 
         // 3. Chuyển hướng về danh sách xe
-        response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
+        response.sendRedirect(request.getContextPath() + "/add-car-success");
     }
 }
