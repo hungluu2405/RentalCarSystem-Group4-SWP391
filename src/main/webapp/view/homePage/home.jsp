@@ -240,7 +240,7 @@
 
                                                             <%-- Giả sử: 2 = Car Owner --%>
                                                             <c:when test="${sessionScope.user.roleId == 2}">
-                                                                <a class="menu-item" href="${pageContext.request.contextPath}/owner/ownerBooking" role="menuitem">My Account</a>
+                                                                <a class="men-uitem" href="${pageContext.request.contextPath}/owner/ownerBooking" role="menuitem">My Account</a>
                                                             </c:when>
 
                                                             <%-- Giả sử: 3 = Customer --%>
