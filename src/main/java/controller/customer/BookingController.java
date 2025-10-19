@@ -112,7 +112,7 @@ public class BookingController extends HttpServlet {
                     discountAmount = Double.parseDouble(calculatedDiscountStr);
                 }
             } else {
-                // Fallback: tính toán như cũ nếu không có giá từ frontend
+
                 finalPrice = calculatePrice(booking, carId);
             }
 
@@ -124,13 +124,13 @@ public class BookingController extends HttpServlet {
 
             String result = bookingService.createBooking(booking, finalPromoCode, discountAmount);
 
-            // =============== XỬ LÝ KẾT QUẢ ===============
+
             if (result.equals("success")) {
 
                 HttpSession session = request.getSession();
                 session.setAttribute("confirmedBooking", booking);
 
-                // Lưu thông tin giảm giá vào session
+
                 if (discountAmount > 0) {
                     session.setAttribute("bookingDiscount", discountAmount);
                 }
@@ -141,7 +141,7 @@ public class BookingController extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/booking-confirmation");
 
             } else {
-                //  BOOKING THẤT BẠI - Hiển thị lỗi trên trang booking
+
                 CarViewModel car = carDAO.getCarById(carId);
                 request.setAttribute("car", car);
                 request.setAttribute("error", result);
@@ -155,7 +155,7 @@ public class BookingController extends HttpServlet {
         }
     }
 
-    // Hàm tính giá fallback
+
     private double calculatePrice(Booking booking, int carId) {
         CarDAO carDAO = new CarDAO();
         double pricePerDay = carDAO.getCarPrice(carId);
