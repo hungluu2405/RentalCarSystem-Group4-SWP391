@@ -18,23 +18,17 @@ public class BookingConfirmationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         HttpSession session = request.getSession();
         Booking booking = (Booking) session.getAttribute("confirmedBooking");
 
-
-
         if (booking == null) {
-
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
 
-
         CarViewModel car = carDAO.getCarById(booking.getCarId());
         request.setAttribute("car", car);
         request.setAttribute("booking", booking);
-
 
         Double discount = (Double) session.getAttribute("bookingDiscount");
         String promoCode = (String) session.getAttribute("bookingPromoCode");
