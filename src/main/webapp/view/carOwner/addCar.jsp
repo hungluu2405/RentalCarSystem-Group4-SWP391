@@ -47,6 +47,9 @@
                     <div class="col-lg-9">
 
                         <!-- ADD CAR -->
+                        <div class="card padding40 rounded-5 shadow-sm">
+                            <h3 class="mb-4"><i class="fa fa-plus-circle"></i> Add New Car</h3>
+
                             <form action="${pageContext.request.contextPath}/owner/addCar" method="post" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
                                 <div class="text-center mb-4">
                                     <img id="previewImage" src="${pageContext.request.contextPath}/images/default-car.png"
@@ -101,7 +104,7 @@
 
                                     <!-- PRICE -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-dollar-sign text-primary"></i> Price per Day</label>
+                                        <label class="form-label"><i class="fa fa-money-bill-wave text-primary"></i> Price per Day</label>
                                         <input type="number" step="0.01" name="pricePerDay" class="form-control" placeholder="Enter price per day..." required>
                                     </div>
 
@@ -130,7 +133,7 @@
 
                                     <!-- LOCATION -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-map-marker-alt text-primary"></i> Location</label>
+                                        <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Location</label>
                                         <input type="text" name="location" class="form-control" placeholder="Enter car location...">
                                     </div>
 

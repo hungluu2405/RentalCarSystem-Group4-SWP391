@@ -468,6 +468,7 @@ public class CarDAO extends DBContext {
         return list;
     }
 
+
     public double getCarPrice(int carId) {
         String sql = "SELECT PRICE_PER_DAY FROM CAR WHERE CAR_ID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
