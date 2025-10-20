@@ -24,16 +24,6 @@ public class CustomerOrderController extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        // Dữ liệu mock user vẫn giữ nguyên để test
-        User mockUser = new User();
-        mockUser.setUserId(2);
-        mockUser.setEmail("demo@carrental.com");
-        mockUser.setRoleId(3); // Customer role for mock session data
-        UserProfile mockProfile = new UserProfile();
-        mockProfile.setFullName("Monica Lucas");
-        mockUser.setUserProfile(mockProfile);
-        session.setAttribute("user", mockUser);
-
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
@@ -42,24 +32,24 @@ public class CustomerOrderController extends HttpServlet {
         }
 
         BookingDAO bookingDAO = new BookingDAO();
+        int userId = user.getUserId();
 
-        // Các hàm đếm vẫn giữ nguyên
-        int upcoming = bookingDAO.countByStatus(user.getUserId(), "Pending");
-        int total = bookingDAO.countByUser(user.getUserId());
-        int cancelled = bookingDAO.countByStatus(user.getUserId(), "Cancelled");
 
-        // === THAY ĐỔI CHÍNH NẰM Ở ĐÂY ===
-        // Gọi phương thức mới getRecentBookingDetails để lấy danh sách chi tiết
-        List<BookingDetail> recentBookings = bookingDAO.getRecentBookingDetails(user.getUserId(), 5);
-        // ================================
+        int upcoming = bookingDAO.countByStatus(userId, "Pending");
+        int total = bookingDAO.countByUser(userId);
+        int cancelled = bookingDAO.countByStatus(userId, "Cancelled");
 
-        // Gửi dữ liệu qua JSP
+
+        List<BookingDetail> allBookings = bookingDAO.getBookingDetailsByUserId(userId, 100);
+
+
+
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
         request.setAttribute("cancelled", cancelled);
-        request.setAttribute("recentBookings", recentBookings); // Gửi danh sách chi tiết qua JSP
+        request.setAttribute("allBookings", allBookings);
 
-        // Chuyển tiếp đến file JSP
+
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
     }
 }

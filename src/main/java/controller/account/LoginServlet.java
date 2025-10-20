@@ -26,11 +26,11 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String email = request.getParameter("email");
+        String loginKey = request.getParameter("loginKey");
         String password = request.getParameter("password");
 
         UserDAO userDAO = new UserDAO();
-        User user = userDAO.checkLogin(email, password);
+        User user = userDAO.checkLoginByEmailOrUsername(loginKey, password);
 
         if (user == null) {
             // Đăng nhập thất bại, trả về trang login với thông báo lỗi
