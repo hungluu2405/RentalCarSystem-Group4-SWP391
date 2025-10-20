@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -136,7 +137,7 @@
                                         <li><a class="menu-item" href="#">Pages</a>
                                             <ul>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About Us</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/contact.html">Contact</a></li>
+                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a></li>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/login">Login</a></li>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/register.jsp">Register</a></li>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/404.html">Page 404</a></li>
@@ -176,13 +177,20 @@
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/tabs.html">Tabs</a></li>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/tooltips.html">Tooltips</a></li>
                                             </ul>
-                                        </li>
+                                        </li>                          
                                     </ul>
                                 </div>
                                 <div class="de-flex-col">
                                     <div class="menu_side_area">
+                                        
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.user}">
+                                                <!-- ICON CHUÔNG -->
+                                                <a href="${pageContext.request.contextPath}/view/notification/notification.jsp"
+                                                   class="btn-bell" title="Thông báo">
+                                                  <i class="fa-solid fa-bell"></i>
+                                                </a>
+
                                                 <!-- USER MENU -->
                                                 <div id="myUserMenu" class="my-user-menu">
                                                     <button id="myUserBtn" class="my-user-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Tài khoản">
@@ -221,6 +229,27 @@
                                                 </div>
 
                                                 <style>
+                                                    .menu_side_area {
+                                                    display: flex;
+                                                    align-items: center;
+                                                    gap: 10px; /* khoảng cách giữa icon */
+                                                  }
+
+                                                  .btn-bell, .my-user-btn {
+                                                    background: transparent;
+                                                    border: none;
+                                                    cursor: pointer;
+                                                    color: #fff;  /* màu trắng đồng nhất với header */
+                                                    font-size: 18px;
+                                                    padding: 6px 8px;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                  }
+
+                                                  .btn-bell:hover, .my-user-btn:hover {
+                                                    color: #32cd32; /* xanh lá khi hover */
+}
                                                     .menu_side_area, .de-flex-col, .de-flex {
                                                         overflow: visible !important;
                                                     }
