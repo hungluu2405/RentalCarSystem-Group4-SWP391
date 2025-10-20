@@ -205,7 +205,8 @@
                                         <form id="form_login" class="form-border" method="post" action="${pageContext.request.contextPath}/login">
 
                                             <div class="field-set mb-3"> 
-                                                <input type="email" name="email" id="email" class="form-control" placeholder="Your Email" required />
+                                                <input type="text" name="loginKey" id="loginKey" class="form-control"
+                                                       placeholder="Email or Username" required />
                                             </div>
 
                                             <div class="field-set">

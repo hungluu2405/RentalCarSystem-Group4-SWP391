@@ -3,8 +3,11 @@ package model;
 import java.sql.Timestamp; // Sử dụng Timestamp cho CREATED_AT để có cả ngày và giờ
 
 public class User {
+
     private int userId;
     private int roleId;
+    private String username;
+
     private String email;
     private String password;
     private boolean isEmailVerified; // Thuộc tính này cần setter
@@ -14,11 +17,15 @@ public class User {
     private UserProfile userProfile; // Thuộc tính này cần setter
     private String roleName;// cần để lấy ra tên role trong dashboard
     // Constructors
+
     public User() {
     }
 
-    // Getters and Setters (Đầy đủ)
+    public String getUsername() {
+        return username;
+    }
 
+    // Getters and Setters (Đầy đủ)
     public int getUserId() {
         return userId;
     }
@@ -33,6 +40,10 @@ public class User {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -85,6 +96,5 @@ public class User {
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
-    
-    
+
 }

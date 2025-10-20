@@ -146,88 +146,113 @@
                                 <button class="tab-btn" id="tabHistory">Trip History</button>
                             </div>
 
-                            <!-- Current Trips -->
+
+
                             <div id="currentTrips" class="tab-content active">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>Order ID</th>
                                             <th>Car Name</th>
-                                            <th>Pick Up Location</th>
-                                            <th>Drop Off Location</th>
+                                            <th>Location</th>
                                             <th>Pick Up Date</th>
                                             <th>Return Date</th>
+                                            <th>Price</th>
                                             <th>Status</th>
+                                            <th>Actions</th> <%-- Thêm cột hành động --%>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>#001</td>
-                                            <td><strong>Toyota Vios</strong></td>
-                                            <td>Chicago</td>
-                                            <td>Ha Noi</td>
-                                            <td>2025-10-10</td>
-                                            <td>2025-10-15</td>
-                                            <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                        </tr>
+                                        <%-- Vòng lặp JSTL --%>
+                                        <c:forEach var="order" items="${allBookings}">
+                                            <c:set var="isCurrent" value="${order.status == 'Pending' || order.status == 'Approved'}"/>
+                                            <c:set var="isHistory" value="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Cancelled'}"/>
+
+                                            <%-- Lọc đơn hàng hiện tại (Current Trips) --%>
+                                            <c:if test="${isCurrent}">
+                                                <tr>
+                                                    <td><strong><c:out value="${order.carName}"/></strong></td>
+                                                    <td><c:out value="${order.location}"/></td>
+                                                    <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
+                                                    <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
+                                                    <td><c:out value="${order.totalPrice}"/></td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${order.status == 'Pending'}">
+                                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                            </c:when>
+                                                            <c:when test="${order.status == 'Approved'}">
+                                                                <span class="badge bg-primary text-white">Approved</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="badge bg-info text-dark">${order.status}</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                    <td>
+                                                        <c:if test="${order.status == 'Pending'}">
+                                                            <a href="${pageContext.request.contextPath}/customer/cancelBooking?bookingId=${order.bookingId}"
+                                                               onclick="return confirm('Are you sure you want to cancel this booking?');"
+                                                               class="btn btn-sm btn-danger">Cancel</a>
+                                                        </c:if>
+                                                        <c:if test="${order.status == 'Approved'}">
+                                                            <a href="#" class="btn btn-sm btn-info">Payment</a>
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Trip History -->
                             <div id="tripHistory" class="tab-content">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>Order ID</th>
+
                                             <th>Car Name</th>
-                                            <th>Pick Up Location</th>
-                                            <th>Drop Off Location</th>
+                                            <th>Location</th>
                                             <th>Pick Up Date</th>
                                             <th>Return Date</th>
+                                            <th>Price</th>
                                             <th>Status</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>#002</td>
-                                            <td><strong>Honda City</strong></td>
-                                            <td>Da Nang</td>
-                                            <td>Hue</td>
-                                            <td>2025-08-05</td>
-                                            <td>2025-08-07</td>
-                                            <td><span class="badge bg-success">Completed</span></td>
-                                        </tr>
+                                        <%-- Vòng lặp JSTL --%>
+                                        <c:forEach var="order" items="${allBookings}">
+                                            <%-- Lọc đơn hàng lịch sử (Trip History) --%>
+                                            <c:if test="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Cancelled'}">
+                                                <tr>
+
+                                                    <td><strong><c:out value="${order.carName}"/></strong></td>
+
+                                                    <td><c:out value="${order.location}"/></td>
+                                                    <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
+                                                    <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
+                                                    <td><c:out value="${order.totalPrice}"/></td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${order.status == 'Completed'}">
+                                                                <span class="badge bg-success">Completed</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="badge bg-danger text-white">${order.status}</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
 
-                        <%-- Favorites giữ nguyên --%>
-                        <div class="card padding30 rounded-5">
-                            <h4>My Favorites</h4>
-                            <div class="spacer-10"></div>
-                            <div class="de-item-list no-border mb30">
-                                <div class="d-img">
-                                    <img src="${pageContext.request.contextPath}/images/cars/jeep-renegade.jpg"
-                                         class="img-fluid" alt="">
-                                </div>
-                                <div class="d-info">
-                                    <div class="d-text">
-                                        <h4>Jeep Renegade</h4>
-                                    </div>
-                                </div>
-                                <div class="d-price">
-                                    Daily rate from <span>$265</span>
-                                    <a class="btn-main" href="#">Rent Now</a>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
+
 
                     </div> <%-- end col-lg-9 --%>
                 </div>

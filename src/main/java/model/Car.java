@@ -16,46 +16,162 @@ public class Car {
     private BigDecimal pricePerDay;
     private String description;
     private boolean availability;
+    private String location;
+    private String carOwnerName; // FULL_NAME từ USER_PROFILE
+    private String typeName;     // NAME từ CAR_TYPE
 
-    public Car() {}
+
+    public Car() {
+    }
+
+    public Car(int carId, int ownerId, int typeId, String model, String brand, int year, String licensePlate, int capacity, String transmission, String fuelType, BigDecimal pricePerDay, String description, boolean availability, String location, String carOwnerName, String typeName) {
+        this.carId = carId;
+        this.ownerId = ownerId;
+        this.typeId = typeId;
+        this.model = model;
+        this.brand = brand;
+        this.year = year;
+        this.licensePlate = licensePlate;
+        this.capacity = capacity;
+        this.transmission = transmission;
+        this.fuelType = fuelType;
+        this.pricePerDay = pricePerDay;
+        this.description = description;
+        this.availability = availability;
+        this.location = location;
+        this.carOwnerName = carOwnerName;
+        this.typeName = typeName;
+    }
+
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     // Getters và Setters
-    public int getCarId() { return carId; }
-    public void setCarId(int carId) { this.carId = carId; }
+    public int getCarId() {
+        return carId;
+    }
 
-    public int getOwnerId() { return ownerId; }
-    public void setOwnerId(int ownerId) { this.ownerId = ownerId; }
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
 
-    public int getTypeId() { return typeId; }
-    public void setTypeId(int typeId) { this.typeId = typeId; }
+    public int getOwnerId() {
+        return ownerId;
+    }
 
-    public String getModel() { return model; }
-    public void setModel(String model) { this.model = model; }
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
 
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
+    public int getTypeId() {
+        return typeId;
+    }
 
-    public int getYear() { return year; }
-    public void setYear(int year) { this.year = year; }
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
 
-    public String getLicensePlate() { return licensePlate; }
-    public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
+    public String getModel() {
+        return model;
+    }
 
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public void setModel(String model) {
+        this.model = model;
+    }
 
-    public String getTransmission() { return transmission; }
-    public void setTransmission(String transmission) { this.transmission = transmission; }
+    public String getBrand() {
+        return brand;
+    }
 
-    public String getFuelType() { return fuelType; }
-    public void setFuelType(String fuelType) { this.fuelType = fuelType; }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
-    public BigDecimal getPricePerDay() { return pricePerDay; }
-    public void setPricePerDay(BigDecimal pricePerDay) { this.pricePerDay = pricePerDay; }
+    public int getYear() {
+        return year;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setYear(int year) {
+        this.year = year;
+    }
 
-    public boolean isAvailability() { return availability; }
-    public void setAvailability(boolean availability) { this.availability = availability; }
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getTransmission() {
+        return transmission;
+    }
+
+    public void setTransmission(String transmission) {
+        this.transmission = transmission;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public BigDecimal getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(BigDecimal pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
+    public String getCarOwnerName() {
+        return carOwnerName;
+    }
+
+    public void setCarOwnerName(String carOwnerName) {
+        this.carOwnerName = carOwnerName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+
 }
