@@ -15,7 +15,7 @@ import model.CarViewModel;
 import model.User;
 import model.UserProfile;
 
-@WebServlet("/owner/dashboard")
+@WebServlet("/owner/profile")
 public class CarOwnerDashboardController extends HttpServlet {
 
     @Override
@@ -33,6 +33,9 @@ public class CarOwnerDashboardController extends HttpServlet {
         mockCarOwner.setUserProfile(profile);
         session.setAttribute("userCarOwner", mockCarOwner);
 
+
+
+        // bắt đầu từ đây
         User owner = (User) session.getAttribute("userCarOwner");
         if (owner == null) {
             response.sendRedirect(request.getContextPath() + "/login");

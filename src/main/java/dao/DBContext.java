@@ -6,7 +6,9 @@ import java.sql.SQLException;
 
 public class DBContext {
     protected Connection connection;
-
+    public DBContext() {
+        this.connection = getConnection(); // 👈 dòng này phải nằm TRONG constructor
+    }
     public Connection getConnection() {
         try {
             // Load SQL Server Driver

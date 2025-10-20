@@ -375,13 +375,13 @@
                                                 <div class="d-img">
                                                     <c:choose>
                                                         <c:when test="${not empty car.images}">
-                                                            <img src="${pageContext.request.contextPath}/${car.images[0].imageUrl}" 
-                                                                 class="img-fluid" 
+                                                            <img src="${pageContext.request.contextPath}/${car.images[0].imageUrl}"
+                                                                 class="img-fluid"
                                                                  alt="Ảnh xe ${car.model}">
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <img src="${pageContext.request.contextPath}/default.jpg" 
-                                                                 class="img-fluid" 
+                                                            <img src="${pageContext.request.contextPath}/default.jpg"
+                                                                 class="img-fluid"
                                                                  alt="No Image">
                                                         </c:otherwise>
                                                     </c:choose>
@@ -430,14 +430,89 @@
 
                                 <nav aria-label="Page navigation" class="mt-4">
                                     <ul class="pagination justify-content-center">
-                                        <c:forEach var="i" begin="1" end="${totalPages}">
-                                            <li class="page-item ${i==currentPage?'active':''}">
-                                                <a class="page-link"
-                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">${i}</a>
-                                            </li>
-                                        </c:forEach>
+
+                                        <!-- Nút về đầu -->
+                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                            <a class="page-link"
+                                               href="cars?page=1&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">«</a>
+                                        </li>
+
+                                        <c:choose>
+                                            <c:when test="${currentPage < 3}">
+                                                <c:forEach var="i" begin="1" end="${totalPages < 3 ? totalPages : 3}">
+                                                    <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                        <a class="page-link"
+                                                           href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                            ${i}
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+                                                <c:if test="${totalPages > 3}">
+                                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                            ${totalPages}
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                            </c:when>
+
+                                            <c:otherwise>
+                                                <li class="page-item disabled"><span class="page-link">...</span></li>
+
+                                                <c:set var="start" value="${currentPage - 1}" />
+                                                <c:set var="end" value="${currentPage + 1}" />
+                                                <c:if test="${end > totalPages}">
+                                                    <c:set var="end" value="${totalPages}" />
+                                                </c:if>
+
+                                                <c:forEach var="i" begin="${start}" end="${end}">
+                                                    <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                        <a class="page-link"
+                                                           href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                            ${i}
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+
+                                                <c:if test="${end < totalPages}">
+                                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                            ${totalPages}
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <!-- Nút đến cuối -->
+                                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                            <a class="page-link"
+                                               href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">»</a>
+                                        </li>
                                     </ul>
+
+                                    <!-- Ô nhập số trang -->
+                                    <div class="d-flex justify-content-center mt-2">
+                                        <form method="get" action="cars" class="d-flex">
+                                            <input type="hidden" name="name" value="${param.name}">
+                                            <input type="hidden" name="brand" value="${param.brand}">
+                                            <input type="hidden" name="type" value="${param.type}">
+                                            <input type="hidden" name="capacity" value="${param.capacity}">
+                                            <input type="hidden" name="fuel" value="${param.fuel}">
+                                            <input type="hidden" name="price" value="${param.price}">
+                                            <input type="number" name="page" min="1" max="${totalPages}"
+                                                   class="form-control form-control-sm" placeholder="Trang..." style="width:80px;">
+                                            <button type="submit" class="btn btn-primary btn-sm ms-2">Go</button>
+                                        </form>
+                                    </div>
                                 </nav>
+
+
+
                             </div>
                         </div>
                     </div>

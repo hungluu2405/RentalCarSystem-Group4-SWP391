@@ -37,8 +37,15 @@ public class VerifyEmailServlet extends HttpServlet {
                 boolean isSuccess = userDAO.registerUser(user, profile, address);
 
                 if (isSuccess) {
-                    session.invalidate(); // Xóa toàn bộ session tạm
-                    response.sendRedirect(request.getContextPath() + "/login?register=success");
+                    // Đăng ký thành công → tự đăng nhập và chuyển về trang chủ
+                    session.removeAttribute("temp_user");
+                    session.removeAttribute("temp_profile");
+                    session.removeAttribute("temp_address");
+
+                    // Đăng nhập tự động
+                    session.setAttribute("user", user);
+                    response.sendRedirect(request.getContextPath() + "/home");
+
                 } else {
                     request.setAttribute("error", "Error creating account. Please try registering again.");
                     request.getRequestDispatcher("view/account/register.jsp").forward(request, response);

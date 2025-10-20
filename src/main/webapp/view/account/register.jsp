@@ -114,6 +114,12 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <h5>Personal Details</h5>
+
+                                                <div class="field-set">
+                                                    <label>Username <span class="text-danger">*</span></label>
+                                                    <input type='text' name='username' class="form-control" required>
+                                                </div>
+                                                
                                                 <div class="field-set">
                                                     <label>Full Name <span class="text-danger">*</span></label>
                                                     <input type='text' name='full_name' class="form-control" required>
