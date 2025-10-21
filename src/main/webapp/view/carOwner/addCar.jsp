@@ -104,9 +104,29 @@
 
                                     <!-- PRICE -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-money-bill-wave text-primary"></i> Price per Day</label>
-                                        <input type="number" step="0.01" name="pricePerDay" class="form-control" placeholder="Enter price per day..." required>
+                                        <label class="form-label">
+                                            <i class="fa fa-money-bill-wave text-primary"></i> Price per Day
+                                        </label>
+                                        <input type="text" id="pricePerDayDisplay" class="form-control" placeholder="Enter price per day..." required>
+                                        <!-- input hidden để gửi giá trị thật về server -->
+                                        <input type="hidden" name="pricePerDay" id="pricePerDay">
                                     </div>
+
+                                    <script>
+                                        const displayInput = document.getElementById('pricePerDayDisplay');
+                                        const hiddenInput = document.getElementById('pricePerDay');
+
+                                        // Hàm định dạng số có dấu . hoặc , ngăn cách hàng nghìn
+                                        function formatNumber(value) {
+                                            return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // hoặc dùng ',' nếu muốn
+                                        }
+
+                                        displayInput.addEventListener('input', function (e) {
+                                            let rawValue = e.target.value.replace(/[^\d]/g, ''); // bỏ ký tự không phải số
+                                            e.target.value = formatNumber(rawValue);             // hiển thị có dấu .
+                                            hiddenInput.value = rawValue;                        // lưu giá trị thật
+                                        });
+                                    </script>
 
                                     <!-- CAPACITY -->
                                     <div class="col-md-6">

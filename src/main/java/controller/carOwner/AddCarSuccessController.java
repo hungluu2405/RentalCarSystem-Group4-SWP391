@@ -21,15 +21,15 @@ public class AddCarSuccessController extends HttpServlet {
 
         // Lấy ID xe vừa thêm từ session hoặc request parameter
         HttpSession session = request.getSession();
-        Integer addedCarId = (Integer) session.getAttribute("addedCarId");
+        Integer carId = (Integer) session.getAttribute("addedCarId");
 
-        if (addedCarId == null) {
+        if (carId == null) {
             response.sendRedirect(request.getContextPath() + "/owner/addCar");
             return;
         }
 
         // Lấy thông tin xe vừa thêm
-        CarViewModel car = carDAO.getCarById(addedCarId);
+        CarViewModel car = carDAO.getCarById(carId);
         request.setAttribute("car", car);
 
 
