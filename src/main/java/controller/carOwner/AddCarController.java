@@ -94,7 +94,12 @@ public class AddCarController extends HttpServlet {
             }
         }
 
-        // 3. Chuyển hướng về danh sách xe
-        response.sendRedirect(request.getContextPath() + "/add-car-success");
-    }
+
+    //  Lưu carId vào session để trang success biết xe nào vừa thêm
+            HttpSession session = request.getSession();
+            session.setAttribute("addedCarId", carId);
+
+    //  Chuyển hướng sang trang thành công
+            response.sendRedirect(request.getContextPath() + "/add-car-success");
+        }
 }
