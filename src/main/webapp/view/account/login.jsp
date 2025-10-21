@@ -235,9 +235,9 @@
                                 <div style="display: flex; justify-content: center; margin-top: 10px;">
                                     <a href="${pageContext.request.contextPath}/login-google"
                                        style="display: flex; align-items: center; justify-content: center;
-                  position: relative; width: 200px; height: 40px;
-                  background: #fff; border: 1px solid #dadce0; border-radius: 6px;
-                  color: #3c4043; font-weight: 500; text-decoration: none;">
+                                       position: relative; width: 200px; height: 40px;
+                                       background: #fff; border: 1px solid #dadce0; border-radius: 6px;
+                                       color: #3c4043; font-weight: 500; text-decoration: none;">
                                         <img src="${pageContext.request.contextPath}/images/svg/google_icon.svg" alt=""
                                              style="width: 20px; height: 20px; margin-right: 10px;">
                                         Google
@@ -250,16 +250,8 @@
             </div>
         </section>
     </div>
-    <div id="selector">
-        <div id="demo-rtl" class="sc-opt">
-            <div class="sc-icon">RTL</div>
-            <span class="sc-val">Click to Enable</span>
-        </div>
-    </div>
-    <div id="purchase-now">
-        <a href="https://themeforest.net/cart/configure_before_adding/44940477" target="_blank"><span>$</span>25</a>
-        <div class="pn-hover">Buy Now</div>
-    </div>
+    
+
     <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
     <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 </body>
