@@ -2,6 +2,7 @@ package controller.carOwner;
 
 import dao.implement.CarDAO;
 import model.Car;
+import model.CarViewModel;
 import model.User;
 import model.CarType;
 
@@ -54,7 +55,12 @@ public class AddCarController extends HttpServlet {
         int capacity = Integer.parseInt(request.getParameter("capacity"));
         String transmission = request.getParameter("transmission");
         String fuelType = request.getParameter("fuelType");
-        BigDecimal pricePerDay = new BigDecimal(request.getParameter("pricePerDay"));
+        String priceRaw = request.getParameter("pricePerDay");
+        if (priceRaw != null) {
+            priceRaw = priceRaw.replace(".", "").replace(",", "").trim(); // loại dấu . hoặc ,
+        }
+        BigDecimal pricePerDay = new BigDecimal(priceRaw);
+
         String description = request.getParameter("description");
         String location = request.getParameter("location");
         int typeId = Integer.parseInt(request.getParameter("typeId"));
@@ -76,6 +82,7 @@ public class AddCarController extends HttpServlet {
 
         // 1. Thêm xe vào DB, lấy carId vừa tạo
         int carId = carDAO.addCarAndReturnId(car);
+        CarViewModel cars = carDAO.getCarById(carId);
 
         // 2. Xử lý upload ảnh
         for (Part part : request.getParts()) {
@@ -100,7 +107,6 @@ public class AddCarController extends HttpServlet {
 
     //  Chuyển hướng sang trang thành công
             response.sendRedirect(request.getContextPath() + "/add-car-success");
-
 
     }
 }
