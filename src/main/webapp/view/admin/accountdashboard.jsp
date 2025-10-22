@@ -83,6 +83,7 @@
             <th>Driver License</th>
             <th>Email</th>
             <th>Created At</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -98,6 +99,19 @@
               <td>${u.userProfile.driverLicenseNumber}</td>
               <td>${u.email}</td>
               <td>${u.createdAt}</td>
+                <td>
+                    <a href="${pageContext.request.contextPath}/admin/manageUser?action=edit&userId=${u.userId}"
+                       class="btn btn-sm btn-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+
+                    <a href="${pageContext.request.contextPath}/admin/manageUser?action=remove&userId=${u.userId}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this user?');">
+                        <i class="fas fa-trash"></i> Remove
+                    </a>
+
+                </td>
             </tr>
           </c:if>
         </c:forEach>
