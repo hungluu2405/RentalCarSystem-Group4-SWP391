@@ -4,21 +4,19 @@ import java.time.LocalDateTime;
 
 public class Payment {
 
-    private int paymentId;        // PAYMENT_ID (Primary Key)
-    private int bookingId;        // BOOKING_ID (Foreign Key)
-    private double amount;        // AMOUNT
-    private String method;        // METHOD (e.g., "PayPal")
-    private String status;        // STATUS (e.g., "COMPLETED")
-    private LocalDateTime paidAt; // PAID_AT (GETDATE())
-    // 💡 Thêm trường này để lưu ID giao dịch của PayPal
-    private String paypalTransactionId; // Đây là ID mà PayPal trả về (executedPayment.getId())
+    private int paymentId;
+    private int bookingId;
+    private double amount;
+    private String method;
+    private String status;
+    private LocalDateTime paidAt;
 
-    // --- Constructors ---
-    // (Cần có constructor không tham số)
+    private String paypalTransactionId;
+
+
     public Payment() {
     }
 
-    // --- Getters và Setters ---
 
     public int getPaymentId() {
         return paymentId;
