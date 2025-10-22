@@ -7,123 +7,145 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<jsp:useBean id="car" class="model.CarViewModel" scope="request" />
 
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Add Car Successfully</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <jsp:include page="/view/common/carOwner/_headOwner.jsp"/>
+    <title>Thêm xe thành công - Rentaly</title>
 
     <style>
-        body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
+        .container-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 15px;
         }
-        .container {
-            width: 80%;
-            margin: 50px auto;
-            background: #fff;
-            padding: 30px 50px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #28a745;
+        .success-box {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            padding: 30px;
+            border-radius: 8px;
             text-align: center;
             margin-bottom: 30px;
         }
-        .car-info {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-        .car-images {
-            flex: 1;
-            min-width: 300px;
-        }
-        .car-images img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
             margin-bottom: 15px;
         }
-        .car-details {
-            flex: 2;
-            min-width: 300px;
-        }
-        .car-details p {
-            font-size: 16px;
-            margin: 8px 0;
-        }
-        .highlight {
-            font-weight: bold;
-            color: #333;
-        }
-        .back-btn {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-        }
-        .back-btn a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
+        .info-section {
+            background: white;
+            padding: 20px;
             border-radius: 8px;
-            transition: 0.3s;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .back-btn a:hover {
-            background-color: #0056b3;
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+        }
+        .info-value {
+            font-weight: 600;
+            color: #1f2937;
+            text-align: right;
+        }
+        .btn-home {
+            background: #10b981;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn-home:hover {
+            background: #059669;
+            color: white;
+        }
+        .car-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-
 <body>
-<div class="container">
-    <h1>✅ Car Added Successfully!</h1>
+<div id="wrapper">
+    <jsp:include page="/view/common/carOwner/_headerOwner.jsp"/>
 
-    <!-- Kiểm tra nếu có đối tượng car -->
-    <c:if test="${not empty car}">
-        <div class="car-info">
+    <div id="content" class="no-bottom no-top">
+        <section id="subheader" class="jarallax text-light"
+                 style="background-image: url('${pageContext.request.contextPath}/images/background/2.jpg');">
+            <div class="center-y relative text-center">
+                <div class="container-content">
+                    <h1>Thêm xe thành công</h1>
+                </div>
+            </div>
+        </section>
 
-            <!-- Hiển thị danh sách hình ảnh -->
-            <div class="car-images">
+        <section style="padding: 60px 0; background: #f5f5f5;">
+            <div class="container-content container">
+
                 <c:choose>
-                    <c:when test="${not empty car.images}">
-                        <c:forEach var="img" items="${car.images}">
-                            <img src="${img.imageUrl}" alt="Car Image">
-                        </c:forEach>
+                    <c:when test="${car == null}">
+                        <div class="alert alert-danger">
+                            <h3>❌ Không tìm thấy thông tin xe!</h3>
+                            <p>Vui lòng thử lại.</p>
+                            <a href="${pageContext.request.contextPath}/owner/addCar" class="btn-home">Thêm lại xe</a>
+                        </div>
                     </c:when>
+
                     <c:otherwise>
-                        <img src="${pageContext.request.contextPath}/assets/img/no-image.png" alt="No Image Available">
+                        <div class="success-box">
+                            <div class="success-icon">✓</div>
+                            <h2 style="color:#10b981;">Xe đã được thêm thành công!</h2>
+                            <p style="color:#059669;">Chiếc xe của bạn đã sẵn sàng để hiển thị. Hãy truy cập vào Manage my car - Quản lý xe của tôi để xem chi tiết</p>
+                        </div>
+
+                        <div class="info-section" style="text-align: center;">
+                            <!-- Nút về trang chủ -->
+                            <a href="${pageContext.request.contextPath}/home" class="btn-home">
+                                🔙 Về trang quản lý
+                            </a>
+
+                            <!-- Nút quản lý xe -->
+                            <a href="${pageContext.request.contextPath}/owner/manageMyCar" class="btn-home" style="margin-left: 10px;">
+                                🚘 Quản lý xe của tôi
+                            </a>
+
+                            <!-- Nút thêm xe mới -->
+                            <a href="${pageContext.request.contextPath}/owner/addCar" class="btn-home" style="margin-left: 10px;">
+                                ➕ Thêm xe mới
+                            </a>
+                        </div>
+
                     </c:otherwise>
                 </c:choose>
             </div>
-
-            <!-- Hiển thị thông tin chi tiết xe -->
-            <div class="car-details">
-                <p><span class="highlight">Brand:</span> ${car.brand}</p>
-                <p><span class="highlight">Model:</span> ${car.model}</p>
-                <p><span class="highlight">Type:</span> ${car.carTypeName}</p>
-                <p><span class="highlight">Transmission:</span> ${car.transmission}</p>
-                <p><span class="highlight">Fuel Type:</span> ${car.fuelType}</p>
-                <p><span class="highlight">Capacity:</span> ${car.capacity} people</p>
-                <p><span class="highlight">License Plate:</span> ${car.licensePlate}</p>
-                <p><span class="highlight">Price/Day:</span> $${car.pricePerDay}</p>
-                <p><span class="highlight">Location:</span> ${car.location}</p>
-                <p><span class="highlight">Description:</span> ${car.description}</p>
-            </div>
-        </div>
-    </c:if>
-
-    <!-- Nút quay lại trang danh sách xe -->
-    <div class="back-btn">
-        <a href="${pageContext.request.contextPath}/owner/manageCar">← Back to My Cars</a>
+        </section>
     </div>
+
+    <jsp:include page="/view/common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
 </body>
 </html>
