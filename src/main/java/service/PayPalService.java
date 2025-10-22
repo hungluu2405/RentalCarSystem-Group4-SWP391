@@ -75,7 +75,7 @@ public class PayPalService {
         return payment.create(getApiContext());
     }
 
-   boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
+   public boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
 
         // 1. Thực thi Payment trên PayPal
         Payment payment = new Payment();
