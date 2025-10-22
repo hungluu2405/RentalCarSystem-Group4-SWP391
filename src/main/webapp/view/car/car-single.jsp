@@ -43,12 +43,10 @@
                 </div>
             </section>
 
-            <!-- Car Details -->
             <section id="section-car-details" class="py-5">
                 <div class="container-fluid px-5">
                     <div class="row g-5 align-items-start">
 
-                        <!-- 🟩 Cột hình ảnh + mô tả -->
                         <div class="col-lg-5">
                             <div id="slider-carousel" class="owl-carousel" style="max-width:100%; margin:auto;">
                                 <c:forEach var="img" items="${car.images}">
@@ -61,8 +59,7 @@
                                 </c:forEach>
                             </div>
 
-                            <!-- Mô tả -->
-                            <div class="mt-4 border-top pt-3">
+                            <div class="mt-4 pt-3">
                                 <h3 class="mb-3 fw-semibold">Description</h3>
                                 <p style="font-size:1.05rem; line-height:1.6; text-align:justify;">
                                     ${car.description}
@@ -70,9 +67,16 @@
                             </div>
                         </div>
 
-                        <!-- 🟦 Cột thông tin kỹ thuật (rộng hơn) -->
                         <div class="col-lg-3">
                             <h3 class="fw-bold mb-3">${car.model}</h3>
+
+                            <div class="de-price text-center border rounded p-3 bg-white shadow-sm mb-4">
+                                <span class="text-muted">Rental Price/Day</span>
+                                <h2 class="text-success mt-2">
+                                    <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
+                                </h2>
+                            </div>
+
                             <h4 class="text-secondary mb-3">Specifications</h4>
                             <div class="de-spec p-3 rounded border bg-light shadow-sm">
                                 <div class="d-row mb-2"><span class="d-title">Type:</span><span class="d-value">${car.carTypeName}</span></div>
@@ -82,86 +86,82 @@
                             </div>
                         </div>
 
-                        <!-- 🟧 Cột giá và form đặt xe -->
                         <div class="col-lg-4">
-                            <div class="de-price text-center border rounded p-3 bg-white shadow-sm">
-                                <span class="text-muted">Rental Price/Day</span>
-                                <h2 class="text-success mt-2">
-                                    <fmt:formatNumber value="${car.pricePerDay}" type="currency" currencyCode="VND" maxFractionDigits="0"/>
-                                </h2>
-                            </div>
 
-                            <div class="spacer-30"></div>
+                            <h5 class="fw-bold mb-3">Booking this car</h5>
 
                             <form action="${pageContext.request.contextPath}/booking" method="post"
-                                  class="booking-form p-4 rounded shadow-sm bg-light border">
+                                  class="booking-form p-3 rounded shadow-sm bg-light border">
+
                                 <input type="hidden" name="carId" value="${car.carId}"/>
                                 <input type="hidden" id="calculatedDiscount" name="calculatedDiscount" value="0">
                                 <input type="hidden" id="appliedPromoCode" name="appliedPromoCode" value="">
                                 <input type="hidden" id="finalCalculatedPrice" name="finalCalculatedPrice" value="${car.pricePerDay}">
                                 <input type="hidden" id="originalPrice" name="originalPrice" value="${car.pricePerDay}">
 
-                                <div class="form-group mb-3">
-                                    <label class="fw-bold mb-1">Ngày nhận xe</label>
-                                    <input type="date" name="startDate" class="form-control" required>
+                                <div class="form-group mb-2">
+                                    <label class="mb-1 small">Pickup Date & Time</label>
+                                    <div class="input-group-date-time">
+                                        <input type="date" name="startDate" class="form-control form-control-sm" required>
+                                        <select name="pickupTime" class="form-select form-select-sm" required>
+                                            <option value="" disabled selected>-- Time --</option>
+                                            <c:forEach var="hour" begin="6" end="22">
+                                                <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-2">
+                                    <label class="mb-1 small">Return Date & Time</label>
+                                    <div class="input-group-date-time">
+                                        <input type="date" name="endDate" class="form-control form-control-sm" required>
+                                        <select name="dropoffTime" class="form-select form-select-sm" required>
+                                            <option value="" disabled selected>-- Time --</option>
+                                            <c:forEach var="hour" begin="6" end="22">
+                                                <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label class="fw-bold mb-1">Giờ nhận xe</label>
-                                    <select name="pickupTime" class="form-select" required>
-                                        <option value="" disabled selected>-- Chọn giờ nhận --</option>
-                                        <c:forEach var="hour" begin="6" end="22">
-                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label class="fw-bold mb-1">Ngày trả xe</label>
-                                    <input type="date" name="endDate" class="form-control" required>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label class="fw-bold mb-1">Giờ trả xe</label>
-                                    <select name="dropoffTime" class="form-select" required>
-                                        <option value="" disabled selected>-- Chọn giờ trả --</option>
-                                        <c:forEach var="hour" begin="6" end="22">
-                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label class="fw-bold mb-1">Địa điểm nhận & trả xe</label>
-                                    <div class="p-3 border rounded bg-white">
+                                    <label class="mb-1 small">The Location</label>
+                                    <div class="p-2 border rounded bg-white small">
                                         <i class="fa fa-map-marker text-success me-2"></i>
                                         ${car.location}
                                     </div>
-                                    <small class="text-muted">Xe chỉ nhận & trả tại địa chỉ cố định này.</small>
+                                    <small class="text-muted">The car can only be picked up and returned at this fixed address.</small>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label class="fw-bold mb-1">Mã khuyến mãi</label>
-                                    <div class="input-group">
+                                    <h6 class="fw-bold mb-2">Discount</h6>
+                                    <div class="input-group input-group-sm">
                                         <input type="text" id="promoCode" name="promoCode" class="form-control"
-                                               placeholder="Nhập mã khuyến mãi...">
-                                        <button type="button" id="applyPromo" class="btn btn-success">Áp dụng</button>
+                                               placeholder="Enter your discount ...">
+                                        <button type="button" id="applyPromo" class="btn btn-success btn-sm">Apply</button>
                                     </div>
                                     <small id="promoMessage" class="text-danger mt-2 d-block"></small>
                                 </div>
 
                                 <div class="border rounded p-3 bg-white mb-3">
-                                    <p>Phí thuê xe:
+                                    <p class="mb-1 d-flex justify-content-between small">
+                                        <span>Car Rental Fee:</span>
                                         <span id="priceValue" data-total="${car.pricePerDay}">
-                                            <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0"/>
-                                        </span>₫
+                                <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0"/>
+                            </span>₫
                                     </p>
-                                    <p>Giảm giá: <span id="discount">0</span>₫</p>
-                                    <h5 class="fw-bold text-success">Tổng cộng:
-                                        <span id="finalPrice">
-                                            <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0"/>
-                                        </span>₫
-                                    </h5>
+                                    <p class="mb-1 d-flex justify-content-between small text-danger">
+                                        <span>Discount:</span>
+                                        <span id="discount">0</span>₫
+                                    </p>
+                                    <hr class="my-2">
+                                    <div class="d-flex justify-content-between fw-bold">
+                                        <span>Total :</span>
+                                        <span id="finalPrice" class="text-success">
+                                <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0"/>
+                            </span>₫
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn-main btn-fullwidth">Đặt xe ngay</button>

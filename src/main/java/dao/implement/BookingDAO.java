@@ -13,9 +13,7 @@ import java.util.List;
 
 public class BookingDAO extends DBContext {
 
-    // =========================================
-    // INSERT BOOKING
-    // =========================================
+
     public boolean insert(Booking booking) {
         String sql = """
             INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
@@ -41,9 +39,7 @@ public class BookingDAO extends DBContext {
         }
     }
 
-    // =========================================
-    // CHECK CAR AVAILABILITY (tránh trùng lịch)
-    // =========================================
+
     public boolean isCarAvailable(int carId, LocalDate start, LocalDate end) {
         String sql = """
             SELECT COUNT(*) FROM BOOKING
@@ -75,9 +71,7 @@ public class BookingDAO extends DBContext {
         return false;
     }
 
-    // =========================================
-    // LẤY BOOKING THEO USER
-    // =========================================
+
     public List<BookingDetail> getRecentBookingDetails(int userId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
@@ -118,9 +112,7 @@ public class BookingDAO extends DBContext {
         return list;
     }
 
-    // =========================================
-    // COUNT BOOKING BY USER / OWNER / STATUS
-    // =========================================
+
     public int countByUser(int userId) {
         String sql = "SELECT COUNT(*) FROM BOOKING WHERE USER_ID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -181,9 +173,7 @@ public class BookingDAO extends DBContext {
         return 0;
     }
 
-    // =========================================
-    // GET RECENT BOOKINGS BY OWNER
-    // =========================================
+
     public List<BookingDetail> getRecentBookingsByOwner(int ownerId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
@@ -222,9 +212,7 @@ public class BookingDAO extends DBContext {
         return list;
     }
 
-    // =========================================
-    // CẬP NHẬT TRẠNG THÁI BOOKING
-    // =========================================
+
     public boolean updateStatus(int bookingId, String status) {
         String sql = "UPDATE BOOKING SET STATUS = ? WHERE BOOKING_ID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -281,7 +269,7 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
-    // Lấy danh sách yêu cầu booking của chủ xe
+
 
     public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
         List<BookingDetail> list = new ArrayList<>();
@@ -321,11 +309,11 @@ public class BookingDAO extends DBContext {
                 bd.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 bd.setStatus(rs.getString("STATUS"));
 
-                // === Customer info ===
+
                 up.setFullName(rs.getString("customerName"));
                 up.setPhone(rs.getString("customerPhone"));
 
-                // Gắn thông tin userProfile vào booking detail
+
                 bd.setCustomerProfile(up);
 
                 list.add(bd);
@@ -388,6 +376,18 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
-    
+    public int countAllBookings(){
+        String sql = "SELECT COUNT(*) AS total FROM [Booking]";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()){
+            if (rs.next()){
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
 
 }

@@ -378,7 +378,6 @@ public class CarDAO extends DBContext {
         return 0;
     }
 
-// OWNER_ID
 
     public List<CarViewModel> getCarsByOwner(int ownerId) {
         List<CarViewModel> list = new ArrayList<>();
@@ -480,4 +479,64 @@ public class CarDAO extends DBContext {
 
         return cars;
     }
+
+    //HÀM THÊM CAR
+    public int addCarAndReturnId(Car car) {
+        String sql = "INSERT INTO CAR (USER_ID, TYPE_ID, MODEL, BRAND, YEAR, LICENSE_PLATE, CAPACITY, TRANSMISSION, FUEL_TYPE, PRICE_PER_DAY, DESCRIPTION, AVAILABILITY, LOCATION) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setInt(1, car.getOwnerId());
+            ps.setInt(2, car.getTypeId());
+            ps.setString(3, car.getModel());
+            ps.setString(4, car.getBrand());
+            ps.setInt(5, car.getYear());
+            ps.setString(6, car.getLicensePlate());
+            ps.setInt(7, car.getCapacity());
+            ps.setString(8, car.getTransmission());
+            ps.setString(9, car.getFuelType());
+            ps.setBigDecimal(10, car.getPricePerDay());
+            ps.setString(11, car.getDescription());
+            ps.setBoolean(12, car.isAvailability());
+            ps.setString(13, car.getLocation());
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    //HÀM UP ẢNH XE
+    public void addCarImage(int carId, String imageUrl) {
+        String sql = "INSERT INTO CAR_IMAGE (CAR_ID, IMAGE_URL) VALUES (?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            ps.setString(2, imageUrl);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public int countAllCars() {
+        String sql = "SELECT COUNT(*) AS total FROM [CAR]";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+
 }
