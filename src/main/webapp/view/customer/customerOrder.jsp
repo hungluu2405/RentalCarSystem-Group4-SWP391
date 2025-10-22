@@ -196,7 +196,9 @@
                                                                class="btn btn-sm btn-danger">Cancel</a>
                                                         </c:if>
                                                         <c:if test="${order.status == 'Approved'}">
-                                                            <a href="#" class="btn btn-sm btn-info">Payment</a>
+                                                            <a href="${pageContext.request.contextPath}/customer/create-payment?bookingId=${order.bookingId}" class="btn btn-sm btn-info">
+                                                                Payment
+                                                            </a>
                                                         </c:if>
                                                     </td>
                                                 </tr>
