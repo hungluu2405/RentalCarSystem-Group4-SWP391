@@ -16,9 +16,9 @@ public class BookingDAO extends DBContext {
 
     public boolean insert(Booking booking) {
         String sql = """
-            INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, booking.getCarId());
@@ -42,14 +42,14 @@ public class BookingDAO extends DBContext {
 
     public boolean isCarAvailable(int carId, LocalDate start, LocalDate end) {
         String sql = """
-            SELECT COUNT(*) FROM BOOKING
-            WHERE CAR_ID = ? AND STATUS IN ('Pending', 'Approved')
-              AND (
-                    (START_DATE <= ? AND END_DATE >= ?)
-                 OR (START_DATE <= ? AND END_DATE >= ?)
-                 OR (START_DATE >= ? AND END_DATE <= ?)
-              )
-        """;
+                    SELECT COUNT(*) FROM BOOKING
+                    WHERE CAR_ID = ? AND STATUS IN ('Pending', 'Approved')
+                      AND (
+                            (START_DATE <= ? AND END_DATE >= ?)
+                         OR (START_DATE <= ? AND END_DATE >= ?)
+                         OR (START_DATE >= ? AND END_DATE <= ?)
+                      )
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, carId);
@@ -75,17 +75,17 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getRecentBookingDetails(int userId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-            SELECT TOP (?) 
-                   b.BOOKING_ID, 
-                   c.MODEL AS carName,
-                   b.START_DATE, b.END_DATE, 
-                   b.PICKUP_TIME, b.DROPOFF_TIME, 
-                   b.TOTAL_PRICE, b.STATUS, b.LOCATION
-            FROM BOOKING b
-            JOIN CAR c ON b.CAR_ID = c.CAR_ID
-            WHERE b.USER_ID = ?
-            ORDER BY b.CREATED_AT DESC
-        """;
+                    SELECT TOP (?) 
+                           b.BOOKING_ID, 
+                           c.MODEL AS carName,
+                           b.START_DATE, b.END_DATE, 
+                           b.PICKUP_TIME, b.DROPOFF_TIME, 
+                           b.TOTAL_PRICE, b.STATUS, b.LOCATION
+                    FROM BOOKING b
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    WHERE b.USER_ID = ?
+                    ORDER BY b.CREATED_AT DESC
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, limit);
@@ -140,11 +140,11 @@ public class BookingDAO extends DBContext {
 
     public int countByOwner(int ownerId) {
         String sql = """
-            SELECT COUNT(*) 
-            FROM BOOKING b 
-            JOIN CAR c ON b.CAR_ID = c.CAR_ID
-            WHERE c.OWNER_ID = ?
-        """;
+                    SELECT COUNT(*) 
+                    FROM BOOKING b 
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    WHERE c.OWNER_ID = ?
+                """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
             ResultSet rs = ps.executeQuery();
@@ -157,11 +157,11 @@ public class BookingDAO extends DBContext {
 
     public int countByOwnerAndStatus(int ownerId, String status) {
         String sql = """
-            SELECT COUNT(*) 
-            FROM BOOKING b 
-            JOIN CAR c ON b.CAR_ID = c.CAR_ID
-            WHERE c.OWNER_ID = ? AND b.STATUS = ?
-        """;
+                    SELECT COUNT(*) 
+                    FROM BOOKING b 
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    WHERE c.OWNER_ID = ? AND b.STATUS = ?
+                """;
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
             ps.setString(2, status);
@@ -177,17 +177,17 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getRecentBookingsByOwner(int ownerId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-            SELECT TOP (?) 
-                   b.BOOKING_ID, 
-                   c.MODEL AS carName,
-                   b.START_DATE, b.END_DATE, 
-                   b.PICKUP_TIME, b.DROPOFF_TIME, 
-                   b.TOTAL_PRICE, b.STATUS
-            FROM BOOKING b
-            JOIN CAR c ON b.CAR_ID = c.CAR_ID
-            WHERE c.OWNER_ID = ?
-            ORDER BY b.CREATED_AT DESC
-        """;
+                    SELECT TOP (?) 
+                           b.BOOKING_ID, 
+                           c.MODEL AS carName,
+                           b.START_DATE, b.END_DATE, 
+                           b.PICKUP_TIME, b.DROPOFF_TIME, 
+                           b.TOTAL_PRICE, b.STATUS
+                    FROM BOOKING b
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    WHERE c.OWNER_ID = ?
+                    ORDER BY b.CREATED_AT DESC
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, limit);
@@ -226,24 +226,23 @@ public class BookingDAO extends DBContext {
     }
 
 
-
     // =========================================
 // LẤY TẤT CẢ BOOKING CHI TIẾT THEO USER ID
 // =========================================
     public List<BookingDetail> getBookingDetailsByUserId(int userId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-        SELECT TOP (?) 
-               b.BOOKING_ID, 
-               c.MODEL + ' ' + c.BRAND AS carName, -- 👈 Nối chuỗi để có tên xe đầy đủ
-               b.START_DATE, b.END_DATE, 
-               b.PICKUP_TIME, b.DROPOFF_TIME, 
-               b.TOTAL_PRICE, b.STATUS, c.LOCATION
-        FROM BOOKING b
-        JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE b.USER_ID = ?
-        ORDER BY b.CREATED_AT DESC
-    """;
+                    SELECT TOP (?) 
+                           b.BOOKING_ID, 
+                           c.MODEL + ' ' + c.BRAND AS carName, -- 👈 Nối chuỗi để có tên xe đầy đủ
+                           b.START_DATE, b.END_DATE, 
+                           b.PICKUP_TIME, b.DROPOFF_TIME, 
+                           b.TOTAL_PRICE, b.STATUS, c.LOCATION
+                    FROM BOOKING b
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    WHERE b.USER_ID = ?
+                    ORDER BY b.CREATED_AT DESC
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, limit);
@@ -264,7 +263,7 @@ public class BookingDAO extends DBContext {
                 detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 list.add(detail);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
@@ -274,23 +273,23 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-        SELECT 
-            b.BOOKING_ID,
-            c.BRAND + ' ' + c.MODEL AS carName,
-            u.FULL_NAME AS customerName,
-            u.PHONE AS customerPhone,
-            b.START_DATE,
-            b.END_DATE,
-            b.PICKUP_TIME,
-            b.DROPOFF_TIME,
-            b.TOTAL_PRICE,
-            b.STATUS
-        FROM BOOKING b
-        JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
-        WHERE c.USER_ID = ?
-        ORDER BY b.BOOKING_ID DESC
-    """;
+                    SELECT 
+                        b.BOOKING_ID,
+                        c.BRAND + ' ' + c.MODEL AS carName,
+                        u.FULL_NAME AS customerName,
+                        u.PHONE AS customerPhone,
+                        b.START_DATE,
+                        b.END_DATE,
+                        b.PICKUP_TIME,
+                        b.DROPOFF_TIME,
+                        b.TOTAL_PRICE,
+                        b.STATUS
+                    FROM BOOKING b
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+                    WHERE c.USER_ID = ?
+                    ORDER BY b.BOOKING_ID DESC
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
@@ -323,18 +322,19 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
+
     public List<Booking> getAllBookings() throws SQLException {
         List<Booking> list = new ArrayList<>();
         String sql = """
-        SELECT b.BOOKING_ID, c.MODEL, u.FULL_NAME, 
-               b.START_DATE, b.END_DATE, b.TOTAL_PRICE, 
-               b.STATUS, b.CREATED_AT, b.PICKUP_TIME, b.DROPOFF_TIME,
-               b.CAR_ID, b.USER_ID
-        FROM BOOKING b
-        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
-        JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        ORDER BY b.BOOKING_ID DESC
-    """;
+                    SELECT b.BOOKING_ID, c.MODEL, u.FULL_NAME, 
+                           b.START_DATE, b.END_DATE, b.TOTAL_PRICE, 
+                           b.STATUS, b.CREATED_AT, b.PICKUP_TIME, b.DROPOFF_TIME,
+                           b.CAR_ID, b.USER_ID
+                    FROM BOOKING b
+                    JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
+                    ORDER BY b.BOOKING_ID DESC
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -356,7 +356,6 @@ public class BookingDAO extends DBContext {
                 }
 
 
-
                 Time pickup = rs.getTime("PICKUP_TIME");
                 if (pickup != null) {
                     b.setPickupTime(pickup.toLocalTime());
@@ -376,11 +375,12 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
-    public int countAllBookings(){
+
+    public int countAllBookings() {
         String sql = "SELECT COUNT(*) AS total FROM [Booking]";
         try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()){
-            if (rs.next()){
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
                 return rs.getInt("total");
             }
         } catch (SQLException e) {
@@ -389,5 +389,68 @@ public class BookingDAO extends DBContext {
         return 0;
     }
 
+    public Booking getBookingById(int bookingId) {
+        Booking booking = null;
+        String sql = """
+                    SELECT BOOKING_ID, CAR_ID, USER_ID, START_DATE, END_DATE, 
+                           PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, LOCATION, CREATED_AT 
+                    FROM BOOKING 
+                    WHERE BOOKING_ID = ?
+                """;
 
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                booking = new Booking();
+
+                booking.setBookingId(rs.getInt("BOOKING_ID"));
+                booking.setCarId(rs.getInt("CAR_ID"));
+                booking.setUserId(rs.getInt("USER_ID"));
+
+
+                booking.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                booking.setStatus(rs.getString("STATUS"));
+
+
+                booking.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                booking.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                booking.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                booking.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                booking.setLocation(rs.getString("LOCATION"));
+
+                Timestamp createdAt = rs.getTimestamp("CREATED_AT");
+                if (createdAt != null) {
+                    booking.setCreatedAt(createdAt.toLocalDateTime());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+    public boolean insertPaymentRecord(int bookingId, String paymentId, double amount, String status) {
+
+        String sql = """
+        INSERT INTO PAYMENT (BOOKING_ID, AMOUNT, METHOD, STATUS, PAYPAL_TRANSACTION_ID, PAID_AT)
+        VALUES (?, ?, ?, ?, ?, GETDATE())
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ps.setDouble(2, amount);
+            ps.setString(3, "PayPal");
+            ps.setString(4, status);
+            ps.setString(5, paymentId); // Chèn ID giao dịch PayPal vào cột mới
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
+
+
