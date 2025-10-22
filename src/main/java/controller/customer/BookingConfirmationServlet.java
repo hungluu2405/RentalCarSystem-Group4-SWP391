@@ -18,14 +18,14 @@ public class BookingConfirmationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Lấy thông tin booking từ session
+
         HttpSession session = request.getSession();
         Booking booking = (Booking) session.getAttribute("confirmedBooking");
 
 
 
         if (booking == null) {
-            // Nếu không có booking trong session, redirect về trang chủ
+
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
@@ -51,7 +51,7 @@ public class BookingConfirmationServlet extends HttpServlet {
         session.removeAttribute("bookingDiscount");
         session.removeAttribute("bookingPromoCode");
 
-        // Forward đến trang confirmation
+
         request.getRequestDispatcher("/view/booking/confirmation.jsp").forward(request, response);
     }
 }

@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.implement.UserDAO;
+import dao.implement.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+
+import model.Booking;
+import model.Car;
 import model.User;
 
 @WebServlet(name = "AccountDashBoard", urlPatterns = {"/accountDB"})
@@ -17,14 +20,21 @@ public class AccountDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1️⃣ Tạo DAO để lấy danh sách người dùng
         UserDAO userDAO = new UserDAO();
+        CarDAO carDAO = new CarDAO();
+        BookingDAO bookingDAO = new BookingDAO();
+
         List<User> listU = userDAO.getAllUsersForAdmin();
 
-        // 2️⃣ Gửi danh sách sang JSP
-        request.setAttribute("listU", listU);
+        int totalUsers = userDAO.countAllUsers();
+        int totalCars = carDAO.countAllCars();
+        int totalBookings = bookingDAO.countAllBookings();
 
-        // 3️⃣ Forward sang JSP hiển thị
+        request.setAttribute("listU", listU);
+        request.setAttribute("totalUsers",totalUsers);
+        request.setAttribute("totalCars",totalCars);
+        request.setAttribute("totalBookings",totalBookings);
+
         request.getRequestDispatcher("/view/admin/accountdashboard.jsp").forward(request, response);
     }
 

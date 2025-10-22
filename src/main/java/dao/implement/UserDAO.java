@@ -298,4 +298,17 @@ public class UserDAO extends GenericDAO<User> {
         return null;
     }
 
+    public int countAllUsers(){
+        String sql = "SELECT COUNT(*) AS total FROM [USER]";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery()){
+            if (rs.next()){
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
 }

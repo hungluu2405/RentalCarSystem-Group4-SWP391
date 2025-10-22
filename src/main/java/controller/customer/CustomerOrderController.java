@@ -43,13 +43,13 @@ public class CustomerOrderController extends HttpServlet {
         List<BookingDetail> allBookings = bookingDAO.getBookingDetailsByUserId(userId, 100);
 
 
-        // Gửi dữ liệu qua JSP
+
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
         request.setAttribute("cancelled", cancelled);
         request.setAttribute("allBookings", allBookings);
 
-        // Chuyển tiếp đến file JSP
+
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
     }
 }
