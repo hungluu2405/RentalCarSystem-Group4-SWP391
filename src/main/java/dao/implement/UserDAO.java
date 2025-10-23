@@ -299,7 +299,7 @@ public class UserDAO extends GenericDAO<User> {
     }
 
     public int countAllUsers(){
-        String sql = "SELECT COUNT(*) AS total FROM [USER]";
+        String sql = "SELECT COUNT(*) AS total FROM [USER_PROFILE]";
         try (PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery()){
             if (rs.next()){
