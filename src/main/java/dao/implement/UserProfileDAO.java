@@ -92,4 +92,17 @@ public class UserProfileDAO extends DBContext {
             return false;
         }
     }
+    public boolean deleteByUserId(int userId) {
+        String sql = "DELETE FROM USER_PROFILE WHERE USER_ID = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("❌ [UserProfileDAO.deleteByUserId] Error: " + e.getMessage());
+            return false;
+        }
+    }
 }
