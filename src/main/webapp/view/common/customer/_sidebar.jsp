@@ -35,9 +35,9 @@
         </li>
 
         <li>
-            <a href="${pageContext.request.contextPath}/customer/favCar"
-               class="${activePage == 'favCar' ? 'active' : ''}">
-                <i class="fa fa-calendar"></i> My Favourite Car
+            <a href="${pageContext.request.contextPath}/customer/myCoupon"
+               class="${activePage == 'myCoupon' ? 'active' : ''}">
+                <i class="fa fa-calendar"></i> My Coupon
             </a>
         </li>
 
