@@ -29,17 +29,14 @@ public class AdminManageUserServlet extends HttpServlet {
 
         int userId = Integer.parseInt(idRaw);
 
-        if (action.equals("edit")) {
-
+        if (action.equals("view")) {  // <-- thêm view
             UserProfile profile = profileDAO.findByUserId(userId);
 
-
             request.setAttribute("profile", profile);
-            request.getRequestDispatcher("/view/customer/myProfile.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/admin/viewUserProfile.jsp").forward(request, response);
 
         } else if (action.equals("remove")) {
             profileDAO.deleteByUserId(userId);
-
             response.sendRedirect(request.getContextPath() + "/accountDB");
         }
     }

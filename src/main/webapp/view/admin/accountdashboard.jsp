@@ -75,8 +75,8 @@
         <thead class="thead-dark">
           <tr>
             <th>Profile ID</th>
-            <th>Role</th>
             <th>Full Name</th>
+            <th>Role</th>
             <th>Phone</th>
             <th>Date of Birth</th>
             <th>Gender</th>
@@ -91,8 +91,12 @@
           <c:if test="${u.userProfile.profileId != 0}">
             <tr>
               <td>${u.userProfile.profileId}</td>
+              <td>
+                    <a href="${pageContext.request.contextPath}/admin/manageUser?action=view&userId=${u.userId}">
+                            ${u.userProfile.fullName}
+                    </a>
+                </td>
               <td>${u.roleName}</td>
-              <td>${u.userProfile.fullName}</td>
               <td>${u.userProfile.phone}</td>
               <td>${u.userProfile.dob}</td>
               <td>${u.userProfile.gender}</td>
@@ -100,10 +104,6 @@
               <td>${u.email}</td>
               <td>${u.createdAt}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/admin/manageUser?action=edit&userId=${u.userId}"
-                       class="btn btn-sm btn-primary">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
 
                     <a href="${pageContext.request.contextPath}/admin/manageUser?action=remove&userId=${u.userId}"
                        class="btn btn-sm btn-danger"
