@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/customer/favCar")
+@WebServlet("/customer/myCoupon")
 public class FavCarController extends HttpServlet {
 
     @Override
@@ -13,7 +13,7 @@ public class FavCarController extends HttpServlet {
             throws ServletException, IOException {
 
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/view/customer/favCar.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/view/customer/myCoupon.jsp");
         dispatcher.forward(request, response);
     }
 
