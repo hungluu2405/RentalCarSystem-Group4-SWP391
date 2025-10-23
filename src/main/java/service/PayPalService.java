@@ -75,35 +75,33 @@ public class PayPalService {
         return payment.create(getApiContext());
     }
 
-   boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
+  public boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
 
-        // 1. Thực thi Payment trên PayPal
+
         Payment payment = new Payment();
         payment.setId(paymentId);
 
         PaymentExecution paymentExecution = new PaymentExecution();
         paymentExecution.setPayerId(payerId);
 
-        // Gọi API Execute Payment để xác nhận giao dịch
+
         Payment executedPayment = payment.execute(getApiContext(), paymentExecution);
 
-        // 2. XỬ LÝ KẾT QUẢ VÀ CẬP NHẬT DB
-        // Kiểm tra xem PayPal có trả về trạng thái phê duyệt (APPROVED) không
         if (executedPayment.getState().equalsIgnoreCase("approved")) {
 
-            // Lấy thông tin thanh toán từ phản hồi PayPal
+
             double paidAmount = Double.parseDouble(executedPayment.getTransactions().get(0).getAmount().getTotal());
             String paypalTransactionId = executedPayment.getId();
 
-            // Cập nhật trạng thái đơn hàng trong DB từ 'Approved' -> 'Completed' (dựa trên Check Constraint)
+
             boolean statusUpdated = bookingDAO.updateStatus(bookingId, "Completed");
 
-            // Chèn bản ghi vào bảng PAYMENT
+
             boolean paymentInserted = bookingDAO.insertPaymentRecord(
                     bookingId,
                     paypalTransactionId,
                     paidAmount,
-                    "COMPLETED" // Trạng thái bảng PAYMENT
+                    "COMPLETED"
             );
 
             return statusUpdated && paymentInserted;
