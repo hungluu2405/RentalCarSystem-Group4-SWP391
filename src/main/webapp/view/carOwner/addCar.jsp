@@ -27,7 +27,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Car Owner Booking Dashboard</h1></div>
+                        <div class="col-md-12 text-center"><h1>Add Car</h1></div>
                     </div>
                 </div>
             </div>
