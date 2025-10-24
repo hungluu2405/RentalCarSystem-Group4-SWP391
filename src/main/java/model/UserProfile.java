@@ -12,7 +12,6 @@ public class UserProfile {
     private String driverLicenseNumber;
     private boolean isVerified;
     private String profileImage; // ✅ Thêm thuộc tính này
-
     // Constructors
     public UserProfile() {
     }
