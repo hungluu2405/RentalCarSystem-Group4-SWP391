@@ -9,11 +9,11 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <%-- ĐÃ SỬA ĐƯỜNG DẪN --%>
+
     <jsp:include page="/view/common/customer/_head.jsp"/>
     <title>Xác nhận đặt xe - Rentaly</title>
     <style>
-        /* CSS CỦA BẠN (Giữ nguyên) */
+
         .container-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -89,7 +89,7 @@
 </head>
 <body>
 <div id="wrapper">
-    <%-- 2. THÊM LẠI HEADER (ĐÃ SỬA ĐƯỜNG DẪN) --%>
+
     <jsp:include page="/view/common/customer/_header.jsp"/>
 
     <div class="no-bottom no-top" id="content">
@@ -98,7 +98,7 @@
         <section id="subheader" class="jarallax text-light" style="background-image: url('${pageContext.request.contextPath}/images/background/2.jpg');">
             <div class="center-y relative text-center">
                 <div class="container-content">
-                    <h1>Xác nhận đặt xe</h1>
+                    <h1>Booking Confirmation</h1>
                 </div>
             </div>
         </section>
@@ -109,7 +109,7 @@
                 <c:choose>
                     <c:when test="${booking == null}">
                         <div class="alert alert-danger container-content">
-                            <h3>❌ Không tìm thấy thông tin booking!</h3>
+                            <h3> Không tìm thấy thông tin booking!</h3>
                             <p>Vui lòng thử lại.</p>
                             <a href="${pageContext.request.contextPath}/home" class="btn-home">Về trang chủ</a>
                         </div>
@@ -117,43 +117,43 @@
                     <c:otherwise>
                         <div class="success-box">
                             <div class="success-icon">✓</div>
-                            <h2 style="color: #10b981; margin: 0;">Đặt xe thành công!</h2>
-                            <p style="margin: 10px 0 0 0; color: #059669;">Vui lòng chờ chủ xe duyệt.</p>
+                            <h2 style="color: #10b981; margin: 0;">Booking Successfully!</h2>
+                            <p style="margin: 10px 0 0 0; color: #059669;">Please waiting car owner response.</p>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="info-section">
-                                    <h4>👤 Thông tin người đặt</h4>
+                                    <h4>👤 Customer Information</h4>
                                     <div class="info-row">
-                                        <span class="info-label">Tên:</span>
+                                        <span class="info-label">Name:</span>
                                         <span class="info-value">${sessionScope.user.userProfile.fullName}</span>
                                     </div>
                                     <div class="info-row">
-                                        <span class="info-label">Số điện thoại:</span>
+                                        <span class="info-label">Phone Number:</span>
                                         <span class="info-value">${sessionScope.user.userProfile.phone}</span>
                                     </div>
                                 </div>
 
                                 <div class="info-section">
-                                    <h4>📅 Thông tin đơn hàng</h4>
+                                    <h4>📅 Booking Details</h4>
                                     <div class="info-row">
-                                        <span class="info-label">Ngày nhận:</span>
+                                        <span class="info-label">Pickup Date:</span>
                                         <span class="info-value">
-                                            <%-- ĐÃ SỬA LỖI 500 --%>
+
                                             ${booking.startDate} ${booking.pickupTime}
                                         </span>
                                     </div>
                                     <div class="info-row">
-                                        <span class="info-label">Ngày trả:</span>
+                                        <span class="info-label">Return Date:</span>
                                         <span class="info-value">
-                                            <%-- ĐÃ SỬA LỖI 500 --%>
+
                                             ${booking.endDate} ${booking.dropoffTime}
                                         </span>
                                     </div>
                                     <div class="info-row">
-                                        <span class="info-label">Địa điểm:</span>
-                                        <span class="info-value">${booking.location}</span>
+                                        <span class="info-label">Location:</span>
+                                        <span class="info-value">${sessionScope.car.location}</span>
                                     </div>
                                 </div>
                             </div>
@@ -161,22 +161,22 @@
                             <div class="col-md-6">
                                 <c:if test="${car != null}">
                                     <div class="info-section">
-                                        <h4>🚗 Thông tin xe</h4>
+                                        <h4>🚗 Car Detail</h4>
                                         <div class="info-row">
-                                            <span class="info-label">Xe:</span>
+                                            <span class="info-label">Car:</span>
                                             <span class="info-value">${car.model}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">Biển số:</span>
+                                            <span class="info-label">License Plate: </span>
                                             <span class="info-value">${car.licensePlate}</span>
                                         </div>
                                     </div>
                                 </c:if>
 
                                 <div class="info-section">
-                                    <h4>💰 Thanh toán</h4>
+                                    <h4>💰 Payment</h4>
                                     <div class="info-row">
-                                        <span class="info-label">Tiền thuê:</span>
+                                        <span class="info-label">Rental Fee:</span>
                                         <span class="info-value">
                                                 <fmt:formatNumber value="${booking.totalPrice + (discount != null ? discount : 0)}"
                                                                   type="number" maxFractionDigits="0"/>₫
@@ -184,14 +184,14 @@
                                     </div>
                                     <c:if test="${not empty discount && discount > 0}">
                                         <div class="info-row" style="color: #10b981;">
-                                            <span class="info-label">Giảm giá:</span>
+                                            <span class="info-label">Discount:</span>
                                             <span class="info-value">
                                                     -<fmt:formatNumber value="${discount}" type="number" maxFractionDigits="0"/>₫
                                                 </span>
                                         </div>
                                     </c:if>
                                     <div class="info-row total-price-row">
-                                        <span class="info-label" style="font-size: 1em;">Tổng cộng:</span>
+                                        <span class="info-label" style="font-size: 1em;">Total Price:</span>
                                         <span class="info-value" style="font-size: 1.2em;">
                                                 <fmt:formatNumber value="${booking.totalPrice}" type="number" maxFractionDigits="0"/>₫
                                             </span>
@@ -202,7 +202,7 @@
 
                         <div style="text-align: center;">
                             <a href="${pageContext.request.contextPath}/home" class="btn-home">
-                                🏠 Về trang chủ
+                                🏠 Back to home
                             </a>
                         </div>
                     </c:otherwise>
