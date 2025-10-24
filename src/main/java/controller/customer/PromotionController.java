@@ -37,10 +37,13 @@ public class PromotionController extends HttpServlet {
         }
 
         LocalDate today = LocalDate.now();
-        if (promo.getStartDate().isAfter(today) || promo.getEndDate().isBefore(today)) {
-            out.print("{\"error\": \"This promotion code is not valid at this time.!\"}");
+
+        if (promo.getStartDate().toLocalDate().isAfter(today) ||
+                promo.getEndDate().toLocalDate().isBefore(today)) {
+            out.print("{\"error\": \"This promotion code is not valid at this time.\"}");
             return;
         }
+
 
         if (!promo.isActive()) {
             out.print("{\"error\": \"This promotion code is no longer active!\"}");
