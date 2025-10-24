@@ -311,4 +311,19 @@ public class UserDAO extends GenericDAO<User> {
         return 0;
     }
 
+    public String findEmailByUserId(int userId) {
+        String sql = "SELECT EMAIL FROM [USER] WHERE USER_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("EMAIL");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
