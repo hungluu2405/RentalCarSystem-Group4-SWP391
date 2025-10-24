@@ -23,7 +23,7 @@ public class BookingService {
 
         LocalDate today = LocalDate.now();
 
-        // 1️⃣ Kiểm tra logic ngày
+        // Kiểm tra logic ngày
         if (booking.getStartDate().isBefore(today)) {
             return "❌The pickup date cannot be earlier than the current date!";
         }
@@ -31,7 +31,7 @@ public class BookingService {
             return "❌ Please select a return date that is after the pickup date!";
         }
 
-        // 2️⃣ Kiểm tra xe có bị trùng lịch không
+        //  Kiểm tra xe có bị trùng lịch không
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
@@ -44,7 +44,7 @@ public class BookingService {
         double discountAmount = frontendDiscount;
         double finalPrice = booking.getTotalPrice();
 
-        // 3️⃣ VALIDATE mã khuyến mãi (nếu có)
+        //  VALIDATE mã khuyến mãi (nếu có)
         if (promoCode != null && !promoCode.trim().isEmpty()) {
             Promotion promo = promoDAO.findByCode(promoCode.trim());
             if (promo == null) {
@@ -67,14 +67,14 @@ public class BookingService {
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
-        // 4️⃣ Lưu booking
+
         boolean success = bookingDAO.insert(booking);
 
         if (!success) {
             return "❌ Booking failed. Please try again!";
         }
 
-        // 5️⃣ Nếu có mã khuyến mãi, lưu vào bảng BOOKING_PROMOTION
+        //  Nếu có mã khuyến mãi, lưu vào bảng BOOKING_PROMOTION
         if (discountAmount > 0 && promoCode != null && !promoCode.trim().isEmpty()) {
             Promotion promo = promoDAO.findByCode(promoCode.trim());
             BookingPromotion bp = new BookingPromotion();
