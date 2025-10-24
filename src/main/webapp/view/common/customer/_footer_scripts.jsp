@@ -24,20 +24,7 @@
             </div>
 
             <div class="col-lg-3">
-                <h5>Quick Links</h5>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="widget">
-                            <ul>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">News</a></li>
-                                <li><a href="#">Partners</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+
             </div>
 
             <div class="col-lg-3">
