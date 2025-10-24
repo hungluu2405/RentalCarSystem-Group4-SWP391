@@ -1,4 +1,4 @@
-package controller;
+package controller.car;
 
 import dao.implement.CarDAO;
 import dao.implement.CarImageDAO;
