@@ -61,9 +61,11 @@ public class BookingService {
                 return "❌ Mã khuyến mãi đã bị ngừng hoạt động!";
             }
 
-            if (promo.getStartDate().isAfter(today) || promo.getEndDate().isBefore(today)) {
+            if (promo.getStartDate().toLocalDate().isAfter(today) ||
+                    promo.getEndDate().toLocalDate().isBefore(today)) {
                 return "❌ Mã khuyến mãi đã hết hạn!";
             }
+
 
             // Không tính lại discount, chỉ validate mã
         }
