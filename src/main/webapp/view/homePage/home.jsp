@@ -200,23 +200,9 @@
                                         <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Cars</a>
 
                                         </li>
-                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/quick-booking.html">Booking</a>
-                                            <ul>
-                                                <li><a class="menu-item new" href="${pageContext.request.contextPath}/quick-booking.html">Quick Booking</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/booking.html">Booking</a></li>
-                                            </ul>
+                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
                                         </li>
-
-                                        <li><a class="menu-item" href="#">Pages</a>
-                                            <ul>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About Us</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/login">Login</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/register.jsp">Register</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/404.html">Page 404</a></li>
-                                            </ul>
-                                        </li>
-
 
 
                                 </div>
@@ -436,7 +422,7 @@
             <div class="no-bottom no-top" id="content">
                 <div id="top"></div>
                 <section id="section-hero" aria-label="section" class="jarallax">
-                    <img src="${pageContext.request.contextPath}/images/background/1.jpg" class="jarallax-img" alt="">
+                    <img src="${pageContext.request.contextPath}/images/background/dep.jpg" class="jarallax-img" alt="">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-lg-12 text-light">
@@ -692,46 +678,7 @@
                     </div>
                 </section>
 
-                <section class="text-light jarallax">
-                    <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
-                    <div class="container">
-                        <div class="row g-5">
-                            <div class="col-lg-6 wow fadeInRight">
-                                <h2>We offer customers a wide range of <span class="id-color">commercial cars</span> and <span class="id-color">luxury cars</span> for any occasion.</h2>
-                            </div>
-                            <div class="col-lg-6 wow fadeInLeft">
-                                At our car rental agency, we believe that everyone deserves to experience the pleasure of driving a reliable and comfortable vehicle, regardless of their budget. We have curated a diverse fleet of well-maintained cars, ranging from sleek sedans to spacious SUVs, all at competitive prices. With our streamlined rental process, you can quickly and conveniently reserve your desired vehicle. Whether you need transportation for a business trip, family vacation, or simply want to enjoy a weekend getaway, we have flexible rental options to accommodate your schedule.
-                            </div>
-                        </div>
-                        <div class="spacer-double"></div>
-                        <div class="row text-center">
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="15425" data-speed="3000">0</h3>
-                                    Completed Orders
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="8745" data-speed="3000">0</h3>
-                                    Happy Customers
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="235" data-speed="3000">0</h3>
-                                    Vehicles Fleet
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="15" data-speed="3000">0</h3>
-                                    Years Experience
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+
 
                 <section id="section-cars">
                     <div class="container">
@@ -814,79 +761,6 @@
                         </div>
                     </div>
                 </section>
-
-                <section id="section-news">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6 offset-lg-3 text-center">
-                                <span class="subtitle">Latest From Us</span>
-                                <h2>News &amp; Promo</h2>
-                                <p>Breaking news, fresh perspectives, and in-depth coverage - stay ahead with our latest news, insights, and analysis.</p>
-                                <div class="spacer-20"></div>
-                            </div>
-
-                            <div class="col-lg-4 mb10">
-                                <div class="bloglist s2 item">
-                                    <div class="post-content">
-                                        <div class="post-image">
-                                            <div class="date-box">
-                                                <div class="m">10</div>
-                                                <div class="d">MAR</div>
-                                            </div>
-                                            <img alt="" src="${pageContext.request.contextPath}/images/news/pic-blog-1.jpg" class="lazy">
-                                        </div>
-                                        <div class="post-text">
-                                            <h4><a href="${pageContext.request.contextPath}/news-single.html">Enjoy Best Travel Experience<span></span></a></h4>
-                                            <p>Traveling is an enriching experience that allows us to explore new destinations, immerse ourselves in different cultures, and create lifelong memories.</p>
-                                            <a class="btn-main" href="#">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb10">
-                                <div class="bloglist s2 item">
-                                    <div class="post-content">
-                                        <div class="post-image">
-                                            <div class="date-box">
-                                                <div class="m">12</div>
-                                                <div class="d">MAR</div>
-                                            </div>
-                                            <img alt="" src="${pageContext.request.contextPath}/images/news/pic-blog-2.jpg" class="lazy">
-                                        </div>
-                                        <div class="post-text">
-                                            <h4><a href="${pageContext.request.contextPath}/news-single.html">The Future of Car Rent<span></span></a></h4>
-                                            <p>As technology continues to advance at a rapid pace, the car rental industry is poised for a transformative shift. The future of car rental promises..</p>
-                                            <a class="btn-main" href="#">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb10">
-                                <div class="bloglist s2 item">
-                                    <div class="post-content">
-                                        <div class="post-image">
-                                            <div class="date-box">
-                                                <div class="m">14</div>
-                                                <div class="d">MAR</div>
-                                            </div>
-                                            <img alt="" src="${pageContext.request.contextPath}/images/news/pic-blog-3.jpg" class="lazy">
-                                        </div>
-                                        <div class="post-text">
-                                            <h4><a href="${pageContext.request.contextPath}/news-single.html">Holiday Tips For Backpacker<span></span></a></h4>
-                                            <p>For adventure seekers and budget-conscious travelers, backpacking offers a thrilling and immersive way to explore the world. Whether you're embarking..</p>
-                                            <a class="btn-main" href="#">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-
-
 
 
                 <section id="section-testimonials" class="no-top no-bottom">
@@ -1051,26 +925,11 @@
                                     <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
                                     <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
                                     <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
-                                    <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
                                 </address>
                             </div>
                         </div>
 
                         <div class="col-lg-3">
-                            <h5>Quick Links</h5>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="widget">
-                                        <ul>
-                                            <li><a href="#">About</a></li>
-                                            <li><a href="#">Blog</a></li>
-                                            <li><a href="#">Careers</a></li>
-                                            <li><a href="#">News</a></li>
-                                            <li><a href="#">Partners</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-lg-3">
@@ -1093,7 +952,7 @@
                             <div class="col-md-12">
                                 <div class="de-flex">
                                     <div class="de-flex-col">
-                                        <a href="index.html">
+                                        <a>
                                             Copyright 2025 - Rentaly by Designesia
                                         </a>
                                     </div>
