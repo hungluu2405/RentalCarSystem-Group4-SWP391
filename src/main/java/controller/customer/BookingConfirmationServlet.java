@@ -1,11 +1,13 @@
 package controller.customer;
 
+import dao.implement.UserProfileDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import model.Booking;
 import model.CarViewModel;
 import dao.implement.CarDAO;
+import model.UserProfile;
 
 import java.io.IOException;
 
@@ -13,7 +15,7 @@ import java.io.IOException;
 public class BookingConfirmationServlet extends HttpServlet {
 
     private final CarDAO carDAO = new CarDAO();
-
+    private final UserProfileDAO uDAO = new UserProfileDAO();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -25,10 +27,11 @@ public class BookingConfirmationServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
-
-        CarViewModel car = carDAO.getCarById(booking.getCarId());
+        UserProfile u = uDAO.findByUserId(booking.getUserId());
+        CarViewModel car = carDAO.getCarSingleById(booking.getCarId());
         request.setAttribute("car", car);
         request.setAttribute("booking", booking);
+        request.setAttribute("u", u);
 
         Double discount = (Double) session.getAttribute("bookingDiscount");
         String promoCode = (String) session.getAttribute("bookingPromoCode");

@@ -127,11 +127,11 @@
                                     <h4>👤 Customer Information</h4>
                                     <div class="info-row">
                                         <span class="info-label">Name:</span>
-                                        <span class="info-value">${sessionScope.user.userProfile.fullName}</span>
+                                        <span class="info-value">${u.fullName}</span>
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">Phone Number:</span>
-                                        <span class="info-value">${sessionScope.user.userProfile.phone}</span>
+                                        <span class="info-value">${u.phone}</span>
                                     </div>
                                 </div>
 
@@ -153,7 +153,7 @@
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">Location:</span>
-                                        <span class="info-value">${sessionScope.car.location}</span>
+                                        <span class="info-value">${car.location}</span>
                                     </div>
                                 </div>
                             </div>
