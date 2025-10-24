@@ -54,7 +54,7 @@ public class ManageMyCarDetailController extends HttpServlet {
         request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
     }
 
-    // ✅ Xử lý cập nhật và xóa
+    // Xử lý cập nhật và xóa
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -93,7 +93,6 @@ public class ManageMyCarDetailController extends HttpServlet {
                     // Nếu không upload ảnh mới, giữ nguyên ảnh cũ
                     car.setImageUrl(request.getParameter("oldImageUrl"));
                 }
-
 
                 boolean updated = carDAO.updateCar(car);
                 if (updated) {
