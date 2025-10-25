@@ -103,6 +103,8 @@
                                   class="p-4 bg-white rounded shadow-sm">
 
                                 <input type="hidden" name="carId" value="${car.carId}">
+
+
                                 <input type="hidden" name="oldImageUrl" value="${car.imageUrl}">
 
                                 <!-- IMAGE -->
@@ -162,10 +164,15 @@
                                         </select>
                                     </div>
 
-                                    <!-- Location -->
+                                    <!-- Car Type -->
                                     <div class="col-md-6 mb-3">
-                                        <label>Location</label>
-                                        <input type="text" name="location" value="${car.location}" class="form-control" required>
+                                        <label>Car Type</label>
+                                        <select name="typeId" class="form-select" required>
+                                            <option value="">Select car type...</option>
+                                            <c:forEach var="c" items="${carTypes}">
+                                                <option value="${c.typeId}" <c:if test="${car.carTypeName eq c.name}">selected</c:if>>${c.name}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
 
                                     <!-- Capacity -->
@@ -180,15 +187,22 @@
                                         <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" required>
                                     </div>
 
-                                    <!-- Car Type -->
+                                    <!-- Location -->
                                     <div class="col-md-6 mb-3">
-                                        <label>Car Type</label>
-                                        <select name="typeId" class="form-select" required>
-                                            <option value="">Select car type...</option>
-                                            <c:forEach var="c" items="${carTypes}">
-                                                <option value="${c.typeId}" <c:if test="${car.carTypeName eq c.name}">selected</c:if>>${c.name}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <label>Location</label>
+                                        <input type="text" name="location" value="${car.location}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Year -->
+                                    <div class="col-md-3 mb-3">
+                                        <label>Year</label>
+                                        <input type="number" name="year" value="${car.year}" class="form-control" required>
+                                    </div>
+
+                                    <!-- LicensePlate -->
+                                    <div class="col-md-3 mb-3">
+                                        <label>License Plate</label>
+                                        <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" required>
                                     </div>
 
                                     <!-- Description -->
