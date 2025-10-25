@@ -1,4 +1,4 @@
-package controller.customer;
+package controller.booking;
 
 import dao.implement.UserProfileDAO;
 import jakarta.servlet.ServletException;
