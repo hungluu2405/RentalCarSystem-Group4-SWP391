@@ -12,7 +12,87 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/carOwner/_headOwner.jsp"/>
-    <title>Car Owner Dashboard</title>
+    <title>Car Owner Dashboard - My Profile</title>
+
+    <style>
+        /* ================= Profile Image Section ================= */
+        .profile-avatar-container {
+            position: relative;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #28a745;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar-container:hover .profile-avatar {
+            opacity: 0.9;
+        }
+
+        .change-photo-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #28a745;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-photo-btn:hover {
+            background-color: #218838;
+            transform: scale(1.1);
+        }
+
+        /* ================= Form Styling ================= */
+        h5 {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-main {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-main:hover {
+            background-color: #218838;
+        }
+
+        .alert-success {
+            border-radius: 8px;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,7 +108,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Car Owner Dashboard</h1></div>
+                        <div class="col-md-12 text-center"><h1>Car Owner Dashboard - My Profile</h1></div>
                     </div>
                 </div>
             </div>
@@ -45,114 +125,126 @@
                         </jsp:include>
                     </div>
 
-                    <!-- MAIN CONTENT -->
-                    <div class="col-lg-9">
-                        <div class="row">
-                            <!-- STATISTICS -->
+                        <!-- MAIN PROFILE FORM -->
+                        <div class="col-lg-9">
+                            <div class="card padding40 rounded-5 shadow-sm">
 
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-car"></i>
+                                <c:if test="${param.status == 'success'}">
+                                    <div class="alert alert-success text-center mb-4">
+                                         Profile updated successfully!
                                     </div>
-                                    <span class="h1 mb0">${totalCars}</span><span class="text-gray">Total Cars</span>
-                                </div>
-                            </div>
+                                </c:if>
 
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-calendar"></i>
-                                    </div>
-                                    <span class="h1 mb0">${totalBookings}</span><span class="text-gray">Total Bookings</span>
-                                </div>
-                            </div>
+                                <form method="post"
+                                      action="${pageContext.request.contextPath}/customer/profile"
+                                      enctype="multipart/form-data"
+                                      class="form-border">
 
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-toggle-on"></i>
-                                    </div>
-                                    <span class="h1 mb0">${activeBookings}</span><span class="text-gray">Active booking</span>
-                                </div>
-                            </div>
+                                    <!-- ================= Profile Image Section ================= -->
+                                    <div class="text-center mb-4">
+                                        <div class="profile-avatar-container">
+                                            <!-- Ảnh đại diện -->
+                                            <c:choose>
+                                                <c:when test="${not empty sessionScope.user.userProfile.profileImage}">
+                                                    <img id="profileImagePreview"
+                                                         src="${pageContext.request.contextPath}${sessionScope.user.userProfile.profileImage}"
+                                                         alt="Profile"
+                                                         class="profile-avatar">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img id="profileImagePreview"
+                                                         src="${pageContext.request.contextPath}/images/profile/default.jpg"
+                                                         alt="Default Profile"
+                                                         class="profile-avatar">
+                                                </c:otherwise>
+                                            </c:choose>
 
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-ban"></i>
+                                            <!-- Nút chọn ảnh -->
+                                            <label for="profileImageUpload" class="change-photo-btn">
+                                                <i class="fa fa-camera"></i>
+                                            </label>
+                                            <input type="file" id="profileImageUpload" name="profileImage" accept="image/*"
+                                                   style="display: none;">
+                                        </div>
+
+                                        <p style="font-size: 14px; color: #777; margin-top: 10px;">
+                                            Click the camera icon to change your photo
+                                        </p>
                                     </div>
-                                    <span class="h1 mb0">${cancelledBookings}</span><span class="text-gray">Cancel booking</span>
-                                </div>
+
+                                    <!-- ================= Thông tin cá nhân ================= -->
+                                    <div class="row">
+                                        <div class="col-lg-6 mb20">
+                                            <h5>Full Name</h5>
+                                            <input type="text" name="fullName" class="form-control"
+                                                   value="${sessionScope.user.userProfile.fullName}"
+                                                   placeholder="Enter your full name">
+                                        </div>
+
+                                        <div class="col-lg-6 mb20">
+                                            <h5>Email Address</h5>
+                                            <input type="text" name="email" class="form-control"
+                                                   value="${sessionScope.user.email}" readonly>
+                                        </div>
+
+                                        <div class="col-lg-6 mb20">
+                                            <h5>Phone Number</h5>
+                                            <input type="text" name="phone" class="form-control"
+                                                   value="${sessionScope.user.userProfile.phone}"
+                                                   placeholder="Enter your phone number">
+                                        </div>
+
+                                        <div class="col-lg-6 mb20">
+                                            <h5>Date of Birth</h5>
+                                            <input type="date" name="dob" class="form-control"
+                                                   value="${sessionScope.user.userProfile.dob}">
+                                        </div>
+
+                                        <div class="col-lg-6 mb20">
+                                            <h5>Driver License Number</h5>
+                                            <input type="text" name="driverLicenseNumber" class="form-control"
+                                                   value="${sessionScope.user.userProfile.driverLicenseNumber}"
+                                                   placeholder="Enter your driver license number">
+                                        </div>
+
+                                        <div class="col-lg-6 mb20">
+                                            <h5>Gender</h5>
+                                            <select name="gender" class="form-control">
+                                                <option value="">-- Select Gender --</option>
+                                                <option value="Male" ${sessionScope.user.userProfile.gender == 'Male' ? 'selected' : ''}>Male</option>
+                                                <option value="Female" ${sessionScope.user.userProfile.gender == 'Female' ? 'selected' : ''}>Female</option>
+                                                <option value="Other" ${sessionScope.user.userProfile.gender == 'Other' ? 'selected' : ''}>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        <input type="submit" class="btn-main" value="Update Profile">
+                                    </div>
+                                </form>
                             </div>
                         </div>
-
-                        <!-- RECENT BOOKINGS -->
-                        <h5 class="fw-bold mb-3 text-secondary">My Recent Bookings</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered align-middle text-center">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Booking ID</th>
-                                    <th>Image</th>
-                                    <th>Car's name</th>
-                                    <th>Customer</th>
-                                    <th>Pick Up</th>
-                                    <th>Drop Off</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:choose>
-                                    <c:when test="${not empty recentBookings}">
-                                        <c:forEach var="b" items="${recentBookings}">
-                                            <tr>
-                                                <td>#${b.bookingId}</td>
-                                                <td>
-                                                    <img src="${b.car.imageUrl}" alt="${b.car.name}"
-                                                         class="car-image"
-                                                         style="width: 80px; height: 50px; object-fit: cover; border-radius: 6px;"/>
-                                                </td>
-                                                <td>${b.carName}</td>
-                                                <td>${b.customerName}</td>
-                                                <td>${b.pickUpLocation}</td>
-                                                <td>${b.dropOffLocation}</td>
-                                                <td>${b.startDate}</td>
-                                                <td>${b.endDate}</td>
-                                                <td>${b.price}</td>
-                                                <td>
-                                                    <div class="badge rounded-pill
-                                                            ${b.status eq 'Completed' ? 'bg-success' : 
-                                                              b.status eq 'Cancelled' ? 'bg-danger' : 'bg-warning'}">
-                                                            ${b.status}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <tr>
-                                            <td colspan="10" class="text-muted">No recent bookings found.</td>
-                                        </tr>
-                                    </c:otherwise>
-
-                                </c:choose>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <%--    </div> --%>
         </section>
     </div>
 
     <!-- FOOTER -->
     <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
+</div>
 
+<!-- ================= JS: Preview Image ================= -->
+<script>
+    document.getElementById("profileImageUpload").addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                document.getElementById("profileImagePreview").src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 </body>
 </html>
-
