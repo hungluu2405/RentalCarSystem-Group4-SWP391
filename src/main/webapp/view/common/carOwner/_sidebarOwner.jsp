@@ -14,7 +14,10 @@
 <div class="card padding30 rounded-5">
     <div class="profile_avatar">
         <div class="profile_img">
-            <img src="${pageContext.request.contextPath}/images/profile/1.jpg" alt="">
+            <img src="${pageContext.request.contextPath}${sessionScope.user.userProfile.profileImage != null ? sessionScope.user.userProfile.profileImage : '/images/profile/default.jpg'}"
+                 alt="Profile Image"
+                 class="rounded-circle"
+                 width="120" height="120">
         </div>
         <div class="profile_name">
             <h4>
@@ -27,14 +30,14 @@
     <ul class="menu-col">
 
         <li>
-            <a href="${pageContext.request.contextPath}/owner/ownerBooking"
-               class="${activePage == 'ownerBooking' ? 'active' : ''}">
-                <i class="fa fa-home"></i> Booking
+            <a href="${pageContext.request.contextPath}/owner/profile" class="${activePage == 'profile' ? 'active' : ''}">
+                <i class="fa fa-user"></i> My Profile
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/owner/profile" class="${activePage == 'profile' ? 'active' : ''}">
-                <i class="fa fa-user"></i> My Profile
+            <a href="${pageContext.request.contextPath}/owner/ownerBooking"
+               class="${activePage == 'ownerBooking' ? 'active' : ''}">
+                <i class="fa fa-home"></i> Booking
             </a>
         </li>
         <li>
