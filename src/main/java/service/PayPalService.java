@@ -29,7 +29,7 @@ public class PayPalService {
         double vndAmount = booking.getTotalPrice();
 
 
-        final double EXCHANGE_RATE = 25000.00;
+        final double EXCHANGE_RATE = 26000.00;
 
         if (vndAmount <= 0) {
             throw new Exception("Total price must be greater than zero.");

@@ -107,12 +107,11 @@
 
                                 <!-- IMAGE -->
                                 <div class="text-center mb-4">
-                                        <img id="carPreview"
-                                             src="${pageContext.request.contextPath}/${car.imageUrl}"
-                                             alt="Car Image"
-                                             style=" max-width: 100%; max-height: 300px; border-radius: 12px; object-fit: contain;
-                                            box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-                                        <p class="fw-bold mt-3">Upload Car Image</p>
+                                    <img id="carPreview"
+                                         src="${pageContext.request.contextPath}/${car.imageUrl}"
+                                         alt="Car Image"
+                                         style="width: 250px; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                    <p class="fw-bold mt-3">Upload Car Image</p>
                                     <input type="file" name="carImage" accept="image/*"
                                            onchange="previewCarImage(event)"
                                            class="form-control mt-2">
