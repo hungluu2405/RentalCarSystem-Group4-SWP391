@@ -515,35 +515,6 @@ public class CarDAO extends DBContext {
         return null;
     }
 
-    // Cập nhật thông tin xe
-//    public boolean updateCar(CarViewModel car) {
-//        String sql = "UPDATE CAR SET BRAND = ?, MODEL = ?, YEAR = ?, FUEL_TYPE = ?, TRANSMISSION = ?, " +
-//                "CAPACITY = ?, PRICE_PER_DAY = ?, DESCRIPTION = ?, LOCATION = ?, LICENSE_PLATE = ?, TYPE_ID = ? " +
-//                "WHERE CAR_ID = ?";
-//
-//        try (Connection conn = getConnection();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setString(1, car.getBrand());
-//            ps.setString(2, car.getModel());
-//            ps.setInt(3, car.getYear());
-//            ps.setString(4, car.getFuelType());
-//            ps.setString(5, car.getTransmission());
-//            ps.setInt(6, car.getCapacity());
-//            ps.setBigDecimal(7, car.getPricePerDay());
-//            ps.setString(8, car.getDescription());
-//            ps.setString(9, car.getLocation());
-//            ps.setString(10, car.getLicensePlate());
-//            ps.setInt(11, car.getTypeId());
-//            ps.setInt(12, car.getCarId());
-//
-//            int rows = ps.executeUpdate();
-//            return rows > 0; // Nếu có ít nhất 1 dòng bị ảnh hưởng => update thành công
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
     public boolean updateCar(CarViewModel car) {
         String sql = "UPDATE CAR " +
                 "SET BRAND = ?, MODEL = ?, PRICE_PER_DAY = ?, CAPACITY = ?, TRANSMISSION = ?, " +
@@ -590,7 +561,6 @@ public class CarDAO extends DBContext {
                     }
                 }
             }
-
             conn.commit();
             return true;
 
