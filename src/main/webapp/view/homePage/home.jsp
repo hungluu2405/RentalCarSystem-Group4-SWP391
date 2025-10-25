@@ -736,7 +736,7 @@
 
 
                 <section class="text-light jarallax" aria-label="section">
-                    <img src="${pageContext.request.contextPath}/images/background/3.jpg" alt="" class="jarallax-img">
+                    <img src="${pageContext.request.contextPath}/images/background/6.jpg" alt="" class="jarallax-img">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-3">
@@ -774,10 +774,10 @@
                                         <h4>Excellent Service! Car Rent Service!</h4>
                                         <blockquote>
                                             I have been using Rentaly for my Car Rental needs for over 5 years now. I have never had any problems with their service. Their customer support is always responsive and helpful. I would recommend Rentaly to anyone looking for a reliable Car Rental provider.
-                                            <span class="by">Stepanie Hutchkiss</span>
+                                            <span class="by">Thuy Linh</span>
                                         </blockquote>
                                     </div>
-                                    <img src="images/testimonial/1.jpg" class="img-fluid" alt="">
+                                    <img src="images/testimonial/anh5.jpg" class="img-fluid" alt="">
                                 </div>
                             </div>
 
@@ -789,10 +789,10 @@
                                         <h4>Excellent Service! Car Rent Service!</h4>
                                         <blockquote>
                                             We have been using Rentaly for our trips needs for several years now and have always been happy with their service. Their customer support is Excellent Service! and they are always available to help with any issues we have. Their prices are also very competitive.
-                                            <span class="by">Jovan Reels</span>
+                                            <span class="by">Bang Kieu</span>
                                         </blockquote>
                                     </div>
-                                    <img src="images/testimonial/2.jpg" class="img-fluid" alt="">
+                                    <img src="images/testimonial/anh6.jpg" class="img-fluid" alt="">
                                 </div>
                             </div>
 
@@ -803,10 +803,10 @@
                                         <h4>Excellent Service! Car Rent Service!</h4>
                                         <blockquote>
                                             Endorsed by industry experts, Rentaly is the Car Rental solution you can trust. With years of experience in the field, we provide fast, reliable and secure Car Rental services.
-                                            <span class="by">Kanesha Keyton</span>
+                                            <span class="by">Tuan Vu Manh</span>
                                         </blockquote>
                                     </div>
-                                    <img src="images/testimonial/3.jpg" class="img-fluid" alt="">
+                                    <img src="images/testimonial/anh7.jpg" class="img-fluid" alt="">
                                 </div>
                             </div>
 
@@ -831,19 +831,23 @@
                                             How do I get started with Car Rental?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-1">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>Getting started is easy! Simply create an account, choose your preferred car, select the rental dates, and confirm your booking. You’ll receive a confirmation email with all the details and pickup instructions.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-2">
-                                            Can I rent a car with a debit card??
+                                            Can I pay online?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-2">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>Yes, you can conveniently pay online using a credit or debit card. Online payment ensures your reservation is confirmed instantly. Some locations may also allow partial payment or pay-at-pickup options.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-3">
                                             What kind of Car Rental do I need?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-3">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>It depends on your trip and preferences:</br>
+                                                Economy or Compact: Best for city travel and fuel efficiency.</br>
+                                                SUV or Minivan: Great for family trips or extra luggage space.</br>
+                                                Luxury or Premium: Perfect for business or special occasions.</br>
+                                                You can filter cars by size, price, or purpose when booking.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -856,19 +860,19 @@
                                             What is a rental car security deposit?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-b-4">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>A security deposit is a temporary hold placed on your payment card at the start of your rental. It covers potential damages, traffic fines, or extra charges. The hold is released once you return the car in good condition.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-b-5">
                                             Can I cancel or modify my reservation?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-b-5">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>No, you can't cancel or modify your reservation online before the pickup time. Cancellation fees may apply depending on how close to the pickup time you make the change.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-b-6">
                                             Is it possible to extend my rental period?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-b-6">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>No. Once your rental agreement is confirmed, the rental period cannot be extended. You will need to create a new booking if you wish to rent the car for a longer duration.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -897,7 +901,7 @@
                                             1 200 333 800
                                         </span>
                                     </div>
-                                    <a href="#" class="btn-main">Contact Us</a>
+                                    <a href="${pageContext.request.contextPath}/view/contact/contact.jsp" class="btn-main">Contact Us</a>
                                 </div>
                             </div>
                         </div>
