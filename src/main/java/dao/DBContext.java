@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBContext {
     protected Connection connection;
     public DBContext() {
-        this.connection = getConnection(); // 👈 dòng này phải nằm TRONG constructor
+        this.connection = getConnection();
     }
     public Connection getConnection() {
         try {

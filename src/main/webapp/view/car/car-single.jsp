@@ -164,7 +164,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn-main btn-fullwidth">Đặt xe ngay</button>
+                                <button type="submit" class="btn-main btn-fullwidth">Booking Now</button>
 
                                 <c:if test="${not empty error}">
                                     <div class="alert alert-danger mt-3">${error}</div>
@@ -281,7 +281,7 @@
 
             // 1. Kiểm tra ngày hợp lệ
             if (end < start) {
-                document.getElementById("promoMessage").innerHTML = "❌ Ngày trả xe không được trước ngày nhận!";
+                document.getElementById("promoMessage").innerHTML = "❌ The return date must be after the pickup date!";
                 document.getElementById("promoMessage").className = "text-danger mt-2 d-block";
                 return pricePerDay;
             }
@@ -326,7 +326,7 @@
             const contextPath = "${pageContext.request.contextPath}";
 
             if (!code) {
-                msg.innerHTML = "⚠️ Vui lòng nhập mã khuyến mãi!";
+                msg.innerHTML = "⚠️ Please enter a promo code!";
                 msg.className = "text-danger mt-2 d-block";
                 return;
             }
@@ -349,7 +349,7 @@
                             appliedPromo = null;
                             resetPromoDisplay(total);
                         } else if (data.success) {
-                            msg.innerHTML = `✅ Áp dụng mã <b>${code}</b> giảm ${data.rate}%`;
+                            msg.innerHTML = `✅ Apply coupon <b>${code}</b> decrease ${data.rate}%`;
                             msg.className = "text-success mt-2 d-block";
                             appliedPromo = {code: code, rate: data.rate};
                             updatePriceDisplay(data.discount, data.finalPrice, total);
@@ -357,7 +357,7 @@
                     })
                     .catch(error => {
                         console.error("Fetch error:", error);
-                        msg.innerHTML = "❌ Có lỗi khi áp mã, vui lòng thử lại!";
+                        msg.innerHTML = "❌Couldn’t apply the promo code. Please try again!";
                         msg.className = "text-danger mt-2 d-block";
                     });
         }
@@ -409,4 +409,4 @@
         });
     </script>
 </body>
-</html>
+</html>git

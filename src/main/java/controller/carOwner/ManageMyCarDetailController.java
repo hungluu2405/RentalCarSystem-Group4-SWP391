@@ -94,6 +94,7 @@ public class ManageMyCarDetailController extends HttpServlet {
                     car.setImageUrl(request.getParameter("oldImageUrl"));
                 }
 
+
                 boolean updated = carDAO.updateCar(car);
                 if (updated) {
                     response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
