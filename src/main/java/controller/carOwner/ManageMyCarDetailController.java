@@ -54,7 +54,7 @@ public class ManageMyCarDetailController extends HttpServlet {
         request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
     }
 
-    // ✅ Xử lý cập nhật và xóa
+    // Xử lý cập nhật và xóa
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
