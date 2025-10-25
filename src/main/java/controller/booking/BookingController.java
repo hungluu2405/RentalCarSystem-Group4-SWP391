@@ -26,21 +26,43 @@ public class BookingController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // --- LẤY DỮ LIỆU ĐÃ NHẬP VÀO REQUEST SCOPE ĐỂ SỬ DỤNG KHI CÓ LỖI ---
+        String carIdStr = request.getParameter("carId");
+        String startDateStr = request.getParameter("startDate");
+        String endDateStr = request.getParameter("endDate");
+        String pickupTimeStr = request.getParameter("pickupTime");
+        String dropoffTimeStr = request.getParameter("dropoffTime");
+        String location = request.getParameter("location");
+        String calculatedDiscountStr = request.getParameter("calculatedDiscount");
+        String finalCalculatedPriceStr = request.getParameter("finalCalculatedPrice");
+        String appliedPromoCode = request.getParameter("appliedPromoCode");
+
+        // --- HÀM TIỆN ÍCH ĐỂ LƯU DỮ LIỆU VÀ CHUYỂN HƯỚNG KHI CÓ LỖI ---
+        // (Giúp code chính gọn hơn, tránh lặp lại logic)
+        Runnable forwardWithError = () -> {
+            try {
+                // Lưu lại tất cả dữ liệu đã nhập (Sticky Form)
+                request.setAttribute("input_startDate", startDateStr);
+                request.setAttribute("input_endDate", endDateStr);
+                request.setAttribute("input_pickupTime", pickupTimeStr);
+                request.setAttribute("input_dropoffTime", dropoffTimeStr);
+                request.setAttribute("input_location", location);
+                request.setAttribute("input_appliedPromoCode", appliedPromoCode);
+
+                // Lấy lại Car Model để hiển thị
+                if (carIdStr != null && !carIdStr.isEmpty()) {
+                    CarViewModel car = carDAO.getCarById(Integer.parseInt(carIdStr));
+                    request.setAttribute("car", car);
+                }
+
+                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+
         try {
-
-            String carIdStr = request.getParameter("carId");
-            String startDateStr = request.getParameter("startDate");
-            String endDateStr = request.getParameter("endDate");
-            String pickupTimeStr = request.getParameter("pickupTime");
-            String dropoffTimeStr = request.getParameter("dropoffTime");
-            String location = request.getParameter("location");
-
-
-            String calculatedDiscountStr = request.getParameter("calculatedDiscount");
-            String finalCalculatedPriceStr = request.getParameter("finalCalculatedPrice");
-            String appliedPromoCode = request.getParameter("appliedPromoCode");
-
-
             if (carIdStr == null || startDateStr == null || endDateStr == null ||
                     pickupTimeStr == null || dropoffTimeStr == null ||
                     carIdStr.isEmpty() || startDateStr.isEmpty() ||
@@ -48,7 +70,7 @@ public class BookingController extends HttpServlet {
                     dropoffTimeStr.isEmpty()) {
 
                 request.setAttribute("error", "Please fill in the booking information completely!");
-                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+                forwardWithError.run();
                 return;
             }
 
@@ -86,17 +108,20 @@ public class BookingController extends HttpServlet {
 
             if (startDate.isBefore(LocalDate.now())) {
                 request.setAttribute("error", "❌ The pick-up date cannot be in the past!");
-                CarViewModel car = carDAO.getCarById(carId);
-                request.setAttribute("car", car);
-                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+                forwardWithError.run(); // Sử dụng hàm tiện ích
                 return;
             }
 
             if (endDate.isBefore(startDate)) {
                 request.setAttribute("error", "❌ The drop-off date must be after the pick-up date!");
-                CarViewModel car = carDAO.getCarById(carId);
-                request.setAttribute("car", car);
-                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+                forwardWithError.run(); // Sử dụng hàm tiện ích
+                return;
+            }
+
+            // Nếu ngày nhận và trả giống nhau, kiểm tra thời gian
+            if (endDate.isEqual(startDate) && dropoffTime.isBefore(pickupTime)) {
+                request.setAttribute("error", "❌ The return time must be after the pick-up time on the same day!");
+                forwardWithError.run();
                 return;
             }
 
@@ -142,16 +167,14 @@ public class BookingController extends HttpServlet {
 
             } else {
 
-                CarViewModel car = carDAO.getCarById(carId);
-                request.setAttribute("car", car);
                 request.setAttribute("error", result);
-                request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+                forwardWithError.run(); // Sử dụng hàm tiện ích
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "⚠️ Booking Failed: " + e.getMessage());
-            request.getRequestDispatcher("/view/car/car-single.jsp").forward(request, response);
+            forwardWithError.run(); // Sử dụng hàm tiện ích
         }
     }
 
