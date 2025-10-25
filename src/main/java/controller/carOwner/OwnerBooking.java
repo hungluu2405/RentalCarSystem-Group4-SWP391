@@ -26,15 +26,6 @@ public class OwnerBooking extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        // Mock user để test
-        User mockCarOwner = new User();
-        mockCarOwner.setUserId(1);
-        mockCarOwner.setEmail("owner@carrental.com");
-        UserProfile profile = new UserProfile();
-        profile.setFullName("Peter Parker");
-        mockCarOwner.setUserProfile(profile);
-        session.setAttribute("userCarOwner", mockCarOwner);
-
         User owner = (User) session.getAttribute("user");
 
         if (owner == null) {
@@ -53,7 +44,8 @@ public class OwnerBooking extends HttpServlet {
         // 🔹 Lấy danh sách xe và booking
         List<CarViewModel> myCars = carDAO.getCarsByOwner(ownerId);
         List<BookingDetail> pendingBookings = bookingDAO.getPendingBookingsForOwner(ownerId);
-        List<BookingDetail> recentBookings = bookingDAO.getRecentBookingsByOwner(ownerId, 5);
+      //  List<BookingDetail> recentBookings = bookingDAO.getRecentBookingsByOwner(ownerId, 5);
+        List<BookingDetail> historyBookings = bookingDAO.getHistoryBookingsForOwner(ownerId);
 
         // 🔹 Gửi dữ liệu sang JSP
         request.setAttribute("totalCars", totalCars);
@@ -62,7 +54,7 @@ public class OwnerBooking extends HttpServlet {
         request.setAttribute("cancelledBookings", cancelledBookings);
         request.setAttribute("myCars", myCars);
         request.setAttribute("pendingBookings", pendingBookings);
-        request.setAttribute("recentBookings", recentBookings);
+       // request.setAttribute("recentBookings", recentBookings);
 
         request.getRequestDispatcher("/view/carOwner/ownerBooking.jsp").forward(request, response);
     }

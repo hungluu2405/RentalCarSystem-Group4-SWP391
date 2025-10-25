@@ -136,7 +136,7 @@
                                 </c:if>
 
                                 <form method="post"
-                                      action="${pageContext.request.contextPath}/customer/profile"
+                                      action="${pageContext.request.contextPath}/owner/profile"
                                       enctype="multipart/form-data"
                                       class="form-border">
 
