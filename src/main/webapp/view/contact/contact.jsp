@@ -61,7 +61,7 @@
 
                         <h3>Do you have any question?</h3>
 
-                        <form name="contactForm" id="contact_form" class="form-border" method="post" action="https://www.madebydesignesia.com/themes/rentaly/contact.php">
+                        <form name="contactForm" id="contact_form" class="form-border" method="post" action="${pageContext.request.contextPath}/contact">
                             <div class="row">
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
@@ -86,8 +86,16 @@
 
                             <div id='submit' class="mt20">
                                 <input type='submit' id='send_message' value='Send Message' class="btn-main">
-                            </div>
+                                
+                                <c:if test="${not empty msg}">
+                                    <div class="alert alert-success mt-3">${msg}</div>
+                                </c:if>
+                                <c:if test="${not empty error}">
+                                    <div class="alert alert-danger mt-3">${error}</div>
+                                </c:if>
 
+                            </div>
+                                <p style="color: green;">${msg}</p>
                             <div id="success_message" class='success'>
                                 Your message has been sent successfully. Refresh this page if you want to send more messages.
                             </div>
