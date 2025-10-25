@@ -29,6 +29,7 @@ public class UserProfileDAO extends DBContext {
                 profile.setDriverLicenseNumber(rs.getString("DRIVER_LICENSE_NUMBER"));
                 profile.setIsVerified(rs.getBoolean("IS_VERIFIED"));
                 profile.setProfileImage(rs.getString("profileImage"));
+//                profile.setEmail(rs.getString("email"));
                 return profile;
             }
         } catch (SQLException e) {
