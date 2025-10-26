@@ -65,37 +65,38 @@
             <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
             <!-- Cars Data Table -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar"></i>
-                    Report
-                </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead class="thead-dark">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Booking ID</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Paid At</th>
+                            <th>PayPal Transaction ID</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="p" items="${listRP}">
                             <tr>
-                                <th>Car ID</th>
-                                <th>Owner Name</th>
-                                <th>Type</th>
-                                <th>Brand</th>
-                                <th>Model</th>
-                                <th>Year</th>
-                                <th>License Plate</th>
-                                <th>Capacity</th>
-                                <th>Fuel Type</th>
-                                <th>Price/Day</th>
-                                <th>Availability</th>
+                                <td>${p.paymentId}</td>
+                                <td>${p.bookingId}</td>
+                                <td>${p.amount}</td>
+                                <td>${p.method}</td>
+                                <td>${p.status}</td>
+                                <td>${p.paidAt}</td>
+                                <td>${p.paypalTransactionId}</td>
                             </tr>
-                            </thead>
-
-
-
-                        </table>
-                    </div>
+                        </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
+        </div>
 
             <!-- /.container-fluid -->
 
