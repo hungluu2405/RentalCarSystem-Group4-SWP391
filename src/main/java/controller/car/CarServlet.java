@@ -1,10 +1,6 @@
 package controller.car;
 
 import dao.implement.CarDAO;
-
-import java.io.IOException;
-import java.util.List;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,37 +8,50 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.CarViewModel;
 
+import java.io.IOException;
+import java.util.List;
+
 @WebServlet(name = "CarServlet", urlPatterns = {"/cars"})
 public class CarServlet extends HttpServlet {
 
-    private CarDAO carDAO = new CarDAO();
+    private final CarDAO carDAO = new CarDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // ===== Lấy các tham số lọc từ người dùng =====
         String name = request.getParameter("name");
         String brand = request.getParameter("brand");
-        String typeId = request.getParameter("type"); // typeId
+        String typeId = request.getParameter("type");
         String capacity = request.getParameter("seats");
         String fuel = request.getParameter("fuel");
         String price = request.getParameter("price");
+        String location = request.getParameter("location");
 
-        int page = 1, pageSize = 9;
+        // ===== Phân trang =====
+        int page = 1;
+        int pageSize = 9;
         try {
-            page = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception e) {
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+        } catch (NumberFormatException e) {
+            page = 1;
         }
 
+        // ===== Lấy danh sách filter =====
         List<String> brandList = carDAO.getAllBrands();
-        List<String> typeList = carDAO.getAllTypes(); // format "id:name"
+        List<String> typeList = carDAO.getAllTypes(); // "id:name"
         List<Integer> capacityList = carDAO.getAllCapacities();
         List<String> fuelList = carDAO.getAllFuelTypes();
 
-        List<CarViewModel> carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, page, pageSize);
-        int totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price);
+        // ===== Lấy danh sách xe =====
+        List<CarViewModel> carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location, page, pageSize);
+        int totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location);
         int totalPages = (int) Math.ceil((double) totalCars / pageSize);
 
+        // ===== Gửi dữ liệu sang JSP =====
         request.setAttribute("brandList", brandList);
         request.setAttribute("typeList", typeList);
         request.setAttribute("capacityList", capacityList);
@@ -51,7 +60,16 @@ public class CarServlet extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
+        // Giữ lại các giá trị filter đã nhập để user không phải nhập lại
+        request.setAttribute("name", name);
+        request.setAttribute("brand", brand);
+        request.setAttribute("typeId", typeId);
+        request.setAttribute("capacity", capacity);
+        request.setAttribute("fuel", fuel);
+        request.setAttribute("price", price);
+        request.setAttribute("location", location);
+
+        // ===== Chuyển đến trang JSP =====
         request.getRequestDispatcher("view/car/cars-list.jsp").forward(request, response);
     }
 }
-
