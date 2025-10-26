@@ -599,7 +599,7 @@ public class CarDAO extends DBContext {
         }
     }
 
-    // 🔍 Lấy thông tin xe theo ID
+    // Lấy thông tin xe theo ID
     public Car findById(int carId) {
         String sql = "SELECT * FROM CAR WHERE CAR_ID = ?";
         try (Connection conn = getConnection();
@@ -630,6 +630,22 @@ public class CarDAO extends DBContext {
         }
         return null;
     }
+    // Check biển số xe
+    public boolean isLicensePlateExists(String licensePlate) {
+        String sql = "SELECT COUNT(*) FROM CAR WHERE LICENSE_PLATE = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, licensePlate);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public double getCarPrice(int carId) {
         String sql = "SELECT PRICE_PER_DAY FROM CAR WHERE CAR_ID = ?";

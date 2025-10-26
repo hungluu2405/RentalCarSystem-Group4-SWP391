@@ -50,6 +50,13 @@
                         <div class="card padding40 rounded-5 shadow-sm">
                             <h3 class="mb-4"><i class="fa fa-plus-circle"></i> Add New Car</h3>
 
+                            <!-- Hiển thị thông báo lỗi (nếu có) -->
+                            <c:if test="${not empty errorMessage}">
+                                <div class="alert alert-danger text-center mb-3">
+                                        ${errorMessage}
+                                </div>
+                            </c:if>
+
                             <form action="${pageContext.request.contextPath}/owner/addCar" method="post" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
                                 <div class="text-center mb-4">
                                     <img id="previewImage" src="${pageContext.request.contextPath}/images/default-car.png"
