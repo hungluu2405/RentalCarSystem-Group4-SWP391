@@ -1,7 +1,7 @@
 package controller.admin;
 
-import dao.implement.BookingPromotionDAO;
-import model.BookingPromotion;
+import dao.implement.*;
+import model.Payment;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -14,12 +14,24 @@ public class ReportDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        BookingPromotionDAO dao = new BookingPromotionDAO();
+        PaymentDAO paymentDAO = new PaymentDAO();
+        UserDAO userDAO = new UserDAO();
+        CarDAO carDAO = new CarDAO();
+        BookingDAO bookingDAO = new BookingDAO();
 
         // Giả sử DAO của bạn có hàm getAll()
-//        List<BookingPromotion> list = dao.getAll();
+        List<Payment> listRP = paymentDAO.getAll();
 
-//        request.setAttribute("list", list);
+        int totalUsers = userDAO.countAllUsers();
+        int totalCars = carDAO.countAllCars();
+        int totalBookings = bookingDAO.countAllBookings();
+        int totalReports = paymentDAO.countAllReport();
+
+        request.setAttribute("listRP", listRP);
+        request.setAttribute("totalUsers",totalUsers);
+        request.setAttribute("totalCars",totalCars);
+        request.setAttribute("totalBookings",totalBookings);
+        request.setAttribute("totalReports",totalReports);
         request.getRequestDispatcher("/view/admin/Report.jsp").forward(request, response);
     }
 }
