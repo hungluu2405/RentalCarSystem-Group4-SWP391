@@ -29,6 +29,12 @@ public class CarServlet extends HttpServlet {
         String price = request.getParameter("price");
         String location = request.getParameter("location");
 
+        // ===== LẤY CÁC THAM SỐ THỜI GIAN TÌM KIẾM (MỚI) =====
+        String startDate = request.getParameter("startDate");
+        String pickupTime = request.getParameter("pickupTime");
+        String endDate = request.getParameter("endDate");
+        String dropoffTime = request.getParameter("dropoffTime");
+
         // ===== Phân trang =====
         int page = 1;
         int pageSize = 9;
@@ -46,9 +52,32 @@ public class CarServlet extends HttpServlet {
         List<Integer> capacityList = carDAO.getAllCapacities();
         List<String> fuelList = carDAO.getAllFuelTypes();
 
-        // ===== Lấy danh sách xe =====
-        List<CarViewModel> carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location, page, pageSize);
-        int totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location);
+
+        List<CarViewModel> carList;
+        int totalCars;
+
+        // ===== KIỂM TRA ĐỂ QUYẾT ĐỊNH GỌI HÀM DAO NÀO =====
+        boolean isDateTimeSearch = startDate != null && !startDate.isEmpty() &&
+                pickupTime != null && !pickupTime.isEmpty() &&
+                endDate != null && !endDate.isEmpty() &&
+                dropoffTime != null && !dropoffTime.isEmpty();
+
+        if (isDateTimeSearch) {
+            // TRƯỜNG HỢP 1: Tìm kiếm từ /home (có ngày giờ)
+            // Gọi hàm MỚI (overloaded)
+            carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location,
+                    startDate, pickupTime, endDate, dropoffTime, // Tham số mới
+                    page, pageSize);
+
+            totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location,
+                    startDate, pickupTime, endDate, dropoffTime); // Tham số mới
+        } else {
+            // TRƯỜNG HỢP 2: Truy cập /cars trực tiếp (không có ngày giờ)
+            // Gọi hàm CŨ của bạn (được giữ nguyên)
+            carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location, page, pageSize);
+            totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location);
+        }
+
         int totalPages = (int) Math.ceil((double) totalCars / pageSize);
 
         // ===== Gửi dữ liệu sang JSP =====
@@ -60,7 +89,7 @@ public class CarServlet extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
-        // Giữ lại các giá trị filter đã nhập để user không phải nhập lại
+        // ===== Giữ lại các giá trị filter đã nhập (BAO GỒM CẢ THỜI GIAN) =====
         request.setAttribute("name", name);
         request.setAttribute("brand", brand);
         request.setAttribute("typeId", typeId);
@@ -68,6 +97,13 @@ public class CarServlet extends HttpServlet {
         request.setAttribute("fuel", fuel);
         request.setAttribute("price", price);
         request.setAttribute("location", location);
+
+        // Luôn set các attribute này, kể cả khi chúng null
+        // để form tìm kiếm trên trang /cars có thể hiển thị lại
+        request.setAttribute("startDate", startDate);
+        request.setAttribute("pickupTime", pickupTime);
+        request.setAttribute("endDate", endDate);
+        request.setAttribute("dropoffTime", dropoffTime);
 
         // ===== Chuyển đến trang JSP =====
         request.getRequestDispatcher("view/car/cars-list.jsp").forward(request, response);
