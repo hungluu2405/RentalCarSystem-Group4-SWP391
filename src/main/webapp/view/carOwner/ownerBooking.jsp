@@ -6,6 +6,28 @@
 <head>
     <jsp:include page="../common/carOwner/_headOwner.jsp"/>
     <title>Car Owner Dashboard</title>
+    <style>
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
 </head>
 
 <body>
@@ -64,7 +86,7 @@
                                         <i class="fa id-color fa-2x fa-toggle-on"></i>
                                     </div>
                                     <span class="h1 mb0">${activeBookings}</span><br>
-                                    <span class="text-gray">Active Bookings</span>
+                                    <span class="text-gray">Accepted Bookings</span>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-6 mb25">
@@ -78,110 +100,152 @@
                             </div>
                         </div>
 
-                        <!-- PENDING BOOKINGS -->
-                        <h5 class="fw-bold mt-5 mb-3 text-secondary">Pending Booking Requests</h5>
-                        <div class="table-responsive mb-5">
-                            <table class="table align-middle text-center">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Booking ID</th>
-                                    <th>Car Name</th>
-                                    <th>Customer</th>
-                                    <th>Phone</th>
-                                    <th>Pickup Time</th>
-                                    <th>Dropoff Time</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Total Price ($)</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:choose>
-                                    <c:when test="${not empty pendingBookings}">
-                                        <c:forEach var="b" items="${pendingBookings}">
+                        <!-- Tabs -->
+                        <div class="tab-container">
+                            <button class="tab-btn active" id="tabPending">Pending Orders</button>
+                            <button class="tab-btn" id="tabHistory">Order History</button>
+                        </div>
+
+                        <!-- === TAB 1: Pending Orders === -->
+                        <div id="pendingOrders" class="tab-content active">
+                            <div class="table-responsive">
+                                <table class="table align-middle text-center">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Car</th>
+                                        <th>Customer</th>
+                                        <th>Phone</th>
+                                        <th>Pickup</th>
+                                        <th>Dropoff</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Total (VND)</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="order" items="${allBookings}">
+                                        <c:set var="isPending" value="${order.status == 'Pending'}"/>
+                                        <c:set var="isHistory" value="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Approved'}"/>
+
+                                        <c:if test="${isPending}">
                                             <tr>
-                                                <td>#${b.bookingId}</td>
-                                                <td>${b.carName}</td>
-                                                <td>${b.customerProfile.fullName}</td>
-                                                <td>${b.customerProfile.phone}</td>
-                                                <td>${b.pickupTime}</td>
-                                                <td>${b.dropoffTime}</td>
-                                                <td>${b.startDate}</td>
-                                                <td>${b.endDate}</td>
-                                                <td>${b.totalPrice}</td>
-
-                                                <!-- STATUS -->
+                                                <td>${order.carName}</td>
+                                                <td>${order.customerProfile.fullName}</td>
+                                                <td>${order.customerProfile.phone}</td>
+                                                <td>${order.pickupTime}</td>
+                                                <td>${order.dropoffTime}</td>
+                                                <td>${order.startDate}</td>
+                                                <td>${order.endDate}</td>
+                                                <td>${order.totalPrice}</td>
                                                 <td>
-                                                    <div class="badge
-                                                        ${b.status eq 'Pending' ? 'bg-warning text-dark' :
-                                                          b.status eq 'Approved' ? 'bg-success' :
-                                                          b.status eq 'Rejected' ? 'bg-danger' :
-                                                          'bg-secondary'}"> ${b.status}
-                                                    </div>
+                                                    <span class="badge bg-warning text-dark">${order.status}</span>
                                                 </td>
+                                                <td>
+                                                    <form method="post"
+                                                          action="${pageContext.request.contextPath}/owner/ownerBooking"
+                                                          class="d-flex justify-content-center gap-2">
+                                                        <input type="hidden" name="bookingId" value="${order.bookingId}">
+                                                        <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+                                                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                                                <!-- ACTION -->
-                                                <td class="action-cell">
+                        <!-- === TAB 2: Order History === -->
+                        <div id="historyOrders" class="tab-content">
+                            <div class="table-responsive">
+                                <table class="table align-middle text-center">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Car</th>
+                                        <th>Customer</th>
+                                        <th>Phone</th>
+                                        <th>Pickup</th>
+                                        <th>Dropoff</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Total (VND)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="order" items="${allBookings}">
+                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Approved'}">
+                                            <tr>
+                                                <td>${order.carName}</td>
+                                                <td>${order.customerProfile.fullName}</td>
+                                                <td>${order.customerProfile.phone}</td>
+                                                <td>${order.pickupTime}</td>
+                                                <td>${order.dropoffTime}</td>
+                                                <td>${order.startDate}</td>
+                                                <td>${order.endDate}</td>
+                                                <td>${order.totalPrice}</td>
+                                                <td>
                                                     <c:choose>
-                                                        <%-- Nếu đang Pending thì hiển thị nút Accept / Reject --%>
-                                                        <c:when test="${b.status eq 'Pending'}">
-                                                            <form method="post"
-                                                                  action="${pageContext.request.contextPath}/owner/ownerBooking"
-                                                                  class="d-flex justify-content-center gap-2">
-                                                                <input type="hidden" name="bookingId"
-                                                                       value="${b.bookingId}">
-                                                                <button type="submit" name="action" value="accept"
-                                                                        class="btn btn-success btn-sm">Accept
-                                                                </button>
-                                                                <button type="submit" name="action" value="reject"
-                                                                        class="btn btn-danger btn-sm">Reject
-                                                                </button>
-                                                            </form>
+                                                        <c:when test="${order.status == 'Approved'}">
+                                                            <span class="badge bg-primary">Approved</span>
                                                         </c:when>
-
-                                                        <%-- Nếu Approved --%>
-                                                        <c:when test="${b.status eq 'Approved'}">
-                                                            <button class="btn btn-success btn-sm" disabled>Approved
-                                                            </button>
+                                                        <c:when test="${order.status == 'Completed'}">
+                                                            <span class="badge bg-success">Completed</span>
                                                         </c:when>
-
-                                                        <%-- Nếu Rejected --%>
-                                                        <c:when test="${b.status eq 'Rejected'}">
-                                                            <button class="btn btn-danger btn-sm" disabled>Rejected
-                                                            </button>
+                                                        <c:when test="${order.status == 'Rejected'}">
+                                                            <span class="badge bg-danger">Rejected</span>
                                                         </c:when>
-
-                                                        <%-- Trường hợp khác --%>
                                                         <c:otherwise>
-                                                            <span class="text-muted">N/A</span>
+                                                            <span class="badge bg-secondary">${order.status}</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                             </tr>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <tr>
-                                            <td colspan="12" class="text-muted">No pending booking requests.</td>
-                                        </tr>
-                                    </c:otherwise>
-                                </c:choose>
-                                </tbody>
-                            </table>
+                                        </c:if>
+                                    </c:forEach>
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-
-
+                        </div>
                     </div>
                 </div>
-            </div>
         </section>
+
+        <!-- FOOTER -->
+        <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
+
+        <!-- SCRIPT: Tab Switching -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const tabPending = document.getElementById("tabPending");
+                const tabHistory = document.getElementById("tabHistory");
+                const pendingOrders = document.getElementById("pendingOrders");
+                const historyOrders = document.getElementById("historyOrders");
+
+                tabPending.addEventListener("click", function () {
+                    tabPending.classList.add("active");
+                    tabHistory.classList.remove("active");
+                    pendingOrders.classList.add("active");
+                    historyOrders.classList.remove("active");
+                });
+
+                tabHistory.addEventListener("click", function () {
+                    tabHistory.classList.add("active");
+                    tabPending.classList.remove("active");
+                    historyOrders.classList.add("active");
+                    pendingOrders.classList.remove("active");
+                });
+            });
+        </script>
+
     </div>
-
-    <!-- FOOTER -->
-    <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
-</div>
-
 </body>
 </html>
+
+

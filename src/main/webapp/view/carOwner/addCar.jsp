@@ -27,7 +27,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Car Owner Booking Dashboard</h1></div>
+                        <div class="col-md-12 text-center"><h1>Add Car</h1></div>
                     </div>
                 </div>
             </div>
@@ -45,91 +45,156 @@
 
                     <!-- MAIN CONTENT -->
                     <div class="col-lg-9">
-                        <!-- STATISTICS -->
-                        <div class="row">
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5 text-center">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-car"></i>
-                                    </div>
-                                    <span class="h1 mb0">${totalCars}</span><br>
-                                    <span class="text-gray">Total Cars</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5 text-center">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-calendar"></i>
-                                    </div>
-                                    <span class="h1 mb0">${totalBookings}</span><br>
-                                    <span class="text-gray">Total Bookings</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5 text-center">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-toggle-on"></i>
-                                    </div>
-                                    <span class="h1 mb0">${activeBookings}</span><br>
-                                    <span class="text-gray">Active Bookings</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-6 mb25">
-                                <div class="card padding30 rounded-5 text-center">
-                                    <div class="symbol mb40">
-                                        <i class="fa id-color fa-2x fa-ban"></i>
-                                    </div>
-                                    <span class="h1 mb0">${cancelledBookings}</span><br>
-                                    <span class="text-gray">Cancelled Bookings</span>
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- ADD CAR -->
+                        <div class="card padding40 rounded-5 shadow-sm">
+                            <h3 class="mb-4"><i class="fa fa-plus-circle"></i> Add New Car</h3>
 
-                        <form action="${pageContext.request.contextPath}/owner/addCar" method="post" enctype="multipart/form-data">
-                            <label>Brand:</label>
-                            <input type="text" name="brand" required>
+                            <!-- Hiển thị thông báo lỗi (nếu có) -->
+                            <c:if test="${not empty errorMessage}">
+                                <div class="alert alert-danger text-center mb-3">
+                                        ${errorMessage}
+                                </div>
+                            </c:if>
 
-                            <label>Model:</label>
-                            <input type="text" name="model" required>
+                            <form action="${pageContext.request.contextPath}/owner/addCar" method="post" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
+                                <div class="text-center mb-4">
+                                    <img id="previewImage" src="${pageContext.request.contextPath}/images/default-car.png"
+                                         alt="Car Preview" class="img-fluid rounded shadow-sm" style="max-width: 300px;">
+                                    <div class="mt-3">
+                                        <label for="carImage" class="form-label fw-bold">Upload Car Image</label>
+                                        <input type="file" id="carImage" name="carImage" accept="image/*" class="form-control" required
+                                               onchange="previewFile(this)">
+                                    </div>
+                                </div>
 
-                            <label>Year:</label>
-                            <input type="number" name="year" required>
+                                <div class="row g-3">
+                                    <!-- BRAND -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-industry text-primary"></i> Brand</label>
+                                        <input type="text" name="brand" class="form-control" placeholder="Enter car brand..." required>
+                                    </div>
 
-                            <label>License Plate:</label>
-                            <input type="text" name="licensePlate" required>
+                                    <!-- TRANSMISSION -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-cogs text-primary"></i> Transmission</label>
+                                        <select name="transmission" class="form-select" required>
+                                            <option value="">Select transmission...</option>
+                                            <c:forEach var="t" items="${transmissions}">
+                                                <option value="${t}">${t}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
 
-                            <label>Capacity:</label>
-                            <input type="number" name="capacity" required>
+                                    <!-- MODEL -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-car text-primary"></i> Model</label>
+                                        <input type="text" name="model" class="form-control" placeholder="Enter car model..." required>
+                                    </div>
 
-                            <label>Transmission:</label>
-                            <input type="text" name="transmission" required>
+                                    <!-- FUEL TYPE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-gas-pump text-primary"></i> Fuel Type</label>
+                                        <select name="fuelType" class="form-select" required>
+                                            <option value="">Select fuel type...</option>
+                                            <c:forEach var="f" items="${fuelTypes}">
+                                                <option value="${f}">${f}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
 
-                            <label>Fuel Type:</label>
-                            <input type="text" name="fuelType" required>
+                                    <!-- YEAR -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-calendar text-primary"></i> Year</label>
+                                        <input type="number" name="year" class="form-control" placeholder="Enter manufacturing year..." required>
+                                    </div>
 
-                            <label>Price per Day:</label>
-                            <input type="number" step="0.01" name="pricePerDay" required>
+                                    <!-- PRICE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">
+                                            <i class="fa fa-money-bill-wave text-primary"></i> Price per Day
+                                        </label>
+                                        <input type="text" id="pricePerDayDisplay" class="form-control" placeholder="Enter price per day..." required>
+                                        <!-- input hidden để gửi giá trị thật về server -->
+                                        <input type="hidden" name="pricePerDay" id="pricePerDay">
+                                    </div>
 
-                            <label>Description:</label>
-                            <textarea name="description"></textarea>
+                                    <script>
+                                        const displayInput = document.getElementById('pricePerDayDisplay');
+                                        const hiddenInput = document.getElementById('pricePerDay');
 
-                            <label>Location:</label>
-                            <input type="text" name="location">
+                                        // Hàm định dạng số có dấu . hoặc , ngăn cách hàng nghìn
+                                        function formatNumber(value) {
+                                            return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // hoặc dùng ',' nếu muốn
+                                        }
 
-                            <label>Car Type:</label>
-                            <select name="typeId">
-                                <c:forEach var="t" items="${carTypes}">
-                                    <option value="${t.typeId}">${t.name}</option>
-                                </c:forEach>
-                            </select>
+                                        displayInput.addEventListener('input', function (e) {
+                                            let rawValue = e.target.value.replace(/[^\d]/g, ''); // bỏ ký tự không phải số
+                                            e.target.value = formatNumber(rawValue);             // hiển thị có dấu .
+                                            hiddenInput.value = rawValue;                        // lưu giá trị thật
+                                        });
+                                    </script>
 
-                            <label>Car Image:</label>
-                            <input type="file" name="carImage" accept="image/*" required>
+                                    <!-- CAPACITY -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-users text-primary"></i> Capacity</label>
+                                        <input type="number" name="capacity" class="form-control" placeholder="Enter car capacity..." required>
+                                    </div>
 
-                            <button type="submit">Add Car</button>
-                        </form>
+                                    <!-- LICENSE PLATE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-id-card text-primary"></i> License Plate</label>
+                                        <input type="text" name="licensePlate" class="form-control" placeholder="Enter license plate..." required>
+                                    </div>
+
+                                    <!-- CAR TYPE -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-tags text-primary"></i> Car Type</label>
+                                        <select name="typeId" class="form-select" required>
+                                            <option value="">Select car type...</option>
+                                            <c:forEach var="c" items="${carTypes}">
+                                                <option value="${c.typeId}">${c.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <!-- LOCATION -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Location</label>
+                                        <input type="text" name="location" class="form-control" placeholder="Enter car location...">
+                                    </div>
+
+                                    <!-- DESCRIPTION -->
+                                    <div class="col-12">
+                                        <label class="form-label"><i class="fa fa-align-left text-primary"></i> Description</label>
+                                        <textarea name="description" class="form-control" rows="4" placeholder="Enter description about the car..."></textarea>
+                                    </div>
+
+                                    <!-- SUBMIT BUTTON -->
+                                    <div class="col-12 text-center mt-4">
+                                        <button type="submit" class="btn btn-primary px-4 py-2">
+                                            <i class="fa fa-plus-circle"></i> Add Car
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        <script>
+                            // Hàm hiển thị ảnh xem trước khi chọn file
+                            function previewFile(input) {
+                                const file = input.files[0];
+                                const preview = document.getElementById('previewImage');
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        preview.src = e.target.result;
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }
+                        </script>
+
 
                     </div>
                 </div>
@@ -140,6 +205,7 @@
     <!-- FOOTER -->
     <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
+
 
 </body>
 </html>
