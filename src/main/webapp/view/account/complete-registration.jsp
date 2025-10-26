@@ -60,32 +60,38 @@
 
                                                 <div class="field-set">
                                                     <label>Username <span class="text-danger">*</span></label>
-                                                    <input type="text" name="username" class="form-control" required>
+                                                    <input type="text" name="username" class="form-control" value='${formData.username}' required>
                                                 </div>
 
                                                 <div class="field-set">
                                                     <label>Phone Number</label>
-                                                    <input type="tel" name="phone" class="form-control">
+                                                    <input type="tel" name="phone" class="form-control" value='${formData.phone}'>
                                                 </div>
 
                                                 <div class="field-set">
                                                     <label>Date of Birth</label>
-                                                    <input type="date" name="dob" class="form-control">
+                                                    <input type="date" name="dob" class="form-control" value='${formData.dob}'>
                                                 </div>
 
                                                 <div class="field-set">
                                                     <label>Gender</label>
                                                     <select name="gender" class="form-control">
                                                         <option value="">-- Select --</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                        <option value="Other">Other</option>
+                                                        <option value="Male" ${formData.gender == 'Male' ? 'selected' : ''}>
+                                                            Male
+                                                        </option>
+                                                        <option value="Female" ${formData.gender == 'Female' ? 'selected' : ''}>
+                                                            Female
+                                                        </option>
+                                                        <option value="Other" ${formData.gender == 'Other' ? 'selected' : ''}>
+                                                            Other
+                                                        </option>
                                                     </select>
                                                 </div>
 
                                                 <div class="field-set">
                                                     <label>Driver's License Number</label>
-                                                    <input type="text" name="driver_license_number" class="form-control">
+                                                    <input type="text" name="driver_license_number" class="form-control" value='${formData.driver_license_number}'>
                                                 </div>
                                             </div>
 
@@ -109,37 +115,46 @@
                                                 </div>
 
                                                 <div class="field-set">
-                                                    <label>Register as <span class="text-danger">*</span></label>
+                                                    <label>Role <span class="text-danger">*</span></label>
                                                     <select name="role_id" class="form-control" required>
                                                         <option value="">-- Select Role --</option>
-                                                        <option value="3">Customer</option>
-                                                        <option value="2">Car Owner</option>
+                                                        <option value="3" ${formData.role_id == '3' ? 'selected' : ''}>
+                                                            Customer
+                                                        </option>
+                                                        <option value="2" ${formData.role_id == '2' ? 'selected' : ''}>Car
+                                                            Owner
+                                                        </option>
                                                     </select>
                                                 </div>
 
                                                 <div class="field-set">
                                                     <label>Address Line <span class="text-danger">*</span></label>
-                                                    <input type="text" name="address_line" class="form-control" required>
+                                                    <input type='text' name='address_line' class="form-control"
+                                                           value='${formData.address_line}' required>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="field-set">
                                                             <label>City / Province <span class="text-danger">*</span></label>
-                                                            <input type="text" name="city" class="form-control" required>
+                                                            <input type='text' name='city' class="form-control"
+                                                                   value='${formData.city}' required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="field-set">
                                                             <label>Country <span class="text-danger">*</span></label>
-                                                            <input type="text" name="country" value="Vietnam" class="form-control" required>
+                                                            <input type='text' name='country' class="form-control"
+                                                                   value='${formData.country != null ? formData.country : "Vietnam"}'
+                                                                   required>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="field-set">
                                                     <label>Postal Code</label>
-                                                    <input type="text" name="postal_code" class="form-control">
+                                                    <input type='text' name='postal_code' class="form-control"
+                                                           value='${formData.postal_code}'>
                                                 </div>
                                             </div>
 
