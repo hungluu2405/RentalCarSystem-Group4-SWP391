@@ -51,5 +51,10 @@ public class CustomerOrderController extends HttpServlet {
 
 
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
+        System.out.println("Bookings found: " + allBookings.size());
+        for (BookingDetail b : allBookings) {
+            System.out.println(b.getBookingId() + " - " + b.getStatus());
+        }
+
     }
 }
