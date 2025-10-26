@@ -60,7 +60,7 @@
         <div class="card text-white bg-danger o-hidden h-100">
             <div class="card-body">
                 <div class="card-body-icon">
-                    <i class="fas fa-fw fa-life-ring"></i>
+                    <i class="fas fa-chart-bar"></i>
                 </div>
                 <div class="mr-5">Report</div>
             </div>
