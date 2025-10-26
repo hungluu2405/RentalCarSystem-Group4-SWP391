@@ -52,4 +52,104 @@ public class PaymentDAO extends DBContext {
         }
         return 0;
     }
+    // ==============================
+    // 1️⃣ Lấy danh sách payment theo tuần / tháng
+    // ==============================
+    public List<Payment> getPaymentsByWeekOrMonth(String type) {
+        List<Payment> list = new ArrayList<>();
+        String sql = "";
+
+        if ("week".equalsIgnoreCase(type)) {
+            sql = """
+                SELECT * FROM PAYMENT
+                WHERE STATUS = 'Completed'
+                  AND DATEPART(YEAR, PAID_AT) = DATEPART(YEAR, GETDATE())
+                  AND DATEPART(WEEK, PAID_AT) = DATEPART(WEEK, GETDATE())
+                ORDER BY PAID_AT DESC
+            """;
+        } else if ("month".equalsIgnoreCase(type)) {
+            sql = """
+                SELECT * FROM PAYMENT
+                WHERE STATUS = 'Completed'
+                  AND YEAR(PAID_AT) = YEAR(GETDATE())
+                  AND MONTH(PAID_AT) = MONTH(GETDATE())
+                ORDER BY PAID_AT DESC
+            """;
+        } else {
+            System.err.println("Invalid type: " + type);
+            return list;
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(mapPayment(rs));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    // ==============================
+    // 2️⃣ Tính tổng doanh thu theo tuần / tháng
+    // ==============================
+    public double getTotalRevenueByWeekOrMonth(String type) {
+        String sql = "";
+
+        if ("week".equalsIgnoreCase(type)) {
+            sql = """
+                SELECT SUM(AMOUNT) AS Total
+                FROM PAYMENT
+                WHERE STATUS = 'Completed'
+                  AND DATEPART(YEAR, PAID_AT) = DATEPART(YEAR, GETDATE())
+                  AND DATEPART(WEEK, PAID_AT) = DATEPART(WEEK, GETDATE())
+            """;
+        } else if ("month".equalsIgnoreCase(type)) {
+            sql = """
+                SELECT SUM(AMOUNT) AS Total
+                FROM PAYMENT
+                WHERE STATUS = 'Completed'
+                  AND YEAR(PAID_AT) = YEAR(GETDATE())
+                  AND MONTH(PAID_AT) = MONTH(GETDATE())
+            """;
+        } else {
+            System.err.println("Invalid type: " + type);
+            return 0;
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getDouble("Total");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    // ==============================
+    // 3️⃣ Helper: map dữ liệu từ ResultSet sang Payment object
+    // ==============================
+    private Payment mapPayment(ResultSet rs) throws SQLException {
+        Payment p = new Payment();
+        p.setPaymentId(rs.getInt("PAYMENT_ID"));
+        p.setBookingId(rs.getInt("BOOKING_ID"));
+        p.setAmount(rs.getDouble("AMOUNT"));
+        p.setMethod(rs.getString("METHOD"));
+        p.setStatus(rs.getString("STATUS"));
+        Timestamp ts = rs.getTimestamp("PAID_AT");
+        if (ts != null) {
+            p.setPaidAt(ts.toLocalDateTime());
+        }
+        p.setPaypalTransactionId(rs.getString("PAYPAL_TRANSACTION_ID"));
+        return p;
+    }
 }

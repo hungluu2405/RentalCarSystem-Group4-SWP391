@@ -63,38 +63,70 @@
 
 
             <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+            <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
             <!-- Cars Data Table -->
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>Payment ID</th>
-                            <th>Booking ID</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Status</th>
-                            <th>Paid At</th>
-                            <th>PayPal Transaction ID</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="p" items="${listRP}">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h4 class="m-0 font-weight-bold text-primary">Report Revenue</h4>
+
+                    <!-- Bộ lọc chọn loại -->
+                    <form action="reportDB" method="get" class="form-inline">
+                        <label for="type" class="mr-2 font-weight-bold">By:</label>
+                        <select name="type" id="type" class="form-control mr-2">
+                            <option value="week" <c:if test="${type == 'week'}">selected</c:if>>Week</option>
+                            <option value="month" <c:if test="${type == 'month'}">selected</c:if>>Month</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <!-- Tổng doanh thu -->
+                    <c:if test="${not empty totalRevenue}">
+                        <div class="alert alert-success mb-3">
+                            <strong>
+                                Total Revenue
+                                (<c:out value="${type == 'week' ? 'By week' : 'By month'}"/>):
+                            </strong>
+                            <fmt:formatNumber value="${totalRevenue}" type="number" maxFractionDigits="0"/> $
+                        </div>
+                    </c:if>
+
+                    <!-- Bảng dữ liệu -->
+                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="thead-dark">
                             <tr>
-                                <td>${p.paymentId}</td>
-                                <td>${p.bookingId}</td>
-                                <td>${p.amount}</td>
-                                <td>${p.method}</td>
-                                <td>${p.status}</td>
-                                <td>${p.paidAt}</td>
-                                <td>${p.paypalTransactionId}</td>
+                                <th>Payment ID</th>
+                                <th>Booking ID</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Paid At</th>
+                                <th>PayPal Transaction ID</th>
                             </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="p" items="${listRP}">
+                                <tr>
+                                    <td>${p.paymentId}</td>
+                                    <td>${p.bookingId}</td>
+                                    <td>${p.amount} $</td>
+                                    <td>${p.method}</td>
+                                    <td>${p.status}</td>
+                                    <td>${p.paidAt}</td>
+                                    <td>${p.paypalTransactionId}</td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
+
+
 
         </div>
 
