@@ -269,36 +269,38 @@ public class BookingDAO extends DBContext {
         return list;
     }
 
-
-    public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
+    public List<BookingDetail> getAllBookingsForOwner(int ownerId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
+
         String sql = """
-                    SELECT 
-                        b.BOOKING_ID,
-                        c.BRAND + ' ' + c.MODEL AS carName,
-                        u.FULL_NAME AS customerName,
-                        u.PHONE AS customerPhone,
-                        b.START_DATE,
-                        b.END_DATE,
-                        b.PICKUP_TIME,
-                        b.DROPOFF_TIME,
-                        b.TOTAL_PRICE,
-                        b.STATUS
-                    FROM BOOKING b
-                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
-                    JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
-                    WHERE c.USER_ID = ?
-                    ORDER BY b.BOOKING_ID DESC
-                """;
+        SELECT TOP (?) 
+            b.BOOKING_ID,
+            c.BRAND + ' ' + c.MODEL AS carName,
+            u.FULL_NAME AS customerName,
+            u.PHONE AS customerPhone,
+            b.START_DATE,
+            b.END_DATE,
+            b.PICKUP_TIME,
+            b.DROPOFF_TIME,
+            b.TOTAL_PRICE,
+            b.STATUS
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+        WHERE c.USER_ID = ?
+        ORDER BY b.BOOKING_ID DESC
+    """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, ownerId);
+            ps.setInt(1, limit);   // số lượng bản ghi muốn giới hạn
+            ps.setInt(2, ownerId);
+
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 BookingDetail bd = new BookingDetail();
                 UserProfile up = new UserProfile();
 
-                // === Booking detail ===
                 bd.setBookingId(rs.getInt("BOOKING_ID"));
                 bd.setCarName(rs.getString("carName"));
                 bd.setStartDate(rs.getObject("START_DATE", LocalDate.class));
@@ -308,11 +310,8 @@ public class BookingDAO extends DBContext {
                 bd.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
                 bd.setStatus(rs.getString("STATUS"));
 
-
                 up.setFullName(rs.getString("customerName"));
                 up.setPhone(rs.getString("customerPhone"));
-
-
                 bd.setCustomerProfile(up);
 
                 list.add(bd);
@@ -322,6 +321,59 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
+
+
+    public List<BookingDetail> getPendingBookingsForOwner(int ownerId) {
+    List<BookingDetail> list = new ArrayList<>();
+    String sql = """
+        SELECT 
+            b.BOOKING_ID,
+            c.BRAND + ' ' + c.MODEL AS carName,
+            u.FULL_NAME AS customerName,
+            u.PHONE AS customerPhone,
+            b.START_DATE,
+            b.END_DATE,
+            b.PICKUP_TIME,
+            b.DROPOFF_TIME,
+            b.TOTAL_PRICE,
+            b.STATUS
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+        WHERE c.USER_ID = ?
+        AND b.STATUS = 'Pending'
+        ORDER BY b.BOOKING_ID DESC
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, ownerId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            BookingDetail bd = new BookingDetail();
+            UserProfile up = new UserProfile();
+
+            bd.setBookingId(rs.getInt("BOOKING_ID"));
+            bd.setCarName(rs.getString("carName"));
+            bd.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+            bd.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+            bd.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+            bd.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+            bd.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+            bd.setStatus(rs.getString("STATUS"));
+
+            up.setFullName(rs.getString("customerName"));
+            up.setPhone(rs.getString("customerPhone"));
+
+            bd.setCustomerProfile(up);
+
+            list.add(bd);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return list;
+}
+
 
     public List<BookingDetail> getHistoryBookingsForOwner(int ownerId) {
         List<BookingDetail> list = new ArrayList<>();
