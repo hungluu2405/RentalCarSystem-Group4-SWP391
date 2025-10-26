@@ -100,15 +100,15 @@
                             </div>
                         </div>
 
-                        <!-- TABS -->
+                        <!-- Tabs -->
                         <div class="tab-container">
                             <button class="tab-btn active" id="tabPending">Pending Orders</button>
                             <button class="tab-btn" id="tabHistory">Order History</button>
                         </div>
 
-                        <!-- TAB 1: Pending Orders -->
+                        <!-- === TAB 1: Pending Orders === -->
                         <div id="pendingOrders" class="tab-content active">
-                            <div class="table-responsive mb-5">
+                            <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
@@ -119,68 +119,49 @@
                                         <th>Dropoff</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total ($)</th>
+                                        <th>Total (VND)</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty currentBookings}">
-                                            <c:forEach var="b" items="${currentBookings}">
-                                                <tr>
-                                                    <td>${b.carName}</td>
-                                                    <td>${b.customerProfile.fullName}</td>
-                                                    <td>${b.customerProfile.phone}</td>
-                                                    <td>${b.pickupTime}</td>
-                                                    <td>${b.dropoffTime}</td>
-                                                    <td>${b.startDate}</td>
-                                                    <td>${b.endDate}</td>
-                                                    <td>${b.totalPrice}</td>
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="${b.status eq 'Pending'}">
-                                                                <span class="badge bg-warning text-dark">Pending</span>
-                                                            </c:when>
-                                                            <c:when test="${b.status eq 'Approved'}">
-                                                                <span class="badge bg-primary text-white">Approved</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="badge bg-secondary">${b.status}</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                    <td>
-                                                        <c:if test="${b.status eq 'Pending'}">
-                                                            <form method="post"
-                                                                  action="${pageContext.request.contextPath}/owner/ownerBooking"
-                                                                  class="d-flex justify-content-center gap-2">
-                                                                <input type="hidden" name="bookingId" value="${b.bookingId}">
-                                                                <button type="submit" name="action" value="accept"
-                                                                        class="btn btn-success btn-sm">Accept</button>
-                                                                <button type="submit" name="action" value="reject"
-                                                                        class="btn btn-danger btn-sm">Reject</button>
-                                                            </form>
-                                                        </c:if>
-                                                        <c:if test="${b.status eq 'Approved'}">
-                                                            <button class="btn btn-sm btn-outline-secondary" disabled>Waiting Completion</button>
-                                                        </c:if>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <tr><td colspan="10" class="text-muted">No current bookings.</td></tr>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <c:forEach var="order" items="${allBookings}">
+                                        <c:set var="isPending" value="${order.status == 'Pending'}"/>
+                                        <c:set var="isHistory" value="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Approved'}"/>
+
+                                        <c:if test="${isPending}">
+                                            <tr>
+                                                <td>${order.carName}</td>
+                                                <td>${order.customerProfile.fullName}</td>
+                                                <td>${order.customerProfile.phone}</td>
+                                                <td>${order.pickupTime}</td>
+                                                <td>${order.dropoffTime}</td>
+                                                <td>${order.startDate}</td>
+                                                <td>${order.endDate}</td>
+                                                <td>${order.totalPrice}</td>
+                                                <td>
+                                                    <span class="badge bg-warning text-dark">${order.status}</span>
+                                                </td>
+                                                <td>
+                                                    <form method="post"
+                                                          action="${pageContext.request.contextPath}/owner/ownerBooking"
+                                                          class="d-flex justify-content-center gap-2">
+                                                        <input type="hidden" name="bookingId" value="${order.bookingId}">
+                                                        <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+                                                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
-                        <!-- TAB 2: Booking History -->
+                        <!-- === TAB 2: Order History === -->
                         <div id="historyOrders" class="tab-content">
-                            <div class="table-responsive mb-5">
+                            <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
@@ -191,44 +172,49 @@
                                         <th>Dropoff</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total ($)</th>
+                                        <th>Total (VND)</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty historyBookings}">
-                                            <c:forEach var="b" items="${historyBookings}">
-                                                <tr>
-                                                    <td>${b.carName}</td>
-                                                    <td>${b.customerProfile.fullName}</td>
-                                                    <td>${b.customerProfile.phone}</td>
-                                                    <td>${b.pickupTime}</td>
-                                                    <td>${b.dropoffTime}</td>
-                                                    <td>${b.startDate}</td>
-                                                    <td>${b.endDate}</td>
-                                                    <td>${b.totalPrice}</td>
-                                                    <td>
-                                <span class="badge
-                                    ${b.status eq 'Completed' ? 'bg-success' :
-                                      b.status eq 'Rejected' ? 'bg-danger' :
-                                      b.status eq 'Cancelled' ? 'bg-secondary' : 'bg-dark'}">
-                                        ${b.status}
-                                </span>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <tr><td colspan="9" class="text-muted">No booking history.</td></tr>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <c:forEach var="order" items="${allBookings}">
+                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Approved'}">
+                                            <tr>
+                                                <td>${order.carName}</td>
+                                                <td>${order.customerProfile.fullName}</td>
+                                                <td>${order.customerProfile.phone}</td>
+                                                <td>${order.pickupTime}</td>
+                                                <td>${order.dropoffTime}</td>
+                                                <td>${order.startDate}</td>
+                                                <td>${order.endDate}</td>
+                                                <td>${order.totalPrice}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${order.status == 'Approved'}">
+                                                            <span class="badge bg-primary">Approved</span>
+                                                        </c:when>
+                                                        <c:when test="${order.status == 'Completed'}">
+                                                            <span class="badge bg-success">Completed</span>
+                                                        </c:when>
+                                                        <c:when test="${order.status == 'Rejected'}">
+                                                            <span class="badge bg-danger">Rejected</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge bg-secondary">${order.status}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div> <!-- end .row -->
-                </div> <!-- end .container -->
+                        </div>
+                    </div>
+                </div>
         </section>
 
         <!-- FOOTER -->
@@ -258,7 +244,7 @@
             });
         </script>
 
-    </div> <!-- end #wrapper -->
+    </div>
 </body>
 </html>
 

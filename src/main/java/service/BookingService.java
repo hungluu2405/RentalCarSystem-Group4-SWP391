@@ -5,6 +5,7 @@ import dao.implement.CarDAO;
 import dao.implement.PromotionDAO;
 import dao.implement.BookingPromotionDAO;
 import model.Booking;
+import model.Car;
 import model.Promotion;
 import model.BookingPromotion;
 
@@ -29,6 +30,14 @@ public class BookingService {
         }
         if (booking.getEndDate().isBefore(booking.getStartDate())) {
             return "❌ Please select a return date that is after the pickup date!";
+        }
+
+        Car car = carDAO.findById(booking.getCarId());
+        if (car == null) {
+            return "❌ The selected car does not exist!";
+        }
+        if (car.getOwnerId() == booking.getUserId()) {
+            return "❌ You cannot book your own car!";
         }
 
         //  Kiểm tra xe có bị trùng lịch không
@@ -59,9 +68,6 @@ public class BookingService {
                     promo.getEndDate().toLocalDate().isBefore(today)) {
                 return "❌ This promo code has expired!";
             }
-
-
-
         }
 
         booking.setStatus("Pending");
