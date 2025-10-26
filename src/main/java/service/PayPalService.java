@@ -93,14 +93,14 @@ public class PayPalService {
             String paypalTransactionId = executedPayment.getId();
 
 
-            boolean statusUpdated = bookingDAO.updateStatus(bookingId, "Completed");
+            boolean statusUpdated = bookingDAO.updateStatus(bookingId, "Paid");
 
 
             boolean paymentInserted = bookingDAO.insertPaymentRecord(
                     bookingId,
                     paypalTransactionId,
                     paidAmount,
-                    "COMPLETED"
+                    "Paid"
             );
 
             return statusUpdated && paymentInserted;
