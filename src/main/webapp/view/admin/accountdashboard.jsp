@@ -75,14 +75,15 @@
         <thead class="thead-dark">
           <tr>
             <th>Profile ID</th>
-            <th>Role</th>
             <th>Full Name</th>
+            <th>Role</th>
             <th>Phone</th>
             <th>Date of Birth</th>
             <th>Gender</th>
             <th>Driver License</th>
             <th>Email</th>
             <th>Created At</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -90,14 +91,27 @@
           <c:if test="${u.userProfile.profileId != 0}">
             <tr>
               <td>${u.userProfile.profileId}</td>
+              <td>
+                    <a href="${pageContext.request.contextPath}/admin/manageUser?action=view&userId=${u.userId}">
+                            ${u.userProfile.fullName}
+                    </a>
+                </td>
               <td>${u.roleName}</td>
-              <td>${u.userProfile.fullName}</td>
               <td>${u.userProfile.phone}</td>
               <td>${u.userProfile.dob}</td>
               <td>${u.userProfile.gender}</td>
               <td>${u.userProfile.driverLicenseNumber}</td>
               <td>${u.email}</td>
               <td>${u.createdAt}</td>
+                <td>
+
+                    <a href="${pageContext.request.contextPath}/admin/manageUser?action=remove&userId=${u.userId}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this user?');">
+                        <i class="fas fa-trash"></i> Remove
+                    </a>
+
+                </td>
             </tr>
           </c:if>
         </c:forEach>
