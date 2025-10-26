@@ -20,12 +20,30 @@ public class ReportDBServlet extends HttpServlet {
         BookingDAO bookingDAO = new BookingDAO();
 
         // Giả sử DAO của bạn có hàm getAll()
-        List<Payment> listRP = paymentDAO.getAll();
+//        List<Payment> listRP = paymentDAO.getAll();
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
         int totalBookings = bookingDAO.countAllBookings();
         int totalReports = paymentDAO.countAllReport();
+
+        String type = request.getParameter("type");
+
+        List<Payment> listRP;
+        double totalRevenue = 0;
+
+        if ("week".equals(type) || "month".equals(type)) {
+            // Nếu có chọn lọc hợp lệ → lọc theo tuần/tháng
+            listRP = paymentDAO.getPaymentsByWeekOrMonth(type);
+            totalRevenue = paymentDAO.getTotalRevenueByWeekOrMonth(type);
+            request.setAttribute("totalRevenue", totalRevenue);
+            request.setAttribute("type", type);
+        } else {
+            // Nếu không có chọn gì → hiển thị tất cả
+            listRP = paymentDAO.getAll();
+        }
+
+
 
         request.setAttribute("listRP", listRP);
         request.setAttribute("totalUsers",totalUsers);
