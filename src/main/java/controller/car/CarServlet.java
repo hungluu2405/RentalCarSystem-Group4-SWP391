@@ -38,9 +38,10 @@ public class CarServlet extends HttpServlet {
         List<String> typeList = carDAO.getAllTypes(); // format "id:name"
         List<Integer> capacityList = carDAO.getAllCapacities();
         List<String> fuelList = carDAO.getAllFuelTypes();
+        String location = request.getParameter("location");
 
-        List<CarViewModel> carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, page, pageSize);
-        int totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price);
+        List<CarViewModel> carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location, page, pageSize);
+        int totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location);
         int totalPages = (int) Math.ceil((double) totalCars / pageSize);
 
         request.setAttribute("brandList", brandList);
