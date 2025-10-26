@@ -31,7 +31,7 @@ public class BookingService {
         if (booking.getEndDate().isBefore(booking.getStartDate())) {
             return "❌ Please select a return date that is after the pickup date!";
         }
-
+        //kiểm tra xem đặt xe của chính  mình được không
         Car car = carDAO.findById(booking.getCarId());
         if (car == null) {
             return "❌ The selected car does not exist!";
