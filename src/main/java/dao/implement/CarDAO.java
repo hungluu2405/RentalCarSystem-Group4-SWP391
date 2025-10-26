@@ -194,8 +194,250 @@ public class CarDAO extends DBContext {
         return total;
     }
 
+    /**
+     * HÀM MỚI (OVERLOADED): Tìm xe (SỬA LỖI: QUAY LẠI LOGIC SO SÁNH 6 THAM SỐ)
+     */
+    public List<CarViewModel> findCars(String name, String brand, String typeIdStr,
+                                       String capacity, String fuel, String price,
+                                       String location,
+                                       String startDate, String pickupTime, // Tham số mới
+                                       String endDate, String dropoffTime, // Tham số mới
+                                       int page, int pageSize) {
+        // Dòng kiểm tra của bạn, hãy giữ lại
+        System.out.println("!!! === ĐANG CHẠY HÀM DAO MỚI (LOGIC 6 THAM SỐ) === !!!");
+        List<CarViewModel> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT c.CAR_ID, c.BRAND, c.MODEL, c.PRICE_PER_DAY, c.CAPACITY, "
+                + "c.TRANSMISSION, c.FUEL_TYPE, c.LOCATION, t.NAME AS CAR_TYPE_NAME, "
+                + "(SELECT TOP 1 IMAGE_URL FROM CAR_IMAGE WHERE CAR_ID = c.CAR_ID) AS IMAGE_URL "
+                + "FROM CAR c "
+                + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
+                + "WHERE c.AVAILABILITY = 1 ";
 
+        // Thêm các filter cũ (giữ nguyên)
+        if (name != null && !name.isEmpty()) {
+            sql += " AND (c.BRAND LIKE ? OR c.MODEL LIKE ?)";
+        }
+        if (brand != null && !brand.isEmpty()) {
+            sql += " AND c.BRAND = ?";
+        }
+        if (typeIdStr != null && !typeIdStr.isEmpty()) {
+            sql += " AND c.TYPE_ID = ?";
+        }
+        if (capacity != null && !capacity.isEmpty()) {
+            sql += " AND c.CAPACITY = ?";
+        }
+        if (fuel != null && !fuel.isEmpty()) {
+            sql += " AND c.FUEL_TYPE = ?";
+        }
+        if (price != null && !price.isEmpty()) {
+            sql += " AND c.PRICE_PER_DAY <= ?";
+        }
+        if (location != null && !location.isEmpty()) {
+            sql += " AND c.LOCATION COLLATE SQL_Latin1_General_Cp1253_CI_AI LIKE ?";
+        }
 
+        // === LOGIC OVERLAP (ĐÃ SỬA LỖI ÉP KIỂU VÀ DÙNG 6 THAM SỐ) ===
+        sql += " AND NOT EXISTS ( "
+                + "    SELECT 1 "
+                + "    FROM Booking b "
+                + "    WHERE b.CAR_ID = c.CAR_ID "
+                + "    AND b.STATUS IN ('Approved', 'Pending', 'Paid') "
+
+                // Điều kiện AND lớn
+                + "    AND ( "
+                // PHẦN 1: (BookingStart < SearchEnd)
+                // SỬA Ở ĐÂY: Dùng ISNULL với CAST TIME
+                + "        (b.START_DATE < ? OR (b.START_DATE = ? AND ISNULL(b.PICKUP_TIME, CAST('00:00:00' AS TIME)) < ?)) "
+                + "    ) "
+                + "    AND ( "
+                // PHẦN 2: (BookingEnd > SearchStart)
+                // SỬA Ở ĐÂY: Dùng ISNULL với CAST TIME
+                + "        (b.END_DATE > ? OR (b.END_DATE = ? AND ISNULL(b.DROPOFF_TIME, CAST('23:59:59' AS TIME)) > ?)) "
+                + "    ) "
+
+                + ") "; // Đóng NOT EXISTS
+
+        // Phân trang
+        sql += " ORDER BY c.CAR_ID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            int idx = 1;
+
+            // Set tham số cho các filter cũ (giữ nguyên)
+            if (name != null && !name.isEmpty()) {
+                ps.setString(idx++, "%" + name + "%");
+                ps.setString(idx++, "%" + name + "%");
+            }
+            if (brand != null && !brand.isEmpty()) {
+                ps.setString(idx++, brand);
+            }
+            if (typeIdStr != null && !typeIdStr.isEmpty()) {
+                ps.setInt(idx++, Integer.parseInt(typeIdStr));
+            }
+            if (capacity != null && !capacity.isEmpty()) {
+                ps.setInt(idx++, Integer.parseInt(capacity));
+            }
+            if (fuel != null && !fuel.isEmpty()) {
+                ps.setString(idx++, fuel);
+            }
+            if (price != null && !price.isEmpty()) {
+                ps.setBigDecimal(idx++, new BigDecimal(price));
+            }
+            if (location != null && !location.isEmpty()) {
+                ps.setString(idx++, "%" + location + "%");
+            }
+
+            // === SET THAM SỐ CHO LOGIC OVERLAP (6 THAM SỐ) ===
+            // PHẦN 1: (BookingStart < SearchEnd)
+            ps.setString(idx++, endDate);      // (b.START_DATE < ?)
+            ps.setString(idx++, endDate);      // (b.START_DATE = ?)
+            ps.setString(idx++, dropoffTime);  // (ISNULL(...) < ?)
+
+            // PHẦN 2: (BookingEnd > SearchStart)
+            ps.setString(idx++, startDate);    // (b.END_DATE > ?)
+            ps.setString(idx++, startDate);    // (b.END_DATE = ?)
+            ps.setString(idx++, pickupTime);   // (ISNULL(...) > ?)
+
+            // Set tham số cho phân trang
+            ps.setInt(idx++, (page - 1) * pageSize);
+            ps.setInt(idx++, pageSize);
+
+            // ... (Code map ResultSet của bạn giữ nguyên) ...
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CarViewModel car = new CarViewModel();
+                car.setCarId(rs.getInt("CAR_ID"));
+                car.setBrand(rs.getString("BRAND"));
+                car.setModel(rs.getString("MODEL"));
+                car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                car.setCapacity(rs.getInt("CAPACITY"));
+                car.setTransmission(rs.getString("TRANSMISSION"));
+                car.setFuelType(rs.getString("FUEL_TYPE"));
+                car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+                car.setLocation(rs.getString("LOCATION"));
+
+                List<CarImage> images = new ArrayList<>();
+                String imageUrl = rs.getString("IMAGE_URL");
+                if (imageUrl != null) {
+                    CarImage img = new CarImage();
+                    img.setCarId(rs.getInt("CAR_ID"));
+                    img.setImageUrl(imageUrl);
+                    images.add(img);
+                }
+                car.setImages(images);
+
+                list.add(car);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * HÀM MỚI (OVERLOADED): Đếm xe (SỬA LỖI: QUAY LẠI LOGIC SO SÁNH 6 THAM SỐ)
+     */
+    public int countCars(String name, String brand, String typeIdStr,
+                         String capacity, String fuel, String price,
+                         String location,
+                         String startDate, String pickupTime, // Tham số mới
+                         String endDate, String dropoffTime) { // Tham số mới
+        int total = 0;
+
+        String sql = "SELECT COUNT(DISTINCT c.CAR_ID) AS total "
+                + "FROM CAR c "
+                + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
+                + "WHERE c.AVAILABILITY = 1 ";
+
+        // Thêm các filter cũ (giữ nguyên)
+        if (name != null && !name.isEmpty()) {
+            sql += " AND (c.BRAND LIKE ? OR c.MODEL LIKE ?)";
+        }
+        if (brand != null && !brand.isEmpty()) {
+            sql += " AND c.BRAND = ?";
+        }
+        if (typeIdStr != null && !typeIdStr.isEmpty()) {
+            sql += " AND c.TYPE_ID = ?";
+        }
+        if (capacity != null && !capacity.isEmpty()) {
+            sql += " AND c.CAPACITY = ?";
+        }
+        if (fuel != null && !fuel.isEmpty()) {
+            sql += " AND c.FUEL_TYPE = ?";
+        }
+        if (price != null && !price.isEmpty()) {
+            sql += " AND c.PRICE_PER_DAY <= ?";
+        }
+        if (location != null && !location.isEmpty()) {
+            sql += " AND c.LOCATION COLLATE SQL_Latin1_General_Cp1253_CI_AI LIKE ?";
+        }
+
+        // === LOGIC OVERLAP (ĐÃ SỬA LỖI ÉP KIỂU VÀ DÙNG 6 THAM SỐ) ===
+        sql += " AND NOT EXISTS ( "
+                + "    SELECT 1 "
+                + "    FROM Booking b "
+                + "    WHERE b.CAR_ID = c.CAR_ID "
+                + "    AND b.STATUS IN ('Approved', 'Pending', 'Paid') "
+
+                // Điều kiện AND lớn
+                + "    AND ( "
+                // PHẦN 1: (BookingStart < SearchEnd)
+                + "        (b.START_DATE < ? OR (b.START_DATE = ? AND ISNULL(b.PICKUP_TIME, CAST('00:00:00' AS TIME)) < ?)) "
+                + "    ) "
+                + "    AND ( "
+                // PHẦN 2: (BookingEnd > SearchStart)
+                + "        (b.END_DATE > ? OR (b.END_DATE = ? AND ISNULL(b.DROPOFF_TIME, CAST('23:59:59' AS TIME)) > ?)) "
+                + "    ) "
+
+                + ") "; // Đóng NOT EXISTS
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            int idx = 1;
+
+            // Set tham số cho các filter cũ (giữ nguyên)
+            if (name != null && !name.isEmpty()) {
+                ps.setString(idx++, "%" + name + "%");
+                ps.setString(idx++, "%" + name + "%");
+            }
+            if (brand != null && !brand.isEmpty()) {
+                ps.setString(idx++, brand);
+            }
+            if (typeIdStr != null && !typeIdStr.isEmpty()) {
+                ps.setInt(idx++, Integer.parseInt(typeIdStr));
+            }
+            if (capacity != null && !capacity.isEmpty()) {
+                ps.setInt(idx++, Integer.parseInt(capacity));
+            }
+            if (fuel != null && !fuel.isEmpty()) {
+                ps.setString(idx++, fuel);
+            }
+            if (price != null && !price.isEmpty()) {
+                ps.setBigDecimal(idx++, new BigDecimal(price));
+            }
+            if (location != null && !location.isEmpty()) {
+                ps.setString(idx++, "%" + location + "%");
+            }
+
+            // === SET THAM SỐ CHO LOGIC OVERLAP (6 THAM SỐ) ===
+            // PHẦN 1: (BookingStart < SearchEnd)
+            ps.setString(idx++, endDate);      // (b.START_DATE < ?)
+            ps.setString(idx++, endDate);      // (b.START_DATE = ?)
+            ps.setString(idx++, dropoffTime);  // (ISNULL(...) < ?)
+
+            // PHẦN 2: (BookingEnd > SearchStart)
+            ps.setString(idx++, startDate);    // (b.END_DATE > ?)
+            ps.setString(idx++, startDate);    // (b.END_DATE = ?)
+            ps.setString(idx++, pickupTime);   // (ISNULL(...) > ?)
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
 
 
     public List<String> getAllBrands() {

@@ -2,59 +2,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page import="dao.implement.CarDAO, model.CarViewModel, java.util.List" %>
-
-
-<%
-    CarDAO carDAO = new CarDAO();
-
-    String name = request.getParameter("name");
-    String brand = request.getParameter("brand");
-    String typeParam = request.getParameter("type");
-    String capacity = request.getParameter("capacity");
-    String fuel = request.getParameter("fuel");
-    String price = request.getParameter("price");
-    String location = request.getParameter("location");
-
-
-    int currentPage = 1;
-    int pageSize = 9; // Giảm pageSize để phù hợp với layout 3 cột
-    if (request.getParameter("page") != null) {
-        try {
-            currentPage = Integer.parseInt(request.getParameter("page"));
-        } catch (Exception e) {
-            currentPage = 1;
-        }
-    }
-
-    List<CarViewModel> carList = carDAO.findCars(name, brand, typeParam, capacity, fuel, price, location, currentPage, pageSize);
-    int totalCars = carDAO.countCars(name, brand, typeParam, capacity, fuel, price, location);
-
-    int totalPages = (int) Math.ceil(totalCars * 1.0 / pageSize);
-
-
-    List<String> brands = carDAO.getAllBrands();
-    List<String> types = carDAO.getAllTypes();
-    List<Integer> capacities = carDAO.getAllCapacities();
-    List<String> fuels = carDAO.getAllFuelTypes();
-
-    request.setAttribute("carList", carList);
-    request.setAttribute("brands", brands);
-    request.setAttribute("types", types);
-    request.setAttribute("capacities", capacities);
-    request.setAttribute("fuels", fuels);
-    request.setAttribute("currentPage", currentPage);
-    request.setAttribute("totalPages", totalPages);
-%>
+<%--
+    ĐÃ XÓA TOÀN BỘ KHỐI SCRIPTLET <% ... %> GỐC CỦA BẠN.
+    CarServlet đã cung cấp tất cả các biến (carList, totalPages, brandList, v.v.)
+    Trang JSP này CHỈ NÊN HIỂN THỊ dữ liệu đó.
+--%>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Rentaly - Cars List</title>
+    <%-- (Phần <head> của bạn giữ nguyên, không cần thay đổi) --%>
     <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"
           id="bootstrap">
     <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css" id="mdb">
@@ -64,11 +25,11 @@
     <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"
           type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 
 <body>
 <div id="wrapper">
+    <%-- (Phần Header và Menu của bạn giữ nguyên, không cần thay đổi) --%>
     <div id="de-preloader"></div>
     <header class="transparent scroll-light has-topbar">
         <div id="topbar" class="topbar-dark text-light">
@@ -113,7 +74,6 @@
                             <div class="menu_side_area">
                                 <c:choose>
                                     <c:when test="${not empty sessionScope.user}">
-                                        <!-- USER MENU -->
                                         <div id="myUserMenu" class="my-user-menu">
                                             <button id="myUserBtn" class="my-user-btn" type="button"
                                                     aria-haspopup="true" aria-expanded="false" title="Tài khoản">
@@ -324,6 +284,12 @@
                             <h4>Filter Cars</h4>
                             <div class="p-3" data-bgcolor="#f5f5f5" style="border-radius: 5px;">
                                 <form action="${pageContext.request.contextPath}/cars" method="GET">
+                                    <%-- Thêm các trường ngày giờ ẩn để chúng được gửi lại khi filter --%>
+                                    <input type="hidden" name="startDate" value="${param.startDate}">
+                                    <input type="hidden" name="pickupTime" value="${param.pickupTime}">
+                                    <input type="hidden" name="endDate" value="${param.endDate}">
+                                    <input type="hidden" name="dropoffTime" value="${param.dropoffTime}">
+
                                     <div class="mb-3">
                                         <label class="form-label">Car Name</label>
                                         <input type="text" name="name" class="form-control" value="${param.name}">
@@ -333,7 +299,8 @@
                                         <label class="form-label">Brand</label>
                                         <select name="brand" class="form-control">
                                             <option value="">All Brands</option>
-                                            <c:forEach var="b" items="${brands}">
+                                            <%-- SỬA TÊN BIẾN: ${brands} -> ${brandList} --%>
+                                            <c:forEach var="b" items="${brandList}">
                                                 <option value="${b}" ${b==param.brand?'selected':''}>${b}</option>
                                             </c:forEach>
                                         </select>
@@ -343,6 +310,7 @@
                                         <label class="form-label">Type</label>
                                         <select name="type" class="form-control">
                                             <option value="">All Types</option>
+                                            <%-- Giữ nguyên: ${typeList} --%>
                                             <c:forEach var="t" items="${typeList}">
                                                 <c:set var="parts" value="${fn:split(t, ':')}"/>
                                                 <option value="${parts[0]}" ${parts[0]==param.type ? 'selected' : ''}>
@@ -357,7 +325,8 @@
                                         <label class="form-label">Seats</label>
                                         <select name="capacity" class="form-control">
                                             <option value="">Any</option>
-                                            <c:forEach var="c" items="${capacities}">
+                                            <%-- SỬA TÊN BIẾN: ${capacities} -> ${capacityList} --%>
+                                            <c:forEach var="c" items="${capacityList}">
                                                 <option value="${c}" ${c.toString()==param.capacity?'selected':''}>${c}</option>
                                             </c:forEach>
                                         </select>
@@ -367,7 +336,8 @@
                                         <label class="form-label">Fuel</label>
                                         <select name="fuel" class="form-control">
                                             <option value="">Any</option>
-                                            <c:forEach var="f" items="${fuels}">
+                                            <%-- SỬA TÊN BIẾN: ${fuels} -> ${fuelTypeList} --%>
+                                            <c:forEach var="f" items="${fuelTypeList}">
                                                 <option value="${f}" ${f==param.fuel?'selected':''}>${f}</option>
                                             </c:forEach>
                                         </select>
@@ -395,6 +365,7 @@
 
                     <div class="col-lg-9">
                         <div class="row">
+                            <%-- Biến ${carList} này là do CarServlet gửi sang --%>
                             <c:if test="${empty carList}">
                                 <div class="col-12">
                                     <div class="alert alert-warning text-center">No cars found matching your criteria.
@@ -464,13 +435,22 @@
                             </c:forEach>
                         </div>
 
+                        <%--
+                           PHẦN SỬA LỖI QUAN TRỌNG:
+                           Thêm các tham số ngày giờ vào TẤT CẢ các link phân trang.
+                           Nếu không, khi bấm sang trang 2, bộ lọc ngày giờ sẽ bị mất.
+                        --%>
+                        <c:set var="dateParams"
+                               value="&startDate=${param.startDate}&pickupTime=${param.pickupTime}&endDate=${param.endDate}&dropoffTime=${param.dropoffTime}"/>
+                        <c:set var="filterParams"
+                               value="&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}"/>
+
                         <nav aria-label="Page navigation" class="mt-4">
                             <ul class="pagination justify-content-center">
 
-                                <!-- Nút về đầu -->
                                 <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                                     <a class="page-link"
-                                       href="cars?page=1&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">«</a>
+                                       href="cars?page=1${filterParams}${dateParams}">«</a>
                                 </li>
 
                                 <c:choose>
@@ -478,7 +458,7 @@
                                         <c:forEach var="i" begin="1" end="${totalPages < 3 ? totalPages : 3}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
+                                                   href="cars?page=${i}${filterParams}${dateParams}">
                                                         ${i}
                                                 </a>
                                             </li>
@@ -487,7 +467,7 @@
                                             <li class="page-item disabled"><span class="page-link">...</span></li>
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
+                                                   href="cars?page=${totalPages}${filterParams}${dateParams}">
                                                         ${totalPages}
                                                 </a>
                                             </li>
@@ -506,7 +486,7 @@
                                         <c:forEach var="i" begin="${start}" end="${end}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
+                                                   href="cars?page=${i}${filterParams}${dateParams}">
                                                         ${i}
                                                 </a>
                                             </li>
@@ -516,7 +496,7 @@
                                             <li class="page-item disabled"><span class="page-link">...</span></li>
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
+                                                   href="cars?page=${totalPages}${filterParams}${dateParams}">
                                                         ${totalPages}
                                                 </a>
                                             </li>
@@ -524,16 +504,15 @@
                                     </c:otherwise>
                                 </c:choose>
 
-                                <!-- Nút đến cuối -->
                                 <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                                     <a class="page-link"
-                                       href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">»</a>
+                                       href="cars?page=${totalPages}${filterParams}${dateParams}">»</a>
                                 </li>
                             </ul>
 
-                            <!-- Ô nhập số trang -->
                             <div class="d-flex justify-content-center mt-2">
                                 <form method="get" action="cars" class="d-flex">
+                                    <%-- Thêm các trường ẩn cho filter VÀ ngày giờ --%>
                                     <input type="hidden" name="name" value="${param.name}">
                                     <input type="hidden" name="brand" value="${param.brand}">
                                     <input type="hidden" name="type" value="${param.type}">
@@ -541,6 +520,11 @@
                                     <input type="hidden" name="fuel" value="${param.fuel}">
                                     <input type="hidden" name="location" value="${param.location}">
                                     <input type="hidden" name="price" value="${param.price}">
+                                    <input type="hidden" name="startDate" value="${param.startDate}">
+                                    <input type="hidden" name="pickupTime" value="${param.pickupTime}">
+                                    <input type="hidden" name="endDate" value="${param.endDate}">
+                                    <input type="hidden" name="dropoffTime" value="${param.dropoffTime}">
+
                                     <input type="number" name="page" min="1" max="${totalPages}"
                                            class="form-control form-control-sm" placeholder="Trang..."
                                            style="width:80px;">
@@ -557,6 +541,7 @@
     </div>
     <a href="#" id="back-to-top"></a>
 
+    <%-- (Phần Footer của bạn giữ nguyên, không cần thay đổi) --%>
     <footer class="text-light">
         <div class="container">
             <div class="row g-custom-x">
