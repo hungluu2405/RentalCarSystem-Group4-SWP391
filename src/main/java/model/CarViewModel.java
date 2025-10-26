@@ -17,12 +17,14 @@ public class CarViewModel {
     private List<CarImage> images;
     private String location;
     private String licensePlate;
+    private int year;
+    private int typeId;
 
     public CarViewModel() {
     }
 
-
-    public CarViewModel(int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String carTypeName, String description, String imageUrl, List<CarImage> images, String location, String licensePlate) {
+    public CarViewModel(String carTypeName, int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String description, String imageUrl, List<CarImage> images, String location, String licensePlate, int year, int typeId) {
+        this.carTypeName = carTypeName;
         this.carId = carId;
         this.brand = brand;
         this.model = model;
@@ -30,12 +32,29 @@ public class CarViewModel {
         this.capacity = capacity;
         this.transmission = transmission;
         this.fuelType = fuelType;
-        this.carTypeName = carTypeName;
         this.description = description;
         this.imageUrl = imageUrl;
         this.images = images;
         this.location = location;
         this.licensePlate = licensePlate;
+        this.year = year;
+        this.typeId = typeId;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public String getLicensePlate() {

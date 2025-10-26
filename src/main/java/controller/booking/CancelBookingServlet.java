@@ -1,4 +1,4 @@
-package controller.customer;
+package controller.booking;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

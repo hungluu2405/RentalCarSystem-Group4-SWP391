@@ -200,23 +200,9 @@
                                         <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Cars</a>
 
                                         </li>
-                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/quick-booking.html">Booking</a>
-                                            <ul>
-                                                <li><a class="menu-item new" href="${pageContext.request.contextPath}/quick-booking.html">Quick Booking</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/booking.html">Booking</a></li>
-                                            </ul>
+                                        <li><a class="menu-item" href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
                                         </li>
-
-                                        <li><a class="menu-item" href="#">Pages</a>
-                                            <ul>
                                                 <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About Us</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/login">Login</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/register.jsp">Register</a></li>
-                                                <li><a class="menu-item" href="${pageContext.request.contextPath}/404.html">Page 404</a></li>
-                                            </ul>
-                                        </li>
-
 
 
                                 </div>
@@ -248,7 +234,7 @@
 
                                                             <%-- Giả sử: 2 = Car Owner --%>
                                                             <c:when test="${sessionScope.user.roleId == 2}">
-                                                                <a class="men-uitem" href="${pageContext.request.contextPath}/owner/ownerBooking" role="menuitem">My Account</a>
+                                                                <a class="men-uitem" href="${pageContext.request.contextPath}/owner/profile" role="menuitem">My Account</a>
                                                             </c:when>
 
                                                             <%-- Giả sử: 3 = Customer --%>
@@ -436,7 +422,7 @@
             <div class="no-bottom no-top" id="content">
                 <div id="top"></div>
                 <section id="section-hero" aria-label="section" class="jarallax">
-                    <img src="${pageContext.request.contextPath}/images/background/1.jpg" class="jarallax-img" alt="">
+                    <img src="${pageContext.request.contextPath}/images/background/dep.jpg" class="jarallax-img" alt="">
                     <div class="container">
                         <div class="row align-items-center">
                             <div class="col-lg-12 text-light">
@@ -692,46 +678,7 @@
                     </div>
                 </section>
 
-                <section class="text-light jarallax">
-                    <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
-                    <div class="container">
-                        <div class="row g-5">
-                            <div class="col-lg-6 wow fadeInRight">
-                                <h2>We offer customers a wide range of <span class="id-color">commercial cars</span> and <span class="id-color">luxury cars</span> for any occasion.</h2>
-                            </div>
-                            <div class="col-lg-6 wow fadeInLeft">
-                                At our car rental agency, we believe that everyone deserves to experience the pleasure of driving a reliable and comfortable vehicle, regardless of their budget. We have curated a diverse fleet of well-maintained cars, ranging from sleek sedans to spacious SUVs, all at competitive prices. With our streamlined rental process, you can quickly and conveniently reserve your desired vehicle. Whether you need transportation for a business trip, family vacation, or simply want to enjoy a weekend getaway, we have flexible rental options to accommodate your schedule.
-                            </div>
-                        </div>
-                        <div class="spacer-double"></div>
-                        <div class="row text-center">
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="15425" data-speed="3000">0</h3>
-                                    Completed Orders
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="8745" data-speed="3000">0</h3>
-                                    Happy Customers
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="235" data-speed="3000">0</h3>
-                                    Vehicles Fleet
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6 mb-sm-30">
-                                <div class="de_count bg-dark text-light wow fadeInUp">
-                                    <h3 class="timer" data-to="15" data-speed="3000">0</h3>
-                                    Years Experience
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+
 
                 <section id="section-cars">
                     <div class="container">
@@ -789,7 +736,7 @@
 
 
                 <section class="text-light jarallax" aria-label="section">
-                    <img src="${pageContext.request.contextPath}/images/background/3.jpg" alt="" class="jarallax-img">
+                    <img src="${pageContext.request.contextPath}/images/background/6.jpg" alt="" class="jarallax-img">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-3">
@@ -815,79 +762,6 @@
                     </div>
                 </section>
 
-                <section id="section-news">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6 offset-lg-3 text-center">
-                                <span class="subtitle">Latest From Us</span>
-                                <h2>News &amp; Promo</h2>
-                                <p>Breaking news, fresh perspectives, and in-depth coverage - stay ahead with our latest news, insights, and analysis.</p>
-                                <div class="spacer-20"></div>
-                            </div>
-
-                            <div class="col-lg-4 mb10">
-                                <div class="bloglist s2 item">
-                                    <div class="post-content">
-                                        <div class="post-image">
-                                            <div class="date-box">
-                                                <div class="m">10</div>
-                                                <div class="d">MAR</div>
-                                            </div>
-                                            <img alt="" src="${pageContext.request.contextPath}/images/news/pic-blog-1.jpg" class="lazy">
-                                        </div>
-                                        <div class="post-text">
-                                            <h4><a href="${pageContext.request.contextPath}/news-single.html">Enjoy Best Travel Experience<span></span></a></h4>
-                                            <p>Traveling is an enriching experience that allows us to explore new destinations, immerse ourselves in different cultures, and create lifelong memories.</p>
-                                            <a class="btn-main" href="#">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb10">
-                                <div class="bloglist s2 item">
-                                    <div class="post-content">
-                                        <div class="post-image">
-                                            <div class="date-box">
-                                                <div class="m">12</div>
-                                                <div class="d">MAR</div>
-                                            </div>
-                                            <img alt="" src="${pageContext.request.contextPath}/images/news/pic-blog-2.jpg" class="lazy">
-                                        </div>
-                                        <div class="post-text">
-                                            <h4><a href="${pageContext.request.contextPath}/news-single.html">The Future of Car Rent<span></span></a></h4>
-                                            <p>As technology continues to advance at a rapid pace, the car rental industry is poised for a transformative shift. The future of car rental promises..</p>
-                                            <a class="btn-main" href="#">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb10">
-                                <div class="bloglist s2 item">
-                                    <div class="post-content">
-                                        <div class="post-image">
-                                            <div class="date-box">
-                                                <div class="m">14</div>
-                                                <div class="d">MAR</div>
-                                            </div>
-                                            <img alt="" src="${pageContext.request.contextPath}/images/news/pic-blog-3.jpg" class="lazy">
-                                        </div>
-                                        <div class="post-text">
-                                            <h4><a href="${pageContext.request.contextPath}/news-single.html">Holiday Tips For Backpacker<span></span></a></h4>
-                                            <p>For adventure seekers and budget-conscious travelers, backpacking offers a thrilling and immersive way to explore the world. Whether you're embarking..</p>
-                                            <a class="btn-main" href="#">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-
-
-
 
                 <section id="section-testimonials" class="no-top no-bottom">
                     <div class="container-fluid">
@@ -900,10 +774,10 @@
                                         <h4>Excellent Service! Car Rent Service!</h4>
                                         <blockquote>
                                             I have been using Rentaly for my Car Rental needs for over 5 years now. I have never had any problems with their service. Their customer support is always responsive and helpful. I would recommend Rentaly to anyone looking for a reliable Car Rental provider.
-                                            <span class="by">Stepanie Hutchkiss</span>
+                                            <span class="by">Thuy Linh</span>
                                         </blockquote>
                                     </div>
-                                    <img src="images/testimonial/1.jpg" class="img-fluid" alt="">
+                                    <img src="images/testimonial/anh5.jpg" class="img-fluid" alt="">
                                 </div>
                             </div>
 
@@ -915,10 +789,10 @@
                                         <h4>Excellent Service! Car Rent Service!</h4>
                                         <blockquote>
                                             We have been using Rentaly for our trips needs for several years now and have always been happy with their service. Their customer support is Excellent Service! and they are always available to help with any issues we have. Their prices are also very competitive.
-                                            <span class="by">Jovan Reels</span>
+                                            <span class="by">Bang Kieu</span>
                                         </blockquote>
                                     </div>
-                                    <img src="images/testimonial/2.jpg" class="img-fluid" alt="">
+                                    <img src="images/testimonial/anh6.jpg" class="img-fluid" alt="">
                                 </div>
                             </div>
 
@@ -929,10 +803,10 @@
                                         <h4>Excellent Service! Car Rent Service!</h4>
                                         <blockquote>
                                             Endorsed by industry experts, Rentaly is the Car Rental solution you can trust. With years of experience in the field, we provide fast, reliable and secure Car Rental services.
-                                            <span class="by">Kanesha Keyton</span>
+                                            <span class="by">Tuan Vu Manh</span>
                                         </blockquote>
                                     </div>
-                                    <img src="images/testimonial/3.jpg" class="img-fluid" alt="">
+                                    <img src="images/testimonial/anh7.jpg" class="img-fluid" alt="">
                                 </div>
                             </div>
 
@@ -957,19 +831,23 @@
                                             How do I get started with Car Rental?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-1">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>Getting started is easy! Simply create an account, choose your preferred car, select the rental dates, and confirm your booking. You’ll receive a confirmation email with all the details and pickup instructions.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-2">
-                                            Can I rent a car with a debit card??
+                                            Can I pay online?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-2">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>Yes, you can conveniently pay online using a credit or debit card. Online payment ensures your reservation is confirmed instantly. Some locations may also allow partial payment or pay-at-pickup options.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-3">
                                             What kind of Car Rental do I need?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-3">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>It depends on your trip and preferences:</br>
+                                                Economy or Compact: Best for city travel and fuel efficiency.</br>
+                                                SUV or Minivan: Great for family trips or extra luggage space.</br>
+                                                Luxury or Premium: Perfect for business or special occasions.</br>
+                                                You can filter cars by size, price, or purpose when booking.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -982,19 +860,19 @@
                                             What is a rental car security deposit?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-b-4">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>A security deposit is a temporary hold placed on your payment card at the start of your rental. It covers potential damages, traffic fines, or extra charges. The hold is released once you return the car in good condition.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-b-5">
                                             Can I cancel or modify my reservation?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-b-5">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>No, you can't cancel or modify your reservation online before the pickup time. Cancellation fees may apply depending on how close to the pickup time you make the change.</p>
                                         </div>
                                         <div class="accordion-section-title" data-tab="#accordion-b-6">
                                             Is it possible to extend my rental period?
                                         </div>
                                         <div class="accordion-section-content" id="accordion-b-6">
-                                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+                                            <p>No. Once your rental agreement is confirmed, the rental period cannot be extended. You will need to create a new booking if you wish to rent the car for a longer duration.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1023,7 +901,7 @@
                                             1 200 333 800
                                         </span>
                                     </div>
-                                    <a href="#" class="btn-main">Contact Us</a>
+                                    <a href="${pageContext.request.contextPath}/view/contact/contact.jsp" class="btn-main">Contact Us</a>
                                 </div>
                             </div>
                         </div>
@@ -1051,26 +929,11 @@
                                     <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
                                     <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
                                     <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
-                                    <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
                                 </address>
                             </div>
                         </div>
 
                         <div class="col-lg-3">
-                            <h5>Quick Links</h5>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="widget">
-                                        <ul>
-                                            <li><a href="#">About</a></li>
-                                            <li><a href="#">Blog</a></li>
-                                            <li><a href="#">Careers</a></li>
-                                            <li><a href="#">News</a></li>
-                                            <li><a href="#">Partners</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-lg-3">
@@ -1093,7 +956,7 @@
                             <div class="col-md-12">
                                 <div class="de-flex">
                                     <div class="de-flex-col">
-                                        <a href="index.html">
+                                        <a>
                                             Copyright 2025 - Rentaly by Designesia
                                         </a>
                                     </div>
@@ -1109,11 +972,7 @@
             </footer>
             <!-- footer close -->
         </div>
-        <div id="selector">
-            <div id="demo-rtl" class="sc-opt">
-                <div class="sc-icon">RTL</div><span class="sc-val">Click to Enable</span>
-            </div>
-        </div>
+
 
         <!-- Javascript Files
         ================================================== -->

@@ -2,16 +2,20 @@ package controller.carOwner;
 
 import dao.implement.CarDAO;
 import model.Car;
-import model.CarImage;
+import model.CarViewModel;
 import model.User;
+import model.CarType;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import service.AddCarService;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @WebServlet("/owner/addCar")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,     // 1MB
@@ -24,6 +28,15 @@ public class AddCarController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<CarType> carTypes = carDAO.getAllCarTypes();
+        List<String> fuelTypes = carDAO.getAllFuelTypess();
+        List<String> transmissions = carDAO.getAllTransmissions();
+
+        // Gán vào request để JSP hiển thị
+        request.setAttribute("carTypes", carTypes);
+        request.setAttribute("fuelTypes", fuelTypes);
+        request.setAttribute("transmissions", transmissions);
+
         // Hiển thị form thêm xe
         request.getRequestDispatcher("/view/carOwner/addCar.jsp").forward(request, response);
     }
@@ -44,10 +57,48 @@ public class AddCarController extends HttpServlet {
         int capacity = Integer.parseInt(request.getParameter("capacity"));
         String transmission = request.getParameter("transmission");
         String fuelType = request.getParameter("fuelType");
-        BigDecimal pricePerDay = new BigDecimal(request.getParameter("pricePerDay"));
+        String priceRaw = request.getParameter("pricePerDay");
+        if (priceRaw != null) {
+            priceRaw = priceRaw.replace(".", "").replace(",", "").trim(); // loại dấu . hoặc ,
+        }
+        BigDecimal pricePerDay = new BigDecimal(priceRaw);
         String description = request.getParameter("description");
         String location = request.getParameter("location");
         int typeId = Integer.parseInt(request.getParameter("typeId"));
+
+        AddCarService addCarService = new AddCarService();
+        if (addCarService.isDuplicateLicensePlate(licensePlate)) {
+            request.setAttribute("errorMessage", "Biển số xe đã tồn tại trong hệ thống!");
+            // Gửi lại form và hiển thị thông báo lỗi
+            List<CarType> carTypes = carDAO.getAllCarTypes();
+            List<String> fuelTypes = carDAO.getAllFuelTypess();
+            List<String> transmissions = carDAO.getAllTransmissions();
+            request.setAttribute("carTypes", carTypes);
+            request.setAttribute("fuelTypes", fuelTypes);
+            request.setAttribute("transmissions", transmissions);
+            request.getRequestDispatcher("/view/carOwner/addCar.jsp").forward(request, response);
+            return;
+        }
+//         Hàm forward khi có lỗi (giữ dữ liệu đã nhập)
+//        Runnable forwardWithError = () -> {
+//            try {
+//                request.setAttribute("input_brand", brand);
+//                request.setAttribute("input_model", model);
+//                request.setAttribute("input_transmission", transmission);
+//                request.setAttribute("input_fuelType", fuelType);
+//                request.setAttribute("input_year", year);
+//                request.setAttribute("input_licensePlate", licensePlate);
+//                request.setAttribute("input_capacity", capacity);
+//                request.setAttribute("input_pricePerDay", pricePerDay);
+//                request.setAttribute("input_typeId", typeId);
+//                request.setAttribute("input_location", location);
+//                request.setAttribute("input_description", description);
+//                request.getRequestDispatcher("/views/carOwner/addCar.jsp").forward(request, response);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        };
+
 
         Car car = new Car();
         car.setBrand(brand);
@@ -66,6 +117,7 @@ public class AddCarController extends HttpServlet {
 
         // 1. Thêm xe vào DB, lấy carId vừa tạo
         int carId = carDAO.addCarAndReturnId(car);
+        CarViewModel cars = carDAO.getCarById(carId);
 
         // 2. Xử lý upload ảnh
         for (Part part : request.getParts()) {
@@ -84,7 +136,11 @@ public class AddCarController extends HttpServlet {
             }
         }
 
-        // 3. Chuyển hướng về danh sách xe
-        response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
+    //  Lưu carId vào session để trang success biết xe nào vừa thêm
+            HttpSession session = request.getSession();
+            session.setAttribute("addedCarId", carId);
+
+            response.sendRedirect(request.getContextPath() + "/add-car-success");
+
     }
 }

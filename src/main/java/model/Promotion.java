@@ -1,6 +1,7 @@
 package model;
 
-import java.time.LocalDate;
+
+import java.sql.Date;
 
 public class Promotion {
     private int promoId;
@@ -8,14 +9,14 @@ public class Promotion {
     private String description;
     private double discountRate;
     private String discountType; // percent / fixed
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Date startDate;
+    private Date endDate;
     private boolean active;
 
     public Promotion() {
     }
 
-    public Promotion(int promoId, String code, String description, double discountRate, String discountType, LocalDate startDate, LocalDate endDate, boolean active) {
+    public Promotion(int promoId, String code, String description, double discountRate, String discountType, Date startDate, Date endDate, boolean active) {
         this.promoId = promoId;
         this.code = code;
         this.description = description;
@@ -67,19 +68,19 @@ public class Promotion {
         this.discountType = discountType;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

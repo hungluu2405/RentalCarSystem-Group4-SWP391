@@ -5,6 +5,7 @@ import dao.implement.CarDAO;
 import dao.implement.PromotionDAO;
 import dao.implement.BookingPromotionDAO;
 import model.Booking;
+import model.Car;
 import model.Promotion;
 import model.BookingPromotion;
 
@@ -19,66 +20,67 @@ public class BookingService {
     private final PromotionDAO promoDAO = new PromotionDAO();
     private final BookingPromotionDAO bookingPromoDAO = new BookingPromotionDAO();
 
-    /**
-     * Tạo booking mới, có hỗ trợ áp dụng mã giảm giá
-     */
-    /**
-     * Tạo booking mới, sử dụng giá đã tính từ frontend
-     */
     public String createBooking(Booking booking, String promoCode, double frontendDiscount) {
 
         LocalDate today = LocalDate.now();
 
-        // 1️⃣ Kiểm tra logic ngày
+        // Kiểm tra logic ngày
         if (booking.getStartDate().isBefore(today)) {
-            return "❌ Ngày nhận xe không được nhỏ hơn ngày hiện tại!";
+            return "❌The pickup date cannot be earlier than the current date!";
         }
         if (booking.getEndDate().isBefore(booking.getStartDate())) {
-            return "❌ Ngày trả xe phải sau ngày nhận xe!";
+            return "❌ Please select a return date that is after the pickup date!";
+        }
+        //kiểm tra xem đặt xe của chính  mình được không
+        Car car = carDAO.findById(booking.getCarId());
+        if (car == null) {
+            return "❌ The selected car does not exist!";
+        }
+        if (car.getOwnerId() == booking.getUserId()) {
+            return "❌ You cannot book your own car!";
         }
 
-        // 2️⃣ Kiểm tra xe có bị trùng lịch không
+        //  Kiểm tra xe có bị trùng lịch không
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
                 booking.getEndDate()
         );
         if (!available) {
-            return "❌ Xe đã có người thuê trong thời gian này!";
+            return "❌This car is already booked for the selected period!";
         }
 
         double discountAmount = frontendDiscount;
         double finalPrice = booking.getTotalPrice();
 
-        // 3️⃣ VALIDATE mã khuyến mãi (nếu có)
+        //  VALIDATE mã khuyến mãi (nếu có)
         if (promoCode != null && !promoCode.trim().isEmpty()) {
             Promotion promo = promoDAO.findByCode(promoCode.trim());
             if (promo == null) {
-                return "❌ Mã khuyến mãi không tồn tại!";
+                return "❌ The promo code does not exist!";
             }
 
             if (!promo.isActive()) {
-                return "❌ Mã khuyến mãi đã bị ngừng hoạt động!";
+                return "❌ This promo code is no longer active!";
             }
 
-            if (promo.getStartDate().isAfter(today) || promo.getEndDate().isBefore(today)) {
-                return "❌ Mã khuyến mãi đã hết hạn!";
+            if (promo.getStartDate().toLocalDate().isAfter(today) ||
+                    promo.getEndDate().toLocalDate().isBefore(today)) {
+                return "❌ This promo code has expired!";
             }
-
-            // Không tính lại discount, chỉ validate mã
         }
 
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
-        // 4️⃣ Lưu booking
+
         boolean success = bookingDAO.insert(booking);
 
         if (!success) {
-            return "❌ Đặt xe thất bại, vui lòng thử lại!";
+            return "❌ Booking failed. Please try again!";
         }
 
-        // 5️⃣ Nếu có mã khuyến mãi, lưu vào bảng BOOKING_PROMOTION
+        //  Nếu có mã khuyến mãi, lưu vào bảng BOOKING_PROMOTION
         if (discountAmount > 0 && promoCode != null && !promoCode.trim().isEmpty()) {
             Promotion promo = promoDAO.findByCode(promoCode.trim());
             BookingPromotion bp = new BookingPromotion();
@@ -103,7 +105,7 @@ public class BookingService {
     }
 
     public boolean completeBooking(int bookingId) {
-        return bookingDAO.updateStatus(bookingId, "Paid");
+        return bookingDAO.updateStatus(bookingId, "Completed");
     }
 
     public boolean cancelBooking(int bookingId) {
