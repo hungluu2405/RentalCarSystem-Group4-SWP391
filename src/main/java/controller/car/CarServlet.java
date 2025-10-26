@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.CarViewModel;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "CarServlet", urlPatterns = {"/cars"})
@@ -20,7 +22,7 @@ public class CarServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // ===== Lấy các tham số lọc từ người dùng =====
+        // ... (Lấy các tham số name, brand, v.v. giữ nguyên) ...
         String name = request.getParameter("name");
         String brand = request.getParameter("brand");
         String typeId = request.getParameter("type");
@@ -29,13 +31,12 @@ public class CarServlet extends HttpServlet {
         String price = request.getParameter("price");
         String location = request.getParameter("location");
 
-        // ===== LẤY CÁC THAM SỐ THỜI GIAN TÌM KIẾM (MỚI) =====
         String startDate = request.getParameter("startDate");
         String pickupTime = request.getParameter("pickupTime");
         String endDate = request.getParameter("endDate");
         String dropoffTime = request.getParameter("dropoffTime");
 
-        // ===== Phân trang =====
+        // ... (Lấy page, pageSize, brandList, typeList... giữ nguyên) ...
         int page = 1;
         int pageSize = 9;
         try {
@@ -46,39 +47,68 @@ public class CarServlet extends HttpServlet {
             page = 1;
         }
 
-        // ===== Lấy danh sách filter =====
         List<String> brandList = carDAO.getAllBrands();
-        List<String> typeList = carDAO.getAllTypes(); // "id:name"
+        List<String> typeList = carDAO.getAllTypes();
         List<Integer> capacityList = carDAO.getAllCapacities();
         List<String> fuelList = carDAO.getAllFuelTypes();
 
+        List<CarViewModel> carList = new ArrayList<>();
+        int totalCars = 0;
+        int totalPages = 0;
+        boolean hasError = false;
 
-        List<CarViewModel> carList;
-        int totalCars;
-
-        // ===== KIỂM TRA ĐỂ QUYẾT ĐỊNH GỌI HÀM DAO NÀO =====
         boolean isDateTimeSearch = startDate != null && !startDate.isEmpty() &&
                 pickupTime != null && !pickupTime.isEmpty() &&
                 endDate != null && !endDate.isEmpty() &&
                 dropoffTime != null && !dropoffTime.isEmpty();
 
         if (isDateTimeSearch) {
-            // TRƯỜNG HỢP 1: Tìm kiếm từ /home (có ngày giờ)
-            // Gọi hàm MỚI (overloaded)
+            // === LOGIC VALIDATION ===
+            try {
+                LocalDateTime startDateTime = LocalDateTime.parse(startDate + "T" + pickupTime);
+                LocalDateTime endDateTime = LocalDateTime.parse(endDate + "T" + dropoffTime);
+
+                if (!endDateTime.isAfter(startDateTime)) {
+                    hasError = true;
+                    // SỬA Ở ĐÂY: Lưu lỗi vào SESSION (flash attribute)
+                    request.getSession().setAttribute("flashErrorMessage", "❌ Error:Return date/time must be after pickup date/time.");
+                }
+            } catch (Exception e) {
+                hasError = true;
+                // SỬA Ở ĐÂY: Lưu lỗi vào SESSION
+                request.getSession().setAttribute("flashErrorMessage", "❌ Error: Invalid date/time format.");
+            }
+
+            // === SỬA LOGIC CHUYỂN HƯỚNG KHI LỖI ===
+            if (hasError) {
+                // Lưu lại các giá trị form cũ vào Session để trả về trang chủ
+                request.getSession().setAttribute("flashForm_location", location);
+                request.getSession().setAttribute("flashForm_startDate", startDate);
+                request.getSession().setAttribute("flashForm_pickupTime", pickupTime);
+                request.getSession().setAttribute("flashForm_endDate", endDate);
+                request.getSession().setAttribute("flashForm_dropoffTime", dropoffTime);
+
+                // Chuyển hướng (REDIRECT) về trang chủ
+                response.sendRedirect(request.getContextPath() + "/home");
+                return; // QUAN TRỌNG: Dừng thực thi servlet
+            }
+
+            // Nếu không có lỗi, tiếp tục tìm xe
             carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location,
-                    startDate, pickupTime, endDate, dropoffTime, // Tham số mới
+                    startDate, pickupTime, endDate, dropoffTime,
                     page, pageSize);
 
             totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location,
-                    startDate, pickupTime, endDate, dropoffTime); // Tham số mới
+                    startDate, pickupTime, endDate, dropoffTime);
+
         } else {
-            // TRƯỜNG HỢP 2: Truy cập /cars trực tiếp (không có ngày giờ)
-            // Gọi hàm CŨ của bạn (được giữ nguyên)
+            // Trường hợp truy cập /cars trực tiếp (không có ngày giờ)
             carList = carDAO.findCars(name, brand, typeId, capacity, fuel, price, location, page, pageSize);
             totalCars = carDAO.countCars(name, brand, typeId, capacity, fuel, price, location);
         }
 
-        int totalPages = (int) Math.ceil((double) totalCars / pageSize);
+        // --- PHẦN NÀY CHỈ CHẠY KHI KHÔNG CÓ LỖI ---
+        totalPages = (int) Math.ceil((double) totalCars / pageSize);
 
         // ===== Gửi dữ liệu sang JSP =====
         request.setAttribute("brandList", brandList);
@@ -89,7 +119,7 @@ public class CarServlet extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
-        // ===== Giữ lại các giá trị filter đã nhập (BAO GỒM CẢ THỜI GIAN) =====
+        // ... (Giữ lại các giá trị filter đã nhập) ...
         request.setAttribute("name", name);
         request.setAttribute("brand", brand);
         request.setAttribute("typeId", typeId);
@@ -97,15 +127,12 @@ public class CarServlet extends HttpServlet {
         request.setAttribute("fuel", fuel);
         request.setAttribute("price", price);
         request.setAttribute("location", location);
-
-        // Luôn set các attribute này, kể cả khi chúng null
-        // để form tìm kiếm trên trang /cars có thể hiển thị lại
         request.setAttribute("startDate", startDate);
         request.setAttribute("pickupTime", pickupTime);
         request.setAttribute("endDate", endDate);
         request.setAttribute("dropoffTime", dropoffTime);
 
-        // ===== Chuyển đến trang JSP =====
+        // Chuyển đến trang cars-list.jsp
         request.getRequestDispatcher("view/car/cars-list.jsp").forward(request, response);
     }
 }
