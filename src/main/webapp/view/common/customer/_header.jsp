@@ -121,6 +121,8 @@
                     <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
                     <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
                     <a href="#"><i class="fa fa-youtube fa-lg"></i></a>
+                    <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
+                    <a href="#"><i class="fa fa-instagram fa-lg"></i></a>
                 </div>
             </div>
             <div class="clearfix"></div>
