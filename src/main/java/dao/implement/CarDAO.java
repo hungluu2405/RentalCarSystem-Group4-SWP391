@@ -599,7 +599,37 @@ public class CarDAO extends DBContext {
         }
     }
 
+    // 🔍 Lấy thông tin xe theo ID
+    public Car findById(int carId) {
+        String sql = "SELECT * FROM CAR WHERE CAR_ID = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql) ) {
+            ps.setInt(1, carId);
+            ResultSet rs = ps.executeQuery();
 
+            if (rs.next()) {
+                Car car = new Car();
+                car.setCarId(rs.getInt("CAR_ID"));
+                car.setOwnerId(rs.getInt("USER_ID"));
+                car.setTypeId(rs.getInt("TYPE_ID"));
+                car.setModel(rs.getString("MODEL"));
+                car.setBrand(rs.getString("BRAND"));
+                car.setYear(rs.getInt("YEAR"));
+                car.setLicensePlate(rs.getString("LICENSE_PLATE"));
+                car.setCapacity(rs.getInt("CAPACITY"));
+                car.setTransmission(rs.getString("TRANSMISSION"));
+                car.setFuelType(rs.getString("FUEL_TYPE"));
+                car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                car.setDescription(rs.getString("DESCRIPTION"));
+                car.setAvailability(rs.getBoolean("AVAILABILITY"));
+                car.setLocation(rs.getString("LOCATION"));
+                return car;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public double getCarPrice(int carId) {
         String sql = "SELECT PRICE_PER_DAY FROM CAR WHERE CAR_ID = ?";
