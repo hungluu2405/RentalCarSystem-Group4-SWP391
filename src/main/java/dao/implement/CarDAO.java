@@ -21,15 +21,7 @@ public class CarDAO extends DBContext {
                 + "(SELECT TOP 1 IMAGE_URL FROM CAR_IMAGE WHERE CAR_ID = c.CAR_ID) AS IMAGE_URL "
                 + "FROM CAR c "
                 + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
-                + "WHERE c.AVAILABILITY = 1 "
-                + "AND NOT EXISTS ( "
-                + "    SELECT 1 FROM BOOKING b "
-                + "    WHERE b.CAR_ID = c.CAR_ID "
-                + "    AND b.STATUS IN ('Approved', 'Pending','Paid') "
-                + ")";
-
-
-
+                + "WHERE c.AVAILABILITY = 1 ";
 
         if (name != null && !name.isEmpty()) {
             sql += " AND (c.BRAND LIKE ? OR c.MODEL LIKE ?)";
@@ -125,7 +117,7 @@ public class CarDAO extends DBContext {
 
 
 
-    // Đếm tổng số xe thỏa điều kiện filter (chỉ xe availability = 1 và chưa có booking Approved/Pending)
+    // Đếm tổng số xe thỏa điều kiện filter (chỉ xe availability = 1 )
     public int countCars(String name, String brand, String typeIdStr,
                          String capacity, String fuel, String price,
                          String location) {
@@ -135,15 +127,7 @@ public class CarDAO extends DBContext {
         String sql = "SELECT COUNT(DISTINCT c.CAR_ID) AS total "
                 + "FROM CAR c "
                 + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
-                + "WHERE c.AVAILABILITY = 1 "
-                + "AND NOT EXISTS ( "
-                + "    SELECT 1 FROM BOOKING b "
-                + "    WHERE b.CAR_ID = c.CAR_ID "
-                + "    AND b.STATUS IN ('Approved', 'Pending','Paid') "
-                + ")";
-
-
-
+                + "WHERE c.AVAILABILITY = 1 ";
 
         if (name != null && !name.isEmpty()) {
             sql += " AND (c.BRAND LIKE ? OR c.MODEL LIKE ?)";
