@@ -79,26 +79,6 @@ public class AddCarController extends HttpServlet {
             request.getRequestDispatcher("/view/carOwner/addCar.jsp").forward(request, response);
             return;
         }
-//         Hàm forward khi có lỗi (giữ dữ liệu đã nhập)
-//        Runnable forwardWithError = () -> {
-//            try {
-//                request.setAttribute("input_brand", brand);
-//                request.setAttribute("input_model", model);
-//                request.setAttribute("input_transmission", transmission);
-//                request.setAttribute("input_fuelType", fuelType);
-//                request.setAttribute("input_year", year);
-//                request.setAttribute("input_licensePlate", licensePlate);
-//                request.setAttribute("input_capacity", capacity);
-//                request.setAttribute("input_pricePerDay", pricePerDay);
-//                request.setAttribute("input_typeId", typeId);
-//                request.setAttribute("input_location", location);
-//                request.setAttribute("input_description", description);
-//                request.getRequestDispatcher("/views/carOwner/addCar.jsp").forward(request, response);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        };
-
 
         Car car = new Car();
         car.setBrand(brand);
