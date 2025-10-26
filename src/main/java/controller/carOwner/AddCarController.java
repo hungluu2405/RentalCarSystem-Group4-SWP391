@@ -10,6 +10,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import service.AddCarService;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -60,10 +62,43 @@ public class AddCarController extends HttpServlet {
             priceRaw = priceRaw.replace(".", "").replace(",", "").trim(); // loại dấu . hoặc ,
         }
         BigDecimal pricePerDay = new BigDecimal(priceRaw);
-
         String description = request.getParameter("description");
         String location = request.getParameter("location");
         int typeId = Integer.parseInt(request.getParameter("typeId"));
+
+        AddCarService addCarService = new AddCarService();
+        if (addCarService.isDuplicateLicensePlate(licensePlate)) {
+            request.setAttribute("errorMessage", "Biển số xe đã tồn tại trong hệ thống!");
+            // Gửi lại form và hiển thị thông báo lỗi
+            List<CarType> carTypes = carDAO.getAllCarTypes();
+            List<String> fuelTypes = carDAO.getAllFuelTypess();
+            List<String> transmissions = carDAO.getAllTransmissions();
+            request.setAttribute("carTypes", carTypes);
+            request.setAttribute("fuelTypes", fuelTypes);
+            request.setAttribute("transmissions", transmissions);
+            request.getRequestDispatcher("/view/carOwner/addCar.jsp").forward(request, response);
+            return;
+        }
+//         Hàm forward khi có lỗi (giữ dữ liệu đã nhập)
+//        Runnable forwardWithError = () -> {
+//            try {
+//                request.setAttribute("input_brand", brand);
+//                request.setAttribute("input_model", model);
+//                request.setAttribute("input_transmission", transmission);
+//                request.setAttribute("input_fuelType", fuelType);
+//                request.setAttribute("input_year", year);
+//                request.setAttribute("input_licensePlate", licensePlate);
+//                request.setAttribute("input_capacity", capacity);
+//                request.setAttribute("input_pricePerDay", pricePerDay);
+//                request.setAttribute("input_typeId", typeId);
+//                request.setAttribute("input_location", location);
+//                request.setAttribute("input_description", description);
+//                request.getRequestDispatcher("/views/carOwner/addCar.jsp").forward(request, response);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        };
+
 
         Car car = new Car();
         car.setBrand(brand);
@@ -105,7 +140,6 @@ public class AddCarController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("addedCarId", carId);
 
-    //  Chuyển hướng sang trang thành công
             response.sendRedirect(request.getContextPath() + "/add-car-success");
 
     }
