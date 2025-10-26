@@ -105,7 +105,7 @@ public class BookingService {
     }
 
     public boolean completeBooking(int bookingId) {
-        // ⚙️ Giờ 'Completed' nghĩa là KHÁCH ĐÃ TRẢ XE
+        // Giờ 'Completed' nghĩa là KHÁCH ĐÃ TRẢ XE
         return bookingDAO.updateStatus(bookingId, "Completed");
     }
 
@@ -114,7 +114,7 @@ public class BookingService {
     }
 
     public boolean markAsPaid(int bookingId) {
-        // ⚙️ Thêm mới: đánh dấu đã thanh toán
+        // Thêm mới: đánh dấu đã thanh toán
         return bookingDAO.updateStatus(bookingId, "Paid");
     }
 }
