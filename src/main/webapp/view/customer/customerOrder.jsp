@@ -225,7 +225,7 @@
                                         </thead>
                                         <tbody>
                                         <%-- Vòng lặp JSTL --%>
-                                        <c:forEach var="order" items="${allBookings}">
+                                        <c:forEach var="order" items="${historyBookings}">
                                             <%-- Lọc đơn hàng lịch sử (Trip History) --%>
                                             <c:if test="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Cancelled'}">
                                                 <tr>

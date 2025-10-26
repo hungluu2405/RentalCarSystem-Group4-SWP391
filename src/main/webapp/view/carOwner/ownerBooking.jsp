@@ -126,8 +126,8 @@
                                     </thead>
                                     <tbody>
                                     <c:choose>
-                                        <c:when test="${not empty currentBookings}">
-                                            <c:forEach var="b" items="${currentBookings}">
+                                        <c:when test="${not empty pendingBookings}">
+                                            <c:forEach var="b" items="${pendingBookings}">
                                                 <tr>
                                                     <td>${b.carName}</td>
                                                     <td>${b.customerProfile.fullName}</td>
@@ -227,8 +227,8 @@
                                 </table>
                             </div>
                         </div>
-                    </div> <!-- end .row -->
-                </div> <!-- end .container -->
+                    </div>
+                </div>
         </section>
 
         <!-- FOOTER -->
@@ -258,7 +258,7 @@
             });
         </script>
 
-    </div> <!-- end #wrapper -->
+    </div>
 </body>
 </html>
 
