@@ -470,7 +470,7 @@
                                 <!-- Nút về đầu -->
                                 <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                                     <a class="page-link"
-                                       href="cars?page=1&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">«</a>
+                                       href="cars?page=1&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">«</a>
                                 </li>
 
                                 <c:choose>
@@ -478,7 +478,7 @@
                                         <c:forEach var="i" begin="1" end="${totalPages < 3 ? totalPages : 3}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
                                                         ${i}
                                                 </a>
                                             </li>
@@ -487,7 +487,7 @@
                                             <li class="page-item disabled"><span class="page-link">...</span></li>
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                   href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
                                                         ${totalPages}
                                                 </a>
                                             </li>
@@ -506,7 +506,7 @@
                                         <c:forEach var="i" begin="${start}" end="${end}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                   href="cars?page=${i}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
                                                         ${i}
                                                 </a>
                                             </li>
@@ -516,7 +516,7 @@
                                             <li class="page-item disabled"><span class="page-link">...</span></li>
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">
+                                                   href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">
                                                         ${totalPages}
                                                 </a>
                                             </li>
@@ -527,7 +527,7 @@
                                 <!-- Nút đến cuối -->
                                 <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                                     <a class="page-link"
-                                       href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&price=${param.price}">»</a>
+                                       href="cars?page=${totalPages}&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}">»</a>
                                 </li>
                             </ul>
 
@@ -539,6 +539,7 @@
                                     <input type="hidden" name="type" value="${param.type}">
                                     <input type="hidden" name="capacity" value="${param.capacity}">
                                     <input type="hidden" name="fuel" value="${param.fuel}">
+                                    <input type="hidden" name="location" value="${param.location}">
                                     <input type="hidden" name="price" value="${param.price}">
                                     <input type="number" name="page" min="1" max="${totalPages}"
                                            class="form-control form-control-sm" placeholder="Trang..."
