@@ -2,6 +2,7 @@ package controller.admin;
 
 import dao.implement.BookingDAO;
 import dao.implement.CarDAO;
+import dao.implement.PaymentDAO;
 import dao.implement.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,18 +24,19 @@ public class CarDBServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
+        PaymentDAO paymentDAO = new PaymentDAO();
         List<Car> listC = carDAO.getAllCarsForAdmin();
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
         int totalBookings = bookingDAO.countAllBookings();
-
+        int totalReports = paymentDAO.countAllReport();
         // 2️⃣ Gửi danh sách sang JSP
         request.setAttribute("listC", listC);
         request.setAttribute("totalUsers",totalUsers);
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
-
+        request.setAttribute("totalReports",totalReports);
         // 3️⃣ Forward sang JSP hiển thị
 
         request.getRequestDispatcher("/view/admin/Cardashboard.jsp").forward(request, response);
