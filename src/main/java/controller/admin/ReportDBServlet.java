@@ -1,46 +1,37 @@
 package controller.admin;
 
 import dao.implement.*;
-import jakarta.servlet.ServletException;
+import model.Payment;
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-import model.Booking;
-import model.Car;
-import model.User;
-
-@WebServlet(name = "AccountDashBoard", urlPatterns = {"/accountDB"})
-public class AccountDBServlet extends HttpServlet {
-
+@WebServlet("/reportDB")
+public class ReportDBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        PaymentDAO paymentDAO = new PaymentDAO();
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
-        PaymentDAO paymentDAO = new PaymentDAO();
-        List<User> listU = userDAO.getAllUsersForAdmin();
+
+        // Giả sử DAO của bạn có hàm getAll()
+        List<Payment> listRP = paymentDAO.getAll();
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
         int totalBookings = bookingDAO.countAllBookings();
         int totalReports = paymentDAO.countAllReport();
-        request.setAttribute("listU", listU);
+
+        request.setAttribute("listRP", listRP);
         request.setAttribute("totalUsers",totalUsers);
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
         request.setAttribute("totalReports",totalReports);
-        request.getRequestDispatcher("/view/admin/accountdashboard.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
+        request.getRequestDispatcher("/view/admin/Report.jsp").forward(request, response);
     }
 }
