@@ -44,7 +44,7 @@ public class OwnerBooking extends HttpServlet {
         // 🔹 Lấy danh sách xe và booking
         List<CarViewModel> myCars = carDAO.getCarsByOwner(ownerId);
         List<BookingDetail> pendingBookings = bookingDAO.getPendingBookingsForOwner(ownerId);
-      //  List<BookingDetail> recentBookings = bookingDAO.getRecentBookingsByOwner(ownerId, 5);
+       List<BookingDetail> recentBookings = bookingDAO.getRecentBookingsByOwner(ownerId, 100);
         List<BookingDetail> historyBookings = bookingDAO.getHistoryBookingsForOwner(ownerId);
 
         // 🔹 Gửi dữ liệu sang JSP
@@ -54,7 +54,8 @@ public class OwnerBooking extends HttpServlet {
         request.setAttribute("cancelledBookings", cancelledBookings);
         request.setAttribute("myCars", myCars);
         request.setAttribute("pendingBookings", pendingBookings);
-       // request.setAttribute("recentBookings", recentBookings);
+        request.setAttribute("recentBookings", recentBookings);
+        request.setAttribute("historyBookings", historyBookings);
 
         request.getRequestDispatcher("/view/carOwner/ownerBooking.jsp").forward(request, response);
     }
