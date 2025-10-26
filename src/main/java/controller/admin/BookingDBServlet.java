@@ -23,10 +23,12 @@ public class BookingDBServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
+        PaymentDAO paymentDAO = new PaymentDAO();
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
         int totalBookings = bookingDAO.countAllBookings();
+        int totalReports = paymentDAO.countAllReport();
         List<Booking> listB = null;
         try {
             listB = bookingDAO.getAllBookings();
@@ -38,7 +40,7 @@ public class BookingDBServlet extends HttpServlet {
         request.setAttribute("totalUsers",totalUsers);
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
-
+        request.setAttribute("totalReports",totalReports);
         request.getRequestDispatcher("/view/admin/BookingDashboard.jsp").forward(request, response);
     }
 
