@@ -11,16 +11,25 @@ import model.CarType;
 
 public class CarDAO extends DBContext {
 
-    // Lấy danh sách xe có filter và phân trang
+    // Lấy danh sách xe có filter và phân trang (có tìm theo location, không dấu)
     public List<CarViewModel> findCars(String name, String brand, String typeIdStr,
                                        String capacity, String fuel, String price,
-                                       int page, int pageSize) {
+                                       String location, int page, int pageSize) {
         List<CarViewModel> list = new ArrayList<>();
-        String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.PRICE_PER_DAY, c.CAPACITY, "
+        String sql = "SELECT DISTINCT c.CAR_ID, c.BRAND, c.MODEL, c.PRICE_PER_DAY, c.CAPACITY, "
                 + "c.TRANSMISSION, c.FUEL_TYPE, c.LOCATION, t.NAME AS CAR_TYPE_NAME, "
                 + "(SELECT TOP 1 IMAGE_URL FROM CAR_IMAGE WHERE CAR_ID = c.CAR_ID) AS IMAGE_URL "
                 + "FROM CAR c "
-                + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID WHERE 1=1";
+                + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
+                + "WHERE c.AVAILABILITY = 1 "
+                + "AND NOT EXISTS ( "
+                + "    SELECT 1 FROM BOOKING b "
+                + "    WHERE b.CAR_ID = c.CAR_ID "
+                + "    AND b.STATUS IN ('Approved', 'Pending','Paid') "
+                + ")";
+
+
+
 
         if (name != null && !name.isEmpty()) {
             sql += " AND (c.BRAND LIKE ? OR c.MODEL LIKE ?)";
@@ -40,11 +49,15 @@ public class CarDAO extends DBContext {
         if (price != null && !price.isEmpty()) {
             sql += " AND c.PRICE_PER_DAY <= ?";
         }
+        if (location != null && !location.isEmpty()) {
+            sql += " AND c.LOCATION COLLATE SQL_Latin1_General_Cp1253_CI_AI LIKE ?";
+        }
+
 
         sql += " ORDER BY c.CAR_ID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             int idx = 1;
             if (name != null && !name.isEmpty()) {
                 ps.setString(idx++, "%" + name + "%");
@@ -65,9 +78,14 @@ public class CarDAO extends DBContext {
             if (price != null && !price.isEmpty()) {
                 ps.setBigDecimal(idx++, new BigDecimal(price));
             }
+            if (location != null && !location.isEmpty()) {
+                ps.setString(idx++, "%" + location + "%");
+            }
+
 
             ps.setInt(idx++, (page - 1) * pageSize);
             ps.setInt(idx++, pageSize);
+
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -80,7 +98,8 @@ public class CarDAO extends DBContext {
                 car.setTransmission(rs.getString("TRANSMISSION"));
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
-                car.setLocation(rs.getString("LOCATION")); // ✅ thêm location
+                car.setLocation(rs.getString("LOCATION"));
+
 
                 List<CarImage> images = new ArrayList<>();
                 String imageUrl = rs.getString("IMAGE_URL");
@@ -92,20 +111,39 @@ public class CarDAO extends DBContext {
                 }
                 car.setImages(images);
 
+
                 list.add(car);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
         return list;
     }
 
-    // countCars version
+
+
+
+    // Đếm tổng số xe thỏa điều kiện filter (chỉ xe availability = 1 và chưa có booking Approved/Pending)
     public int countCars(String name, String brand, String typeIdStr,
-                         String capacity, String fuel, String price) {
-        String sql = "SELECT COUNT(*) FROM CAR c "
-                + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID WHERE 1=1";
+                         String capacity, String fuel, String price,
+                         String location) {
+        int total = 0;
+
+
+        String sql = "SELECT COUNT(DISTINCT c.CAR_ID) AS total "
+                + "FROM CAR c "
+                + "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID "
+                + "WHERE c.AVAILABILITY = 1 "
+                + "AND NOT EXISTS ( "
+                + "    SELECT 1 FROM BOOKING b "
+                + "    WHERE b.CAR_ID = c.CAR_ID "
+                + "    AND b.STATUS IN ('Approved', 'Pending','Paid') "
+                + ")";
+
+
+
 
         if (name != null && !name.isEmpty()) {
             sql += " AND (c.BRAND LIKE ? OR c.MODEL LIKE ?)";
@@ -125,11 +163,15 @@ public class CarDAO extends DBContext {
         if (price != null && !price.isEmpty()) {
             sql += " AND c.PRICE_PER_DAY <= ?";
         }
+        if (location != null && !location.isEmpty()) {
+            sql += " AND c.LOCATION COLLATE SQL_Latin1_General_Cp1253_CI_AI LIKE ?";
+        }
 
-        int total = 0;
+
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
             int idx = 1;
+
+
             if (name != null && !name.isEmpty()) {
                 ps.setString(idx++, "%" + name + "%");
                 ps.setString(idx++, "%" + name + "%");
@@ -149,16 +191,28 @@ public class CarDAO extends DBContext {
             if (price != null && !price.isEmpty()) {
                 ps.setBigDecimal(idx++, new BigDecimal(price));
             }
+            if (location != null && !location.isEmpty()) {
+                ps.setString(idx++, "%" + location + "%");
+            }
+
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                total = rs.getInt(1);
+                total = rs.getInt("total");
             }
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
         return total;
     }
+
+
+
+
 
     public List<String> getAllBrands() {
         List<String> list = new ArrayList<>();
@@ -383,7 +437,7 @@ public class CarDAO extends DBContext {
         return 0;
     }
 
- //Hàm đếm tổng số lượng tất cả các booking (đặt xe)
+    //Hàm đếm tổng số lượng tất cả các booking (đặt xe)
 
     public int countTotalBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) " +
@@ -401,7 +455,7 @@ public class CarDAO extends DBContext {
         }
         return 0;
     }
-//Hàm đếm số lượng booking đã được chấp nhận (Approved)
+    //Hàm đếm số lượng booking đã được chấp nhận (Approved)
     public int countApprovedBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) " +
                 "FROM BOOKING b " +
@@ -603,7 +657,7 @@ public class CarDAO extends DBContext {
     public Car findById(int carId) {
         String sql = "SELECT * FROM CAR WHERE CAR_ID = ?";
         try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql) ) {
+             PreparedStatement ps = conn.prepareStatement(sql) ) {
             ps.setInt(1, carId);
             ResultSet rs = ps.executeQuery();
 
