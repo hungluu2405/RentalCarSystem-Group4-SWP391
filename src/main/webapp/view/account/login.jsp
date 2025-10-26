@@ -206,12 +206,12 @@
 
                                     <div class="field-set mb-3">
                                         <input type="text" name="loginKey" id="loginKey" class="form-control"
-                                               placeholder="Email or Username" required/>
+                                               placeholder="Email or Username" value='${formData.loginKey}' required/>
                                     </div>
 
                                     <div class="field-set">
                                         <input type="password" name="password" id="password" class="form-control"
-                                               placeholder="Your Password" required/>
+                                               placeholder="Your Password"  required/>
                                     </div>
 
                                     <div class="text-end mt-2">
