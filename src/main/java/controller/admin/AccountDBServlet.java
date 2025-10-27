@@ -23,18 +23,18 @@ public class AccountDBServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
-
+        PaymentDAO paymentDAO = new PaymentDAO();
         List<User> listU = userDAO.getAllUsersForAdmin();
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
         int totalBookings = bookingDAO.countAllBookings();
-
+        int totalReports = paymentDAO.countAllReport();
         request.setAttribute("listU", listU);
         request.setAttribute("totalUsers",totalUsers);
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
-
+        request.setAttribute("totalReports",totalReports);
         request.getRequestDispatcher("/view/admin/accountdashboard.jsp").forward(request, response);
     }
 

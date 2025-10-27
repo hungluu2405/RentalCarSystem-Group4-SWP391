@@ -7,15 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <ul class="sidebar navbar-nav">
-    <li class="nav-item active">
-        <a class="nav-link" href="accountDB">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
+
     <li class="nav-item">
         <a class="nav-link" href="accountDB">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="fas fa-id-card"></i>
             <span>Account</span></a>
     </li>
 
@@ -28,5 +23,10 @@
         <a class="nav-link" href="bookingDB">
             <i class="fas fa-fw fa-table"></i>
             <span>Booking history</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="reportDB">
+            <i class="fas fa-chart-bar"></i>
+            <span>Report</span></a>
     </li>
 </ul>

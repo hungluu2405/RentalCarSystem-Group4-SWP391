@@ -37,7 +37,7 @@
         <li>
             <a href="${pageContext.request.contextPath}/owner/ownerBooking"
                class="${activePage == 'ownerBooking' ? 'active' : ''}">
-                <i class="fa fa-home"></i> Booking
+                <i class="fa fa-home"></i> View Booking
             </a>
         </li>
         <li>
@@ -51,8 +51,8 @@
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/owner/viewBookingHistory" class="${activePage == 'viewBookingHistory' ? 'active' : ''}">
-                <i class="fa fa-history"></i> View booking history
+            <a href="${pageContext.request.contextPath}/owner/myBooking" class="${activePage == 'myBooking' ? 'active' : ''}">
+                <i class="fa fa-history"></i> My Booking
             </a>
         </li>
 

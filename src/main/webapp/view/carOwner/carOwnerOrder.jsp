@@ -1,10 +1,17 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tunge
+  Date: 10/26/2025
+  Time: 10:50 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <jsp:include page="../common/customer/_head.jsp"/>
+    <jsp:include page="../common/carOwner/_headOwner.jsp"/>
     <style>
         /* CSS Giữ Nguyên, chỉ thêm các lớp màu mới */
         .tab-container { display: flex; gap: 30px; border-bottom: 2px solid #eaeaea; margin-top: 10px; margin-bottom: 20px; }
@@ -27,7 +34,7 @@
 <body>
 <div id="wrapper">
 
-    <jsp:include page="../common/customer/_header.jsp"/>
+    <jsp:include page="../common/carOwner/_headerOwner.jsp"/>
 
     <div class="no-bottom no-top zebra" id="content">
         <%-- PHẦN HEADER VÀ SIDEBAR GIỮ NGUYÊN --%>
@@ -48,8 +55,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 mb30">
-                        <jsp:include page="../common/customer/_sidebar.jsp">
-                            <jsp:param name="activePage" value="orders"/>
+                        <jsp:include page="../common/carOwner/_sidebarOwner.jsp">
+                            <jsp:param name="activePage" value="myBooking"/>
                         </jsp:include>
                     </div>
 
@@ -210,7 +217,7 @@
         </section>
     </div>
 
-    <jsp:include page="../common/customer/_footer_scripts.jsp"/>
+    <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
 
 <script>
