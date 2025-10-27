@@ -35,6 +35,7 @@ public class AccountDBServlet extends HttpServlet {
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
         request.setAttribute("totalReports",totalReports);
+        request.setAttribute("activePage", "account");
         request.getRequestDispatcher("/view/admin/accountdashboard.jsp").forward(request, response);
     }
 
