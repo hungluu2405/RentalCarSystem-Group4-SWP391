@@ -62,7 +62,7 @@ public class PaymentDAO extends DBContext {
         if ("week".equalsIgnoreCase(type)) {
             sql = """
                 SELECT * FROM PAYMENT
-                WHERE STATUS = 'Completed'
+                WHERE STATUS = 'Paid'
                   AND DATEPART(YEAR, PAID_AT) = DATEPART(YEAR, GETDATE())
                   AND DATEPART(WEEK, PAID_AT) = DATEPART(WEEK, GETDATE())
                 ORDER BY PAID_AT DESC
@@ -70,7 +70,7 @@ public class PaymentDAO extends DBContext {
         } else if ("month".equalsIgnoreCase(type)) {
             sql = """
                 SELECT * FROM PAYMENT
-                WHERE STATUS = 'Completed'
+                WHERE STATUS = 'Paid'
                   AND YEAR(PAID_AT) = YEAR(GETDATE())
                   AND MONTH(PAID_AT) = MONTH(GETDATE())
                 ORDER BY PAID_AT DESC
@@ -104,7 +104,7 @@ public class PaymentDAO extends DBContext {
             sql = """
                 SELECT SUM(AMOUNT) AS Total
                 FROM PAYMENT
-                WHERE STATUS = 'Completed'
+                WHERE STATUS = 'Paid'
                   AND DATEPART(YEAR, PAID_AT) = DATEPART(YEAR, GETDATE())
                   AND DATEPART(WEEK, PAID_AT) = DATEPART(WEEK, GETDATE())
             """;
@@ -112,7 +112,7 @@ public class PaymentDAO extends DBContext {
             sql = """
                 SELECT SUM(AMOUNT) AS Total
                 FROM PAYMENT
-                WHERE STATUS = 'Completed'
+                WHERE STATUS = 'Paid'
                   AND YEAR(PAID_AT) = YEAR(GETDATE())
                   AND MONTH(PAID_AT) = MONTH(GETDATE())
             """;
