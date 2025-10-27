@@ -41,6 +41,7 @@ public class BookingDBServlet extends HttpServlet {
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
         request.setAttribute("totalReports",totalReports);
+        request.setAttribute("activePage", "booking");
         request.getRequestDispatcher("/view/admin/BookingDashboard.jsp").forward(request, response);
     }
 
