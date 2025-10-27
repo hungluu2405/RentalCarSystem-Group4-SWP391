@@ -19,12 +19,13 @@ public class CarViewModel {
     private String licensePlate;
     private int year;
     private int typeId;
+    private int availability;
+
 
     public CarViewModel() {
     }
 
-    public CarViewModel(String carTypeName, int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String description, String imageUrl, List<CarImage> images, String location, String licensePlate, int year, int typeId) {
-        this.carTypeName = carTypeName;
+    public CarViewModel(int carId, String brand, String model, BigDecimal pricePerDay, int capacity, String transmission, String fuelType, String carTypeName, String description, String imageUrl, List<CarImage> images, String location, String licensePlate, int year, int typeId, int availability) {
         this.carId = carId;
         this.brand = brand;
         this.model = model;
@@ -32,6 +33,7 @@ public class CarViewModel {
         this.capacity = capacity;
         this.transmission = transmission;
         this.fuelType = fuelType;
+        this.carTypeName = carTypeName;
         this.description = description;
         this.imageUrl = imageUrl;
         this.images = images;
@@ -39,6 +41,15 @@ public class CarViewModel {
         this.licensePlate = licensePlate;
         this.year = year;
         this.typeId = typeId;
+        this.availability = availability;
+    }
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(int availability) {
+        this.availability = availability;
     }
 
     public int getTypeId() {
