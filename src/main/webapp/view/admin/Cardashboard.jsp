@@ -93,7 +93,7 @@
                 <tbody>
                 <c:forEach var="car" items="${listC}">
                     <tr>
-                        <td>${car.carId}</td>
+                        <td><a href="${pageContext.request.contextPath}/admin/manageCar?id=${car.carId}">${car.carId}</a></td>
                         <td>${car.carOwnerName}</td>
                         <td>${car.typeName}</td>
                         <td>${car.brand}</td>
