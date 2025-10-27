@@ -11,7 +11,6 @@ import model.BookingPromotion;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 public class BookingService {
 
@@ -24,14 +23,15 @@ public class BookingService {
 
         LocalDate today = LocalDate.now();
 
-        // Kiểm tra logic ngày
+        // --- Kiểm tra logic ngày ---
         if (booking.getStartDate().isBefore(today)) {
             return "❌The pickup date cannot be earlier than the current date!";
         }
         if (booking.getEndDate().isBefore(booking.getStartDate())) {
             return "❌ Please select a return date that is after the pickup date!";
         }
-        //kiểm tra xem đặt xe của chính  mình được không
+
+        // --- Kiểm tra xe hợp lệ ---
         Car car = carDAO.findById(booking.getCarId());
         if (car == null) {
             return "❌ The selected car does not exist!";
@@ -40,7 +40,7 @@ public class BookingService {
             return "❌ You cannot book your own car!";
         }
 
-        //  Kiểm tra xe có bị trùng lịch không
+        // --- Kiểm tra xe có bị trùng lịch không ---
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
@@ -53,7 +53,7 @@ public class BookingService {
         double discountAmount = frontendDiscount;
         double finalPrice = booking.getTotalPrice();
 
-        //  VALIDATE mã khuyến mãi (nếu có)
+        // --- VALIDATE mã khuyến mãi (nếu có) ---
         if (promoCode != null && !promoCode.trim().isEmpty()) {
             Promotion promo = promoDAO.findByCode(promoCode.trim());
             if (promo == null) {
@@ -64,23 +64,22 @@ public class BookingService {
                 return "❌ This promo code is no longer active!";
             }
 
-            if (promo.getStartDate().toLocalDate().isAfter(today) ||
-                    promo.getEndDate().toLocalDate().isBefore(today)) {
+            if (promo.getStartDate().toLocalDate().isAfter(today)
+                    || promo.getEndDate().toLocalDate().isBefore(today)) {
                 return "❌ This promo code has expired!";
             }
         }
 
-        booking.setStatus("Pending");
+        // --- Khi tạo booking mới ---
+        booking.setStatus("Pending"); // khách vừa đặt
         booking.setCreatedAt(LocalDateTime.now());
 
-
         boolean success = bookingDAO.insert(booking);
-
         if (!success) {
             return "❌ Booking failed. Please try again!";
         }
 
-        //  Nếu có mã khuyến mãi, lưu vào bảng BOOKING_PROMOTION
+        // --- Nếu có mã khuyến mãi ---
         if (discountAmount > 0 && promoCode != null && !promoCode.trim().isEmpty()) {
             Promotion promo = promoDAO.findByCode(promoCode.trim());
             BookingPromotion bp = new BookingPromotion();
@@ -96,6 +95,7 @@ public class BookingService {
         return "success";
     }
 
+    // --- Các thao tác cập nhật trạng thái ---
     public boolean approveBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Approved");
     }
@@ -105,10 +105,16 @@ public class BookingService {
     }
 
     public boolean completeBooking(int bookingId) {
+        // Giờ 'Completed' nghĩa là KHÁCH ĐÃ TRẢ XE
         return bookingDAO.updateStatus(bookingId, "Completed");
     }
 
     public boolean cancelBooking(int bookingId) {
         return bookingDAO.updateStatus(bookingId, "Cancelled");
+    }
+
+    public boolean markAsPaid(int bookingId) {
+        // Thêm mới: đánh dấu đã thanh toán
+        return bookingDAO.updateStatus(bookingId, "Paid");
     }
 }

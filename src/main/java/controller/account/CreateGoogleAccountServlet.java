@@ -13,6 +13,8 @@ import model.Address;
 import model.GoogleUser;
 import model.User;
 import model.UserProfile;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(urlPatterns = {"/create-google-account"})
 public class CreateGoogleAccountServlet extends HttpServlet {
@@ -45,6 +47,19 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         String city = request.getParameter("city");
         String country = request.getParameter("country");
         String postalCode = request.getParameter("postal_code");
+
+        Map<String, String> formData = new HashMap<>();
+        formData.put("username", username);
+        formData.put("phone", phone);
+        formData.put("dob", dobString);
+        formData.put("gender", gender);
+        formData.put("driver_license_number", licenseNumber);
+        formData.put("address_line", addressLine);
+        formData.put("city", city);
+        formData.put("country", country);
+        formData.put("postal_code", postalCode);
+        formData.put("role_id", roleIdStr);
+        request.setAttribute("formData", formData);
 
         // 🟩 Kiểm tra username
         if (username == null || username.isEmpty()) {

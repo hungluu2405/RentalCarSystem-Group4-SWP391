@@ -103,8 +103,10 @@
                         <!-- Tabs -->
                         <div class="tab-container">
                             <button class="tab-btn active" id="tabPending">Pending Orders</button>
-                            <button class="tab-btn" id="tabHistory">Order History</button>
+                            <button class="tab-btn" id="tabActive">Active Orders</button>
+                            <button class="tab-btn" id="tabHistory">History Orders</button>
                         </div>
+
 
                         <!-- === TAB 1: Pending Orders === -->
                         <div id="pendingOrders" class="tab-content active">
@@ -127,7 +129,8 @@
                                     <tbody>
                                     <c:forEach var="order" items="${allBookings}">
                                         <c:set var="isPending" value="${order.status == 'Pending'}"/>
-                                        <c:set var="isHistory" value="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Approved'}"/>
+                                        <c:set var="isHistory" value="${order.status == 'Paid' || order.status == 'Approved'}"/>
+                                        <c:set var="isHistory" value="${order.status == 'Completed' || order.status == 'Rejected'}"/>
 
                                         <c:if test="${isPending}">
                                             <tr>
@@ -159,8 +162,8 @@
                             </div>
                         </div>
 
-                        <!-- === TAB 2: Order History === -->
-                        <div id="historyOrders" class="tab-content">
+                        <!-- === TAB 2: Order Active === -->
+                        <div id="activeOrders" class="tab-content">
                             <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
@@ -178,7 +181,7 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${allBookings}">
-                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Approved'}">
+                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -199,6 +202,9 @@
                                                         <c:when test="${order.status == 'Rejected'}">
                                                             <span class="badge bg-danger">Rejected</span>
                                                         </c:when>
+                                                        <c:when test="${order.status == 'Paid'}">
+                                                            <span class="badge bg-info text-dark">Paid</span>
+                                                        </c:when>
                                                         <c:otherwise>
                                                             <span class="badge bg-secondary">${order.status}</span>
                                                         </c:otherwise>
@@ -212,6 +218,64 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- === TAB 3: Order History === -->
+                        <div id="historyOrders" class="tab-content">
+                            <div class="table-responsive">
+                                <table class="table align-middle text-center">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Car</th>
+                                        <th>Customer</th>
+                                        <th>Phone</th>
+                                        <th>Pickup</th>
+                                        <th>Dropoff</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Total (VND)</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="order" items="${allBookings}">
+                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">
+                                            <tr>
+                                                <td>${order.carName}</td>
+                                                <td>${order.customerProfile.fullName}</td>
+                                                <td>${order.customerProfile.phone}</td>
+                                                <td>${order.pickupTime}</td>
+                                                <td>${order.dropoffTime}</td>
+                                                <td>${order.startDate}</td>
+                                                <td>${order.endDate}</td>
+                                                <td>${order.totalPrice}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${order.status == 'Approved'}">
+                                                            <span class="badge bg-primary">Approved</span>
+                                                        </c:when>
+                                                        <c:when test="${order.status == 'Completed'}">
+                                                            <span class="badge bg-success">Completed</span>
+                                                        </c:when>
+                                                        <c:when test="${order.status == 'Rejected'}">
+                                                            <span class="badge bg-danger">Rejected</span>
+                                                        </c:when>
+                                                        <c:when test="${order.status == 'Paid'}">
+                                                            <span class="badge bg-info text-dark">Paid</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge bg-secondary">${order.status}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                    </c:forEach>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                         </div>
                     </div>
                 </div>
@@ -221,28 +285,52 @@
         <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 
         <!-- SCRIPT: Tab Switching -->
+        <!-- SCRIPT: Tab Switching -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const tabPending = document.getElementById("tabPending");
+                const tabActive = document.getElementById("tabActive");
                 const tabHistory = document.getElementById("tabHistory");
+
                 const pendingOrders = document.getElementById("pendingOrders");
+                const activeOrders = document.getElementById("activeOrders");
                 const historyOrders = document.getElementById("historyOrders");
 
+                // Tab 1: Pending
                 tabPending.addEventListener("click", function () {
                     tabPending.classList.add("active");
+                    tabActive.classList.remove("active");
                     tabHistory.classList.remove("active");
+
                     pendingOrders.classList.add("active");
+                    activeOrders.classList.remove("active");
                     historyOrders.classList.remove("active");
                 });
 
+                // Tab 2: Active
+                tabActive.addEventListener("click", function () {
+                    tabActive.classList.add("active");
+                    tabPending.classList.remove("active");
+                    tabHistory.classList.remove("active");
+
+                    activeOrders.classList.add("active");
+                    pendingOrders.classList.remove("active");
+                    historyOrders.classList.remove("active");
+                });
+
+                // Tab 3: History
                 tabHistory.addEventListener("click", function () {
                     tabHistory.classList.add("active");
                     tabPending.classList.remove("active");
+                    tabActive.classList.remove("active");
+
                     historyOrders.classList.add("active");
                     pendingOrders.classList.remove("active");
+                    activeOrders.classList.remove("active");
                 });
             });
         </script>
+
 
     </div>
 </body>
