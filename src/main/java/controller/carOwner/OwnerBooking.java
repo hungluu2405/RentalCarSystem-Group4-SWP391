@@ -35,18 +35,18 @@ public class OwnerBooking extends HttpServlet {
 
         int ownerId = owner.getUserId();
 
-        // 🔹 Thống kê
+        // Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
         int totalBookings = carDAO.countTotalBookingsByOwner(ownerId);
         int activeBookings = carDAO.countApprovedBookingsByOwner(ownerId);
         int cancelledBookings = carDAO.countRejectedBookingsByOwner(ownerId);
 
-        // 🔹 Lấy danh sách xe và booking
+        // Lấy danh sách xe và booking
         List<CarViewModel> myCars = carDAO.getCarsByOwner(ownerId);
         List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
 
 
-        // 🔹 Gửi dữ liệu sang JSP
+        // Gửi dữ liệu sang JSP
         request.setAttribute("totalCars", totalCars);
         request.setAttribute("totalBookings", totalBookings);
         request.setAttribute("activeBookings", activeBookings);

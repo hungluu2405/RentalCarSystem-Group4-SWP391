@@ -204,6 +204,41 @@
                                         <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" required>
                                     </div>
 
+                                    <!-- Availability -->
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               id="availabilitySwitch"
+                                               name="availability"
+                                               value="1"
+                                               <c:if test="${car.availability == 1}">checked</c:if>>
+                                        <label class="form-check-label" for="availabilitySwitch">
+                                            <span id="availabilityLabel">
+                                              <c:choose>
+                                                  <c:when test="${car.availability == 1}">Available</c:when>
+                                                  <c:otherwise>Not Available</c:otherwise>
+                                              </c:choose>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <script>
+                                        // Thay đổi label khi gạt công tắc
+                                        const toggle = document.getElementById('availabilitySwitch');
+                                        const label = document.getElementById('availabilityLabel');
+                                        toggle.addEventListener('change', function () {
+                                            label.textContent = this.checked ? 'Available' : 'Not Available';
+                                        });
+                                    </script>
+                                    <input type="hidden" name="availability" value="0">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="availabilitySwitch"
+                                           name="availability"
+                                           value="1"
+                                           <c:if test="${car.availability == 1}">checked</c:if>>
+
+
                                     <!-- Description -->
                                     <div class="col-md-12 mb-3">
                                         <label>Description</label>
@@ -236,20 +271,6 @@
                                 }
                             </script>
 
-
-                            <script>
-                                function confirmDelete() {
-                                    if (confirm("Are you sure you want to delete this car? This action cannot be undone!")) {
-                                        const form = document.forms[0];
-                                        const input = document.createElement("input");
-                                        input.type = "hidden";
-                                        input.name = "action";
-                                        input.value = "delete";
-                                        form.appendChild(input);
-                                        form.submit();
-                                    }
-                                }
-                            </script>
                         </div>
                     </div>
                 </div>
