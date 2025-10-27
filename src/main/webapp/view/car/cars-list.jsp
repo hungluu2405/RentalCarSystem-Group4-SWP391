@@ -92,7 +92,7 @@
                                                     <%-- Giả sử: 2 = Car Owner --%>
                                                     <c:when test="${sessionScope.user.roleId == 2}">
                                                         <a class="menu-item"
-                                                           href="${pageContext.request.contextPath}/owner/dashboard"
+                                                           href="${pageContext.request.contextPath}/owner/profile"
                                                            role="menuitem">Tài khoản Chủ xe</a>
                                                     </c:when>
 
