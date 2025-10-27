@@ -435,8 +435,26 @@
                             <div class="col-lg-12">
                                 <div class="spacer-single sm-hide"></div>
 
+                                <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
                                 <div class="form-wrapper-center">
                                     <div class="p-4 rounded-3 shadow-soft" data-bgcolor="#ffffff">
+
+                                        <%-- THÊM VÀO: Hiển thị thông báo lỗi (nếu có) --%>
+                                            <c:if test="${not empty errorMessage}">
+                                                <div class="alert alert-danger" role="alert"
+                                                     style="
+                                                             margin-bottom: 15px;  <%-- SỬA: Xóa max-width và margin auto --%>
+                                                             display: flex;
+                                                             align-items: center;
+                                                             font-weight: 500;
+                                                             font-size: 0.95rem;
+                                                             ">
+
+                                                        <%-- Nội dung lỗi (giờ sẽ là tiếng Anh) --%>
+                                                    <span>${errorMessage}</span>
+                                                </div>
+                                            </c:if>
 
                                         <form action="${pageContext.request.contextPath}/cars" method="get" class="main-search-form-simplified">
 
@@ -444,35 +462,44 @@
 
                                                 <div class="input-group-simplified location-group-simplified">
                                                     <label for="location">Pickup and return location</label>
-                                                    <input type="text" id="autocomplete_location" name="location" placeholder="Select Car Location" class="form-control" required>
+                                                    <%-- SỬA: Thêm value="${location}" --%>
+                                                    <input type="text" id="autocomplete_location" name="location" placeholder="Chọn địa điểm tìm xe" class="form-control" required value="${location}">
                                                 </div>
 
                                                 <div class="input-group-simplified">
                                                     <label for="pickupDate">Pickup Date</label>
-                                                    <input type="date" id="pickupDate" name="startDate" class="form-control" required>
+                                                    <%-- SỬA: Thêm value="${startDate}" --%>
+                                                    <input type="date" id="pickupDate" name="startDate" class="form-control" required value="${startDate}">
                                                 </div>
 
                                                 <div class="input-group-simplified">
                                                     <label for="pickupTime">Pickup Time</label>
                                                     <select id="pickupTime" name="pickupTime" class="form-control" required>
-                                                        <option selected disabled value="">Select Time</option>
+                                                        <%-- SỬA: Logic chọn 'selected' cho option mặc định --%>
+                                                        <option ${empty pickupTime ? 'selected' : ''} disabled value="">Select Time</option>
                                                         <c:forEach var="hour" begin="6" end="22">
-                                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                                            <%-- SỬA: Logic kiểm tra và thêm 'selected' cho giá trị cũ --%>
+                                                            <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00" />
+                                                            <option value="${timeValue}" ${timeValue eq pickupTime ? 'selected' : ''}>${timeValue}</option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
 
                                                 <div class="input-group-simplified">
                                                     <label for="returnDate">Return Date</label>
-                                                    <input type="date" id="returnDate" name="endDate" class="form-control" required>
+                                                    <%-- SỬA: Thêm value="${endDate}" --%>
+                                                    <input type="date" id="returnDate" name="endDate" class="form-control" required value="${endDate}">
                                                 </div>
 
                                                 <div class="input-group-simplified">
                                                     <label for="returnTime">Return Time</label>
                                                     <select id="returnTime" name="dropoffTime" class="form-control" required>
-                                                        <option selected disabled value="">Select Time</option>
+                                                        <%-- SỬA: Logic chọn 'selected' cho option mặc định --%>
+                                                        <option ${empty dropoffTime ? 'selected' : ''} disabled value="">Select Time</option>
                                                         <c:forEach var="hour" begin="6" end="22">
-                                                            <option value="${hour < 10 ? '0' : ''}${hour}:00">${hour < 10 ? '0' : ''}${hour}:00</option>
+                                                            <%-- SỬA: Logic kiểm tra và thêm 'selected' cho giá trị cũ --%>
+                                                            <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00" />
+                                                            <option value="${timeValue}" ${timeValue eq dropoffTime ? 'selected' : ''}>${timeValue}</option>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
@@ -704,11 +731,11 @@
                                             <div class="d-img">
                                                 <img src="${pageContext.request.contextPath}/${not empty car.imageUrl ? car.imageUrl : 'images/cars/default.jpg'}"
                                                      class="img-fluid"
-                                                     alt="${car.brand} ${car.model}">
+                                                     alt=" ${car.model}">
                                             </div>
                                             <div class="d-info">
                                                 <div class="d-text">
-                                                    <h4>${car.brand} ${car.model}</h4>
+                                                    <h4> ${car.model}</h4>
                                                     <div class="d-atr-group">
                                                         <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/1-green.svg" alt="">${car.capacity}</span>
                                                         <span class="d-atr"><img src="${pageContext.request.contextPath}/images/icons/3-green.svg" alt="">${car.transmission}</span>
