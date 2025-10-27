@@ -38,7 +38,7 @@ public class CarDBServlet extends HttpServlet {
         request.setAttribute("totalBookings",totalBookings);
         request.setAttribute("totalReports",totalReports);
         // 3️⃣ Forward sang JSP hiển thị
-
+        request.setAttribute("activePage", "car");
         request.getRequestDispatcher("/view/admin/Cardashboard.jsp").forward(request, response);
     }
 
