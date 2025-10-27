@@ -25,6 +25,22 @@ import java.sql.Date;
 )
 public class CustomerProfileController extends HttpServlet {
 
+    // --- Phương thức tiện ích để lưu input và forward khi có lỗi ---
+    private void forwardWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage) throws ServletException, IOException {
+        // 1. Lưu thông báo lỗi
+        request.setAttribute("error", errorMessage);
+
+        // 2. Lưu lại toàn bộ dữ liệu đã nhập (Sticky Form)
+        request.setAttribute("input_fullName", request.getParameter("fullName"));
+        request.setAttribute("input_phone", request.getParameter("phone"));
+        request.setAttribute("input_dob", request.getParameter("dob"));
+        request.setAttribute("input_driverLicenseNumber", request.getParameter("driverLicenseNumber"));
+        request.setAttribute("input_gender", request.getParameter("gender"));
+
+        // 3. Forward trở lại trang form
+        request.getRequestDispatcher("/view/customer/myProfile.jsp").forward(request, response);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -62,13 +78,27 @@ public class CustomerProfileController extends HttpServlet {
             return;
         }
 
+
         String fullName = request.getParameter("fullName");
         String phone = request.getParameter("phone");
         String dobString = request.getParameter("dob");
         String driverLicenseNumber = request.getParameter("driverLicenseNumber");
         String gender = request.getParameter("gender");
 
-        // Ảnh upload
+
+
+
+        if (phone != null && !phone.isEmpty() && (phone.length() != 10 || !phone.matches("\\d+"))) {
+            forwardWithError(request, response, "❌ Please enter a 10-digit phone number.!");
+            return;
+        }
+
+        if (driverLicenseNumber != null && !driverLicenseNumber.isEmpty() && driverLicenseNumber.length() != 12) {
+            forwardWithError(request, response, "❌ The driver’s license number must be exactly 12 characters.!");
+            return;
+        }
+
+
         Part filePart = request.getPart("profileImage");
         String imagePath = null;
         if (filePart != null && filePart.getSize() > 0) {
@@ -79,6 +109,7 @@ public class CustomerProfileController extends HttpServlet {
             filePart.write(uploadPath + File.separator + fileName);
             imagePath = "/images/profile/" + fileName;
         }
+
 
         UserProfileDAO dao = new UserProfileDAO();
         UserProfile profile = dao.findByUserId(user.getUserId());

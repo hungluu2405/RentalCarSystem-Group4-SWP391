@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 import model.User;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
@@ -28,6 +30,10 @@ public class LoginServlet extends HttpServlet {
         
         String loginKey = request.getParameter("loginKey");
         String password = request.getParameter("password");
+
+        Map<String, String> formData = new HashMap<>();
+        formData.put("loginKey", loginKey);
+        request.setAttribute("formData", formData);
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.checkLoginByEmailOrUsername(loginKey, password);

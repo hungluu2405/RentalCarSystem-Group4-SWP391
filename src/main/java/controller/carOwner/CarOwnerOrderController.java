@@ -1,4 +1,4 @@
-package controller.customer;
+package controller.carOwner;
 
 import dao.implement.BookingDAO;
 import jakarta.servlet.ServletException;
@@ -15,8 +15,8 @@ import model.BookingDetail;
 import model.User;
 import model.UserProfile;
 
-@WebServlet("/customer/customerOrder")
-public class CustomerOrderController extends HttpServlet {
+@WebServlet("/owner/myBooking")
+public class CarOwnerOrderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,7 +50,7 @@ public class CustomerOrderController extends HttpServlet {
         request.setAttribute("allBookings", allBookings);
 
 
-        request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/carOwner/carOwnerOrder.jsp").forward(request, response);
         System.out.println("Bookings found: " + allBookings.size());
         for (BookingDetail b : allBookings) {
             System.out.println(b.getBookingId() + " - " + b.getStatus());

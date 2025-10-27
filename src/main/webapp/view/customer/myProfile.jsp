@@ -8,83 +8,19 @@
     <title>Rentaly - My Profile</title>
 
     <style>
-        /* ================= Profile Image Section ================= */
-        .profile-avatar-container {
-            position: relative;
-            display: inline-block;
-            text-align: center;
-        }
 
-        .profile-avatar {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #28a745;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .profile-avatar-container:hover .profile-avatar {
-            opacity: 0.9;
-        }
-
-        .change-photo-btn {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background-color: #28a745;
-            color: white;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .change-photo-btn:hover {
-            background-color: #218838;
-            transform: scale(1.1);
-        }
-
-        /* ================= Form Styling ================= */
-        h5 {
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            transition: 0.2s ease;
-        }
-
-        .form-control:focus {
-            border-color: #28a745;
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
-        }
-
-        .btn-main {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 25px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-main:hover {
-            background-color: #218838;
-        }
-
-        .alert-success {
-            border-radius: 8px;
-        }
+        .profile-avatar-container { position: relative; display: inline-block; text-align: center; }
+        .profile-avatar { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid #28a745; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; }
+        .profile-avatar-container:hover .profile-avatar { opacity: 0.9; }
+        .change-photo-btn { position: absolute; bottom: 5px; right: 5px; background-color: #28a745; color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
+        .change-photo-btn:hover { background-color: #218838; transform: scale(1.1); }
+        h5 { font-weight: 600; margin-bottom: 6px; }
+        .form-control { border-radius: 8px; border: 1px solid #ccc; padding: 10px; transition: 0.2s ease; }
+        .form-control:focus { border-color: #28a745; box-shadow: 0 0 5px rgba(40, 167, 69, 0.3); }
+        .btn-main { background-color: #28a745; color: white; border: none; border-radius: 8px; padding: 10px 25px; font-weight: 600; transition: all 0.3s; }
+        .btn-main:hover { background-color: #218838; }
+        .alert-success { border-radius: 8px; }
+        .alert-danger { border-radius: 8px; }
     </style>
 </head>
 
@@ -105,20 +41,26 @@
         <section id="section-settings" class="bg-gray-100">
             <div class="container">
                 <div class="row">
-                    <!-- SIDEBAR -->
                     <div class="col-lg-3 mb30">
                         <jsp:include page="../common/customer/_sidebar.jsp">
                             <jsp:param name="activePage" value="profile"/>
                         </jsp:include>
                     </div>
 
-                    <!-- MAIN PROFILE FORM -->
                     <div class="col-lg-9">
                         <div class="card padding40 rounded-5 shadow-sm">
+
 
                             <c:if test="${param.status == 'success'}">
                                 <div class="alert alert-success text-center mb-4">
                                     ✅ Profile updated successfully!
+                                </div>
+                            </c:if>
+
+
+                            <c:if test="${not empty requestScope.error}">
+                                <div class="alert alert-danger text-center mb-4">
+                                        ${requestScope.error}
                                 </div>
                             </c:if>
 
@@ -127,44 +69,35 @@
                                   enctype="multipart/form-data"
                                   class="form-border">
 
-                                <!-- ================= Profile Image Section ================= -->
                                 <div class="text-center mb-4">
                                     <div class="profile-avatar-container">
-                                        <!-- Ảnh đại diện -->
-                                        <c:choose>
-                                            <c:when test="${not empty sessionScope.user.userProfile.profileImage}">
-                                                <img id="profileImagePreview"
-                                                     src="${pageContext.request.contextPath}${sessionScope.user.userProfile.profileImage}"
-                                                     alt="Profile"
-                                                     class="profile-avatar">
-                                            </c:when>
-                                            <c:otherwise>
-                                                <img id="profileImagePreview"
-                                                     src="${pageContext.request.contextPath}/images/profile/default.jpg"
-                                                     alt="Default Profile"
-                                                     class="profile-avatar">
-                                            </c:otherwise>
-                                        </c:choose>
 
-                                        <!-- Nút chọn ảnh -->
+
+                                        <c:set var="profileImageUrl"
+                                               value="${sessionScope.user.userProfile.profileImage != null ? sessionScope.user.userProfile.profileImage : '/images/profile/default.jpg'}" />
+
+                                        <img id="profileImagePreview"
+                                             src="${pageContext.request.contextPath}${profileImageUrl}"
+                                             alt="Profile"
+                                             class="profile-avatar">
+
                                         <label for="profileImageUpload" class="change-photo-btn">
                                             <i class="fa fa-camera"></i>
                                         </label>
                                         <input type="file" id="profileImageUpload" name="profileImage" accept="image/*"
                                                style="display: none;">
                                     </div>
-
                                     <p style="font-size: 14px; color: #777; margin-top: 10px;">
                                         Click the camera icon to change your photo
                                     </p>
                                 </div>
 
-                                <!-- ================= Thông tin cá nhân ================= -->
                                 <div class="row">
                                     <div class="col-lg-6 mb20">
                                         <h5>Full Name</h5>
+
                                         <input type="text" name="fullName" class="form-control"
-                                               value="${sessionScope.user.userProfile.fullName}"
+                                               value="${not empty input_fullName ? input_fullName : sessionScope.user.userProfile.fullName}"
                                                placeholder="Enter your full name">
                                     </div>
 
@@ -176,31 +109,38 @@
 
                                     <div class="col-lg-6 mb20">
                                         <h5>Phone Number</h5>
+
                                         <input type="text" name="phone" class="form-control"
-                                               value="${sessionScope.user.userProfile.phone}"
+                                               value="${not empty input_phone ? input_phone : sessionScope.user.userProfile.phone}"
                                                placeholder="Enter your phone number">
                                     </div>
 
                                     <div class="col-lg-6 mb20">
                                         <h5>Date of Birth</h5>
+
                                         <input type="date" name="dob" class="form-control"
-                                               value="${sessionScope.user.userProfile.dob}">
+                                               value="${not empty input_dob ? input_dob : sessionScope.user.userProfile.dob}">
                                     </div>
 
                                     <div class="col-lg-6 mb20">
                                         <h5>Driver License Number</h5>
+
                                         <input type="text" name="driverLicenseNumber" class="form-control"
-                                               value="${sessionScope.user.userProfile.driverLicenseNumber}"
+                                               value="${not empty input_driverLicenseNumber ? input_driverLicenseNumber : sessionScope.user.userProfile.driverLicenseNumber}"
                                                placeholder="Enter your driver license number">
                                     </div>
 
                                     <div class="col-lg-6 mb20">
+
+                                        <c:set var="currentGender"
+                                               value="${not empty input_gender ? input_gender : sessionScope.user.userProfile.gender}" />
+
                                         <h5>Gender</h5>
                                         <select name="gender" class="form-control">
-                                            <option value="">-- Select Gender --</option>
-                                            <option value="Male" ${sessionScope.user.userProfile.gender == 'Male' ? 'selected' : ''}>Male</option>
-                                            <option value="Female" ${sessionScope.user.userProfile.gender == 'Female' ? 'selected' : ''}>Female</option>
-                                            <option value="Other" ${sessionScope.user.userProfile.gender == 'Other' ? 'selected' : ''}>Other</option>
+                                            <option value="" ${empty currentGender ? 'selected' : ''}>-- Select Gender --</option>
+                                            <option value="Male" ${currentGender == 'Male' ? 'selected' : ''}>Male</option>
+                                            <option value="Female" ${currentGender == 'Female' ? 'selected' : ''}>Female</option>
+                                            <option value="Other" ${currentGender == 'Other' ? 'selected' : ''}>Other</option>
                                         </select>
                                     </div>
                                 </div>
@@ -219,7 +159,6 @@
     <jsp:include page="../common/customer/_footer_scripts.jsp"/>
 </div>
 
-<!-- ================= JS: Preview Image ================= -->
 <script>
     document.getElementById("profileImageUpload").addEventListener("change", function (e) {
         const file = e.target.files[0];
