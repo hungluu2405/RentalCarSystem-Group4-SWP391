@@ -444,7 +444,7 @@
 
                                                 <div class="input-group-simplified location-group-simplified">
                                                     <label for="location">Pickup and return location</label>
-                                                    <input type="text" id="autocomplete_location" name="location" placeholder="Chọn địa điểm tìm xe" class="form-control" required>
+                                                    <input type="text" id="autocomplete_location" name="location" placeholder="Select Car Location" class="form-control" required>
                                                 </div>
 
                                                 <div class="input-group-simplified">
