@@ -758,7 +758,7 @@ public class CarDAO extends DBContext {
 
         String sql = "SELECT c.CAR_ID, c.TYPE_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
                 "c.TRANSMISSION, c.FUEL_TYPE, c.YEAR, t.NAME AS CAR_TYPE_NAME, i.IMAGE_URL, " +
-                "c.DESCRIPTION, c.LICENSE_PLATE " +
+                "c.DESCRIPTION, c.LICENSE_PLATE, c.AVAILABILITY " +
                 "FROM CAR c " +
                 "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
                 "LEFT JOIN CAR_IMAGE i ON c.CAR_ID = i.CAR_ID " +
@@ -787,6 +787,7 @@ public class CarDAO extends DBContext {
                                 ? rs.getString("IMAGE_URL")
                                 : "images/default.jpg"
                 );
+                car.setAvailability(rs.getInt("AVAILABILITY"));
                 return car;
             }
         } catch (SQLException e) {
@@ -798,7 +799,7 @@ public class CarDAO extends DBContext {
     public boolean updateCar(CarViewModel car) {
         String sql = "UPDATE CAR " +
                 "SET BRAND = ?, MODEL = ?, PRICE_PER_DAY = ?, CAPACITY = ?, TRANSMISSION = ?, " +
-                "FUEL_TYPE = ?, DESCRIPTION = ?, LOCATION = ?, LICENSE_PLATE = ?, YEAR = ?, TYPE_ID = ? " +
+                "FUEL_TYPE = ?, DESCRIPTION = ?, LOCATION = ?, LICENSE_PLATE = ?, YEAR = ?, TYPE_ID = ?, AVAILABILITY = ? " +
                 "WHERE CAR_ID = ?";
 
         String sqlImage = "UPDATE CAR_IMAGE SET IMAGE_URL = ? WHERE CAR_ID = ?";
@@ -819,7 +820,8 @@ public class CarDAO extends DBContext {
                 ps.setString(9, car.getLicensePlate());
                 ps.setInt(10, car.getYear());
                 ps.setInt(11, car.getTypeId());
-                ps.setInt(12, car.getCarId());
+                ps.setInt(12, car.getAvailability());
+                ps.setInt(13, car.getCarId());
                 ps.executeUpdate();
             }
 
