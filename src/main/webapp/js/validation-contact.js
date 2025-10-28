@@ -47,20 +47,33 @@ $(document).ready(function(){
                 $('#send_message').attr({'disabled' : 'true', 'value' : 'Sending...' });
                 
                 /* Post Ajax function of jQuery to get all the data from the submission of the form as soon as the form sends the values to contact.php*/
-                $.post("contact.php", $("#contact_form").serialize(),function(result){
-                    //Check the result set from contact.php file.
-                    if(result == 'sent'){
-                        //If the email is sent successfully, remove the submit button
-                         $('#contact_form_wrap').remove();
-                        //Display the success message
-                        $('#success_message').fadeIn(500);
-                    }else{
-                        //Display the error message
-                        $('#mail_fail').fadeIn(500);
-                        // Enable the submit button again
-                        $('#send_message').removeAttr('disabled').attr('value', 'Send The Message');
-                    }
-                });
+                    $.ajax({
+
+                        url: baseUrl + "/contact",
+
+                        // đúng — lấy context path động
+
+    type: "POST",
+    data: $("#contact_form").serialize(), // ✅ Lấy dữ liệu form
+    success: function(result) {
+        // ✅ Nếu Servlet trả "sent", nghĩa là lưu thành công
+        if (result.trim() === "sent") {
+            $('#success_message').fadeIn(500);
+            $('#error_message').hide();
+            $('#contact_form')[0].reset(); // reset form sau khi gửi
+        } else {
+            $('#error_message').fadeIn(500);
+        }
+        // Bật lại nút gửi
+        $('#send_message').removeAttr('disabled').attr('value', 'Send Message');
+    },
+    error: function() {
+        // Trường hợp lỗi mạng hoặc lỗi server
+        $('#error_message').fadeIn(500);
+        $('#send_message').removeAttr('disabled').attr('value', 'Send Message');
+    }
+});
+
             }
         });    
     });
