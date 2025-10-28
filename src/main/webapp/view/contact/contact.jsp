@@ -87,12 +87,6 @@
                             <div id='submit' class="mt20">
                                 <input type='submit' id='send_message' value='Send Message' class="btn-main">
                                 
-                                <c:if test="${not empty msg}">
-                                    <div class="alert alert-success mt-3">${msg}</div>
-                                </c:if>
-                                <c:if test="${not empty error}">
-                                    <div class="alert alert-danger mt-3">${error}</div>
-                                </c:if>
 
                             </div>
                                 <p style="color: green;">${msg}</p>
@@ -154,6 +148,9 @@
 ================================================== -->
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+<script>
+    const baseUrl = '${pageContext.request.contextPath}';
+</script>
 <script src="${pageContext.request.contextPath}/js/validation-contact.js"></script>
 </body>
 
