@@ -48,8 +48,10 @@ $(document).ready(function(){
                 
                 /* Post Ajax function of jQuery to get all the data from the submission of the form as soon as the form sends the values to contact.php*/
                     $.ajax({
-                        
-    url: "${pageContext.request.contextPath}/contact", // đúng — lấy context path động
+
+                        url: baseUrl + "/contact",
+
+                        // đúng — lấy context path động
 
     type: "POST",
     data: $("#contact_form").serialize(), // ✅ Lấy dữ liệu form
