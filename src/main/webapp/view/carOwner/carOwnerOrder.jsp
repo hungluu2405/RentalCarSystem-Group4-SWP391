@@ -138,7 +138,7 @@
                                                     </td>
                                                     <td>
                                                         <c:if test="${status == 'Pending'}">
-                                                            <a href="${pageContext.request.contextPath}/customer/cancelBooking?bookingId=${order.bookingId}"
+                                                            <a href="${pageContext.request.contextPath}/owner/cancelBooking?bookingId=${order.bookingId}"
                                                                onclick="return confirm('Are you sure you want to cancel this booking?');"
                                                                class="btn btn-sm btn-danger">Cancel</a>
                                                         </c:if>

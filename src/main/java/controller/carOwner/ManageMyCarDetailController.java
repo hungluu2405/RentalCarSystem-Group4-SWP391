@@ -77,6 +77,12 @@ public class ManageMyCarDetailController extends HttpServlet {
                 car.setLocation(request.getParameter("location"));
                 car.setLicensePlate(request.getParameter("licensePlate"));
                 car.setTypeId(Integer.parseInt(request.getParameter("typeId")));
+                String availabilityParam = request.getParameter("availability");
+                if (availabilityParam != null && availabilityParam.equals("1")) {
+                    car.setAvailability(1);
+                } else {
+                    car.setAvailability(0);
+                }
 
                 Part imagePart = request.getPart("carImage");
                 if (imagePart != null && imagePart.getSize() > 0) {
@@ -93,7 +99,6 @@ public class ManageMyCarDetailController extends HttpServlet {
                     // Nếu không upload ảnh mới, giữ nguyên ảnh cũ
                     car.setImageUrl(request.getParameter("oldImageUrl"));
                 }
-
 
                 boolean updated = carDAO.updateCar(car);
                 if (updated) {
