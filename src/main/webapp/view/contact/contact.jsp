@@ -61,8 +61,10 @@
 
                         <h3>Do you have any question?</h3>
 
-                        <form name="contactForm" id="contact_form" class="form-border" method="post" action="${pageContext.request.contextPath}/contact">
-                            <div class="row">
+                        <form name="contactForm" id="contact_form" class="form-border" method="post"
+                              action="<%= request.getContextPath() %>/contact">
+
+                        <div class="row">
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
                                         <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
@@ -87,12 +89,6 @@
                             <div id='submit' class="mt20">
                                 <input type='submit' id='send_message' value='Send Message' class="btn-main">
                                 
-                                <c:if test="${not empty msg}">
-                                    <div class="alert alert-success mt-3">${msg}</div>
-                                </c:if>
-                                <c:if test="${not empty error}">
-                                    <div class="alert alert-danger mt-3">${error}</div>
-                                </c:if>
 
                             </div>
                                 <p style="color: green;">${msg}</p>
@@ -154,6 +150,9 @@
 ================================================== -->
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+<script>
+    const baseUrl = '${pageContext.request.contextPath}';
+</script>
 <script src="${pageContext.request.contextPath}/js/validation-contact.js"></script>
 </body>
 

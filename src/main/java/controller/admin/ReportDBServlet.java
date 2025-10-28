@@ -50,6 +50,7 @@ public class ReportDBServlet extends HttpServlet {
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
         request.setAttribute("totalReports",totalReports);
+        request.setAttribute("activePage", "report");
         request.getRequestDispatcher("/view/admin/Report.jsp").forward(request, response);
     }
 }
