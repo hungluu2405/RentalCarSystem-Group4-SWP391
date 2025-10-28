@@ -24,10 +24,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     response.setContentType("text/plain;charset=UTF-8");
 
     HttpSession session = request.getSession();
-    Integer userIdFromSession = (Integer) session.getAttribute("USER_ID");
-    int userId = (userIdFromSession != null && userIdFromSession > 0) ? userIdFromSession : 0;
+       Integer userId = (Integer) session.getAttribute("USER_ID");
 
-    String name = request.getParameter("name");
+
+       String name = request.getParameter("name");
     String email = request.getParameter("email");
     String phone = request.getParameter("phone");
     String message = request.getParameter("message");
@@ -43,7 +43,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     }
 
     if (success) {
-    response.getWriter().write("sent");đ
+    response.getWriter().write("sent");
     } else {
         response.getWriter().write("error");
     }

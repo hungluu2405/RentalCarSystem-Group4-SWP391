@@ -61,8 +61,10 @@
 
                         <h3>Do you have any question?</h3>
 
-                        <form name="contactForm" id="contact_form" class="form-border" method="post" action="${pageContext.request.contextPath}/contact">
-                            <div class="row">
+                        <form name="contactForm" id="contact_form" class="form-border" method="post"
+                              action="<%= request.getContextPath() %>/contact">
+
+                        <div class="row">
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
                                         <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
