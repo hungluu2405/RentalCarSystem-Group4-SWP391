@@ -14,9 +14,10 @@ public class ContactDAO extends DBContext {
             "INSERT INTO SUPPORT_TICKET_REQUIREMENT (USER_ID, MESSAGE, PHONE_NUMBER, EMAIL, NAME) VALUES (?, ?, ?, ?, ?)";
 
     public boolean insertContact(Contact contact) {
-        try (Connection conn = this.connection;
-             PreparedStatement ps = conn.prepareStatement(INSERT_CONTACT_SQL)) {
+        String sql = "INSERT INTO SUPPORT_TICKET_REQUIREMENT (USER_ID, MESSAGE, PHONE_NUMBER, EMAIL, NAME) VALUES (?, ?, ?, ?, ?)";
 
+        try (Connection conn = this.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             if (contact.getUserId() == null) {
                 ps.setNull(1, java.sql.Types.INTEGER);
@@ -29,14 +30,13 @@ public class ContactDAO extends DBContext {
             ps.setString(4, contact.getEmail());
             ps.setString(5, contact.getName());
 
-            // Thực thi
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("❌ SQL Error in insertContact: " + e.getMessage());
+            System.err.println("SQL Error in insertContact: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
+
 }
