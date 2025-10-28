@@ -141,34 +141,20 @@
                                     <!-- Fuel Type -->
                                     <div class="col-md-6 mb-3">
                                         <label>Fuel Type</label>
-                                        <select name="fuelType" class="form-select" required>
-                                            <option value="">Select fuel type...</option>
-                                            <c:forEach var="f" items="${fuelTypes}">
-                                                <option value="${f}" <c:if test="${car.fuelType eq f}">selected</c:if>>${f}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <input type="text" name="model" value="${car.fuelType}" class="form-control" required>
                                     </div>
 
                                     <!-- Transmission -->
                                     <div class="col-md-6 mb-3">
                                         <label>Transmission</label>
-                                        <select name="transmission" class="form-select" required>
-                                            <option value="">Select transmission...</option>
-                                            <c:forEach var="t" items="${transmissions}">
-                                                <option value="${t}" <c:if test="${car.transmission eq t}">selected</c:if>>${t}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <input type="text" name="model" value="${car.transmission}" class="form-control" required>
                                     </div>
 
                                     <!-- Car Type -->
                                     <div class="col-md-6 mb-3">
                                         <label>Car Type</label>
-                                        <select name="typeId" class="form-select" required>
-                                            <option value="">Select car type...</option>
-                                            <c:forEach var="c" items="${carTypes}">
-                                                <option value="${c.typeId}" <c:if test="${car.carTypeName eq c.name}">selected</c:if>>${c.name}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <input type="text" name="model" value="${car.carTypeName}" class="form-control" required>
+
                                     </div>
 
                                     <!-- Capacity -->
@@ -242,30 +228,13 @@
                                         <textarea name="description" rows="4" class="form-control">${car.description}</textarea>
                                     </div>
                                 </div>
-
-                                <!-- BUTTONS -->
-                                <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Xác nhận xóa xe này?');">
-                                    <input type="hidden" name="deleteId" value="${car.carId}" />
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                    <a href="${pageContext.request.contextPath}/carDB" class="btn btn-secondary">Back to list</a>
-                                </form>
-
                             </form>
-
-                            <script>
-                                function confirmDelete() {
-                                    if (confirm("Are you sure you want to delete this car? This action cannot be undone!")) {
-                                        const form = document.forms[0];
-                                        const input = document.createElement("input");
-                                        input.type = "hidden";
-                                        input.name = "action";
-                                        input.value = "delete";
-                                        form.appendChild(input);
-                                        form.submit();
-                                    }
-                                }
-                            </script>
-
+                                <!-- BUTTONS -->
+                            <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Xác nhận xóa xe này?');">
+                                <input type="hidden" name="deleteId" value="${car.carId}" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <a href="${pageContext.request.contextPath}/carDB" class="btn btn-secondary">Back to list</a>
+                            </form>
                         </div>
 
                 </div>
