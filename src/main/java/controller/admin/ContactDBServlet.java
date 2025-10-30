@@ -1,7 +1,7 @@
 package controller.admin;
 
 
-import dao.implement.ContactDAO;
+import dao.implement.*;
 import model.Contact;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,13 +15,27 @@ public class ContactDBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        UserDAO userDAO = new UserDAO();
+        CarDAO carDAO = new CarDAO();
+        BookingDAO bookingDAO = new BookingDAO();
+        PaymentDAO paymentDAO = new PaymentDAO();
         ContactDAO contactDAO = new ContactDAO();
         List<Contact> contactList = contactDAO.getAllContacts();
 
+        int totalContacts = contactDAO.countUnresolvedContacts();
+        int totalUsers = userDAO.countAllUsers();
+        int totalCars = carDAO.countAllCars();
+        int totalBookings = bookingDAO.countAllBookings();
+        int totalReports = paymentDAO.countAllReport();
+
 
         request.setAttribute("contactList", contactList);
-//        request.setAttribute("activePage", "support");
+        request.setAttribute("totalContacts", totalContacts);
+        request.setAttribute("activePage", "support");
+        request.setAttribute("totalUsers",totalUsers);
+        request.setAttribute("totalCars",totalCars);
+        request.setAttribute("totalBookings",totalBookings);
+        request.setAttribute("totalReports",totalReports);
         request.getRequestDispatcher("/view/admin/supportDashboard.jsp").forward(request, response);
     }
 
