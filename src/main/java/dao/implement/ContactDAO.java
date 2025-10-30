@@ -2,10 +2,12 @@ package dao.implement;
 
 import model.Contact;
 import dao.DBContext;
-
+import java.sql.*;
+import java.util.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 
 public class ContactDAO extends DBContext {
 
@@ -38,5 +40,51 @@ public class ContactDAO extends DBContext {
             return false;
         }
     }
+    public List<Contact> getAllContacts() {
+        List<Contact> list = new ArrayList<>();
+        String sql = "SELECT TICKET_ID, NAME, PHONE_NUMBER, EMAIL, MESSAGE, CREATED_AT, STATUS "
+                + "FROM SUPPORT_TICKET_REQUIREMENT ORDER BY CREATED_AT DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Contact c = new Contact();
+                c.setTicketId(rs.getInt("TICKET_ID"));
+                c.setName(rs.getString("NAME"));
+                c.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+                c.setEmail(rs.getString("EMAIL"));
+                c.setMessage(rs.getString("MESSAGE"));
+
+                Timestamp ts = rs.getTimestamp("CREATED_AT");
+                if (ts != null) {
+                    c.setCreatedAt(ts.toLocalDateTime());
+                }
+
+                c.setStatus(rs.getBoolean("STATUS"));
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Cập nhật trạng thái xử lý (bit)
+    public void updateStatus(int ticketId, boolean status) {
+        String sql = "UPDATE SUPPORT_TICKET_REQUIREMENT SET STATUS = ? WHERE TICKET_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setBoolean(1, status);
+            ps.setInt(2, ticketId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
 }
