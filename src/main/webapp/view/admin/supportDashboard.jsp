@@ -67,8 +67,8 @@
             <!-- Cars Data Table -->
             <div class="card mb-3">
                 <div class="card-header">
-                    <i class="fas fa-car"></i>
-                    Car Management
+                    <i class="fas fa-comments"></i>
+                    Support Table
                 </div>
 
                 <div class="card-body">
