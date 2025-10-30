@@ -1,7 +1,7 @@
 package controller.admin;
 
 
-//import dao.ContactDAO;
+import dao.implement.ContactDAO;
 import model.Contact;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,12 +15,13 @@ public class ContactDBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Gọi DAO để lấy danh sách contact
-//        ContactDAO contactDAO = new ContactDAO();
-//        List<Contact> contactList = contactDAO.getAllContacts();
 
-        // Gửi dữ liệu qua JSP
-//        request.setAttribute("contactList", contactList);
+        ContactDAO contactDAO = new ContactDAO();
+        List<Contact> contactList = contactDAO.getAllContacts();
+
+
+        request.setAttribute("contactList", contactList);
+//        request.setAttribute("activePage", "support");
         request.getRequestDispatcher("/view/admin/supportDashboard.jsp").forward(request, response);
     }
 
@@ -28,6 +29,19 @@ public class ContactDBServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        String ticketIdParam = request.getParameter("ticketId");
+        String statusParam = request.getParameter("status");
+
+        if (ticketIdParam != null && statusParam != null) {
+            int ticketId = Integer.parseInt(ticketIdParam);
+            boolean status = Boolean.parseBoolean(statusParam);
+
+            ContactDAO dao = new ContactDAO();
+            dao.updateStatus(ticketId, status);
+        }
+
+        // Cập nhật xong load lại trang
+        response.sendRedirect("contactDB");
     }
 }
+
