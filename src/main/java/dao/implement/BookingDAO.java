@@ -14,28 +14,63 @@ import java.util.List;
 public class BookingDAO extends DBContext {
 
 
-    public boolean insert(Booking booking) {
+        public boolean insert(Booking booking) {
         String sql = """
-                    INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """;
+                INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """;
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        // Khai báo Statement và ResultSet bên ngoài try-with-resources để sử dụng getGeneratedKeys
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = null;
+
+        try {
+            conn = getConnection(); // Lấy kết nối từ DBContext
+
+            // ✅ BƯỚC 1: Yêu cầu JDBC trả về ID tự động tăng
+            // Sử dụng Statement.RETURN_GENERATED_KEYS
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            // Thiết lập tham số (Giữ nguyên logic của bạn)
             ps.setInt(1, booking.getCarId());
             ps.setInt(2, booking.getUserId());
             ps.setObject(3, booking.getStartDate());
             ps.setObject(4, booking.getEndDate());
-            ps.setObject(5, booking.getPickupTime());   // 👈 thêm giờ nhận
-            ps.setObject(6, booking.getDropoffTime());  // 👈 thêm giờ trả
+            ps.setObject(5, booking.getPickupTime());
+            ps.setObject(6, booking.getDropoffTime());
             ps.setDouble(7, booking.getTotalPrice());
             ps.setString(8, booking.getStatus());
             ps.setObject(9, booking.getCreatedAt());
             ps.setString(10, booking.getLocation());
 
-            return ps.executeUpdate() > 0;
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows > 0) {
+                // ✅ BƯỚC 2: Lấy ResultSet chứa ID vừa tạo
+                rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    // ✅ BƯỚC 3: Gán ID vừa tạo TRỞ LẠI đối tượng Booking
+                    int newBookingId = rs.getInt(1);
+                    booking.setBookingId(newBookingId);
+
+                    return true;
+                }
+            }
+            return false;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            // Đóng các tài nguyên
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close(); // Sử dụng hàm đóng kết nối của DBContext nếu có
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
