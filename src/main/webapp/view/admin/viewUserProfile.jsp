@@ -214,6 +214,11 @@
 
 
                             </form>
+
+
+
+                                <form><a href="${pageContext.request.contextPath}/accountDB" class="btn btn-secondary">Back to list</a></form>
+
                         </div>
                     </div>
                 </div>

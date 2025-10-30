@@ -1,50 +1,250 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: tunge
+  Date: 10/23/2025
+  Time: 11:00 PM
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Car Detail</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" />
+    <jsp:include page="../common/carOwner/_headOwner.jsp"/>
+    <title>Manage Car Detail</title>
+    <style>
+        .car-form {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #fff;
+        }
+        .car-form input, .car-form textarea, .car-form select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        .car-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-update {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .car-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
+
 <body>
-<div class="container mt-4">
-    <h2>Car detail</h2>
+<div id="wrapper">
+    <div id="de-preloader"></div>
 
-    <c:if test="${not empty error}">
-        <div class="alert alert-danger">${error}</div>
-    </c:if>
+    <!-- HEADER -->
+    <jsp:include page="../common/carOwner/_headerOwner.jsp"/>
 
-    <c:if test="${not empty car}">
-        <div class="row">
-            <div class="col-md-5">
-                <c:if test="${not empty car.imageUrl}">
-                    <img src="${pageContext.request.contextPath}/images/car/${car.imageUrl}" alt="car" class="img-fluid"/>
-                </c:if>
+    <div class="no-bottom no-top zebra" id="content">
+        <div id="top"></div>
+
+        <!-- TITLE SECTION -->
+        <section id="subheader" class="jarallax text-light">
+            <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img" alt="">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center"><h1>Manage My Car Detail</h1></div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-7">
-                <table class="table table-striped">
-                    <tr><th>Car ID</th><td>${car.carId}</td></tr>
-                    <tr><th>Type</th><td>${car.carTypeName}</td></tr>
-                    <tr><th>Brand</th><td>${car.brand}</td></tr>
-                    <tr><th>Model</th><td>${car.model}</td></tr>
-                    <tr><th>Year</th><td>${car.year}</td></tr>
-                    <tr><th>License plate</th><td>${car.licensePlate}</td></tr>
-                    <tr><th>Capacity</th><td>${car.capacity}</td></tr>
-                    <tr><th>Transmission</th><td>${car.transmission}</td></tr>
-                    <tr><th>Fuel type</th><td>${car.fuelType}</td></tr>
-                    <tr><th>Price/day</th><td>${car.pricePerDay}</td></tr>
-                    <tr><th>Location</th><td>${car.location}</td></tr>
-                    <tr><th>Description</th><td><pre style="white-space:pre-wrap">${car.description}</pre></td></tr>
-                </table>
+        </section>
 
-                <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Xác nhận xóa xe này?');">
-                    <input type="hidden" name="deleteId" value="${car.carId}" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                    <a href="${pageContext.request.contextPath}/carDB" class="btn btn-secondary">Back to list</a>
-                </form>
+        <section id="section-cars" class="bg-gray-100">
+            <div class="container">
+                <div class="row">
+
+
+
+
+
+                    <!-- MAIN CONTENT -->
+
+                        <div class="card padding40 rounded-5 shadow-sm">
+                            <h3 class="mb-4"><i class="fa fa-edit"></i> View and Edit Car Information</h3>
+
+                            <form method="post"
+                                  action="${pageContext.request.contextPath}/owner/manageCarDetail"
+                                  enctype="multipart/form-data"
+                                  class="p-4 bg-white rounded shadow-sm">
+
+                                <input type="hidden" name="carId" value="${car.carId}">
+
+                                <input type="hidden" name="oldImageUrl" value="${car.imageUrl}">
+
+                                <!-- IMAGE -->
+                                <div class="text-center mb-4">
+                                    <img id="carPreview"
+                                         src="${pageContext.request.contextPath}/${car.imageUrl}"
+                                         alt="Car Image"
+                                         style="max-width: 100%; max-height: 300px; border-radius: 12px; object-fit: contain; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                                    <p class="fw-bold mt-3">Upload Car Image</p>
+                                    <input type="file" name="carImage" accept="image/*"
+                                           onchange="previewCarImage(event)"
+                                           class="form-control mt-2">
+                                </div>
+
+                                <script>
+                                    function previewCarImage(event) {
+                                        const preview = document.getElementById('carPreview');
+                                        const file = event.target.files[0];
+                                        preview.src = file ? URL.createObjectURL(file)
+                                            : "${pageContext.request.contextPath}/${car.imageUrl}";
+                                    }
+                                </script>
+
+                                <!-- GRID LAYOUT -->
+                                <div class="row">
+                                    <!-- Brand -->
+                                    <div class="col-md-6 mb-3">
+                                        <label>Brand</label>
+                                        <input type="text" name="brand" value="${car.brand}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Model -->
+                                    <div class="col-md-6 mb-3">
+                                        <label>Model</label>
+                                        <input type="text" name="model" value="${car.model}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Fuel Type -->
+                                    <div class="col-md-6 mb-3">
+                                        <label>Fuel Type</label>
+                                        <input type="text" name="model" value="${car.fuelType}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Transmission -->
+                                    <div class="col-md-6 mb-3">
+                                        <label>Transmission</label>
+                                        <input type="text" name="model" value="${car.transmission}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Car Type -->
+                                    <div class="col-md-6 mb-3">
+                                        <label>Car Type</label>
+                                        <input type="text" name="model" value="${car.carTypeName}" class="form-control" required>
+
+                                    </div>
+
+                                    <!-- Capacity -->
+                                    <div class="col-md-3 mb-3">
+                                        <label>Capacity</label>
+                                        <input type="number" name="capacity" value="${car.capacity}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Price -->
+                                    <div class="col-md-3 mb-3">
+                                        <label>Price Per Day</label>
+                                        <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div class="col-md-6 mb-3">
+                                        <label>Location</label>
+                                        <input type="text" name="location" value="${car.location}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Year -->
+                                    <div class="col-md-3 mb-3">
+                                        <label>Year</label>
+                                        <input type="number" name="year" value="${car.year}" class="form-control" required>
+                                    </div>
+
+                                    <!-- LicensePlate -->
+                                    <div class="col-md-3 mb-3">
+                                        <label>License Plate</label>
+                                        <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" required>
+                                    </div>
+
+                                    <!-- Availability -->
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               id="availabilitySwitch"
+                                               name="availability"
+                                               value="1"
+                                               <c:if test="${car.availability == 1}">checked</c:if>>
+                                        <label class="form-check-label" for="availabilitySwitch">
+                                            <span id="availabilityLabel">
+                                              <c:choose>
+                                                  <c:when test="${car.availability == 1}">Available</c:when>
+                                                  <c:otherwise>Not Available</c:otherwise>
+                                              </c:choose>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <script>
+                                        // Thay đổi label khi gạt công tắc
+                                        const toggle = document.getElementById('availabilitySwitch');
+                                        const label = document.getElementById('availabilityLabel');
+                                        toggle.addEventListener('change', function () {
+                                            label.textContent = this.checked ? 'Available' : 'Not Available';
+                                        });
+                                    </script>
+                                    <input type="hidden" name="availability" value="0">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="availabilitySwitch"
+                                           name="availability"
+                                           value="1"
+                                           <c:if test="${car.availability == 1}">checked</c:if>>
+
+
+                                    <!-- Description -->
+                                    <div class="col-md-12 mb-3">
+                                        <label>Description</label>
+                                        <textarea name="description" rows="4" class="form-control">${car.description}</textarea>
+                                    </div>
+                                </div>
+                            </form>
+                                <!-- BUTTONS -->
+                            <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Xác nhận xóa xe này?');">
+                                <input type="hidden" name="deleteId" value="${car.carId}" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <a href="${pageContext.request.contextPath}/carDB" class="btn btn-secondary">Back to list</a>
+                            </form>
+                        </div>
+
+                </div>
             </div>
-        </div>
-    </c:if>
+        </section>
+    </div>
 
+    <!-- FOOTER -->
+    <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
 </body>
 </html>
+
