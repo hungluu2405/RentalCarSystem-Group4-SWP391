@@ -613,18 +613,23 @@ public class CarDAO extends DBContext {
         List<CarViewModel> cars = new ArrayList<>();
 
         String sql = "SELECT TOP " + limit + " "
-                + "c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.LOCATION, c.PRICE_PER_DAY, "
+                + "c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, "
+                + "c.LOCATION, c.PRICE_PER_DAY, "
                 + "ct.NAME AS CarTypeName, "
                 + "(SELECT TOP 1 ci.IMAGE_URL FROM CAR_IMAGE ci WHERE ci.CAR_ID = c.CAR_ID ORDER BY ci.IMAGE_ID) AS ImageUrl, "
                 + "COUNT(b.BOOKING_ID) AS booking_count "
                 + "FROM CAR c "
                 + "JOIN CAR_TYPE ct ON c.TYPE_ID = ct.TYPE_ID "
-                + "LEFT JOIN BOOKING b ON c.CAR_ID = b.CAR_ID "
-                + "WHERE c.AVAILABILITY = 1 "
-                + "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.PRICE_PER_DAY, c.LOCATION, ct.NAME "
+                + "JOIN BOOKING b ON c.CAR_ID = b.CAR_ID "
+                + "WHERE c.AVAILABILITY = 1 AND b.STATUS = 'Completed' "
+                + "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.CAPACITY, c.TRANSMISSION, "
+                + "c.FUEL_TYPE, c.PRICE_PER_DAY, c.LOCATION, ct.NAME "
+                + "HAVING COUNT(b.BOOKING_ID) > 0 "
                 + "ORDER BY booking_count DESC";
 
-        try (Connection conn = getConnection(); PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
+        try (Connection conn = getConnection();
+             PreparedStatement st = conn.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 CarViewModel car = new CarViewModel();
@@ -636,7 +641,7 @@ public class CarDAO extends DBContext {
                 car.setFuelType(rs.getString("FUEL_TYPE"));
                 car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
                 car.setCarTypeName(rs.getString("CarTypeName"));
-                car.setLocation(rs.getString("LOCATION")); // ✅ thêm dòng này
+                car.setLocation(rs.getString("LOCATION"));
                 car.setImageUrl(rs.getString("ImageUrl"));
                 cars.add(car);
             }
@@ -646,6 +651,7 @@ public class CarDAO extends DBContext {
 
         return cars;
     }
+
     // ==========================
     // ĐẾM SỐ LƯỢNG BOOKING THEO CHỦ XE THEO SIDEBAROWNER
     // ==========================
