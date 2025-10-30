@@ -7,22 +7,25 @@ package model;
 import java.time.LocalDateTime;
 
 public class Contact {
+    private  Integer ticketId;
     private Integer userId;
     private String name;
     private String email;
     private String phoneNumber;
     private String message;
     private LocalDateTime createdAt;
-
+    private boolean status;
     public Contact() {
     }
 
-    public Contact(Integer userId, String name, String email, String phoneNumber, String message) {
+    public Contact( Integer userId, String name, String email, String phoneNumber, String message) {
+
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.message = message;
+        this.createdAt = createdAt;
     }
 
     // Getters
@@ -66,5 +69,29 @@ public class Contact {
     public void setMessage(String message) {
         this.message = message;
     }
-    // ... Thêm các getters/setters khác nếu cần
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(Integer ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
 }

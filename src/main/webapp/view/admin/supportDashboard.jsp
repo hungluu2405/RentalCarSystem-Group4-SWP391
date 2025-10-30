@@ -76,26 +76,61 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
                             <tr>
-                                <th>Car ID</th>
-                                <th>Model</th>
-                                <th>Type</th>
-                                <th>Brand</th>
-                                <th>Owner Name</th>
-                                <th>Year</th>
-                                <th>License Plate</th>
-                                <th>Capacity</th>
-                                <th>Fuel Type</th>
-                                <th>Price/Day</th>
-                                <th>Availability</th>
+                                <th>Ticket ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Message</th>
+                                <th>Created At</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
 
                             <tbody>
+                            <c:forEach var="c" items="${contactList}">
+                                <tr>
+                                    <td>${c.ticketId}</td>
+                                    <td>${c.name}</td>
+                                    <td>${c.phoneNumber}</td>
+                                    <td>${c.email}</td>
+                                    <td>${c.message}</td>
+                                    <td>
+                                        <fmt:formatDate value="${c.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${c.status}">
+                                                <span class="badge badge-success">Done</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge badge-danger">To Do</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <form action="${pageContext.request.contextPath}/contactDB" method="post" style="display:inline;">
+                                            <input type="hidden" name="ticketId" value="${c.ticketId}">
+                                            <input type="hidden" name="status" value="${!c.status}">
+                                            <button type="submit" class="btn btn-sm
+                                <c:choose>
+                                    <c:when test="${c.status}">btn-warning</c:when>
+                                    <c:otherwise>btn-success</c:otherwise>
+                                </c:choose>">
+                                                <c:choose>
+                                                    <c:when test="${c.status}">To Do</c:when>
+                                                    <c:otherwise>Done</c:otherwise>
+                                                </c:choose>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
                             </tbody>
-
                         </table>
                     </div>
                 </div>
+
             </div>
 
             <!-- /.container-fluid -->
