@@ -1,28 +1,24 @@
 package service;
 
-import model.Car;
 import util.PayPalConfig;
 import dao.implement.BookingDAO;
-import dao.implement.NotificationDAO; // <-- THÊM: Import Notification DAO
 import model.Booking;
-import model.Notification; // <-- THÊM: Import Model Notification
 import com.paypal.base.rest.APIContext;
 import com.paypal.api.payments.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PayPalService {
 
     private final BookingDAO bookingDAO = new BookingDAO();
-    private final NotificationDAO notificationDAO = new NotificationDAO(); // <-- KHỞI TẠO DAO
-    Car car = new Car();
+    // XÓA: NotificationDAO, CarDAO, Car car - KHÔNG CẦN NỮA
 
     private APIContext getApiContext() {
         return new APIContext(PayPalConfig.CLIENT_ID, PayPalConfig.CLIENT_SECRET, PayPalConfig.MODE);
     }
 
     public Payment createOrder(int bookingId, String contextPath) throws Exception {
-        // ... (Hàm này giữ nguyên) ...
         Booking booking = bookingDAO.getBookingById(bookingId);
 
         if (booking == null || !booking.getStatus().equalsIgnoreCase("Approved")) {
@@ -30,7 +26,6 @@ public class PayPalService {
         }
 
         double vndAmount = booking.getTotalPrice();
-
         final double EXCHANGE_RATE = 26000.00;
 
         if (vndAmount <= 0) {
@@ -38,7 +33,6 @@ public class PayPalService {
         }
 
         double usdAmount = vndAmount / EXCHANGE_RATE;
-
         String totalAmountStr = String.format("%.2f", usdAmount);
 
         Amount amount = new Amount();
@@ -57,9 +51,7 @@ public class PayPalService {
         String baseUrl = "http://localhost:8080" + contextPath;
 
         RedirectUrls redirectUrls = new RedirectUrls();
-
         redirectUrls.setReturnUrl(baseUrl + "/customer/execute-payment?bookingId=" + bookingId);
-
         redirectUrls.setCancelUrl(baseUrl + "/customer/customerOrder?id=" + bookingId + "&payment=cancel");
 
         Payment payment = new Payment();
@@ -71,6 +63,7 @@ public class PayPalService {
         return payment.create(getApiContext());
     }
 
+    // CHỈ XỬ LÝ PAYPAL + LƯU PAYMENT RECORD
     public boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
 
         Payment payment = new Payment();
@@ -83,11 +76,12 @@ public class PayPalService {
 
         if (executedPayment.getState().equalsIgnoreCase("approved")) {
 
-            double paidAmount = Double.parseDouble(executedPayment.getTransactions().get(0).getAmount().getTotal());
+            double paidAmount = Double.parseDouble(
+                    executedPayment.getTransactions().get(0).getAmount().getTotal()
+            );
             String paypalTransactionId = executedPayment.getId();
 
-            boolean statusUpdated = bookingDAO.updateStatus(bookingId, "Paid");
-
+            // CHỈ LƯU PAYMENT RECORD - KHÔNG UPDATE STATUS
             boolean paymentInserted = bookingDAO.insertPaymentRecord(
                     bookingId,
                     paypalTransactionId,
@@ -95,28 +89,7 @@ public class PayPalService {
                     "Paid"
             );
 
-
-            if (statusUpdated && paymentInserted) {
-                try {
-                    // Cần load lại booking để lấy Customer ID
-                    Booking booking = bookingDAO.getBookingById(bookingId);
-
-                    // THÔNG BÁO CHO CUSTOMER: Thanh toán thành công
-                    notificationDAO.insertNotification(new Notification(
-                            booking.getUserId(), // Customer ID
-                            "PAYMENT_SUCCESS",
-                            "Payment Successful!",
-                            "Payment for your booking vehicle" + " completed successfully. Enjoy your trip!",
-                            "/customer/customerOrder?id=" + bookingId
-                    ));
-                } catch (Exception e) {
-                    System.err.println("Lỗi tạo thông báo sau khi thanh toán: " + e.getMessage());
-                    // Tiếp tục trả về kết quả thành công của PayPal dù lỗi thông báo
-                }
-            }
-
-
-            return statusUpdated && paymentInserted;
+            return paymentInserted;
         }
         return false;
     }

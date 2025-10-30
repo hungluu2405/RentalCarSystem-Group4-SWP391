@@ -1,6 +1,7 @@
 package controller.payment;
 
 import service.PayPalService;
+import service.BookingService;  // ← THÊM IMPORT
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,20 +14,18 @@ import java.io.IOException;
 public class PaymentExecuteServlet extends HttpServlet {
 
     private final PayPalService paypalService = new PayPalService();
+    private final BookingService bookingService = new BookingService();  // ← THÊM DÒNG NÀY
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         String cancelStatus = request.getParameter("cancel");
         String bookingIdOnCancel = request.getParameter("bookingId");
         if ("true".equalsIgnoreCase(cancelStatus) && bookingIdOnCancel != null) {
-
             response.sendRedirect(request.getContextPath() + "/my-booking-detail?id=" + bookingIdOnCancel + "&payment=cancelled");
             return;
         }
-
 
         String paymentId = request.getParameter("paymentId");
         String payerId = request.getParameter("PayerID");
@@ -40,21 +39,26 @@ public class PaymentExecuteServlet extends HttpServlet {
         int bookingId = Integer.parseInt(bookingIdStr);
 
         try {
+            // 1. XỬ LÝ PAYPAL
+            boolean paypalSuccess = paypalService.executeAndRecordPayment(bookingId, paymentId, payerId);
 
-            boolean success = paypalService.executeAndRecordPayment(bookingId, paymentId, payerId);
             final String ORDER_DETAIL_URL = "/customer/customerOrder";
 
-            if (success) {
+            if (paypalSuccess) {
+                // 2. UPDATE STATUS + GỬI THÔNG BÁO
+                boolean statusUpdated = bookingService.markAsPaid(bookingId);
 
-                response.sendRedirect(request.getContextPath() + ORDER_DETAIL_URL + "?id=" + bookingId + "&payment=success");
+                if (statusUpdated) {
+                    response.sendRedirect(request.getContextPath() + ORDER_DETAIL_URL + "?id=" + bookingId + "&payment=success");
+                } else {
+                    response.sendRedirect(request.getContextPath() + ORDER_DETAIL_URL + "?id=" + bookingId + "&payment=failed");
+                }
             } else {
-
                 response.sendRedirect(request.getContextPath() + ORDER_DETAIL_URL + "?id=" + bookingId + "&payment=failed");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-
             response.sendRedirect(request.getContextPath() + "/error-page?msg=Payment Execution Error: " + e.getMessage());
         }
     }
