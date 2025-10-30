@@ -82,6 +82,18 @@ public class ContactDAO extends DBContext {
         }
     }
 
+    public int countUnresolvedContacts() {
+        String sql = "SELECT COUNT(*) FROM SUPPORT_TICKET_REQUIREMENT WHERE STATUS = 0";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 
 
