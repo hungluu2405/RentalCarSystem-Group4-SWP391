@@ -7,7 +7,6 @@ package model;
 import java.time.LocalDateTime;
 
 public class Contact {
-    private int ticketId;
     private Integer userId;
     private String name;
     private String email;
