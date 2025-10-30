@@ -77,10 +77,10 @@
                 <thead class="thead-dark">
                 <tr>
                     <th>Car ID</th>
-                    <th>Owner Name</th>
+                    <th>Model</th>
                     <th>Type</th>
                     <th>Brand</th>
-                    <th>Model</th>
+                    <th>Owner Name</th>
                     <th>Year</th>
                     <th>License Plate</th>
                     <th>Capacity</th>
@@ -93,11 +93,11 @@
                 <tbody>
                 <c:forEach var="car" items="${listC}">
                     <tr>
-                        <td><a href="${pageContext.request.contextPath}/admin/manageCar?id=${car.carId}">${car.carId}</a></td>
-                        <td>${car.carOwnerName}</td>
+                        <td>${car.carId}</td>
+                        <td><a href="${pageContext.request.contextPath}/admin/manageCar?id=${car.carId}">${car.model}</a></td>
                         <td>${car.typeName}</td>
                         <td>${car.brand}</td>
-                        <td>${car.model}</td>
+                        <td>${car.carOwnerName}</td>
                         <td>${car.year}</td>
                         <td>${car.licensePlate}</td>
                         <td>${car.capacity}</td>
