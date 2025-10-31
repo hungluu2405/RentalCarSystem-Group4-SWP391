@@ -77,7 +77,7 @@
                                         </form>
                                         <div class="spacer-10"></div>
                                         <div class="text-center">
-                                            <a href="${pageContext.request.contextPath}/account-profile">Back to Profile</a>
+                                            <a href="${pageContext.request.contextPath}/customer/profile">Back to Profile</a>
                                         </div>
                                     </div>
                                 </div>
