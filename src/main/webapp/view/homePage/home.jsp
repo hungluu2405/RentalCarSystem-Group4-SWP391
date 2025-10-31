@@ -362,7 +362,8 @@
                                     <c:when test="${not empty sessionScope.user}">
                                         <!-- ICON CHUÔNG -->
                                         <div id="notificationMenu" class="notification-menu">
-                                            <button id="notificationBtn" class="btn-bell" type="button" aria-haspopup="true" aria-expanded="false" title="Notifications">
+                                            <button id="notificationBtn" class="btn-bell" type="button"
+                                                    aria-haspopup="true" aria-expanded="false" title="Notifications">
                                                 <i class="fa-solid fa-bell"></i>
                                                     <%-- ✅ THÊM: LOGIC HIỂN THỊ BADGE (COUNT) --%>
                                                 <c:if test="${sessionScope.unreadNotificationCount > 0}">
@@ -370,18 +371,21 @@
                                                 </c:if>
                                             </button>
 
-                                            <div class="notification-dropdown" role="menu" aria-labelledby="notificationBtn">
+                                            <div class="notification-dropdown" role="menu"
+                                                 aria-labelledby="notificationBtn">
                                                 <div class="dropdown-header">
                                                     <h4>Notifications</h4>
                                                         <%-- ✅ THÊM: NÚT ĐÁNH DẤU TẤT CẢ ĐÃ ĐỌC (Cần Servlet xử lý) --%>
-                                                    <a href="${pageContext.request.contextPath}/mark-all-read">Mark All Read</a>
+                                                    <a href="${pageContext.request.contextPath}/mark-all-read">Mark All
+                                                        Read</a>
                                                 </div>
 
 
                                                 <ul id="notification-list">
                                                     <c:choose>
                                                         <c:when test="${not empty sessionScope.latestNotifications}">
-                                                            <c:forEach var="noti" items="${sessionScope.latestNotifications}">
+                                                            <c:forEach var="noti"
+                                                                       items="${sessionScope.latestNotifications}">
                                                                 <%-- ✅ SỬA 1: DÙNG !noti.read ĐỂ GÁN CLASS "unread" --%>
                                                                 <li class="${!noti.read ? 'unread' : ''}">
 
@@ -640,19 +644,11 @@
                         <div class="form-wrapper-center">
                             <div class="p-4 rounded-3 shadow-soft" data-bgcolor="#ffffff">
 
-                                <%-- THÊM VÀO: Hiển thị thông báo lỗi (nếu có) --%>
-                                <c:if test="${not empty errorMessage}">
-                                    <div class="alert alert-danger" role="alert"
-                                         style="
-                                                 margin-bottom: 15px;  <%-- SỬA: Xóa max-width và margin auto --%>
-                                                 display: flex;
-                                                 align-items: center;
-                                                 font-weight: 500;
-                                                 font-size: 0.95rem;
-                                                 ">
-
-                                            <%-- Nội dung lỗi (giờ sẽ là tiếng Anh) --%>
-                                        <span>${errorMessage}</span>
+                                <%-- ✅ Hiển thị thông báo lỗi (flash) --%>
+                                <c:if test="${not empty sessionScope.flashErrorMessage}">
+                                    <div class="alert alert-danger text-center fw-bold" role="alert"
+                                         style="margin-bottom: 15px; display: flex; justify-content: center; font-size: 0.95rem;">
+                                        <span>${sessionScope.flashErrorMessage}</span>
                                     </div>
                                 </c:if>
 
@@ -663,64 +659,68 @@
 
                                         <div class="input-group-simplified location-group-simplified">
                                             <label for="location">Pickup and return location</label>
-                                            <%-- SỬA: Thêm value="${location}" --%>
                                             <input type="text" id="autocomplete_location" name="location"
                                                    placeholder="Chọn địa điểm tìm xe" class="form-control" required
-                                                   value="${location}">
+                                                   value="${sessionScope.flashForm_location != null ? sessionScope.flashForm_location : location}">
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="pickupDate">Pickup Date</label>
-                                            <%-- SỬA: Thêm value="${startDate}" --%>
-                                            <input type="date" id="pickupDate" name="startDate" class="form-control"
-                                                   required value="${startDate}">
+                                            <input type="date" id="pickupDate" name="startDate" class="form-control" required
+                                                   value="${sessionScope.flashForm_startDate != null ? sessionScope.flashForm_startDate : startDate}">
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="pickupTime">Pickup Time</label>
                                             <select id="pickupTime" name="pickupTime" class="form-control" required>
-                                                <%-- SỬA: Logic chọn 'selected' cho option mặc định --%>
-                                                <option ${empty pickupTime ? 'selected' : ''} disabled value="">Select
-                                                    Time
+                                                <option ${empty pickupTime and empty sessionScope.flashForm_pickupTime ? 'selected' : ''} disabled value="">
+                                                    Select Time
                                                 </option>
                                                 <c:forEach var="hour" begin="6" end="22">
-                                                    <%-- SỬA: Logic kiểm tra và thêm 'selected' cho giá trị cũ --%>
-                                                    <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00"/>
-                                                    <option value="${timeValue}" ${timeValue eq pickupTime ? 'selected' : ''}>${timeValue}</option>
+                                                    <c:set var="timeValue" value="${hour lt 10 ? '0' : ''}${hour}:00"/>
+                                                    <option value="${timeValue}"
+                                                        ${timeValue eq pickupTime or timeValue eq sessionScope.flashForm_pickupTime ? 'selected' : ''}>
+                                                            ${timeValue}
+                                                    </option>
                                                 </c:forEach>
                                             </select>
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="returnDate">Return Date</label>
-                                            <%-- SỬA: Thêm value="${endDate}" --%>
-                                            <input type="date" id="returnDate" name="endDate" class="form-control"
-                                                   required value="${endDate}">
+                                            <input type="date" id="returnDate" name="endDate" class="form-control" required
+                                                   value="${sessionScope.flashForm_endDate != null ? sessionScope.flashForm_endDate : endDate}">
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="returnTime">Return Time</label>
                                             <select id="returnTime" name="dropoffTime" class="form-control" required>
-                                                <%-- SỬA: Logic chọn 'selected' cho option mặc định --%>
-                                                <option ${empty dropoffTime ? 'selected' : ''} disabled value="">Select
-                                                    Time
+                                                <option ${empty dropoffTime and empty sessionScope.flashForm_dropoffTime ? 'selected' : ''} disabled value="">
+                                                    Select Time
                                                 </option>
                                                 <c:forEach var="hour" begin="6" end="22">
-                                                    <%-- SỬA: Logic kiểm tra và thêm 'selected' cho giá trị cũ --%>
-                                                    <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00"/>
-                                                    <option value="${timeValue}" ${timeValue eq dropoffTime ? 'selected' : ''}>${timeValue}</option>
+                                                    <c:set var="timeValue" value="${hour lt 10 ? '0' : ''}${hour}:00"/>
+                                                    <option value="${timeValue}"
+                                                        ${timeValue eq dropoffTime or timeValue eq sessionScope.flashForm_dropoffTime ? 'selected' : ''}>
+                                                            ${timeValue}
+                                                    </option>
                                                 </c:forEach>
                                             </select>
                                         </div>
 
                                         <div class="search-button-group-simplified">
-                                            <button type="submit" id='send_message' value='Find a Vehicle'
-                                                    class="btn-search-final">Search
+                                            <button type="submit" id='send_message' value='Find a Vehicle' class="btn-search-final">
+                                                Search
                                             </button>
                                         </div>
-
                                     </div>
                                 </form>
+
+                                <%-- ✅ Xóa flash dữ liệu sau khi hiển thị (flash message) --%>
+                                <%
+                                    session.removeAttribute("flashErrorMessage");
+                                %>
+
                             </div>
                         </div>
                     </div>
