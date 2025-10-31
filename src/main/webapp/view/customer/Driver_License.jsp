@@ -64,91 +64,46 @@
                                 </div>
                             </c:if>
 
-                            <form method="post"
-                                  action="${pageContext.request.contextPath}/customer/profile"
-                                  enctype="multipart/form-data"
-                                  class="form-border">
+                            <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-                                <div class="text-center mb-4">
-                                    <div class="profile-avatar-container">
+                            <form action="${pageContext.request.contextPath}/customer/license"
+                                  method="post" enctype="multipart/form-data">
+                                <label>License Number:</label>
+                                <input type="text" name="license_number" value="${license.license_number}" required><br>
 
+                                <label>Issue Date:</label>
+                                <input type="date" name="issue_date" value="${license.issue_date}"><br>
 
-                                        <c:set var="profileImageUrl"
-                                               value="${sessionScope.user.userProfile.profileImage != null ? sessionScope.user.userProfile.profileImage : '/images/profile/default.jpg'}" />
+                                <label>Expiry Date:</label>
+                                <input type="date" name="expiry_date" value="${license.expiry_date}"><br>
 
-                                        <img id="profileImagePreview"
-                                             src="${pageContext.request.contextPath}${profileImageUrl}"
-                                             alt="Profile"
-                                             class="profile-avatar">
+                                <label>Front Image:</label>
+                                <input type="file" name="front_image"><br>
+                                <c:if test="${not empty license.front_image_url}">
+                                    <img src="${pageContext.request.contextPath}${license.front_image_url}" width="150">
+                                </c:if><br>
 
-                                        <label for="profileImageUpload" class="change-photo-btn">
-                                            <i class="fa fa-camera"></i>
-                                        </label>
-                                        <input type="file" id="profileImageUpload" name="profileImage" accept="image/*"
-                                               style="display: none;">
-                                    </div>
-                                    <p style="font-size: 14px; color: #777; margin-top: 10px;">
-                                        Click the camera icon to change your photo
-                                    </p>
-                                </div>
+                                <label>Back Image:</label>
+                                <input type="file" name="back_image"><br>
+                                <c:if test="${not empty license.back_image_url}">
+                                    <img src="${pageContext.request.contextPath}${license.back_image_url}" width="150">
+                                </c:if><br>
 
-                                <div class="row">
-                                    <div class="col-lg-6 mb20">
-                                        <h5>Full Name</h5>
-
-                                        <input type="text" name="fullName" class="form-control"
-                                               value="${not empty input_fullName ? input_fullName : sessionScope.user.userProfile.fullName}"
-                                               placeholder="Enter your full name">
-                                    </div>
-
-                                    <div class="col-lg-6 mb20">
-                                        <h5>Email Address</h5>
-                                        <input type="text" name="email" class="form-control"
-                                               value="${sessionScope.user.email}" readonly>
-                                    </div>
-
-                                    <div class="col-lg-6 mb20">
-                                        <h5>Phone Number</h5>
-
-                                        <input type="text" name="phone" class="form-control"
-                                               value="${not empty input_phone ? input_phone : sessionScope.user.userProfile.phone}"
-                                               placeholder="Enter your phone number">
-                                    </div>
-
-                                    <div class="col-lg-6 mb20">
-                                        <h5>Date of Birth</h5>
-
-                                        <input type="date" name="dob" class="form-control"
-                                               value="${not empty input_dob ? input_dob : sessionScope.user.userProfile.dob}">
-                                    </div>
-
-                                    <div class="col-lg-6 mb20">
-                                        <h5>Driver License Number</h5>
-
-                                        <input type="text" name="driverLicenseNumber" class="form-control"
-                                               value="${not empty input_driverLicenseNumber ? input_driverLicenseNumber : sessionScope.user.userProfile.driverLicenseNumber}"
-                                               placeholder="Enter your driver license number">
-                                    </div>
-
-                                    <div class="col-lg-6 mb20">
-
-                                        <c:set var="currentGender"
-                                               value="${not empty input_gender ? input_gender : sessionScope.user.userProfile.gender}" />
-
-                                        <h5>Gender</h5>
-                                        <select name="gender" class="form-control">
-                                            <option value="" ${empty currentGender ? 'selected' : ''}>-- Select Gender --</option>
-                                            <option value="Male" ${currentGender == 'Male' ? 'selected' : ''}>Male</option>
-                                            <option value="Female" ${currentGender == 'Female' ? 'selected' : ''}>Female</option>
-                                            <option value="Other" ${currentGender == 'Other' ? 'selected' : ''}>Other</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="text-center mt-4">
-                                    <input type="submit" class="btn-main" value="Update Profile">
-                                </div>
+                                <button type="submit">Update License</button>
                             </form>
+
+
+                            <script>
+                                // Preview ảnh bằng lái
+                                document.getElementById('licenseImageUpload').addEventListener('change', function (event) {
+                                    const file = event.target.files[0];
+                                    if (file) {
+                                        const preview = document.getElementById('licenseImagePreview');
+                                        preview.src = URL.createObjectURL(file);
+                                    }
+                                });
+                            </script>
+
                         </div>
                     </div>
                 </div>

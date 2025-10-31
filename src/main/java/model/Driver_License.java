@@ -8,7 +8,8 @@ public class Driver_License {
     private String license_number;
     private Date issue_date;
     private Date expiry_date;
-    private String image_url;
+    private String front_image_url;
+    private String back_image_url;
 
     //join
     private String fullName;
@@ -16,13 +17,18 @@ public class Driver_License {
     private Date dob;
     public Driver_License(){
     }
-    public Driver_License(int license_id, int user_id, String license_number, Date issue_date, Date expiry_date, String image_url) {
-        this.license_id = license_id;
-        this.user_id = user_id;
-        this.license_number = license_number;
+
+    public Driver_License(Date issue_date, Date expiry_date, String front_image_url, String back_image_url, String fullName, Date dob, String gender, String license_number, int user_id, int license_id) {
         this.issue_date = issue_date;
         this.expiry_date = expiry_date;
-        this.image_url = image_url;
+        this.front_image_url = front_image_url;
+        this.back_image_url = back_image_url;
+        this.fullName = fullName;
+        this.dob = dob;
+        this.gender = gender;
+        this.license_number = license_number;
+        this.user_id = user_id;
+        this.license_id = license_id;
     }
 
     public int getLicense_id() {
@@ -65,12 +71,20 @@ public class Driver_License {
         this.expiry_date = expiry_date;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getFront_image_url() {
+        return front_image_url;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setFront_image_url(String front_image_url) {
+        this.front_image_url = front_image_url;
+    }
+
+    public String getBack_image_url() {
+        return back_image_url;
+    }
+
+    public void setBack_image_url(String back_image_url) {
+        this.back_image_url = back_image_url;
     }
 
     public String getFullName() {
