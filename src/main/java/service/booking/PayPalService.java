@@ -1,4 +1,4 @@
-package service;
+package service.booking;
 
 import util.PayPalConfig;
 import dao.implement.BookingDAO;

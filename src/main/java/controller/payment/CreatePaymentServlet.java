@@ -1,6 +1,6 @@
 package controller.payment;
 
-import service.PayPalService;
+import service.booking.PayPalService;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Links;
 import jakarta.servlet.ServletException;
