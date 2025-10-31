@@ -1,5 +1,6 @@
 package controller.admin;
 
+import dao.implement.Driver_LicenseDAO;
 import dao.implement.UserDAO;
 import dao.implement.UserProfileDAO;
 import jakarta.servlet.ServletException;
@@ -8,8 +9,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import model.UserProfile;
+
 import model.User;
+import model.UserProfile;
+import model.Driver_License;
 
 @WebServlet("/admin/manageUser")
 public class AdminManageUserServlet extends HttpServlet {
@@ -34,11 +37,14 @@ public class AdminManageUserServlet extends HttpServlet {
 
         if (action.equals("view")) {  // <-- thêm view
             UserProfile profile = profileDAO.findByUserId(userId);
+            Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
 
             String email = userDAO.findEmailByUserId(userId);
+            Driver_License license = licenseDAO.getLicenseByUserId(userId);
 
             request.setAttribute("profile", profile);
             request.setAttribute("email", email);
+            request.setAttribute("license", license);
             request.getRequestDispatcher("/view/admin/viewUserProfile.jsp").forward(request, response);
 
         } else if (action.equals("remove")) {
