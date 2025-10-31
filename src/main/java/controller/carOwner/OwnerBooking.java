@@ -10,8 +10,7 @@ import java.util.List;
 import model.BookingDetail;
 import model.CarViewModel;
 import model.User;
-import model.UserProfile;
-import service.BookingService;
+import service.booking.BookingService;
 
 @WebServlet("/owner/ownerBooking")
 public class OwnerBooking extends HttpServlet {
