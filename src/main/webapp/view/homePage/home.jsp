@@ -644,27 +644,13 @@
                         <div class="form-wrapper-center">
                             <div class="p-4 rounded-3 shadow-soft" data-bgcolor="#ffffff">
 
-                                <%-- ✅ Hiển thị flash error message (từ CarServlet) --%>
+                                <%-- ✅ Hiển thị thông báo lỗi (flash) --%>
                                 <c:if test="${not empty sessionScope.flashErrorMessage}">
-                                    <div class="alert alert-danger" role="alert"
-                                         style="margin-bottom: 15px;
-                                         display: flex;
-                                         align-items: center;
-                                         font-weight: 500;
-                                         font-size: 0.95rem;">
+                                    <div class="alert alert-danger text-center fw-bold" role="alert"
+                                         style="margin-bottom: 15px; display: flex; justify-content: center; font-size: 0.95rem;">
                                         <span>${sessionScope.flashErrorMessage}</span>
                                     </div>
-                                    <%
-                                        // ✅ Xóa sau khi hiển thị (flash message)
-                                        session.removeAttribute("flashErrorMessage");
-                                        session.removeAttribute("flashForm_location");
-                                        session.removeAttribute("flashForm_startDate");
-                                        session.removeAttribute("flashForm_pickupTime");
-                                        session.removeAttribute("flashForm_endDate");
-                                        session.removeAttribute("flashForm_dropoffTime");
-                                    %>
                                 </c:if>
-
 
                                 <form action="${pageContext.request.contextPath}/cars" method="get"
                                       class="main-search-form-simplified">
@@ -673,64 +659,69 @@
 
                                         <div class="input-group-simplified location-group-simplified">
                                             <label for="location">Pickup and return location</label>
-                                            <%-- SỬA: Thêm value="${location}" --%>
                                             <input type="text" id="autocomplete_location" name="location"
                                                    placeholder="Chọn địa điểm tìm xe" class="form-control" required
-                                                   value="${location}">
+                                                   value="${sessionScope.flashForm_location != null ? sessionScope.flashForm_location : location}">
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="pickupDate">Pickup Date</label>
-                                            <%-- SỬA: Thêm value="${startDate}" --%>
-                                            <input type="date" id="pickupDate" name="startDate" class="form-control"
-                                                   required value="${startDate}">
+                                            <input type="date" id="pickupDate" name="startDate" class="form-control" required
+                                                   value="${sessionScope.flashForm_startDate != null ? sessionScope.flashForm_startDate : startDate}">
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="pickupTime">Pickup Time</label>
                                             <select id="pickupTime" name="pickupTime" class="form-control" required>
-                                                <%-- SỬA: Logic chọn 'selected' cho option mặc định --%>
-                                                <option ${empty pickupTime ? 'selected' : ''} disabled value="">Select
-                                                    Time
+                                                <option ${empty pickupTime and empty sessionScope.flashForm_pickupTime ? 'selected' : ''} disabled value="">
+                                                    Select Time
                                                 </option>
                                                 <c:forEach var="hour" begin="6" end="22">
-                                                    <%-- SỬA: Logic kiểm tra và thêm 'selected' cho giá trị cũ --%>
-                                                    <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00"/>
-                                                    <option value="${timeValue}" ${timeValue eq pickupTime ? 'selected' : ''}>${timeValue}</option>
+                                                    <c:set var="timeValue" value="${hour lt 10 ? '0' : ''}${hour}:00"/>
+                                                    <option value="${timeValue}"
+                                                        ${timeValue eq pickupTime or timeValue eq sessionScope.flashForm_pickupTime ? 'selected' : ''}>
+                                                            ${timeValue}
+                                                    </option>
                                                 </c:forEach>
                                             </select>
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="returnDate">Return Date</label>
-                                            <%-- SỬA: Thêm value="${endDate}" --%>
-                                            <input type="date" id="returnDate" name="endDate" class="form-control"
-                                                   required value="${endDate}">
+                                            <input type="date" id="returnDate" name="endDate" class="form-control" required
+                                                   value="${sessionScope.flashForm_endDate != null ? sessionScope.flashForm_endDate : endDate}">
                                         </div>
 
                                         <div class="input-group-simplified">
                                             <label for="returnTime">Return Time</label>
                                             <select id="returnTime" name="dropoffTime" class="form-control" required>
-                                                <%-- SỬA: Logic chọn 'selected' cho option mặc định --%>
-                                                <option ${empty dropoffTime ? 'selected' : ''} disabled value="">Select
-                                                    Time
+                                                <option ${empty dropoffTime and empty sessionScope.flashForm_dropoffTime ? 'selected' : ''} disabled value="">
+                                                    Select Time
                                                 </option>
                                                 <c:forEach var="hour" begin="6" end="22">
-                                                    <%-- SỬA: Logic kiểm tra và thêm 'selected' cho giá trị cũ --%>
-                                                    <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00"/>
-                                                    <option value="${timeValue}" ${timeValue eq dropoffTime ? 'selected' : ''}>${timeValue}</option>
+                                                    <c:set var="timeValue" value="${hour lt 10 ? '0' : ''}${hour}:00"/>
+                                                    <option value="${timeValue}"
+                                                        ${timeValue eq dropoffTime or timeValue eq sessionScope.flashForm_dropoffTime ? 'selected' : ''}>
+                                                            ${timeValue}
+                                                    </option>
                                                 </c:forEach>
                                             </select>
                                         </div>
 
                                         <div class="search-button-group-simplified">
-                                            <button type="submit" id='send_message' value='Find a Vehicle'
-                                                    class="btn-search-final">Search
+                                            <button type="submit" id='send_message' value='Find a Vehicle' class="btn-search-final">
+                                                Search
                                             </button>
                                         </div>
-
                                     </div>
                                 </form>
+
+                                <%-- ✅ Xóa flash dữ liệu sau khi hiển thị (flash message) --%>
+                                <%
+                                    session.removeAttribute("flashErrorMessage");
+                                    
+                                %>
+
                             </div>
                         </div>
                     </div>
