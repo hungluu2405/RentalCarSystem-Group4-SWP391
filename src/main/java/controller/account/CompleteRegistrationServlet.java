@@ -7,9 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import service.account.CompleteRegistrationService;
 
 @WebServlet(urlPatterns = {"/complete-registration"})
 public class CompleteRegistrationServlet extends HttpServlet {
+
+    private final CompleteRegistrationService completeRegistrationService = new CompleteRegistrationService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -17,13 +20,13 @@ public class CompleteRegistrationServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        // Check if googleUser exists in session
-        if (session == null || session.getAttribute("googleUser") == null) {
+        // ✅ Dùng service để kiểm tra googleUser
+        if (!completeRegistrationService.hasGoogleUser(session)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        // Show form to complete registration
+        // Hiển thị form hoàn tất đăng ký
         request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
     }
 }
