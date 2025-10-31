@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import model.Booking;
-import model.Car;
 import model.User;
 
 @WebServlet(name = "AccountDashBoard", urlPatterns = {"/accountDB"})
@@ -25,7 +23,15 @@ public class AccountDBServlet extends HttpServlet {
         BookingDAO bookingDAO = new BookingDAO();
         PaymentDAO paymentDAO = new PaymentDAO();
         ContactDAO contactDAO = new ContactDAO();
+        Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
         List<User> listU = userDAO.getAllUsersForAdmin();
+
+        for (User u : listU) {
+            var license = licenseDAO.getLicenseByUserId(u.getUserId());
+            if (license != null && u.getUserProfile() != null) {
+                u.getUserProfile().setDriverLicenseNumber(license.getLicense_number());
+            }
+        }
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
