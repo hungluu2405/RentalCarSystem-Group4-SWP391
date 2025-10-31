@@ -137,18 +137,22 @@
                                             <input type='text' name='full_name' class="form-control"
                                                    value='${formData.full_name}' required>
                                         </div>
+
                                         <div class="field-set">
-                                            <label>Phone Number</label>
+                                            <label>Phone Number <span class="text-danger">*</span></label>
                                             <input type='tel' name='phone' class="form-control"
-                                                   value='${formData.phone}'>
+                                                   value='${formData.phone}' required>
                                         </div>
+
                                         <div class="field-set">
-                                            <label>Date of Birth</label>
-                                            <input type='date' name='dob' class="form-control" value='${formData.dob}'>
+                                            <label>Date of Birth <span class="text-danger">*</span></label>
+                                            <input type='date' name='dob' class="form-control" value='${formData.dob}'
+                                                   required>
                                         </div>
+
                                         <div class="field-set">
-                                            <label>Gender</label>
-                                            <select name="gender" class="form-control">
+                                            <label>Gender <span class="text-danger">*</span></label>
+                                            <select name="gender" class="form-control" required>
                                                 <option value="">-- Select --</option>
                                                 <option value="Male" ${formData.gender == 'Male' ? 'selected' : ''}>
                                                     Male
@@ -161,10 +165,11 @@
                                                 </option>
                                             </select>
                                         </div>
+
                                         <div class="field-set">
-                                            <label>Driver's License Number</label>
+                                            <label>Driver's License Number <span class="text-danger">*</span></label>
                                             <input type='text' name='driver_license_number' class="form-control"
-                                                   value='${formData.driver_license_number}'>
+                                                   value='${formData.driver_license_number}' required>
                                         </div>
                                     </div>
 
@@ -231,6 +236,7 @@
                                                    value='${formData.postal_code}'>
                                         </div>
                                     </div>
+
 
                                     <div class="col-lg-12 text-center mt-4">
                                         <input type='submit' value='Create Account' class="btn-main">
