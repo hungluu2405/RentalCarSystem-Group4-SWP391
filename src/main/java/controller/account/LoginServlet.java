@@ -1,33 +1,32 @@
-
 package controller.account;
 
-
-import dao.implement.UserDAO;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 import model.User;
+import service.account.LoginService;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
+    private final LoginService loginService = new LoginService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Đường dẫn đã chính xác tới file jsp trong thư mục view/homePage
         request.getRequestDispatcher("view/account/login.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String loginKey = request.getParameter("loginKey");
         String password = request.getParameter("password");
 
@@ -35,29 +34,32 @@ public class LoginServlet extends HttpServlet {
         formData.put("loginKey", loginKey);
         request.setAttribute("formData", formData);
 
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.checkLoginByEmailOrUsername(loginKey, password);
+        // ✅ Kiểm tra input
+        String error = loginService.validateInput(loginKey, password);
+        if (error != null) {
+            request.setAttribute("error", error);
+            request.getRequestDispatcher("view/account/login.jsp").forward(request, response);
+            return;
+        }
+
+        // ✅ Xác thực tài khoản
+        User user = loginService.authenticate(loginKey, password);
 
         if (user == null) {
-            // Đăng nhập thất bại, trả về trang login với thông báo lỗi
             request.setAttribute("error", "Invalid email or password!");
             request.getRequestDispatcher("view/account/login.jsp").forward(request, response);
-        } else {
-            // Đăng nhập thành công, lưu user vào session
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            
-            int role = user.getRoleId(); // hoặc user.getUserRole() nếu bạn đặt tên khác
+            return;
+        }
 
-            if (role == 1) {
-                // Chuyển hướng đến dashboard admin
-                response.sendRedirect(request.getContextPath() + "/accountDB");
-            } else {
-                // Người dùng thường -> về trang home
-                response.sendRedirect(request.getContextPath() + "/home");
-            }
-            // Chuyển hướng về trang chủ một cách an toàn
-//            response.sendRedirect(request.getContextPath() + "/home"); 
+        // ✅ Lưu vào session và điều hướng
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+
+        int role = user.getRoleId();
+        if (role == 1) {
+            response.sendRedirect(request.getContextPath() + "/accountDB"); // Admin
+        } else {
+            response.sendRedirect(request.getContextPath() + "/home"); // Người dùng thường
         }
     }
 }
