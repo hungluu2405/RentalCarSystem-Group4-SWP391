@@ -719,7 +719,6 @@
                                 <%-- ✅ Xóa flash dữ liệu sau khi hiển thị (flash message) --%>
                                 <%
                                     session.removeAttribute("flashErrorMessage");
-                                    
                                 %>
 
                             </div>
