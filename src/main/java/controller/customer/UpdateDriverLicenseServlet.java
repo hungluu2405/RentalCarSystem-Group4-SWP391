@@ -20,7 +20,7 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         licenseDAO = new Driver_LicenseDAO();
-//        licenseService = new Driver_LicenseService();
+//       licenseService = new Driver_LicenseService();
     }
 
     // 🟩 Hiển thị trang Driver License (GET)
@@ -80,14 +80,14 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             dl.setImage_url(imageUrl);
 
             // 🧠 Validate qua service
-            String validationMsg = licenseService.validateLicense(dl);
-            if (validationMsg != null) {
-                request.setAttribute("error", validationMsg);
-                request.setAttribute("license", dl);
-                request.getRequestDispatcher("view/customer/Driver_License.jsp")
-                        .forward(request, response);
-                return;
-            }
+//            String validationMsg = licenseService.validateLicense(dl);
+//            if (validationMsg != null) {
+//                request.setAttribute("error", validationMsg);
+//                request.setAttribute("license", dl);
+//                request.getRequestDispatcher("view/customer/Driver_License.jsp")
+//                        .forward(request, response);
+//                return;
+//            }
 
             // ✅ Update DB
             boolean success = licenseDAO.updateLicense(dl);
