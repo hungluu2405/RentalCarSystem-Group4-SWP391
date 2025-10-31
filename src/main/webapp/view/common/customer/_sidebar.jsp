@@ -27,6 +27,7 @@
             </a>
         </li>
 
+
         <li>
             <a href="${pageContext.request.contextPath}/customer/customerOrder"
                class="${activePage == 'orders' ? 'active' : ''}">
@@ -40,7 +41,12 @@
                 <i class="fa fa-calendar"></i> My Coupon
             </a>
         </li>
-
+        <li>
+            <a href="${pageContext.request.contextPath}/customer/profile"
+               class="${activePage == 'profile' ? 'active' : ''}">
+                <i class="fa fa-id-card"></i> Update Driver License
+            </a>
+        </li>
         <li>
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fa fa-sign-out"></i> Sign Out
