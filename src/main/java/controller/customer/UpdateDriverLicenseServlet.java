@@ -98,6 +98,15 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             if (frontImagePath != null) dl.setFront_image_url("/images/license/" + frontImagePath);
             if (backImagePath != null) dl.setBack_image_url("/images/license/" + backImagePath);
 
+            // 🧠 Validate qua service
+//            String validationMsg = licenseService.validateLicense(dl);
+//            if (validationMsg != null) {
+//                request.setAttribute("error", validationMsg);
+//                request.setAttribute("license", dl);
+//                request.getRequestDispatcher("view/customer/Driver_License.jsp")
+//                        .forward(request, response);
+//                return;
+//            }
             String validationMsg = licenseService.validateLicense(dl);
             if (validationMsg != null) {
                 forwardWithError(request, response, validationMsg);
