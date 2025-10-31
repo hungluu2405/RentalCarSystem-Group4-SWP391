@@ -53,9 +53,14 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
         if (dl == null) {
             dl = new Driver_License();
             dl.setUser_id(user.getUserId());
+            dl.setFullName(user.getUserProfile().getFullName());
+            dl.setGender(user.getUserProfile().getGender());
+            dl.setDob(user.getUserProfile().getDob());
         }
 
+
         request.setAttribute("license", dl);
+        request.setAttribute("activePage", "license");
         request.getRequestDispatcher("/view/customer/Driver_License.jsp").forward(request, response);
     }
 
