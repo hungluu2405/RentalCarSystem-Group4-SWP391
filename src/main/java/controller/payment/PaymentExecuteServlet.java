@@ -1,7 +1,7 @@
 package controller.payment;
 
-import service.PayPalService;
-import service.BookingService;  // ← THÊM IMPORT
+import service.booking.PayPalService;
+import service.booking.BookingService;  // ← THÊM IMPORT
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
