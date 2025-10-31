@@ -24,7 +24,7 @@ public class CarServlet extends HttpServlet {
         String name = request.getParameter("name");
         String brand = request.getParameter("brand");
         String typeId = request.getParameter("type");
-        String capacity = request.getParameter("seats");
+        String capacity = request.getParameter("capacity");
         String fuel = request.getParameter("fuel");
         String price = request.getParameter("price");
         String location = request.getParameter("location");

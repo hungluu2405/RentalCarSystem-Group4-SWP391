@@ -283,25 +283,31 @@
                         <div class="item_filter_group">
                             <h4>Filter Cars</h4>
                             <div class="p-3" data-bgcolor="#f5f5f5" style="border-radius: 5px;">
-                                <form action="${pageContext.request.contextPath}/cars" method="GET">
-                                    <%-- Thêm các trường ngày giờ ẩn để chúng được gửi lại khi filter --%>
-                                    <input type="hidden" name="startDate" value="${param.startDate}">
-                                    <input type="hidden" name="pickupTime" value="${param.pickupTime}">
-                                    <input type="hidden" name="endDate" value="${param.endDate}">
-                                    <input type="hidden" name="dropoffTime" value="${param.dropoffTime}">
+                                <form action="${pageContext.request.contextPath}/cars" method="get">
+                                    <%-- ✅ Giữ lại dữ liệu ngày/giờ khi chuyển từ /home --%>
+                                    <input type="hidden" name="startDate"
+                                           value="${param.startDate != null ? param.startDate : requestScope.startDate}">
+                                    <input type="hidden" name="pickupTime"
+                                           value="${param.pickupTime != null ? param.pickupTime : requestScope.pickupTime}">
+                                    <input type="hidden" name="endDate"
+                                           value="${param.endDate != null ? param.endDate : requestScope.endDate}">
+                                    <input type="hidden" name="dropoffTime"
+                                           value="${param.dropoffTime != null ? param.dropoffTime : requestScope.dropoffTime}">
 
                                     <div class="mb-3">
                                         <label class="form-label">Car Name</label>
-                                        <input type="text" name="name" class="form-control" value="${param.name}">
+                                        <input type="text" name="name" class="form-control"
+                                               value="${param.name != null ? param.name : requestScope.name}">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Brand</label>
                                         <select name="brand" class="form-control">
                                             <option value="">All Brands</option>
-                                            <%-- SỬA TÊN BIẾN: ${brands} -> ${brandList} --%>
                                             <c:forEach var="b" items="${brandList}">
-                                                <option value="${b}" ${b==param.brand?'selected':''}>${b}</option>
+                                                <option value="${b}" ${b == param.brand || b == requestScope.brand ? 'selected' : ''}>
+                                                        ${b}
+                                                </option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -310,24 +316,25 @@
                                         <label class="form-label">Type</label>
                                         <select name="type" class="form-control">
                                             <option value="">All Types</option>
-                                            <%-- Giữ nguyên: ${typeList} --%>
                                             <c:forEach var="t" items="${typeList}">
                                                 <c:set var="parts" value="${fn:split(t, ':')}"/>
-                                                <option value="${parts[0]}" ${parts[0]==param.type ? 'selected' : ''}>
+                                                <option value="${parts[0]}"
+                                                    ${parts[0] == param.type || parts[0] == requestScope.typeId ? 'selected' : ''}>
                                                         ${parts[1]}
                                                 </option>
                                             </c:forEach>
                                         </select>
                                     </div>
 
-
                                     <div class="mb-3">
                                         <label class="form-label">Seats</label>
                                         <select name="capacity" class="form-control">
                                             <option value="">Any</option>
-                                            <%-- SỬA TÊN BIẾN: ${capacities} -> ${capacityList} --%>
                                             <c:forEach var="c" items="${capacityList}">
-                                                <option value="${c}" ${c.toString()==param.capacity?'selected':''}>${c}</option>
+                                                <option value="${c}"
+                                                    ${c.toString() == param.capacity || c.toString() == requestScope.capacity ? 'selected' : ''}>
+                                                        ${c}
+                                                </option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -336,9 +343,9 @@
                                         <label class="form-label">Fuel</label>
                                         <select name="fuel" class="form-control">
                                             <option value="">Any</option>
-                                            <%-- SỬA TÊN BIẾN: ${fuels} -> ${fuelTypeList} --%>
                                             <c:forEach var="f" items="${fuelTypeList}">
-                                                <option value="${f}" ${f==param.fuel?'selected':''}>${f}</option>
+                                                <option value="${f}"
+                                                    ${f == param.fuel || f == requestScope.fuel ? 'selected' : ''}>${f}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -346,19 +353,20 @@
                                     <div class="mb-3">
                                         <label class="form-label">Location</label>
                                         <input type="text" name="location" class="form-control"
-                                               value="${param.location}" placeholder="Enter location...">
+                                               value="${param.location != null ? param.location : requestScope.location}"
+                                               placeholder="Enter location...">
                                     </div>
-
 
                                     <div class="mb-3">
                                         <label class="form-label">Max Price (VND/day)</label>
-                                        <input type="number" name="price" class="form-control" value="${param.price}"
+                                        <input type="number" name="price" class="form-control"
+                                               value="${param.price != null ? param.price : requestScope.price}"
                                                min="0">
                                     </div>
 
-
                                     <button type="submit" class="btn-main w-100">Apply Filter</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -435,60 +443,63 @@
                             </c:forEach>
                         </div>
 
-                        <%--
-                           PHẦN SỬA LỖI QUAN TRỌNG:
-                           Thêm các tham số ngày giờ vào TẤT CẢ các link phân trang.
-                           Nếu không, khi bấm sang trang 2, bộ lọc ngày giờ sẽ bị mất.
-                        --%>
+                        <%-- ✅ Giữ tham số filter và ngày giờ trong URL --%>
+                        <c:set var="safeStartDate" value="${empty param.startDate ? '' : param.startDate}"/>
+                        <c:set var="safePickupTime" value="${empty param.pickupTime ? '' : param.pickupTime}"/>
+                        <c:set var="safeEndDate" value="${empty param.endDate ? '' : param.endDate}"/>
+                        <c:set var="safeDropoffTime" value="${empty param.dropoffTime ? '' : param.dropoffTime}"/>
+
+                        <c:set var="safeName" value="${empty param.name ? '' : param.name}"/>
+                        <c:set var="safeBrand" value="${empty param.brand ? '' : param.brand}"/>
+                        <c:set var="safeType" value="${empty param.type ? '' : param.type}"/>
+                        <c:set var="safeCapacity" value="${empty param.capacity ? '' : param.capacity}"/>
+                        <c:set var="safeFuel" value="${empty param.fuel ? '' : param.fuel}"/>
+                        <c:set var="safeLocation" value="${empty param.location ? '' : param.location}"/>
+                        <c:set var="safePrice" value="${empty param.price ? '' : param.price}"/>
+
                         <c:set var="dateParams"
-                               value="&startDate=${param.startDate}&pickupTime=${param.pickupTime}&endDate=${param.endDate}&dropoffTime=${param.dropoffTime}"/>
+                               value="&startDate=${safeStartDate}&pickupTime=${safePickupTime}&endDate=${safeEndDate}&dropoffTime=${safeDropoffTime}"/>
                         <c:set var="filterParams"
-                               value="&name=${param.name}&brand=${param.brand}&type=${param.type}&capacity=${param.capacity}&fuel=${param.fuel}&location=${param.location}&price=${param.price}"/>
+                               value="&name=${safeName}&brand=${safeBrand}&type=${safeType}&capacity=${safeCapacity}&fuel=${safeFuel}&location=${safeLocation}&price=${safePrice}"/>
 
                         <nav aria-label="Page navigation" class="mt-4">
                             <ul class="pagination justify-content-center">
 
+                                <%-- Nút về đầu --%>
                                 <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                    <a class="page-link"
-                                       href="cars?page=1${filterParams}${dateParams}">«</a>
+                                    <a class="page-link" href="cars?page=1${filterParams}${dateParams}"
+                                       aria-label="First">«</a>
                                 </li>
 
+                                <%-- Dải phân trang thông minh --%>
                                 <c:choose>
-                                    <c:when test="${currentPage < 3}">
-                                        <c:forEach var="i" begin="1" end="${totalPages < 3 ? totalPages : 3}">
+                                    <c:when test="${totalPages <= 5}">
+                                        <c:forEach var="i" begin="1" end="${totalPages}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}${filterParams}${dateParams}">
-                                                        ${i}
-                                                </a>
+                                                   href="cars?page=${i}${filterParams}${dateParams}">${i}</a>
                                             </li>
                                         </c:forEach>
-                                        <c:if test="${totalPages > 3}">
-                                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                                            <li class="page-item">
-                                                <a class="page-link"
-                                                   href="cars?page=${totalPages}${filterParams}${dateParams}">
-                                                        ${totalPages}
-                                                </a>
-                                            </li>
-                                        </c:if>
                                     </c:when>
 
                                     <c:otherwise>
-                                        <li class="page-item disabled"><span class="page-link">...</span></li>
-
                                         <c:set var="start" value="${currentPage - 1}"/>
                                         <c:set var="end" value="${currentPage + 1}"/>
-                                        <c:if test="${end > totalPages}">
-                                            <c:set var="end" value="${totalPages}"/>
+                                        <c:if test="${start < 1}"><c:set var="start" value="1"/></c:if>
+                                        <c:if test="${end > totalPages}"><c:set var="end" value="${totalPages}"/></c:if>
+
+                                        <c:if test="${start > 1}">
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="cars?page=1${filterParams}${dateParams}">1</a>
+                                            </li>
+                                            <li class="page-item disabled"><span class="page-link">...</span></li>
                                         </c:if>
 
                                         <c:forEach var="i" begin="${start}" end="${end}">
                                             <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                 <a class="page-link"
-                                                   href="cars?page=${i}${filterParams}${dateParams}">
-                                                        ${i}
-                                                </a>
+                                                   href="cars?page=${i}${filterParams}${dateParams}">${i}</a>
                                             </li>
                                         </c:forEach>
 
@@ -496,38 +507,38 @@
                                             <li class="page-item disabled"><span class="page-link">...</span></li>
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="cars?page=${totalPages}${filterParams}${dateParams}">
-                                                        ${totalPages}
-                                                </a>
+                                                   href="cars?page=${totalPages}${filterParams}${dateParams}">${totalPages}</a>
                                             </li>
                                         </c:if>
                                     </c:otherwise>
                                 </c:choose>
 
+                                <%-- Nút tới cuối --%>
                                 <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                    <a class="page-link"
-                                       href="cars?page=${totalPages}${filterParams}${dateParams}">»</a>
+                                    <a class="page-link" href="cars?page=${totalPages}${filterParams}${dateParams}"
+                                       aria-label="Last">»</a>
                                 </li>
                             </ul>
 
+                            <%-- ✅ Form nhập trang nhanh --%>
                             <div class="d-flex justify-content-center mt-2">
                                 <form method="get" action="cars" class="d-flex">
-                                    <%-- Thêm các trường ẩn cho filter VÀ ngày giờ --%>
-                                    <input type="hidden" name="name" value="${param.name}">
-                                    <input type="hidden" name="brand" value="${param.brand}">
-                                    <input type="hidden" name="type" value="${param.type}">
-                                    <input type="hidden" name="capacity" value="${param.capacity}">
-                                    <input type="hidden" name="fuel" value="${param.fuel}">
-                                    <input type="hidden" name="location" value="${param.location}">
-                                    <input type="hidden" name="price" value="${param.price}">
-                                    <input type="hidden" name="startDate" value="${param.startDate}">
-                                    <input type="hidden" name="pickupTime" value="${param.pickupTime}">
-                                    <input type="hidden" name="endDate" value="${param.endDate}">
-                                    <input type="hidden" name="dropoffTime" value="${param.dropoffTime}">
+                                    <%-- Truyền lại tất cả filter + date --%>
+                                    <input type="hidden" name="name" value="${safeName}">
+                                    <input type="hidden" name="brand" value="${safeBrand}">
+                                    <input type="hidden" name="type" value="${safeType}">
+                                    <input type="hidden" name="capacity" value="${safeCapacity}">
+                                    <input type="hidden" name="fuel" value="${safeFuel}">
+                                    <input type="hidden" name="location" value="${safeLocation}">
+                                    <input type="hidden" name="price" value="${safePrice}">
+                                    <input type="hidden" name="startDate" value="${safeStartDate}">
+                                    <input type="hidden" name="pickupTime" value="${safePickupTime}">
+                                    <input type="hidden" name="endDate" value="${safeEndDate}">
+                                    <input type="hidden" name="dropoffTime" value="${safeDropoffTime}">
 
                                     <input type="number" name="page" min="1" max="${totalPages}"
-                                           class="form-control form-control-sm" placeholder="Trang..."
-                                           style="width:80px;">
+                                           class="form-control form-control-sm" placeholder="Page..."
+                                           style="width: 80px;">
                                     <button type="submit" class="btn btn-primary btn-sm ms-2">Go</button>
                                 </form>
                             </div>
