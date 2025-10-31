@@ -24,7 +24,7 @@ import java.util.List;
 
 public class AddCarController extends HttpServlet {
     private CarDAO carDAO = new CarDAO();
-
+    private final AddCarService addCarService = new AddCarService();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -66,9 +66,9 @@ public class AddCarController extends HttpServlet {
         String location = request.getParameter("location");
         int typeId = Integer.parseInt(request.getParameter("typeId"));
 
-        AddCarService addCarService = new AddCarService();
-        if (addCarService.isDuplicateLicensePlate(licensePlate)) {
-            request.setAttribute("errorMessage", "Biển số xe đã tồn tại trong hệ thống!");
+        String validationError = addCarService.validateCarData(year, pricePerDay, capacity, licensePlate);
+        if (validationError != null) { // Nếu có lỗi → trả lại form
+            request.setAttribute("errorMessage", validationError);
             // Gửi lại form và hiển thị thông báo lỗi
             List<CarType> carTypes = carDAO.getAllCarTypes();
             List<String> fuelTypes = carDAO.getAllFuelTypess();
