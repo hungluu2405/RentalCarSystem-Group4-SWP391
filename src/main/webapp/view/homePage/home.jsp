@@ -362,7 +362,8 @@
                                     <c:when test="${not empty sessionScope.user}">
                                         <!-- ICON CHUÔNG -->
                                         <div id="notificationMenu" class="notification-menu">
-                                            <button id="notificationBtn" class="btn-bell" type="button" aria-haspopup="true" aria-expanded="false" title="Notifications">
+                                            <button id="notificationBtn" class="btn-bell" type="button"
+                                                    aria-haspopup="true" aria-expanded="false" title="Notifications">
                                                 <i class="fa-solid fa-bell"></i>
                                                     <%-- ✅ THÊM: LOGIC HIỂN THỊ BADGE (COUNT) --%>
                                                 <c:if test="${sessionScope.unreadNotificationCount > 0}">
@@ -370,18 +371,21 @@
                                                 </c:if>
                                             </button>
 
-                                            <div class="notification-dropdown" role="menu" aria-labelledby="notificationBtn">
+                                            <div class="notification-dropdown" role="menu"
+                                                 aria-labelledby="notificationBtn">
                                                 <div class="dropdown-header">
                                                     <h4>Notifications</h4>
                                                         <%-- ✅ THÊM: NÚT ĐÁNH DẤU TẤT CẢ ĐÃ ĐỌC (Cần Servlet xử lý) --%>
-                                                    <a href="${pageContext.request.contextPath}/mark-all-read">Mark All Read</a>
+                                                    <a href="${pageContext.request.contextPath}/mark-all-read">Mark All
+                                                        Read</a>
                                                 </div>
 
 
                                                 <ul id="notification-list">
                                                     <c:choose>
                                                         <c:when test="${not empty sessionScope.latestNotifications}">
-                                                            <c:forEach var="noti" items="${sessionScope.latestNotifications}">
+                                                            <c:forEach var="noti"
+                                                                       items="${sessionScope.latestNotifications}">
                                                                 <%-- ✅ SỬA 1: DÙNG !noti.read ĐỂ GÁN CLASS "unread" --%>
                                                                 <li class="${!noti.read ? 'unread' : ''}">
 
@@ -640,21 +644,27 @@
                         <div class="form-wrapper-center">
                             <div class="p-4 rounded-3 shadow-soft" data-bgcolor="#ffffff">
 
-                                <%-- THÊM VÀO: Hiển thị thông báo lỗi (nếu có) --%>
-                                <c:if test="${not empty errorMessage}">
+                                <%-- ✅ Hiển thị flash error message (từ CarServlet) --%>
+                                <c:if test="${not empty sessionScope.flashErrorMessage}">
                                     <div class="alert alert-danger" role="alert"
-                                         style="
-                                                 margin-bottom: 15px;  <%-- SỬA: Xóa max-width và margin auto --%>
-                                                 display: flex;
-                                                 align-items: center;
-                                                 font-weight: 500;
-                                                 font-size: 0.95rem;
-                                                 ">
-
-                                            <%-- Nội dung lỗi (giờ sẽ là tiếng Anh) --%>
-                                        <span>${errorMessage}</span>
+                                         style="margin-bottom: 15px;
+                                         display: flex;
+                                         align-items: center;
+                                         font-weight: 500;
+                                         font-size: 0.95rem;">
+                                        <span>${sessionScope.flashErrorMessage}</span>
                                     </div>
+                                    <%
+                                        // ✅ Xóa sau khi hiển thị (flash message)
+                                        session.removeAttribute("flashErrorMessage");
+                                        session.removeAttribute("flashForm_location");
+                                        session.removeAttribute("flashForm_startDate");
+                                        session.removeAttribute("flashForm_pickupTime");
+                                        session.removeAttribute("flashForm_endDate");
+                                        session.removeAttribute("flashForm_dropoffTime");
+                                    %>
                                 </c:if>
+
 
                                 <form action="${pageContext.request.contextPath}/cars" method="get"
                                       class="main-search-form-simplified">
