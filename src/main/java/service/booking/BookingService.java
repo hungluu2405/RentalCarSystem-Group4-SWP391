@@ -1,4 +1,4 @@
-package service;
+package service.booking;
 
 import dao.implement.BookingDAO;
 import dao.implement.CarDAO;

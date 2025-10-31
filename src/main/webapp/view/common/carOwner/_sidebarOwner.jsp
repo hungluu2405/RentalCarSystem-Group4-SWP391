@@ -57,6 +57,11 @@
         </li>
 
         <li>
+            <a href="${pageContext.request.contextPath}/owner/rental-calendar" class="${activePage == 'rental-calendar' ? 'active' : ''}">
+                <i class="fa fa-history"></i> View Rental Calendar
+            </a>
+        </li>
+        <li>
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fa fa-sign-out"></i> Sign Out
             </a>
