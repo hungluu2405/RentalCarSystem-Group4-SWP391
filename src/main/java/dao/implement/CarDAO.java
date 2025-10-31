@@ -933,6 +933,22 @@ public class CarDAO extends DBContext {
         }
         return false;
     }
+    // ✅ Lấy carId theo biển số
+    public Integer getCarIdByLicensePlate(String licensePlate) {
+        String sql = "SELECT CAR_ID FROM CAR WHERE LICENSE_PLATE = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, licensePlate);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("CAR_ID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
     public double getCarPrice(int carId) {
