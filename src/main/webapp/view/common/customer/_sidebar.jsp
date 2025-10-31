@@ -42,8 +42,8 @@
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/customer/profile"
-               class="${activePage == 'profile' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/customer/license"
+               class="${activePage == 'update_dl' ? 'active' : ''}">
                 <i class="fa fa-id-card"></i> Update Driver License
             </a>
         </li>
