@@ -67,30 +67,91 @@
                             <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
                             <form action="${pageContext.request.contextPath}/customer/license"
-                                  method="post" enctype="multipart/form-data">
-                                <label>License Number:</label>
-                                <input type="text" name="license_number" value="${license.license_number}" required><br>
+                                  method="post"
+                                  enctype="multipart/form-data"
+                                  class="form-border p-4 bg-light rounded shadow-sm">
 
-                                <label>Issue Date:</label>
-                                <input type="date" name="issue_date" value="${license.issue_date}"><br>
+                                <!-- License Images -->
+                                <div class="text-center mb-4">
+                                    <div class="license-image-container">
+                                        <c:set var="frontImageUrl"
+                                               value="${license.front_image_url != null ? license.front_image_url : '/images/license/default-front.jpg'}" />
+                                        <c:set var="backImageUrl"
+                                               value="${license.back_image_url != null ? license.back_image_url : '/images/license/default-back.jpg'}" />
 
-                                <label>Expiry Date:</label>
-                                <input type="date" name="expiry_date" value="${license.expiry_date}"><br>
+                                        <div class="mb-3">
+                                            <label>Front Image:</label><br>
+                                            <img id="frontImagePreview"
+                                                 src="${pageContext.request.contextPath}${frontImageUrl}"
+                                                 alt="Front License"
+                                                 class="license-preview mb-2"
+                                                 width="150">
+                                            <input type="file" name="front_image" class="form-control">
+                                        </div>
 
-                                <label>Front Image:</label>
-                                <input type="file" name="front_image"><br>
-                                <c:if test="${not empty license.front_image_url}">
-                                    <img src="${pageContext.request.contextPath}${license.front_image_url}" width="150">
-                                </c:if><br>
+                                        <div class="mb-3">
+                                            <label>Back Image:</label><br>
+                                            <img id="backImagePreview"
+                                                 src="${pageContext.request.contextPath}${backImageUrl}"
+                                                 alt="Back License"
+                                                 class="license-preview mb-2"
+                                                 width="150">
+                                            <input type="file" name="back_image" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <label>Back Image:</label>
-                                <input type="file" name="back_image"><br>
-                                <c:if test="${not empty license.back_image_url}">
-                                    <img src="${pageContext.request.contextPath}${license.back_image_url}" width="150">
-                                </c:if><br>
+                                <!-- License & User Info -->
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="fullName" class="form-label">Full Name:</label>
+                                        <input type="text" id="fullName" name="fullName"
+                                               class="form-control"
+                                               value="${license.fullName}" readonly>
+                                    </div>
 
-                                <button type="submit">Update License</button>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="gender" class="form-label">Gender:</label>
+                                        <input type="text" id="gender" name="gender"
+                                               class="form-control"
+                                               value="${license.gender}" readonly>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="dob" class="form-label">Date of Birth:</label>
+                                        <input type="date" id="dob" name="dob"
+                                               class="form-control"
+                                               value="${license.dob}" readonly>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="license_number" class="form-label">License Number:</label>
+                                        <input type="text" id="license_number" name="license_number"
+                                               class="form-control"
+                                               value="${license.license_number}" required>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="issue_date" class="form-label">Issue Date:</label>
+                                        <input type="date" id="issue_date" name="issue_date"
+                                               class="form-control"
+                                               value="${license.issue_date}">
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="expiry_date" class="form-label">Expiry Date:</label>
+                                        <input type="date" id="expiry_date" name="expiry_date"
+                                               class="form-control"
+                                               value="${license.expiry_date}">
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn-main">Update License</button>
+                                </div>
                             </form>
+
+
 
 
                             <script>
