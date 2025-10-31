@@ -1,6 +1,5 @@
 package controller.account;
 
-import dao.implement.UserDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,10 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.User;
+import service.account.ResetPasswordService;
 
 @WebServlet(urlPatterns = {"/reset-password"})
 public class ResetPasswordServlet extends HttpServlet {
+
+    private final ResetPasswordService resetPasswordService = new ResetPasswordService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,32 +41,18 @@ public class ResetPasswordServlet extends HttpServlet {
         String password = request.getParameter("password");
         String rePassword = request.getParameter("re_password");
 
-        // Check if both fields are filled
-        if (password == null || password.isEmpty() || rePassword == null || rePassword.isEmpty()) {
-            request.setAttribute("error", "Please enter both the new password and confirmation!");
+        // ✅ Kiểm tra input
+        String error = resetPasswordService.validatePassword(password, rePassword);
+        if (error != null) {
+            request.setAttribute("error", error);
             request.getRequestDispatcher("view/account/reset-password.jsp").forward(request, response);
             return;
         }
 
-        // Check if passwords match
-        if (!password.equals(rePassword)) {
-            request.setAttribute("error", "Passwords do not match!");
-            request.getRequestDispatcher("view/account/reset-password.jsp").forward(request, response);
-            return;
-        }
+        // ✅ Cập nhật mật khẩu
+        boolean success = resetPasswordService.resetPassword(email, password);
 
-        // Validate password length
-        if (password.length() < 6) {
-            request.setAttribute("error", "Password must be at least 6 characters long!");
-            request.getRequestDispatcher("view/account/reset-password.jsp").forward(request, response);
-            return;
-        }
-
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.findUserByEmail(email);
-
-        if (user != null) {
-            userDAO.updatePassword(user.getUserId(), password);
+        if (success) {
             session.removeAttribute("reset_email");
             response.sendRedirect(request.getContextPath() + "/login?reset=success");
         } else {

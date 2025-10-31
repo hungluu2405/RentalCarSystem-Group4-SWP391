@@ -7,21 +7,29 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import util.ResetCodeStore;
+import service.account.VerifyCodeService;
 
 @WebServlet(urlPatterns = {"/verify-code"})
 public class VerifyCodeServlet extends HttpServlet {
+
+    private final VerifyCodeService verifyCodeService = new VerifyCodeService();
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         request.getRequestDispatcher("view/account/verify-code.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         String email = request.getParameter("email");
         String code = request.getParameter("code");
 
-        if (ResetCodeStore.validateCode(email, code)) {
+        boolean isValid = verifyCodeService.verifyCode(email, code);
+
+        if (isValid) {
             HttpSession session = request.getSession();
             session.setAttribute("reset_email", email);
             response.sendRedirect(request.getContextPath() + "/reset-password");
