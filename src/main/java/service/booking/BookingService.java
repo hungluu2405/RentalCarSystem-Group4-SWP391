@@ -1,15 +1,7 @@
 package service.booking;
 
-import dao.implement.BookingDAO;
-import dao.implement.CarDAO;
-import dao.implement.PromotionDAO;
-import dao.implement.BookingPromotionDAO;
-import dao.implement.NotificationDAO;
-import model.Booking;
-import model.Car;
-import model.Promotion;
-import model.BookingPromotion;
-import model.Notification;
+import dao.implement.*;
+import model.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,10 +14,14 @@ public class BookingService {
     private final PromotionDAO promoDAO = new PromotionDAO();
     private final BookingPromotionDAO bookingPromoDAO = new BookingPromotionDAO();
     private final NotificationDAO notificationDAO = new NotificationDAO();
+    private final Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
 
     public String createBooking(Booking booking, String promoCode, double frontendDiscount) {
-        // ... GIỮ NGUYÊN CODE CŨ ...
+        Driver_License license = licenseDAO.getLicenseByUserId(booking.getUserId());
         LocalDate today = LocalDate.now();
+        if (license == null) {
+            return "❌ You must upload your driver license before booking!";
+        }
 
         if (booking.getStartDate().isBefore(today)) {
             return "❌ The pickup date cannot be earlier than the current date!";
