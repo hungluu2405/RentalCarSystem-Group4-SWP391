@@ -15,6 +15,7 @@ import model.User;
 import model.UserProfile;
 import service.account.RegisterService;
 
+
 @WebServlet(urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
 
@@ -104,5 +105,7 @@ public class RegisterServlet extends HttpServlet {
         session.setAttribute("temp_address", address);
 
         response.sendRedirect(request.getContextPath() + "/verify-email?email=" + email);
+
     }
+
 }
