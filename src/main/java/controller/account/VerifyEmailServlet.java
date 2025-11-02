@@ -64,4 +64,5 @@ public class VerifyEmailServlet extends HttpServlet {
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
         }
     }
+
 }
