@@ -40,6 +40,7 @@
                                     <p>A 6-digit code has been sent to your email. Please enter it below.</p>
                                     <div class="spacer-10"></div>
                                     <p style="color:red;">${requestScope.error}</p>
+                                    <p style="color:green;">${requestScope.message}</p>
                                     <form id="form_verify" class="form-border" method="post" action="${pageContext.request.contextPath}/verify-code">
                                         <input type="hidden" name="email" value="${param.email}">
                                         <div class="field-set mb-3">
@@ -48,6 +49,20 @@
                                         <div id="submit">
                                             <input type="submit" value="Verify" class="btn-main btn-fullwidth rounded-3">                                        </div>
                                     </form>
+
+                                    <!-- ✅ Khu vực gửi lại mã -->
+                                    <div id="resendSection">
+                                        <p id="timer">You can resend code in <span id="countdown">60</span> seconds.</p>
+                                        <form id="resendForm" method="post"
+                                              action="${pageContext.request.contextPath}/resend-code"
+                                              class="mt-3"
+                                              style="display:none;">
+                                            <input type="hidden" name="email" value="${param.email}">
+                                            <input type="hidden" name="type" value="reset">
+                                            <input type="submit" value="Resend Code" class="btn-main btn-fullwidth rounded-3">
+                                        </form>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -58,5 +73,22 @@
     </div>
     <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
     <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+    <!-- ✅ Script đếm ngược 60s -->
+    <script>
+        let seconds = 60;
+        const countdown = document.getElementById("countdown");
+        const timerText = document.getElementById("timer");
+        const resendForm = document.getElementById("resendForm");
+
+        const interval = setInterval(() => {
+            seconds--;
+            countdown.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(interval);
+                timerText.style.display = "none";
+                resendForm.style.display = "block";
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
