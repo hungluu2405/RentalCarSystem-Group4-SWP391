@@ -19,7 +19,7 @@ public class RegisterService {
     /** ✅ Kiểm tra dữ liệu nhập */
     public String validateInput(String username, String email, String password, String rePassword,
                                 String fullName, String phone, String dobString, String gender,
-                                String licenseNumber, String addressLine, String city,
+                                String addressLine, String city,
                                 String country, String roleParam) {
         if (username == null || username.isEmpty()
                 || email == null || email.isEmpty()
@@ -29,7 +29,6 @@ public class RegisterService {
                 || phone == null || phone.isEmpty()
                 || dobString == null || dobString.isEmpty()
                 || gender == null || gender.isEmpty()
-                || licenseNumber == null || licenseNumber.isEmpty()
                 || addressLine == null || addressLine.isEmpty()
                 || city == null || city.isEmpty()
                 || country == null || country.isEmpty()
@@ -66,8 +65,7 @@ public class RegisterService {
         if (!gender.equalsIgnoreCase("male") && !gender.equalsIgnoreCase("female") && !gender.equalsIgnoreCase("other"))
             return "Invalid gender value!";
 
-        if (!licenseNumber.matches("^\\d{8,12}$"))
-            return "Driver’s license number must contain 8 to 12 digits!";
+
 
         try {
             Integer.parseInt(roleParam);
@@ -88,7 +86,7 @@ public class RegisterService {
     }
 
     /** ✅ Tạo User, Profile, Address và gửi OTP xác thực */
-    public void registerTempUser(String email, User user, UserProfile profile, Address address) {
+    public void registerTempUser(String email) {
         String otp = String.format("%06d", new Random().nextInt(999999));
         ResetCodeStore.saveCode(email, otp);
 

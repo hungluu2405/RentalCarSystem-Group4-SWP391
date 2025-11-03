@@ -166,11 +166,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="field-set">
-                                            <label>Driver's License Number <span class="text-danger">*</span></label>
-                                            <input type='text' name='driver_license_number' class="form-control"
-                                                   value='${formData.driver_license_number}' required>
-                                        </div>
+
                                     </div>
 
                                     <div class="col-lg-6">
