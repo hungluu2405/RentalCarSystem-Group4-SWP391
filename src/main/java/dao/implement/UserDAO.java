@@ -279,7 +279,7 @@ public class UserDAO extends GenericDAO<User> {
     }
 
     public User findUserByUsername(String username) {
-        String sql = "SELECT * FROM [USER] WHERE USERNAME = ?";
+        String sql = "SELECT * FROM [USER] WHERE USER_NAME = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
