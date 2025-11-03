@@ -161,6 +161,20 @@ public class NotificationDAO extends DBContext {
 
         return noti;
     }
+    // 6. MARK ALL AS READ (MỚI)
+    public void markAllAsRead(int userId) {
+        String sql = "UPDATE Notification SET is_read = 1 WHERE user_id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+            System.out.println("✅ Đã đánh dấu tất cả thông báo của user " + userId + " là đã đọc");
+        } catch (SQLException e) {
+            System.err.println("Lỗi UPDATE Mark All As Read:");
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Hàm tiện ích để đóng Connection, PreparedStatement và ResultSet.
