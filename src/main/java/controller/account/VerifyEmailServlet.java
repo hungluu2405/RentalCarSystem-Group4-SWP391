@@ -20,6 +20,13 @@ public class VerifyEmailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String msg = request.getParameter("msg");
+        if ("resent".equals(msg)) {
+            request.setAttribute("message", "A new code has been sent to your email.");
+        } else if ("failed".equals(msg)) {
+            request.setAttribute("error", "Failed to resend code. Please try again.");
+        }
+
         request.getRequestDispatcher("view/account/verify-email.jsp").forward(request, response);
     }
 
@@ -43,10 +50,12 @@ public class VerifyEmailServlet extends HttpServlet {
 
         // Kiểm tra session
         if (user == null) {
-            request.setAttribute("error", "Session expired. Please register again.");
-            request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
+            String emails = request.getParameter("email");
+            request.setAttribute("error", "Your session expired. Please verify again.");
+            response.sendRedirect(request.getContextPath() + "/register?email=" + emails);
             return;
         }
+
 
         // Gọi service để lưu vào DB
         boolean isSuccess = verifyEmailService.registerAfterVerification(user, profile, address);
