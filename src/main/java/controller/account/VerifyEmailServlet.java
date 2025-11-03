@@ -67,6 +67,8 @@ public class VerifyEmailServlet extends HttpServlet {
 
             // Đăng nhập tự động sau xác thực thành công
             session.setAttribute("user", user);
+
+            //them ham thong bao o day ha?
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.setAttribute("error", "Error creating account. Please try registering again.");
