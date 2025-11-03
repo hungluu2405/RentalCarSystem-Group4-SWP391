@@ -385,7 +385,7 @@
                     <!-- Sidebar -->
                     <div class="col-lg-3 mb30">
                         <jsp:include page="../common/carOwner/_sidebarOwner.jsp">
-                            <jsp:param name="activePage" value="calendar"/>
+                            <jsp:param name="activePage" value="rental-calendar"/>
                         </jsp:include>
                     </div>
 
