@@ -46,7 +46,7 @@ public class VerifyEmailService {
                     "WELCOME_VOUCHER",
                     "Welcome to Rentaly! 🎉",
                     "Welcome! As a new member, you receive a special voucher code: NEWUSER. Get 15% off your first booking!",
-                    "/customer/carListing"
+                    "/home"
             ));
             System.out.println("✅ Notification sent for userId = " + userId);
         } catch (Exception e) {
