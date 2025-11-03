@@ -95,7 +95,7 @@ public class RegisterServlet extends HttpServlet {
         Address address = new Address(addressLine, city, city, postalCode, country);
 
         // ✅ Gửi OTP xác thực
-        registerService.registerTempUser(email, user, profile, address);
+        registerService.registerTempUser(email);
 
         // ✅ Lưu tạm vào session
         HttpSession session = request.getSession();
