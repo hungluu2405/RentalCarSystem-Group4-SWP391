@@ -177,6 +177,8 @@ public class UserDAO extends GenericDAO<User> {
                     if (generatedKeys.next()) {
                         int newUserId = generatedKeys.getInt(1);
 
+                        user.setUserId(newUserId);
+
                         try (PreparedStatement profileSt = connection.prepareStatement(insertProfileSql)) {
                             profileSt.setInt(1, newUserId);
                             profileSt.setString(2, profile.getFullName());
