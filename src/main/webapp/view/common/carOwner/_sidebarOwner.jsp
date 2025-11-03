@@ -55,7 +55,6 @@
                 <i class="fa fa-history"></i> My Booking
             </a>
         </li>
-
         <li>
             <a href="${pageContext.request.contextPath}/owner/rental-calendar" class="${activePage == 'rental-calendar' ? 'active' : ''}">
                 <i class="fa fa-history"></i> View Rental Calendar
