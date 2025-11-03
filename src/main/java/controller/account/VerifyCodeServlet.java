@@ -17,6 +17,13 @@ public class VerifyCodeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String msg = request.getParameter("msg");
+        if ("resent".equals(msg)) {
+            request.setAttribute("message", "A new code has been sent to your email.");
+        } else if ("failed".equals(msg)) {
+            request.setAttribute("error", "Failed to resend code. Please try again.");
+        }
+
         request.getRequestDispatcher("view/account/verify-code.jsp").forward(request, response);
     }
 
