@@ -1,9 +1,11 @@
 package service.account;
 
 import dao.implement.UserDAO;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
+
 import model.Address;
 import model.GoogleUser;
 import model.User;
@@ -17,7 +19,9 @@ public class CreateGoogleAccountService {
         this.userDAO = new UserDAO();
     }
 
-    /** ✅ Kiểm tra dữ liệu nhập */
+    /**
+     * ✅ Kiểm tra dữ liệu nhập
+     */
     public String validateForm(java.util.Map<String, String> data, GoogleUser googleUser) {
         String username = data.get("username");
         String password = data.get("password");
@@ -25,7 +29,6 @@ public class CreateGoogleAccountService {
         String phone = data.get("phone");
         String dobString = data.get("dob");
         String gender = data.get("gender");
-        String licenseNumber = data.get("driver_license_number");
         String addressLine = data.get("address_line");
         String city = data.get("city");
         String country = data.get("country");
@@ -38,7 +41,6 @@ public class CreateGoogleAccountService {
                 || phone == null || phone.isEmpty()
                 || dobString == null || dobString.isEmpty()
                 || gender == null || gender.isEmpty()
-                || licenseNumber == null || licenseNumber.isEmpty()
                 || addressLine == null || addressLine.isEmpty()
                 || city == null || city.isEmpty()
                 || country == null || country.isEmpty()
@@ -80,11 +82,6 @@ public class CreateGoogleAccountService {
             return "Invalid gender value!";
         }
 
-        // 🟩 Kiểm tra bằng lái
-        if (!licenseNumber.matches("^\\d{8,12}$"))
-            return "Driver’s license number must contain 8 to 12 digits!";
-
-
         // 🟩 Kiểm tra role ID hợp lệ
         try {
             Integer.parseInt(roleParam);
@@ -101,7 +98,9 @@ public class CreateGoogleAccountService {
         return null;
     }
 
-    /** ✅ Tạo tài khoản người dùng mới sau khi xác thực Google */
+    /**
+     * ✅ Tạo tài khoản người dùng mới sau khi xác thực Google
+     */
     public boolean createAccount(GoogleUser googleUser, java.util.Map<String, String> data) {
         User user = new User();
         user.setUsername(data.get("username"));
@@ -119,7 +118,6 @@ public class CreateGoogleAccountService {
         }
 
         profile.setGender(data.get("gender"));
-        profile.setDriverLicenseNumber(data.get("driver_license_number"));
 
         Address address = new Address(
                 data.get("address_line"),
