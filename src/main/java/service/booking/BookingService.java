@@ -176,6 +176,22 @@ public class BookingService {
                         "/owner/ownerBooking?id=" + bookingId
                 ));
             }
+            else if ("Completed".equals(status)) {
+                // Thông báo cho Customer
+                notificationDAO.insertNotification(new Notification(
+                        customerId, "BOOKING_COMPLETED",
+                        "Booking Successful!",
+                        "Your trip with " + car.getModel() + " has been completed. Thank you for using Rentaly!",
+                        "/customer/customerOrder?id=" + bookingId
+                ));
+                // Thông báo cho Owner
+                notificationDAO.insertNotification(new Notification(
+                        ownerId, "BOOKING_COMPLETED",
+                        "BOOKING_COMPLETED!",
+                        "Customer has done the trip with " + car.getModel() + ". Please check the car after trip.",
+                        "/owner/ownerBooking?id=" + bookingId
+                ));
+            }
         } catch (Exception e) {
             System.err.println("Lỗi tạo thông báo khi cập nhật trạng thái " + status + ": " + e.getMessage());
         }
