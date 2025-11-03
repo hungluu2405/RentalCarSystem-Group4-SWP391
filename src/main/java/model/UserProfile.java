@@ -16,12 +16,11 @@ public class UserProfile {
     public UserProfile() {
     }
 
-    public UserProfile(String fullName, String phone, Date dob, String gender, String driverLicenseNumber) {
+    public UserProfile(String fullName, String phone, Date dob, String gender) {
         this.fullName = fullName;
         this.phone = phone;
         this.dob = dob;
         this.gender = gender;
-        this.driverLicenseNumber = driverLicenseNumber;
     }
 
     // === Getters & Setters ===

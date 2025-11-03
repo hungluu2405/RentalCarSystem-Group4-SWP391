@@ -42,7 +42,6 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String dobString = request.getParameter("dob");
         String gender = request.getParameter("gender");
-        String licenseNumber = request.getParameter("driver_license_number");
         String addressLine = request.getParameter("address_line");
         String city = request.getParameter("city");
         String country = request.getParameter("country");
@@ -57,7 +56,6 @@ public class RegisterServlet extends HttpServlet {
         formData.put("phone", phone);
         formData.put("dob", dobString);
         formData.put("gender", gender);
-        formData.put("driver_license_number", licenseNumber);
         formData.put("address_line", addressLine);
         formData.put("city", city);
         formData.put("country", country);
@@ -67,7 +65,7 @@ public class RegisterServlet extends HttpServlet {
 
         // ✅ Validate dữ liệu
         String error = registerService.validateInput(username, email, password, rePassword, fullName,
-                phone, dobString, gender, licenseNumber, addressLine, city, country, roleParam);
+                phone, dobString, gender, addressLine, city, country, roleParam);
         if (error != null) {
             request.setAttribute("error", error);
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
@@ -92,11 +90,11 @@ public class RegisterServlet extends HttpServlet {
         user.setPassword(password);
         user.setRoleId(roleId);
 
-        UserProfile profile = new UserProfile(fullName, phone, dob, gender, licenseNumber);
+        UserProfile profile = new UserProfile(fullName, phone, dob, gender);
         Address address = new Address(addressLine, city, city, postalCode, country);
 
         // ✅ Gửi OTP xác thực
-        registerService.registerTempUser(email, user, profile, address);
+        registerService.registerTempUser(email);
 
         // ✅ Lưu tạm vào session
         HttpSession session = request.getSession();
