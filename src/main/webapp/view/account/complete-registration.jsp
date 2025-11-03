@@ -8,6 +8,8 @@
     <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
+
     <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"
           type="text/css">
 </head>
@@ -57,9 +59,9 @@
                                         <h5>Personal Details</h5>
 
                                         <div class="field-set">
-                                            <label>Full Name (from Google)</label>
+                                            <label>Full Name (from Google)<span class="text-danger">*</span></label>
                                             <input type="text" name="full_name" class="form-control"
-                                                   value="${sessionScope.googleUser.name}" readonly>
+                                                   value="${sessionScope.googleUser.name}" required>
                                         </div>
 
                                         <div class="field-set">
@@ -163,8 +165,8 @@
 
 
                                     <div class="col-lg-12 text-center mt-4">
-                                        <input type="submit" value="Create Account"
-                                               class="btn-main color-2 btn-fullwidth rounded-3">
+                                        <input type="submit" value="Create Account" class="btn-main btn-fullwidth rounded-3">
+
                                     </div>
                                 </div>
                             </form>
