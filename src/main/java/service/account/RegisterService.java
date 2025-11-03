@@ -87,7 +87,7 @@ public class RegisterService {
     }
 
     /** ✅ Tạo User, Profile, Address và gửi OTP xác thực */
-    public void registerTempUser(String email, User user, UserProfile profile, Address address) {
+    public void registerTempUser(String email) {
         String otp = String.format("%06d", new Random().nextInt(999999));
         ResetCodeStore.saveCode(email, otp);
 
