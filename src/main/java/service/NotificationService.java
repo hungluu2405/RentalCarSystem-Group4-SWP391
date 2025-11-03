@@ -22,4 +22,10 @@ public class NotificationService {
     public void markNotificationAsRead(int notificationId) {
         notificationDAO.markAsRead(notificationId);
     }
+
+    public void markAllAsRead(int userId) {
+        notificationDAO.markAllAsRead(userId);
+    }
+
+
 }
