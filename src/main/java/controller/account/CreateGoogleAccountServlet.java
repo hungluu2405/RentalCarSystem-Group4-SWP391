@@ -35,7 +35,7 @@ public class CreateGoogleAccountServlet extends HttpServlet {
         Map<String, String> data = new HashMap<>();
         String[] fields = {
                 "username", "password", "re_password", "phone", "dob", "gender",
-                "driver_license_number", "role_id", "address_line", "city", "country", "postal_code"
+                "role_id", "address_line", "city", "country", "postal_code"
         };
         for (String f : fields) {
             data.put(f, request.getParameter(f) != null ? request.getParameter(f).trim() : "");
