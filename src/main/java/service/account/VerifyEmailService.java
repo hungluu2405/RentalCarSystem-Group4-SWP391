@@ -39,14 +39,14 @@ public class VerifyEmailService {
     }
 
     /** ✅ Gửi thông báo chào mừng */
-    private void sendWelcomeNotification(int userId) {
+    public void sendWelcomeNotification(int userId) {
         try {
             notificationDAO.insertNotification(new Notification(
                     userId,
                     "WELCOME_VOUCHER",
                     "Welcome to Rentaly! 🎉",
-                    "Welcome! As a new member, you receive a special voucher code: NEWUSER. Get 10% off your first booking!",
-                    "/customer/carListing"
+                    "Welcome! As a new member, you receive a special voucher code: NEWUSER. Get 15% off your first booking!",
+                    "/home"
             ));
             System.out.println("✅ Notification sent for userId = " + userId);
         } catch (Exception e) {
