@@ -1,23 +1,29 @@
 package service;
 
+import dao.implement.BookingDAO;
+import dao.implement.CarDAO;
 import dao.implement.NotificationDAO;
+import model.Booking;
+import model.Car;
 import model.Notification;
+
 import java.util.List;
 
 public class NotificationService {
 
     private final NotificationDAO notificationDAO = new NotificationDAO();
+    private final BookingDAO bookingDAO = new BookingDAO();
+    private final CarDAO carDAO = new CarDAO();
 
+    // ==================== EXISTING METHODS ====================
 
     public List<Notification> getHeaderNotifications(int userId) {
         return notificationDAO.getLatestNotificationsByUserId(userId);
     }
 
-
     public int getUnreadCount(int userId) {
         return notificationDAO.getUnreadCountByUserId(userId);
     }
-
 
     public void markNotificationAsRead(int notificationId) {
         notificationDAO.markAsRead(notificationId);
@@ -27,5 +33,183 @@ public class NotificationService {
         notificationDAO.markAllAsRead(userId);
     }
 
+    // ==================== BOOKING NOTIFICATION METHODS ====================
 
+    /**
+     * Gửi thông báo khi tạo booking mới (Pending)
+     */
+    public void notifyBookingCreated(int bookingId, int customerId, int ownerId, String carModel) {
+        try {
+            // Thông báo cho Customer
+            notificationDAO.insertNotification(new Notification(
+                    customerId,
+                    "BOOKING_PENDING",
+                    "Your car booking has been received!",
+                    "Your car booking has been received! Please wait for the Owner to approve it.",
+                    "/customer/customerOrder?id=" + bookingId
+            ));
+
+            // Thông báo cho Owner
+            notificationDAO.insertNotification(new Notification(
+                    ownerId,
+                    "BOOKING_NEW",
+                    "New car booking request!",
+                    "A new booking has been made for " + carModel + ". Please review the request.",
+                    "/owner/ownerBooking?id=" + bookingId
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking created notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo khi Owner approve booking
+     */
+    public void notifyBookingApproved(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            notificationDAO.insertNotification(new Notification(
+                    booking.getUserId(),
+                    "BOOKING_APPROVED",
+                    "The booking has been approved!",
+                    "Your booking for " + car.getModel() + " has been approved! Please proceed to payment.",
+                    "/customer/customerOrder?id=" + bookingId
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking approved notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo khi Owner reject booking
+     */
+    public void notifyBookingRejected(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            notificationDAO.insertNotification(new Notification(
+                    booking.getUserId(),
+                    "BOOKING_REJECTED",
+                    "The booking has been rejected.",
+                    "Your booking for " + car.getModel() + " was rejected by the Owner.",
+                    "/home"
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking rejected notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo khi Customer cancel booking
+     */
+    public void notifyBookingCancelled(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            int customerId = booking.getUserId();
+            int ownerId = car.getOwnerId();
+
+            // Thông báo cho Customer
+            notificationDAO.insertNotification(new Notification(
+                    customerId,
+                    "BOOKING_CANCELLED",
+                    "Booking Cancelled Successfully.",
+                    "You have successfully cancelled your booking for " + car.getModel() + ".",
+                    "/customer/customerOrder?id=" + bookingId
+            ));
+
+            // Thông báo cho Owner
+            notificationDAO.insertNotification(new Notification(
+                    ownerId,
+                    "BOOKING_CANCELLED",
+                    "Customer Cancelled Booking!",
+                    "The booking for " + car.getModel() + " has been cancelled by the Customer.",
+                    "/owner/ownerBooking?id=" + bookingId
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking cancelled notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo khi Customer thanh toán thành công
+     */
+    public void notifyBookingPaid(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            int customerId = booking.getUserId();
+            int ownerId = car.getOwnerId();
+
+            // Thông báo cho Customer
+            notificationDAO.insertNotification(new Notification(
+                    customerId,
+                    "BOOKING_PAID",
+                    "Payment Successful!",
+                    "Your payment for " + car.getModel() + " has been confirmed. Enjoy your trip!",
+                    "/customer/customerOrder?id=" + bookingId
+            ));
+
+            // Thông báo cho Owner
+            notificationDAO.insertNotification(new Notification(
+                    ownerId,
+                    "BOOKING_PAID",
+                    "Payment Received!",
+                    "Customer has paid for the booking of " + car.getModel() + ". Prepare the car for pickup.",
+                    "/owner/ownerBooking?id=" + bookingId
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking paid notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo khi booking hoàn thành (Completed)
+     */
+    public void notifyBookingCompleted(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            int customerId = booking.getUserId();
+            int ownerId = car.getOwnerId();
+
+            // Thông báo cho Customer
+            notificationDAO.insertNotification(new Notification(
+                    customerId,
+                    "BOOKING_COMPLETED",
+                    "Car Returned Successfully!",
+                    "Your trip with " + car.getModel() + " has been completed. Thank you for using Rentaly!",
+                    "/customer/customerOrder?id=" + bookingId
+            ));
+
+            // Thông báo cho Owner
+            notificationDAO.insertNotification(new Notification(
+                    ownerId,
+                    "BOOKING_COMPLETED",
+                    "Trip Completed by Customer!",
+                    "Customer has done the trip with " + car.getModel() + ". Please check the car after trip.",
+                    "/owner/ownerBooking?id=" + bookingId
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking completed notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
