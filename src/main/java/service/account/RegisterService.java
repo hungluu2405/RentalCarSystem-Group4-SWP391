@@ -5,11 +5,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Random;
-import model.Address;
-import model.User;
-import model.UserProfile;
+
+import model.*;
 import util.EmailUtil;
 import util.ResetCodeStore;
+import dao.implement.NotificationDAO;
+
 
 public class RegisterService {
 
@@ -92,4 +93,5 @@ public class RegisterService {
         EmailUtil.sendEmail(email, "Your Rentaly Verification Code",
                 "Your verification code is: <h2><b>" + otp + "</b></h2>");
     }
+
 }

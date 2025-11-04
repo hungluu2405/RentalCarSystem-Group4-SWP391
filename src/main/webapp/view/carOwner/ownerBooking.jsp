@@ -118,7 +118,7 @@
                                         <th>Customer</th>
                                         <th>Phone</th>
                                         <th>Pickup</th>
-                                        <th>Dropoff</th>
+                                        <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
                                         <th>Total (VND)</th>
@@ -172,7 +172,7 @@
                                         <th>Customer</th>
                                         <th>Phone</th>
                                         <th>Pickup</th>
-                                        <th>Dropoff</th>
+                                        <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
                                         <th>Total (VND)</th>
@@ -229,7 +229,7 @@
                                         <th>Customer</th>
                                         <th>Phone</th>
                                         <th>Pickup</th>
-                                        <th>Dropoff</th>
+                                        <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
                                         <th>Total (VND)</th>

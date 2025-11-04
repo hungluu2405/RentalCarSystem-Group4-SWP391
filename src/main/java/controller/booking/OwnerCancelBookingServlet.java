@@ -2,7 +2,7 @@ package controller.booking;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import service.BookingService;
+import service.booking.BookingService;
 import java.io.IOException;
 
 @WebServlet("/owner/cancelBooking")
