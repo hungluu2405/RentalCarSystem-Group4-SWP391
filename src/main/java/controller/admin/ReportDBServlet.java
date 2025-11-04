@@ -18,7 +18,7 @@ public class ReportDBServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
-
+        ContactDAO contactDAO = new ContactDAO();
         // Giả sử DAO của bạn có hàm getAll()
 //        List<Payment> listRP = paymentDAO.getAll();
 
@@ -26,7 +26,7 @@ public class ReportDBServlet extends HttpServlet {
         int totalCars = carDAO.countAllCars();
         int totalBookings = bookingDAO.countAllBookings();
         int totalReports = paymentDAO.countAllReport();
-
+        int totalContacts = contactDAO.countUnresolvedContacts();
         String type = request.getParameter("type");
 
         List<Payment> listRP;
@@ -50,6 +50,7 @@ public class ReportDBServlet extends HttpServlet {
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
         request.setAttribute("totalReports",totalReports);
+        request.setAttribute("totalContacts", totalContacts);
         request.setAttribute("activePage", "report");
         request.getRequestDispatcher("/view/admin/Report.jsp").forward(request, response);
     }

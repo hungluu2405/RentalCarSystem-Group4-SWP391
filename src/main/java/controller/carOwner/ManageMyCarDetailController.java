@@ -8,6 +8,7 @@ import model.CarViewModel;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import service.ManageCarDetailService;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +22,13 @@ import java.util.List;
 public class ManageMyCarDetailController extends HttpServlet {
 
     private final CarDAO carDAO = new CarDAO();
-
+    private final ManageCarDetailService carService = new ManageCarDetailService(); // 🔹 Đã chỉnh
+    private void reloadFormData(HttpServletRequest request, CarViewModel car) {
+        request.setAttribute("car", car);
+        request.setAttribute("carTypes", carDAO.getAllCarTypes());
+        request.setAttribute("fuelTypes", carDAO.getAllFuelTypess());
+        request.setAttribute("transmissions", carDAO.getAllTransmissions());
+    }
     // Xử lý hiển thị chi tiết xe
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -99,12 +106,24 @@ public class ManageMyCarDetailController extends HttpServlet {
                     // Nếu không upload ảnh mới, giữ nguyên ảnh cũ
                     car.setImageUrl(request.getParameter("oldImageUrl"));
                 }
+                // 🔹 Đã chỉnh: gọi service để kiểm tra hợp lệ
+                String error = carService.validateCarUpdate(car);
+                if (error != null) {
+                    request.setAttribute("error", error);
+                    request.setAttribute("car", car);
+                    request.setAttribute("carTypes", carDAO.getAllCarTypes());
+                    request.setAttribute("fuelTypes", carDAO.getAllFuelTypess());
+                    request.setAttribute("transmissions", carDAO.getAllTransmissions());
+                    request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
+                    return;
+                }
 
+                // 🔹 Đã chỉnh: chỉ update nếu validate pass
                 boolean updated = carDAO.updateCar(car);
                 if (updated) {
                     response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
                 } else {
-                    request.setAttribute("error", "Update failed!");
+                    request.setAttribute("error", "Cập nhật xe thất bại!");
                     request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
                 }
 
@@ -127,4 +146,5 @@ public class ManageMyCarDetailController extends HttpServlet {
         }
     }
 }
+
 

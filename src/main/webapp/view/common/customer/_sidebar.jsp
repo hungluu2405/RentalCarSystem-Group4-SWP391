@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:set var="activePage" value="${param.activePage}" />
+<c:set var="activePage" value="${activePage != null ? activePage : param.activePage}" />
+
 
 <div class="card padding30 rounded-5 text-center">
     <div class="profile_avatar mb-3">
@@ -27,6 +28,7 @@
             </a>
         </li>
 
+
         <li>
             <a href="${pageContext.request.contextPath}/customer/customerOrder"
                class="${activePage == 'orders' ? 'active' : ''}">
@@ -40,7 +42,12 @@
                 <i class="fa fa-calendar"></i> My Coupon
             </a>
         </li>
-
+        <li>
+            <a href="${pageContext.request.contextPath}/customer/license"
+               class="${activePage == 'license' ? 'active' : ''}">
+                <i class="fa fa-id-card"></i> Update Driver License
+            </a>
+        </li>
         <li>
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fa fa-sign-out"></i> Sign Out
