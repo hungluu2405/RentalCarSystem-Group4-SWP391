@@ -196,8 +196,8 @@
 
                                     <div class="col-lg-6 mb20">
                                         <h5>Driver License Number</h5>
-                                        <input type="text" name="driverLicenseNumber" class="form-control"
-                                               value="${profile.driverLicenseNumber}"
+                                        <input type="text" name="license" class="form-control"
+                                               value="${license.license_number}"
                                                placeholder="Enter your driver license number">
                                     </div>
 

@@ -6,7 +6,7 @@ import jakarta.servlet.http.*;
 import model.Booking;
 import model.CarViewModel;
 import model.User;
-import service.BookingService;
+import service.booking.BookingService;
 import dao.implement.CarDAO;
 
 import java.io.IOException;

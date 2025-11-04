@@ -30,11 +30,46 @@ public class UserDAO extends GenericDAO<User> {
         return insertGenericDAO(user);
     }
 
-    // Lấy user theo ID
     public User getUserById(int id) {
-        String sql = "SELECT * FROM [USER] WHERE userId = ?";
-        List<User> list = queryGenericDAO(User.class, sql, Map.of("userId", id));
-        return list.isEmpty() ? null : list.get(0);
+        String sql = "SELECT * FROM [USER] WHERE USER_ID = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("USER_ID"));
+                user.setUsername(rs.getString("USER_NAME"));
+                user.setEmail(rs.getString("EMAIL"));
+                user.setPassword(rs.getString("PASSWORD"));
+                user.setRoleId(rs.getInt("ROLE_ID"));
+
+                try {
+                    user.setIsEmailVerified(rs.getBoolean("IS_EMAIL_VERIFIED"));
+                } catch (SQLException e) {
+                    user.setIsEmailVerified(false);
+                }
+
+                try {
+                    user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                } catch (SQLException e) {
+                    // Ignore if column not exists
+                }
+
+                // Load UserProfile
+                UserProfileDAO profileDAO = new UserProfileDAO();
+                UserProfile profile = profileDAO.findByUserId(id);
+                user.setUserProfile(profile);
+
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error in getUserById: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     // Lấy user theo email (ví dụ cho login)

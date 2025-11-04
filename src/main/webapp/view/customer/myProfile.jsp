@@ -125,10 +125,19 @@
                                     <div class="col-lg-6 mb20">
                                         <h5>Driver License Number</h5>
 
-                                        <input type="text" name="driverLicenseNumber" class="form-control"
-                                               value="${not empty input_driverLicenseNumber ? input_driverLicenseNumber : sessionScope.user.userProfile.driverLicenseNumber}"
-                                               placeholder="Enter your driver license number">
+                                        <input type="text"
+                                               class="form-control"
+                                               value="${license != null ? license.license_number : 'Not registered'}"
+                                               readonly>
+
+                                        <small class="text-muted">
+                                            To update your license, please visit
+                                            <a href="${pageContext.request.contextPath}/customer/license" class="text-primary">
+                                                License Management
+                                            </a>.
+                                        </small>
                                     </div>
+
 
                                     <div class="col-lg-6 mb20">
 

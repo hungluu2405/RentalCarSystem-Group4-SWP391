@@ -1,15 +1,7 @@
-package service;
+package service.booking;
 
-import dao.implement.BookingDAO;
-import dao.implement.CarDAO;
-import dao.implement.PromotionDAO;
-import dao.implement.BookingPromotionDAO;
-import dao.implement.NotificationDAO;
-import model.Booking;
-import model.Car;
-import model.Promotion;
-import model.BookingPromotion;
-import model.Notification;
+import dao.implement.*;
+import model.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,10 +14,14 @@ public class BookingService {
     private final PromotionDAO promoDAO = new PromotionDAO();
     private final BookingPromotionDAO bookingPromoDAO = new BookingPromotionDAO();
     private final NotificationDAO notificationDAO = new NotificationDAO();
+    private final Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
 
     public String createBooking(Booking booking, String promoCode, double frontendDiscount) {
-        // ... GIỮ NGUYÊN CODE CŨ ...
+        Driver_License license = licenseDAO.getLicenseByUserId(booking.getUserId());
         LocalDate today = LocalDate.now();
+        if (license == null) {
+            return "❌ You must upload your driver license before booking!";
+        }
 
         if (booking.getStartDate().isBefore(today)) {
             return "❌ The pickup date cannot be earlier than the current date!";
@@ -164,7 +160,7 @@ public class BookingService {
                         "The booking for " + car.getModel() + " has been cancelled by the Customer.",
                         "/owner/ownerBooking?id=" + bookingId
                 ));
-            } else if ("Paid".equals(status)) {  // ← THÊM CASE NÀY
+            } else if ("Paid".equals(status)) {
                 // Thông báo cho Customer
                 notificationDAO.insertNotification(new Notification(
                         customerId, "BOOKING_PAID",
@@ -177,6 +173,22 @@ public class BookingService {
                         ownerId, "BOOKING_PAID",
                         "Payment Received!",
                         "Customer has paid for the booking of " + car.getModel() + ". Prepare the car for pickup.",
+                        "/owner/ownerBooking?id=" + bookingId
+                ));
+            }
+            else if ("Completed".equals(status)) {
+                // Thông báo cho Customer
+                notificationDAO.insertNotification(new Notification(
+                        customerId, "BOOKING_COMPLETED",
+                        "Car Returned Successfully!",
+                        "Your trip with " + car.getModel() + " has been completed. Thank you for using Rentaly!",
+                        "/customer/customerOrder?id=" + bookingId
+                ));
+                // Thông báo cho Owner
+                notificationDAO.insertNotification(new Notification(
+                        ownerId, "BOOKING_COMPLETED",
+                        "Trip Completed by Customer!",
+                        "Customer has done the trip with " + car.getModel() + ". Please check the car after trip.",
                         "/owner/ownerBooking?id=" + bookingId
                 ));
             }
@@ -218,6 +230,10 @@ public class BookingService {
     }
 
     public boolean completeBooking(int bookingId) {
-        return bookingDAO.updateStatus(bookingId, "Completed");
+        boolean success = bookingDAO.updateStatus(bookingId, "Completed");
+        if (success) {
+            insertStatusNotification(bookingId, "Completed");
+        }
+        return success;
     }
 }
