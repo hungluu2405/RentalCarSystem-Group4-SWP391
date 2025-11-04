@@ -30,7 +30,7 @@ public class AddCarService {
             return "Biển số xe đã tồn tại trong hệ thống!";
         }
 
-        return null; // null = hợp lệ
+        return null;
     }
 
     public boolean isDuplicateLicensePlate(String licensePlate) {
