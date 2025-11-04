@@ -33,8 +33,8 @@ public class ForgotPasswordService {
         ResetCodeStore.saveCode(email, otp);
 
         // Gửi email xác nhận
-        String subject = "Your Password Reset Code";
-        String body = "Your verification code is: <h2><b>" + otp + "</b></h2>";
+        String subject = "Your Rentaly Verification Code";
+        String body = "Your reset code is: <h2><b>" + otp + "</b></h2>";
 
         EmailUtil.sendEmail(email, subject, body);
         return otp;
