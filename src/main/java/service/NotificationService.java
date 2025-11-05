@@ -3,9 +3,11 @@ package service;
 import dao.implement.BookingDAO;
 import dao.implement.CarDAO;
 import dao.implement.NotificationDAO;
+import dao.implement.UserDAO;
 import model.Booking;
 import model.Car;
 import model.Notification;
+import model.User;
 
 import java.util.List;
 
@@ -14,8 +16,9 @@ public class NotificationService {
     private final NotificationDAO notificationDAO = new NotificationDAO();
     private final BookingDAO bookingDAO = new BookingDAO();
     private final CarDAO carDAO = new CarDAO();
+    private final UserDAO userDAO = new UserDAO();
 
-    // ==================== EXISTING METHODS ====================
+
 
     public List<Notification> getHeaderNotifications(int userId) {
         return notificationDAO.getLatestNotificationsByUserId(userId);
@@ -33,6 +36,28 @@ public class NotificationService {
         notificationDAO.markAllAsRead(userId);
     }
 
+
+
+    private String getBookingUrl(int userId, int bookingId) {
+        try {
+            User user = userDAO.getUserById(userId);
+            if (user != null) {
+                // Role 3 = Customer
+                if (user.getRoleId() == 3) {
+                    return "/customer/customerOrder?id=" + bookingId;
+                }
+                // Role 2 = Car Owner (khi owner book xe của người khác)
+                else if (user.getRoleId() == 2) {
+                    return "/owner/myBooking?id=" + bookingId;  // ← THAY ĐỔI URL NÀY NẾU CẦN
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Error getting booking URL: " + e.getMessage());
+        }
+        // Default fallback
+        return "/customer/customerOrder?id=" + bookingId;
+    }
+
     // ==================== BOOKING NOTIFICATION METHODS ====================
 
     /**
@@ -40,22 +65,25 @@ public class NotificationService {
      */
     public void notifyBookingCreated(int bookingId, int customerId, int ownerId, String carModel) {
         try {
-            // Thông báo cho Customer
+            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
+            String customerUrl = getBookingUrl(customerId, bookingId);
+
+            // Thông báo cho Customer/Owner (người đặt xe)
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_PENDING",
                     "Your car booking has been received!",
                     "Your car booking has been received! Please wait for the Owner to approve it.",
-                    "/customer/customerOrder?id=" + bookingId
+                    customerUrl  // ← SỬA
             ));
 
-            // Thông báo cho Owner
+            // Thông báo cho Owner (chủ xe)
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_NEW",
                     "New car booking request!",
                     "A new booking has been made for " + carModel + ". Please review the request.",
-                    "/owner/ownerBooking?id=" + bookingId
+                    "/owner/ownerBooking?id=" + bookingId  // ← Owner luôn xem ở ownerBooking
             ));
 
         } catch (Exception e) {
@@ -72,12 +100,15 @@ public class NotificationService {
             Booking booking = bookingDAO.getBookingById(bookingId);
             Car car = carDAO.findById(booking.getCarId());
 
+            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
+            String customerUrl = getBookingUrl(booking.getUserId(), bookingId);
+
             notificationDAO.insertNotification(new Notification(
                     booking.getUserId(),
                     "BOOKING_APPROVED",
                     "The booking has been approved!",
                     "Your booking for " + car.getModel() + " has been approved! Please proceed to payment.",
-                    "/customer/customerOrder?id=" + bookingId
+                    customerUrl  // ← SỬA
             ));
 
         } catch (Exception e) {
@@ -99,7 +130,7 @@ public class NotificationService {
                     "BOOKING_REJECTED",
                     "The booking has been rejected.",
                     "Your booking for " + car.getModel() + " was rejected by the Owner.",
-                    "/home"
+                    "/home"  // ← GIỮ NGUYÊN (redirect về home)
             ));
 
         } catch (Exception e) {
@@ -109,7 +140,7 @@ public class NotificationService {
     }
 
     /**
-     * Gửi thông báo khi Customer cancel booking
+     * Gửi thông báo khi Customer/Owner cancel booking
      */
     public void notifyBookingCancelled(int bookingId) {
         try {
@@ -119,16 +150,19 @@ public class NotificationService {
             int customerId = booking.getUserId();
             int ownerId = car.getOwnerId();
 
-            // Thông báo cho Customer
+            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
+            String customerUrl = getBookingUrl(customerId, bookingId);
+
+            // Thông báo cho Customer/Owner (người đặt xe)
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_CANCELLED",
                     "Booking Cancelled Successfully.",
                     "You have successfully cancelled your booking for " + car.getModel() + ".",
-                    "/customer/customerOrder?id=" + bookingId
+                    customerUrl  // ← SỬA
             ));
 
-            // Thông báo cho Owner
+            // Thông báo cho Owner (chủ xe)
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_CANCELLED",
@@ -144,7 +178,7 @@ public class NotificationService {
     }
 
     /**
-     * Gửi thông báo khi Customer thanh toán thành công
+     * Gửi thông báo khi thanh toán thành công
      */
     public void notifyBookingPaid(int bookingId) {
         try {
@@ -154,16 +188,19 @@ public class NotificationService {
             int customerId = booking.getUserId();
             int ownerId = car.getOwnerId();
 
-            // Thông báo cho Customer
+            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
+            String customerUrl = getBookingUrl(customerId, bookingId);
+
+            // Thông báo cho Customer/Owner (người đặt xe)
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_PAID",
                     "Payment Successful!",
                     "Your payment for " + car.getModel() + " has been confirmed. Enjoy your trip!",
-                    "/customer/customerOrder?id=" + bookingId
+                    customerUrl  // ← SỬA
             ));
 
-            // Thông báo cho Owner
+            // Thông báo cho Owner (chủ xe)
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_PAID",
@@ -179,7 +216,7 @@ public class NotificationService {
     }
 
     /**
-     * Gửi thông báo khi booking hoàn thành (Completed)
+     * Gửi thông báo khi booking hoàn thành
      */
     public void notifyBookingCompleted(int bookingId) {
         try {
@@ -189,16 +226,19 @@ public class NotificationService {
             int customerId = booking.getUserId();
             int ownerId = car.getOwnerId();
 
-            // Thông báo cho Customer
+            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
+            String customerUrl = getBookingUrl(customerId, bookingId);
+
+            // Thông báo cho Customer/Owner (người đặt xe)
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_COMPLETED",
                     "Car Returned Successfully!",
                     "Your trip with " + car.getModel() + " has been completed. Thank you for using Rentaly!",
-                    "/customer/customerOrder?id=" + bookingId
+                    customerUrl  // ← SỬA
             ));
 
-            // Thông báo cho Owner
+            // Thông báo cho Owner (chủ xe)
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_COMPLETED",
