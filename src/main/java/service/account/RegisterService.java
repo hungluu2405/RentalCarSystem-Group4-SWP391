@@ -90,7 +90,7 @@ public class RegisterService {
         String otp = String.format("%06d", new Random().nextInt(999999));
         ResetCodeStore.saveCode(email, otp);
 
-        EmailUtil.sendEmail(email, "Account Verification - Rentaly",
+        EmailUtil.sendEmail(email, "Your Rentaly Verification Code",
                 "Your verification code is: <h2><b>" + otp + "</b></h2>");
     }
 
