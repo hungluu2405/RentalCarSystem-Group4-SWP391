@@ -100,8 +100,20 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             dl.setLicense_number(licenseNumber);
             dl.setIssue_date(issueDate);
             dl.setExpiry_date(expiryDate);
-            if (frontImagePath != null) dl.setFront_image_url("/images/license/" + frontImagePath);
-            if (backImagePath != null) dl.setBack_image_url("/images/license/" + backImagePath);
+            // Giữ nguyên ảnh cũ nếu không upload mới
+            if (frontImagePath != null) {
+                dl.setFront_image_url("/images/license/" + frontImagePath);
+            } else if (dl.getFront_image_url() == null) {
+                // Nếu chưa có trong DB (record mới)
+                dl.setFront_image_url(null);
+            }
+
+            if (backImagePath != null) {
+                dl.setBack_image_url("/images/license/" + backImagePath);
+            } else if (dl.getBack_image_url() == null) {
+                dl.setBack_image_url(null);
+            }
+
 
             // 🧠 Validate qua service
 //            String validationMsg = licenseService.validateLicense(dl);
