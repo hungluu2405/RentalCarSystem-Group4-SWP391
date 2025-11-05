@@ -1,19 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<%-- KHAI BÁO BEAN CHO IDE --%>
-<jsp:useBean id="car" class="model.CarViewModel" scope="request" />
-<jsp:useBean id="booking" class="model.Booking" scope="request" />
+<fmt:setLocale value="en_US" />
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-
     <jsp:include page="/view/common/customer/_head.jsp"/>
-    <title>Xác nhận đặt xe - Rentaly</title>
+    <title>Booking Confirmation - Rentaly</title>
     <style>
-
         .container-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -80,6 +75,7 @@
             border-radius: 5px;
             display: inline-block;
             margin-top: 20px;
+            transition: background 0.3s;
         }
         .btn-home:hover {
             background: #059669;
@@ -95,7 +91,8 @@
     <div class="no-bottom no-top" id="content">
         <div id="top"></div>
 
-        <section id="subheader" class="jarallax text-light" style="background-image: url('${pageContext.request.contextPath}/images/background/2.jpg');">
+        <section id="subheader" class="jarallax text-light"
+                 style="background-image: url('${pageContext.request.contextPath}/images/background/2.jpg');">
             <div class="center-y relative text-center">
                 <div class="container-content">
                     <h1>Booking Confirmation</h1>
@@ -109,20 +106,26 @@
                 <c:choose>
                     <c:when test="${booking == null}">
                         <div class="alert alert-danger container-content">
-                            <h3> Không tìm thấy thông tin booking!</h3>
-                            <p>Vui lòng thử lại.</p>
-                            <a href="${pageContext.request.contextPath}/home" class="btn-home">Về trang chủ</a>
+                            <h3>❌ Booking information not found!</h3>
+                            <p>Please try again.</p>
+                            <a href="${pageContext.request.contextPath}/home" class="btn-home">Back to Home</a>
                         </div>
                     </c:when>
                     <c:otherwise>
+                        <%-- ✅ SET BIẾN DISCOUNT (nếu null thì = 0) --%>
+                        <c:set var="discountValue" value="${discount != null ? discount : 0}" />
+                        <c:set var="rentalFee" value="${booking.totalPrice + discountValue}" />
+
                         <div class="success-box">
                             <div class="success-icon">✓</div>
                             <h2 style="color: #10b981; margin: 0;">Booking Successfully!</h2>
-                            <p style="margin: 10px 0 0 0; color: #059669;">Please waiting car owner response.</p>
+                            <p style="margin: 10px 0 0 0; color: #059669;">Please wait for car owner response.</p>
                         </div>
 
                         <div class="row">
+                            <!-- LEFT COLUMN -->
                             <div class="col-md-6">
+                                <!-- Customer Information -->
                                 <div class="info-section">
                                     <h4>👤 Customer Information</h4>
                                     <div class="info-row">
@@ -135,66 +138,91 @@
                                     </div>
                                 </div>
 
+                                <!-- Booking Details -->
                                 <div class="info-section">
                                     <h4>📅 Booking Details</h4>
                                     <div class="info-row">
                                         <span class="info-label">Pickup Date:</span>
                                         <span class="info-value">
-
                                             ${booking.startDate} ${booking.pickupTime}
                                         </span>
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">Return Date:</span>
                                         <span class="info-value">
-
                                             ${booking.endDate} ${booking.dropoffTime}
                                         </span>
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">Location:</span>
-                                        <span class="info-value">${car.location}</span>
+                                        <span class="info-value">
+                                            <c:choose>
+                                                <c:when test="${not empty booking.location}">
+                                                    ${booking.location}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${car.location}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
 
+                            <!-- RIGHT COLUMN -->
                             <div class="col-md-6">
+                                <!-- Car Details -->
                                 <c:if test="${car != null}">
                                     <div class="info-section">
-                                        <h4>🚗 Car Detail</h4>
+                                        <h4>🚗 Car Details</h4>
                                         <div class="info-row">
-                                            <span class="info-label">Car:</span>
+                                            <span class="info-label">Car Model:</span>
                                             <span class="info-value">${car.model}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">License Plate: </span>
+                                            <span class="info-label">License Plate:</span>
                                             <span class="info-value">${car.licensePlate}</span>
                                         </div>
                                     </div>
                                 </c:if>
 
+                                <!-- Payment Summary -->
                                 <div class="info-section">
-                                    <h4>💰 Payment</h4>
+                                    <h4>💰 Payment Summary</h4>
+
+                                    <!-- Rental Fee (GIÁ GỐC) -->
                                     <div class="info-row">
                                         <span class="info-label">Rental Fee:</span>
                                         <span class="info-value">
-                                                <fmt:formatNumber value="${booking.totalPrice + (discount != null ? discount : 0)}"
-                                                                  type="number" maxFractionDigits="0"/>₫
-                                            </span>
+                                            $<fmt:formatNumber value="${rentalFee}"
+                                                               type="number"
+                                                               minFractionDigits="2"
+                                                               maxFractionDigits="2"/>
+                                        </span>
                                     </div>
-                                    <c:if test="${not empty discount && discount > 0}">
-                                        <div class="info-row" style="color: #10b981;">
+
+                                    <!-- Discount (CHỈ HIỂN THỊ NẾU > 0) -->
+                                    <c:if test="${discountValue > 0}">
+                                        <div class="info-row" style="color: #dc2626;">
                                             <span class="info-label">Discount:</span>
                                             <span class="info-value">
-                                                    -<fmt:formatNumber value="${discount}" type="number" maxFractionDigits="0"/>₫
-                                                </span>
+                                                -$<fmt:formatNumber value="${discountValue}"
+                                                                    type="number"
+                                                                    minFractionDigits="2"
+                                                                    maxFractionDigits="2"/>
+                                            </span>
                                         </div>
                                     </c:if>
+
+                                    <!-- Total Price (GIÁ CUỐI CÙNG) -->
                                     <div class="info-row total-price-row">
-                                        <span class="info-label" style="font-size: 1em;">Total Price:</span>
-                                        <span class="info-value" style="font-size: 1.2em;">
-                                                <fmt:formatNumber value="${booking.totalPrice}" type="number" maxFractionDigits="0"/>₫
-                                            </span>
+                                        <span class="info-label">Total Price:</span>
+                                        <span class="info-value">
+                                            $<fmt:formatNumber value="${booking.totalPrice}"
+                                                               type="number"
+                                                               minFractionDigits="2"
+                                                               maxFractionDigits="2"/>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +230,7 @@
 
                         <div style="text-align: center;">
                             <a href="${pageContext.request.contextPath}/home" class="btn-home">
-                                🏠 Back to home
+                                🏠 Back to Home
                             </a>
                         </div>
                     </c:otherwise>
@@ -214,8 +242,8 @@
     <a href="#" id="back-to-top"></a>
 
 
+</div>
 
-<%-- INCLUDE SCRIPT CHUNG --%>
 <jsp:include page="/view/common/customer/_footer_scripts.jsp"/>
 </body>
 </html>

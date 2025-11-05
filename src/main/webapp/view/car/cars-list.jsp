@@ -2,18 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%--
-    ĐÃ XÓA TOÀN BỘ KHỐI SCRIPTLET <% ... %> GỐC CỦA BẠN.
-    CarServlet đã cung cấp tất cả các biến (carList, totalPages, brandList, v.v.)
-    Trang JSP này CHỈ NÊN HIỂN THỊ dữ liệu đó.
---%>
+<fmt:setLocale value="en_US" />
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Rentaly - Cars List</title>
-    <%-- (Phần <head> của bạn giữ nguyên, không cần thay đổi) --%>
+
     <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"
@@ -428,8 +424,7 @@
                                                     <div>
                                                         <span class="fs-6 text-muted">Daily rate from</span>
                                                         <h5 class="fw-bold mb-0">
-                                                            <fmt:formatNumber value="${car.pricePerDay}" type="currency"
-                                                                              currencyCode="VND" maxFractionDigits="0"/>
+                                                            $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                         </h5>
                                                     </div>
                                                     <a class="btn-main"
