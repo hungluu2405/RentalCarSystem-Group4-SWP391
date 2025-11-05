@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="util.TimeAgoUtil" %>
+<fmt:setLocale value="en_US" />
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -970,8 +971,7 @@
                                             </div>
                                             <div class="d-price">
                                                 <h3 class="fw-bold mb-0">
-                                                    <fmt:formatNumber value="${car.pricePerDay}" type="currency"
-                                                                      currencyCode="VND" maxFractionDigits="0"/>
+                                                    $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </h3>
                                                 <a class="btn-main"
                                                    href="${pageContext.request.contextPath}/car-single?id=${car.carId}">

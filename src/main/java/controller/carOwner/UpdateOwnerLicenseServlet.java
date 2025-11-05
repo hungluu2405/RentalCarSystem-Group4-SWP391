@@ -1,4 +1,4 @@
-package controller.customer;
+package controller.carOwner;
 
 import dao.implement.Driver_LicenseDAO;
 import jakarta.servlet.ServletException;
@@ -15,13 +15,13 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet("/customer/license")
+@WebServlet("/owner/license")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 10,
         maxRequestSize = 1024 * 1024 * 15
 )
-public class UpdateDriverLicenseServlet extends HttpServlet {
+public class UpdateOwnerLicenseServlet extends HttpServlet {
 
     private Driver_LicenseDAO licenseDAO;
     private Driver_LicenseService licenseService;
@@ -35,7 +35,7 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
     private void forwardWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
             throws ServletException, IOException {
         request.setAttribute("error", errorMessage);
-        request.getRequestDispatcher("/view/customer/Driver_License.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/carOwner/Driver_License.jsp").forward(request, response);
     }
 
     @Override
@@ -58,10 +58,9 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             dl.setDob(user.getUserProfile().getDob());
         }
 
-
         request.setAttribute("license", dl);
         request.setAttribute("activePage", "license");
-        request.getRequestDispatcher("/view/customer/Driver_License.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/carOwner/Driver_License.jsp").forward(request, response);
     }
 
     @Override
@@ -80,13 +79,13 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
         String issueDateStr = request.getParameter("issue_date");
         String expiryDateStr = request.getParameter("expiry_date");
 
-        // 🖼 Upload ảnh
         String uploadPath = request.getServletContext().getRealPath("/images/license");
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
         String frontImagePath = null;
         String backImagePath = null;
+
         try {
             frontImagePath = uploadFile(request.getPart("front_image"), uploadPath);
             backImagePath = uploadFile(request.getPart("back_image"), uploadPath);
@@ -99,10 +98,9 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
 
             request.setAttribute("license", dl);
             request.setAttribute("error", e.getMessage());
-            request.getRequestDispatcher("/view/customer/Driver_License.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/carOwner/Driver_License.jsp").forward(request, response);
             return;
         }
-
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -116,11 +114,10 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             dl.setLicense_number(licenseNumber);
             dl.setIssue_date(issueDate);
             dl.setExpiry_date(expiryDate);
-            // Giữ nguyên ảnh cũ nếu không upload mới
+
             if (frontImagePath != null) {
                 dl.setFront_image_url("/images/license/" + frontImagePath);
             } else if (dl.getFront_image_url() == null) {
-                // Nếu chưa có trong DB (record mới)
                 dl.setFront_image_url(null);
             }
 
@@ -130,16 +127,6 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
                 dl.setBack_image_url(null);
             }
 
-
-            // 🧠 Validate qua service
-//            String validationMsg = licenseService.validateLicense(dl);
-//            if (validationMsg != null) {
-//                request.setAttribute("error", validationMsg);
-//                request.setAttribute("license", dl);
-//                request.getRequestDispatcher("view/customer/Driver_License.jsp")
-//                        .forward(request, response);
-//                return;
-//            }
             String validationMsg = licenseService.validateLicense(dl);
             if (validationMsg != null) {
                 forwardWithError(request, response, validationMsg);
@@ -152,7 +139,7 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
                 licenseDAO.updateLicense(dl);
             }
 
-            response.sendRedirect(request.getContextPath() + "/customer/license?status=success");
+            response.sendRedirect(request.getContextPath() + "/carOwner/license?status=success");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,7 +152,6 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             String contentType = filePart.getContentType();
 
-            // ✅ Chỉ chấp nhận ảnh
             if (contentType == null ||
                     !(contentType.equals("image/jpeg") ||
                             contentType.equals("image/png") ||
@@ -174,12 +160,9 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
                 throw new IOException("Invalid file type. Please upload an image (JPEG, PNG, WEBP).");
             }
 
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdirs();
-
             filePart.write(uploadPath + File.separator + fileName);
             return fileName;
         }
         return null;
-}
+    }
 }
