@@ -16,14 +16,14 @@ public class ResendCodeService {
 
         try {
             // Tạo mã 6 chữ số ngẫu nhiên
-            String code = String.format("%06d", new Random().nextInt(999999));
+            String otp = String.format("%06d", new Random().nextInt(999999));
 
             // Lưu mã vào bộ nhớ tạm (có thời hạn)
-            ResetCodeStore.saveCode(email, code);
+            ResetCodeStore.saveCode(email, otp);
 
             // Gửi email cho người dùng
             String subject = "Your Rentaly Verification Code";
-            String body = "Your verification code is: <h2><b>" + code + "</b></h2>";
+            String body = "Your new code is: <h2><b>" + otp + "</b></h2>";
 
             EmailUtil.sendEmail(email, subject, body);
             return true;
