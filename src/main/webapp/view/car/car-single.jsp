@@ -7,18 +7,7 @@
 
     <head>
         <jsp:include page="../common/customer/_head.jsp"/>
-        <%--    <title>${car.model} - Vehicle Fleet</title>--%>
-        <%--    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">--%>
-        <%--    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">--%>
-        <%--    <meta content="width=device-width, initial-scale=1.0" name="viewport">--%>
 
-        <%--    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">--%>
-        <%--    <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css">--%>
-        <%--    <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">--%>
-        <%--    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">--%>
-        <%--    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">--%>
-        <%--    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"--%>
-        <%--          type="text/css">--%>
     </head>
 
     <body>
@@ -285,92 +274,78 @@
     <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 
         <script>
-            // Lấy giá thuê gốc mỗi ngày từ input ẩn (giá này không bao giờ thay đổi)
-            const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value);
-            // Ghi nhớ promo code đã áp dụng (dùng logic đã sticky)
+            const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value) || 0;
             let appliedPromo = ${not empty input_appliedPromoCode ? '{"code": "' + input_appliedPromoCode + '", "rate": 0}' : 'null'};
 
-            // Khai báo lại các biến sticky từ Request Scope
-            const stickyStartDate = document.querySelector('input[name="startDate"]').value;
-            const stickyEndDate = document.querySelector('input[name="endDate"]').value;
-
-
-            // Tính tổng tiền dựa trên số ngày
+            // =============== MAIN CALCULATION ===============
             function calculateTotal() {
                 const startDate = document.querySelector('input[name="startDate"]').value;
                 const endDate = document.querySelector('input[name="endDate"]').value;
+                const pickupTime = document.querySelector('select[name="pickupTime"]').value;
+                const dropoffTime = document.querySelector('select[name="dropoffTime"]').value;
 
-                const pricePerDay = ORIGINAL_PRICE_PER_DAY;
+                if (!startDate || !endDate || !pickupTime || !dropoffTime) return ORIGINAL_PRICE_PER_DAY;
 
-                if (!startDate || !endDate) {
-                    // Nếu thiếu ngày, trả về giá 1 ngày (hoặc giá gốc)
-                    // QUAN TRỌNG: Dùng giá trị gốc từ data-total nếu chưa có ngày
-                    const originalTotal = parseFloat(document.getElementById("finalCalculatedPrice").value) || pricePerDay;
-                    return originalTotal;
+                // Parse local date-time (không dùng UTC)
+                const [sy, sm, sd] = startDate.split('-').map(Number);
+                const [ey, em, ed] = endDate.split('-').map(Number);
+                const [sh, smin] = pickupTime.split(':').map(Number);
+                const [eh, emin] = dropoffTime.split(':').map(Number);
+
+                const start = new Date(sy, sm - 1, sd, sh, smin || 0, 0);
+                const end = new Date(ey, em - 1, ed, eh, emin || 0, 0);
+
+                const diffMs = end.getTime() - start.getTime();
+                const diffHours = diffMs / (1000 * 60 * 60);
+
+                if (diffHours < 24) {
+                    showWarning("⚠️ Minimum rental period is 24 hours!");
+                    return ORIGINAL_PRICE_PER_DAY;
+                } else {
+                    hideWarning();
                 }
 
-                const start = new Date(startDate);
-                const end = new Date(endDate);
+                // ===== TÍNH GIÁ =====
+                const fullDays = Math.floor(diffHours / 24);
+                const remaining = diffHours % 24;
 
-                // 1. Kiểm tra ngày hợp lệ (LỖI LOGIC NÊN ĐƯỢC XỬ LÝ TRÊN SERVER)
-                if (end < start) {
-                    document.getElementById("promoMessage").innerHTML = "❌ The drop-off date must be after the pick-up date!";
-                    document.getElementById("promoMessage").className = "text-danger mt-2 d-block";
-                    // Trả về giá trị của total hiện tại trên form để tránh nhảy số 0
-                    return parseFloat(document.getElementById("finalPrice").textContent.replace(/[^0-9.]/g, '')) || pricePerDay;
+                let total = fullDays * ORIGINAL_PRICE_PER_DAY;
+                const hourlyRate = ORIGINAL_PRICE_PER_DAY / 24;
+
+                if (remaining <= 1) {
+                    // free
+                } else if (remaining > 1 && remaining <= 6) {
+                    total += (remaining - 1) * hourlyRate * 1.2;
+                } else {
+                    total += ORIGINAL_PRICE_PER_DAY;
                 }
 
-                const timeDiff = end - start;
-                let days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-                if (days <= 0 && timeDiff >= 0) {
-                    days = 1;
-                }
-
-                const newTotal = days * pricePerDay;
-
-                // Cập nhật hiển thị phí thuê xe (LƯU Ý: Đây là giá thuê theo ngày, có thể cần tính lại theo giờ)
-                // Mình giữ logic tính theo ngày của bạn
-                document.getElementById("priceValue").textContent = newTotal.toLocaleString('vi-VN');
-
-                if (document.getElementById("promoMessage").innerHTML.includes("drop-off date")) {
-                    document.getElementById("promoMessage").innerHTML = "";
-                }
-
-                return newTotal;
+                return Math.round(total);
             }
 
-            // Cập nhật giá khi thay đổi ngày
-            function updatePriceOnDateChange() {
-                // Lấy lại giá trị ban đầu nếu có lỗi và không có promo
-                let newTotal = 0;
+            // =============== UI UPDATES ===============
+            function showWarning(msg) {
+                const el = document.getElementById("promoMessage");
+                el.innerHTML = msg;
+                el.className = "text-danger mt-2 d-block";
+            }
 
-                // Chỉ tính toán nếu cả hai ngày đều được điền (hoặc đã sticky)
-                if (document.querySelector('input[name="startDate"]').value && document.querySelector('input[name="endDate"]').value) {
-                    newTotal = calculateTotal();
-                } else {
-                    // Nếu chưa điền đủ ngày, dùng giá trị đã sticky (giá cuối cùng hoặc giá gốc)
-                    newTotal = parseFloat(document.getElementById("finalCalculatedPrice").value) || ORIGINAL_PRICE_PER_DAY;
-
-                    // Nếu giá trị sticky là 0 (hoặc lỗi), dùng giá gốc 1 ngày
-                    if (newTotal === 0) newTotal = ORIGINAL_PRICE_PER_DAY;
-                }
-
-
-
-                // Nếu có mã khuyến mãi đã áp dụng, tính lại
-                if (appliedPromo && appliedPromo.code) {
-                    // Lấy mã từ input ẩn (vì có thể đã sticky)
-                    const promoCode = document.getElementById("appliedPromoCode").value;
-                    if (promoCode) {
-                        applyPromoCode(promoCode, newTotal);
-                    }
-                } else {
-                    resetPromoDisplay(newTotal);
+            function hideWarning() {
+                const el = document.getElementById("promoMessage");
+                if (el && el.textContent.includes("Minimum rental")) {
+                    el.innerHTML = "";
+                    el.className = "d-none";
                 }
             }
 
-            // Áp dụng mã khuyến mãi (Giữ nguyên logic API)
+            function updateDisplay(total) {
+                document.getElementById("priceValue").textContent = total.toLocaleString('vi-VN');
+                document.getElementById("discount").textContent = "0";
+                document.getElementById("finalPrice").textContent = total.toLocaleString('vi-VN');
+                document.getElementById("finalCalculatedPrice").value = total;
+            }
+
+            // =============== PROMO CODE ===============
             function applyPromoCode(code, total = calculateTotal()) {
                 const msg = document.getElementById("promoMessage");
                 const contextPath = "${pageContext.request.contextPath}";
@@ -381,14 +356,11 @@
                     return;
                 }
 
-                msg.innerHTML = "Đang kiểm tra mã...";
+                msg.innerHTML = "Checking code...";
                 msg.className = "text-info mt-2 d-block";
 
-
-                const url = contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total;
-
-                fetch(url)
-                    .then(response => response.json())
+                fetch(contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total)
+                    .then(res => res.json())
                     .then(data => {
                         if (data.error) {
                             msg.innerHTML = "❌ " + data.error;
@@ -396,53 +368,58 @@
                             appliedPromo = null;
                             resetPromoDisplay(total);
                         } else if (data.success) {
-                            msg.innerHTML = `✅ Apply coupon <b>${code}</b> decrease ${data.rate}%`;
+                            msg.innerHTML = `✅ Coupon <b>${code}</b> applied: -${data.rate}%`;
                             msg.className = "text-success mt-2 d-block";
-                            appliedPromo = {code: code, rate: data.rate};
-                            updatePriceDisplay(data.discount, data.finalPrice, total);
+                            appliedPromo = { code: code, rate: data.rate };
+                            updatePriceDisplay(data.discount, data.finalPrice);
                         }
                     })
-                    .catch(error => {
-                        msg.innerHTML = "❌Couldn’t apply the promo code. Please try again!";
+                    .catch(() => {
+                        msg.innerHTML = "❌ Could not verify promo code.";
                         msg.className = "text-danger mt-2 d-block";
                     });
             }
 
-            // Cập nhật hiển thị giá
-            function updatePriceDisplay(discount, finalPrice, originalTotal) {
+            function updatePriceDisplay(discount, finalPrice) {
                 document.getElementById("discount").textContent = discount.toLocaleString('vi-VN');
                 document.getElementById("finalPrice").textContent = finalPrice.toLocaleString('vi-VN');
-
-                // Cập nhật các input ẩn
                 document.getElementById("calculatedDiscount").value = discount;
                 document.getElementById("appliedPromoCode").value = appliedPromo ? appliedPromo.code : "";
                 document.getElementById("finalCalculatedPrice").value = finalPrice;
             }
 
-            // Reset hiển thị
             function resetPromoDisplay(total) {
                 document.getElementById("discount").textContent = "0";
                 document.getElementById("finalPrice").textContent = total.toLocaleString('vi-VN');
-
-                // Reset các input ẩn
                 document.getElementById("calculatedDiscount").value = 0;
                 document.getElementById("appliedPromoCode").value = "";
                 document.getElementById("finalCalculatedPrice").value = total;
             }
 
-            // Event listeners
+            // =============== EVENT HANDLING ===============
+            function updatePriceOnChange() {
+                const total = calculateTotal();
+                if (appliedPromo && appliedPromo.code) {
+                    applyPromoCode(appliedPromo.code, total);
+                } else {
+                    updateDisplay(total);
+                }
+            }
+
             document.addEventListener("DOMContentLoaded", function () {
-                // Áp mã khi click nút
+                const elements = [
+                    'input[name="startDate"]',
+                    'input[name="endDate"]',
+                    'select[name="pickupTime"]',
+                    'select[name="dropoffTime"]'
+                ];
+                elements.forEach(sel => document.querySelector(sel).addEventListener("change", updatePriceOnChange));
+
                 document.getElementById("applyPromo").addEventListener("click", function () {
                     const code = document.getElementById("promoCode").value.trim();
                     applyPromoCode(code);
                 });
 
-                // Tính toán lại khi thay đổi ngày
-                document.querySelector('input[name="startDate"]').addEventListener("change", updatePriceOnDateChange);
-                document.querySelector('input[name="endDate"]').addEventListener("change", updatePriceOnDateChange);
-
-                // Enter để áp mã
                 document.getElementById("promoCode").addEventListener("keypress", function (e) {
                     if (e.key === "Enter") {
                         e.preventDefault();
@@ -450,21 +427,18 @@
                     }
                 });
 
-                // QUAN TRỌNG: Chạy tính toán ngay khi tải trang nếu dữ liệu đã được sticky
-                if (stickyStartDate && stickyEndDate) {
-                    // Sử dụng setTimeout để đảm bảo các giá trị sticky đã được load hoàn toàn vào DOM
-                    setTimeout(updatePriceOnDateChange, 50);
-                }
-
-                // Nếu có mã khuyến mãi được sticky, hiển thị lại trạng thái áp dụng
-                if (appliedPromo && appliedPromo.code) {
-                    // Chạy tính toán lại lần nữa để áp dụng promo code
-                    setTimeout(() => {
-                        const total = calculateTotal();
+                // Auto load khi trang sticky lại
+                setTimeout(() => {
+                    const total = calculateTotal();
+                    if (appliedPromo && appliedPromo.code) {
                         applyPromoCode(appliedPromo.code, total);
-                    }, 100);
-                }
+                    } else {
+                        updateDisplay(total);
+                    }
+                }, 80);
             });
         </script>
-</body>
-</htm
+
+
+    </body>
+</html>
