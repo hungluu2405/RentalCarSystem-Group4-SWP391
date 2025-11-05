@@ -289,7 +289,7 @@
                                                     <td><c:out value="${order.location}"/></td>
                                                     <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
                                                     <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
-                                                    <td><c:out value="${order.totalPrice}"/></td>
+                                                    <td>$<c:out value="${order.totalPrice}"/></td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${status == 'Pending'}">
@@ -355,7 +355,7 @@
                                                     <td><c:out value="${order.location}"/></td>
                                                     <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
                                                     <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
-                                                    <td><c:out value="${order.totalPrice}"/></td>
+                                                    <td>$<c:out value="${order.totalPrice}"/></td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${status == 'Completed'}">
