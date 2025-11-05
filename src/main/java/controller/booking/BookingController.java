@@ -32,10 +32,9 @@ public class BookingController extends HttpServlet {
         String pickupTimeStr = request.getParameter("pickupTime");
         String dropoffTimeStr = request.getParameter("dropoffTime");
         String location = request.getParameter("location");
-        String appliedPromoCode = request.getParameter("appliedPromoCode");
+        String appliedPromoCode = request.getParameter("promoCode");
 
         try {
-            // ===== BASIC VALIDATION =====
             if (carIdStr == null || startDateStr == null || endDateStr == null ||
                     pickupTimeStr == null || dropoffTimeStr == null ||
                     carIdStr.isEmpty() || startDateStr.isEmpty() ||
@@ -48,14 +47,12 @@ public class BookingController extends HttpServlet {
                 return;
             }
 
-            // ===== CHECK USER LOGIN =====
             User user = (User) request.getSession().getAttribute("user");
             if (user == null) {
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
 
-            // ===== PARSE DATA =====
             int carId;
             LocalDate startDate;
             LocalDate endDate;
@@ -67,7 +64,7 @@ public class BookingController extends HttpServlet {
                 startDate = LocalDate.parse(startDateStr);
                 endDate = LocalDate.parse(endDateStr);
 
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm[:ss]");
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
                 pickupTime = LocalTime.parse(pickupTimeStr, timeFormatter);
                 dropoffTime = LocalTime.parse(dropoffTimeStr, timeFormatter);
 
@@ -78,7 +75,6 @@ public class BookingController extends HttpServlet {
                 return;
             }
 
-            // ===== CREATE BOOKING OBJECT =====
             Booking booking = new Booking();
             booking.setCarId(carId);
             booking.setUserId(user.getUserId());
@@ -90,25 +86,19 @@ public class BookingController extends HttpServlet {
             booking.setStatus("Pending");
             booking.setCreatedAt(LocalDateTime.now());
 
-            // ===== CALL SERVICE =====
             String finalPromoCode = (appliedPromoCode != null && !appliedPromoCode.trim().isEmpty())
                     ? appliedPromoCode.trim()
                     : null;
 
-            // ✅ GỌI SERVICE (chỉ 2 parameters)
             String result = bookingService.createBooking(booking, finalPromoCode);
 
-            // ===== CHECK RESULT =====
             if (result.equals("success")) {
                 HttpSession session = request.getSession();
                 session.setAttribute("confirmedBooking", booking);
-
                 if (finalPromoCode != null) {
                     session.setAttribute("bookingPromoCode", finalPromoCode);
                 }
-
                 response.sendRedirect(request.getContextPath() + "/booking-confirmation");
-
             } else {
                 forwardWithError(request, response, result,
                         carIdStr, startDateStr, endDateStr, pickupTimeStr,
