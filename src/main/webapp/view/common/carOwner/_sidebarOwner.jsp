@@ -50,14 +50,20 @@
                 <i class="fa fa-cogs"></i> Manage my car
             </a>
         </li>
+
+        <li>
+            <a href="${pageContext.request.contextPath}/owner/rental-calendar" class="${activePage == 'rental-calendar' ? 'active' : ''}">
+                <i class="fa fa-history"></i> View Rental Calendar
+            </a>
+        </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/myBooking" class="${activePage == 'myBooking' ? 'active' : ''}">
                 <i class="fa fa-history"></i> My Booking
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/owner/rental-calendar" class="${activePage == 'rental-calendar' ? 'active' : ''}">
-                <i class="fa fa-history"></i> View Rental Calendar
+            <a href="${pageContext.request.contextPath}/owner/myCoupon" class="${activePage == 'myCoupon' ? 'active' : ''}">
+                <i class="fa fa-history"></i> My Coupon
             </a>
         </li>
         <li>
