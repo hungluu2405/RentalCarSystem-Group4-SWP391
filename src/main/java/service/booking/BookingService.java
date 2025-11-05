@@ -24,53 +24,23 @@ public class BookingService {
         Driver_License license = licenseDAO.getLicenseByUserId(booking.getUserId());
         LocalDate today = LocalDate.now();
 
-        if (license == null) {
-            return "❌ You must upload your driver license before booking!";
-        }
+        if (license == null) return "❌ You must upload your driver license before booking!";
+        if (booking.getStartDate().isBefore(today)) return "❌ The pickup date cannot be earlier than today!";
 
-        if (booking.getStartDate().isBefore(today)) {
-            return "❌ The pickup date cannot be earlier than the current date!";
-        }
-
-        if (booking.getEndDate().isBefore(booking.getStartDate()) ||
-                booking.getEndDate().equals(booking.getStartDate())) {
-            return "❌ Return date must be after pickup date (minimum 1 day)!";
-        }
-
-        // check đủ 1 ngày (phải lớn hơn 24 tiếng)
         LocalTime pickupTime = booking.getPickupTime();
         LocalTime dropoffTime = booking.getDropoffTime();
-
-        if (pickupTime == null || dropoffTime == null) {
-            return "❌ Pickup time and return time are required!";
-        }
+        if (pickupTime == null || dropoffTime == null) return "❌ Pickup and dropoff times are required!";
 
         LocalDateTime pickupDateTime = LocalDateTime.of(booking.getStartDate(), pickupTime);
         LocalDateTime returnDateTime = LocalDateTime.of(booking.getEndDate(), dropoffTime);
-        long hoursBetween = ChronoUnit.HOURS.between(pickupDateTime, returnDateTime);
 
-        if (hoursBetween < 24) {
-            return "❌ Minimum rental period is 24 hours!";
-        }
-
-        long days = ChronoUnit.DAYS.between(booking.getStartDate(), booking.getEndDate());
-
-        if (booking.getStartDate().isAfter(today.plusMonths(6))) {
-            return "❌ Cannot book more than 6 months in advance!";
-        }
-
-        if (days > 90) {
-            return "❌ Maximum rental period is 90 days!";
-        }
+        long totalHours = ChronoUnit.HOURS.between(pickupDateTime, returnDateTime);
+        if (totalHours < 24) return "❌ Minimum rental period is 24 hours!";
 
         Car car = carDAO.findById(booking.getCarId());
-        if (car == null) {
-            return "❌ The selected car does not exist!";
-        }
-        if (car.getOwnerId() == booking.getUserId()) {
-            return "❌ You cannot book your own car!";
-        }
-        //kiểm tra về mặt thời gian có trùng lặp k
+        if (car == null) return "❌ The selected car does not exist!";
+        if (car.getOwnerId() == booking.getUserId()) return "❌ You cannot book your own car!";
+
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
@@ -78,78 +48,62 @@ public class BookingService {
                 booking.getEndDate(),
                 booking.getDropoffTime()
         );
-        if (!available) {
-            return "❌ This car is already booked for the selected period!";
+        if (!available) return "❌ This car is already booked for the selected period!";
+
+        BigDecimal pricePerDay = car.getPricePerDay();
+        long fullDays = totalHours / 24;
+        long remainingHours = totalHours % 24;
+
+        BigDecimal basePrice = pricePerDay.multiply(BigDecimal.valueOf(fullDays));
+        BigDecimal hourlyRate = pricePerDay.divide(BigDecimal.valueOf(24), 2, RoundingMode.HALF_UP);
+        BigDecimal extraFee = BigDecimal.ZERO;
+
+        if (remainingHours <= 1) {
+            extraFee = BigDecimal.ZERO;
+        } else if (remainingHours > 1 && remainingHours <= 6) {
+            long chargeableHours = remainingHours - 1;
+            extraFee = hourlyRate
+                    .multiply(BigDecimal.valueOf(1.2))
+                    .multiply(BigDecimal.valueOf(chargeableHours))
+                    .setScale(2, RoundingMode.HALF_UP);
+        } else {
+            extraFee = pricePerDay;
         }
 
-        //tính giá thuê xe
-        BigDecimal pricePerDay = car.getPricePerDay();
-        BigDecimal daysDecimal = BigDecimal.valueOf(days);
-        BigDecimal basePrice = pricePerDay.multiply(daysDecimal);  // basePrice = pricePerDay * days
-
+        BigDecimal finalPriceBeforeDiscount = basePrice.add(extraFee);
         BigDecimal discountAmount = BigDecimal.ZERO;
-        BigDecimal finalPrice = basePrice;
+        BigDecimal finalPrice = finalPriceBeforeDiscount;
         Promotion promo = null;
 
-        // ===== PROMOTION HANDLING =====
         if (promoCode != null && !promoCode.trim().isEmpty()) {
             promo = promoDAO.findByCode(promoCode.trim());
-            if (promo == null) {
-                return "❌ The promo code does not exist!";
-            }
-
-            if (!promo.isActive()) {
-                return "❌ This promo code is no longer active!";
-            }
-
+            if (promo == null) return "❌ Promo code not found!";
+            if (!promo.isActive()) return "❌ Promo code is not active!";
             if (promo.getStartDate().toLocalDate().isAfter(today) ||
                     promo.getEndDate().toLocalDate().isBefore(today)) {
-                return "❌ This promo code has expired!";
+                return "❌ Promo code expired!";
             }
 
-            // Calculate discount
-            double discountRate = promo.getDiscountRate();  // double từ DB
-
-            if ("PERCENTAGE".equalsIgnoreCase(promo.getDiscountType()) ||
-                    "PERCENT".equalsIgnoreCase(promo.getDiscountType())) {
-
-                discountAmount = basePrice.multiply(BigDecimal.valueOf(discountRate))
+            double discountRate = promo.getDiscountRate();
+            if ("PERCENT".equalsIgnoreCase(promo.getDiscountType())) {
+                discountAmount = finalPriceBeforeDiscount.multiply(BigDecimal.valueOf(discountRate))
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-
             } else if ("FIXED".equalsIgnoreCase(promo.getDiscountType())) {
-                // Discount cố định
                 discountAmount = BigDecimal.valueOf(discountRate);
-            } else {
-                // Default: coi như percent
-                discountAmount = basePrice.multiply(BigDecimal.valueOf(discountRate))
-                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
             }
 
-            // Discount không được lớn hơn basePrice
-            if (discountAmount.compareTo(basePrice) > 0) {
-                discountAmount = basePrice;
-            }
-
-            // finalPrice = basePrice - discountAmount
-            finalPrice = basePrice.subtract(discountAmount);
-
-            // Safety check
-            if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
-                finalPrice = BigDecimal.ZERO;
-            }
+            if (discountAmount.compareTo(finalPriceBeforeDiscount) > 0) discountAmount = finalPriceBeforeDiscount;
+            finalPrice = finalPriceBeforeDiscount.subtract(discountAmount);
+            if (finalPrice.compareTo(BigDecimal.ZERO) < 0) finalPrice = BigDecimal.ZERO;
         }
-
 
         booking.setTotalPrice(finalPrice.doubleValue());
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
-
         try {
             boolean bookingSuccess = bookingDAO.insert(booking);
-            if (!bookingSuccess) {
-                return "❌ Booking failed. Please try again!";
-            }
+            if (!bookingSuccess) return "❌ Booking failed. Please try again!";
 
             if (discountAmount.compareTo(BigDecimal.ZERO) > 0 && promo != null) {
                 BookingPromotion bp = new BookingPromotion();
@@ -162,24 +116,13 @@ public class BookingService {
                 bookingPromoDAO.insert(bp);
             }
 
-            try {
-                notificationService.notifyBookingCreated(
-                        booking.getBookingId(),
-                        booking.getUserId(),
-                        car.getOwnerId(),
-                        car.getModel()
-                );
-            } catch (Exception e) {
-                System.err.println("⚠️ Warning: Failed to send notification");
-                e.printStackTrace();
-            }
+            notificationService.notifyBookingCreated(booking.getBookingId(),
+                    booking.getUserId(), car.getOwnerId(), car.getModel());
 
             return "success";
-
         } catch (Exception e) {
-            System.err.println("❌ Error creating booking: " + e.getMessage());
             e.printStackTrace();
-            return "❌ Booking failed due to system error. Please try again!";
+            return "❌ Booking failed due to system error.";
         }
     }
 
