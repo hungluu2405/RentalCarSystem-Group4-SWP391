@@ -22,7 +22,7 @@ import java.util.List;
 public class ManageMyCarDetailController extends HttpServlet {
 
     private final CarDAO carDAO = new CarDAO();
-    private final ManageCarDetailService carService = new ManageCarDetailService(); // 🔹 Đã chỉnh
+    private final ManageCarDetailService carService = new ManageCarDetailService();
     private void reloadFormData(HttpServletRequest request, CarViewModel car) {
         request.setAttribute("car", car);
         request.setAttribute("carTypes", carDAO.getAllCarTypes());

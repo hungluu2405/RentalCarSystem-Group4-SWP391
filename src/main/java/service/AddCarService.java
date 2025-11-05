@@ -20,17 +20,17 @@ public class AddCarService {
         if (pricePerDay == null || pricePerDay.compareTo(BigDecimal.ZERO) <= 0) {
             return "Giá thuê mỗi ngày phải lớn hơn 0!";
         }
-        if (capacity <= 0) {
-            return "Sức chứa của xe phải lớn hơn 0!";
+        if (capacity < 2) {
+            return "Sức chứa của xe phải lớn hơn hoặc bằng 2!";
         }
-        if (capacity >7) {
+        if (capacity > 7) {
             return "Sức chứa của xe không được lớn hơn 7!";
         }
         if (isDuplicateLicensePlate(licensePlate)) {
             return "Biển số xe đã tồn tại trong hệ thống!";
         }
 
-        return null; // null = hợp lệ
+        return null;
     }
 
     public boolean isDuplicateLicensePlate(String licensePlate) {

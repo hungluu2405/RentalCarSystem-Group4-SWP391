@@ -12,7 +12,7 @@ public class ManageCarDetailService {
 
     public String validateCarUpdate(CarViewModel car) {
         // 1️⃣ Validate dung tích
-        if (car.getCapacity() <= 0 || car.getCapacity() > 7) {
+        if (car.getCapacity() < 2 || car.getCapacity() > 7) {
             return "Số chỗ ngồi phải trong khoảng từ 1 đến 7.";
         }
 
