@@ -7,7 +7,9 @@ import model.UserProfile;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,38 +76,50 @@ public class BookingDAO extends DBContext {
         }
     }
 
+    public boolean isCarAvailable(int carId, LocalDate startDate, LocalTime startTime,
+                                  LocalDate endDate, LocalTime endTime) {
 
-    public boolean isCarAvailable(int carId, LocalDate start, LocalDate end) {
+        // Tạo LocalDateTime để so sánh chính xác
+        LocalDateTime requestStart = LocalDateTime.of(startDate, startTime);
+        LocalDateTime requestEnd = LocalDateTime.of(endDate, endTime);
+
         String sql = """
-                    SELECT COUNT(*) FROM BOOKING
-                    WHERE CAR_ID = ? AND STATUS IN ('Pending', 'Approved','Paid')
-                      AND (
-                            (START_DATE <= ? AND END_DATE >= ?)
-                         OR (START_DATE <= ? AND END_DATE >= ?)
-                         OR (START_DATE >= ? AND END_DATE <= ?)
-                      )
-                """;
+            SELECT COUNT(*) FROM BOOKING
+            WHERE CAR_ID = ? 
+              AND STATUS IN ('Pending', 'Approved', 'Paid')
+              AND (
+                  -- Overlap check: booking hiện tại CONFLICT với request
+                  CONCAT(START_DATE, ' ', PICKUP_TIME) < ?
+                  AND CONCAT(END_DATE, ' ', DROPOFF_TIME) > ?
+              )
+        """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, carId);
-            ps.setObject(2, end);
-            ps.setObject(3, start);
-            ps.setObject(4, start);
-            ps.setObject(5, end);
-            ps.setObject(6, start);
-            ps.setObject(7, end);
+
+            // Format: "2025-12-20 20:00:00"
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            ps.setString(2, requestEnd.format(formatter));
+            ps.setString(3, requestStart.format(formatter));
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
+
+                if (count > 0) {
+                    System.out.println("⚠️ Car " + carId + " is NOT available!");
+                    System.out.println("   Request: " + requestStart + " → " + requestEnd);
+                    System.out.println("   Conflicts with " + count + " existing booking(s)");
+                }
+
                 return count == 0; // true = available
             }
         } catch (SQLException e) {
+            System.err.println("❌ Error checking availability: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
     }
-
 
     public List<BookingDetail> getRecentBookingDetails(int userId, int limit) {
         List<BookingDetail> list = new ArrayList<>();
