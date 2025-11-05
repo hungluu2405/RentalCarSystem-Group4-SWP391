@@ -67,6 +67,12 @@
             </a>
         </li>
         <li>
+            <a href="${pageContext.request.contextPath}/owner/license"
+               class="${activePage == 'license' ? 'active' : ''}">
+                <i class="fa fa-id-card"></i> Update Driver License
+            </a>
+        </li>
+        <li>
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fa fa-sign-out"></i> Sign Out
             </a>
