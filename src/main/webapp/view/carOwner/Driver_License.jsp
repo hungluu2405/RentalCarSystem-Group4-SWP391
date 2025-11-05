@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <jsp:include page="../common/customer/_head.jsp"/>
+    <jsp:include page="../common/carOwner/_headOwner.jsp"/>
     <title>Rentaly - My Profile</title>
 
     <style>
@@ -26,7 +26,7 @@
 
 <body>
 <div id="wrapper">
-    <jsp:include page="../common/customer/_header.jsp"/>
+    <jsp:include page="../common/carOwner/_headerOwner.jsp"/>
 
     <div class="no-bottom no-top zebra" id="content">
         <section id="subheader" class="jarallax text-light">
@@ -42,7 +42,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 mb30">
-                        <jsp:include page="../common/customer/_sidebar.jsp">
+                        <jsp:include page="../common/carOwner/_sidebarOwner.jsp">
                             <jsp:param name="activePage" value="profile"/>
                         </jsp:include>
                     </div>
@@ -65,7 +65,7 @@
                             </c:if>
 
 
-                            <form action="${pageContext.request.contextPath}/customer/license"
+                            <form action="${pageContext.request.contextPath}/owner/license"
                                   method="post"
                                   enctype="multipart/form-data"
                                   class="form-border p-4 bg-light rounded shadow-sm">
@@ -177,7 +177,7 @@
         </section>
     </div>
 
-    <jsp:include page="../common/customer/_footer_scripts.jsp"/>
+    <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
 
 <script>
