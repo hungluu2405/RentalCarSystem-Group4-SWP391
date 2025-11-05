@@ -12,36 +12,39 @@ import java.util.List;
 public class PayPalService {
 
     private final BookingDAO bookingDAO = new BookingDAO();
-    // XÓA: NotificationDAO, CarDAO, Car car - KHÔNG CẦN NỮA
 
     private APIContext getApiContext() {
         return new APIContext(PayPalConfig.CLIENT_ID, PayPalConfig.CLIENT_SECRET, PayPalConfig.MODE);
     }
 
+
     public Payment createOrder(int bookingId, String contextPath) throws Exception {
         Booking booking = bookingDAO.getBookingById(bookingId);
 
-        if (booking == null || !booking.getStatus().equalsIgnoreCase("Approved")) {
-            throw new Exception("Booking ID " + bookingId + " is not approved or does not exist.");
+        if (booking == null) {
+            throw new Exception("Booking ID " + bookingId + " does not exist.");
         }
 
-        double vndAmount = booking.getTotalPrice();
-        final double EXCHANGE_RATE = 26000.00;
+        if (!"Approved".equalsIgnoreCase(booking.getStatus())) {
+            throw new Exception("Booking ID " + bookingId + " is not approved yet.");
+        }
 
-        if (vndAmount <= 0) {
+        double usdAmount = booking.getTotalPrice();
+        if (usdAmount <= 0) {
             throw new Exception("Total price must be greater than zero.");
         }
 
-        double usdAmount = vndAmount / EXCHANGE_RATE;
+        // Format số USD theo chuẩn PayPal (2 chữ số thập phân)
         String totalAmountStr = String.format("%.2f", usdAmount);
 
         Amount amount = new Amount();
-        amount.setCurrency(PayPalConfig.CURRENCY);
+        amount.setCurrency(PayPalConfig.CURRENCY); // "USD"
         amount.setTotal(totalAmountStr);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setDescription("Payment for Booking ID: " + bookingId);
+
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -63,9 +66,10 @@ public class PayPalService {
         return payment.create(getApiContext());
     }
 
-    // CHỈ XỬ LÝ PAYPAL + LƯU PAYMENT RECORD
+    /**
+     * Xác nhận thanh toán PayPal & lưu record vào DB
+     */
     public boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
-
         Payment payment = new Payment();
         payment.setId(paymentId);
 
@@ -74,14 +78,14 @@ public class PayPalService {
 
         Payment executedPayment = payment.execute(getApiContext(), paymentExecution);
 
-        if (executedPayment.getState().equalsIgnoreCase("approved")) {
-
+        if ("approved".equalsIgnoreCase(executedPayment.getState())) {
             double paidAmount = Double.parseDouble(
                     executedPayment.getTransactions().get(0).getAmount().getTotal()
             );
+
             String paypalTransactionId = executedPayment.getId();
 
-            // CHỈ LƯU PAYMENT RECORD - KHÔNG UPDATE STATUS
+            // Lưu record thanh toán (giá trị đã là USD)
             boolean paymentInserted = bookingDAO.insertPaymentRecord(
                     bookingId,
                     paypalTransactionId,
@@ -91,6 +95,7 @@ public class PayPalService {
 
             return paymentInserted;
         }
+
         return false;
     }
 }
