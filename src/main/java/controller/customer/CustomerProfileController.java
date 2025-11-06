@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 @WebServlet("/customer/profile")
 @MultipartConfig(
@@ -102,10 +104,24 @@ public class CustomerProfileController extends HttpServlet {
         }
 
         if (driverLicenseNumber != null && !driverLicenseNumber.isEmpty() && driverLicenseNumber.length() != 12) {
-            forwardWithError(request, response, "❌ The driver’s license number must be exactly 12 characters.!");
+            forwardWithError(request, response, "❌ The driver's license number must be exactly 12 characters.!");
             return;
         }
 
+        // ✅ Validate age >= 18 years old
+        if (dobString != null && !dobString.isEmpty()) {
+            try {
+                Date dob = Date.valueOf(dobString);
+                int age = Period.between(dob.toLocalDate(), LocalDate.now()).getYears();
+                if (age < 18) {
+                    forwardWithError(request, response, "❌ You must be at least 18 years old to use this service!");
+                    return;
+                }
+            } catch (IllegalArgumentException e) {
+                forwardWithError(request, response, "❌ Invalid date of birth format!");
+                return;
+            }
+        }
 
         Part filePart = request.getPart("profileImage");
         String imagePath = null;
