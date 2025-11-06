@@ -36,8 +36,6 @@ public class NotificationService {
         notificationDAO.markAllAsRead(userId);
     }
 
-
-
     private String getBookingUrl(int userId, int bookingId) {
         try {
             User user = userDAO.getUserById(userId);
@@ -45,42 +43,23 @@ public class NotificationService {
             if (user != null) {
                 int roleId = user.getRoleId();
 
-                // Debug log
-                System.out.println("🔍 getBookingUrl - UserId: " + userId +
-                        ", RoleId: " + roleId +
-                        ", BookingId: " + bookingId);
-
-
-                if (roleId == 2) {
-                    String url = "/customer/customerOrder?id=" + bookingId;
-                    System.out.println("✅ Customer URL: " + url);
-                    return url;
+                // Role 2 = Customer
+                if (roleId == 3) {
+                    return "/customer/customerOrder?id=" + bookingId;
                 }
-
-                else if (roleId == 3) {
-                    String url = "/owner/myBooking?id=" + bookingId;
-                    System.out.println("✅ Owner URL: " + url);
-                    return url;
+                // Role 3 = Car Owner
+                else if (roleId == 2) {
+                    return "/owner/myBooking?id=" + bookingId;
                 }
-
+                // Role 1 = Admin
                 else if (roleId == 1) {
                     return "/admin/dashboard";
                 }
-                else {
-                    System.out.println("⚠️ Unknown role: " + roleId);
-                    return "/home";
-                }
-            } else {
-                System.out.println("❌ User not found for userId: " + userId);
             }
-
         } catch (Exception e) {
-            System.err.println("❌ Error getting booking URL for userId " + userId + ": " + e.getMessage());
             e.printStackTrace();
         }
 
-        // Default fallback
-        System.out.println("⚠️ Using default URL");
         return "/home";
     }
 
@@ -91,7 +70,6 @@ public class NotificationService {
      */
     public void notifyBookingCreated(int bookingId, int customerId, int ownerId, String carModel) {
         try {
-            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
             String customerUrl = getBookingUrl(customerId, bookingId);
 
             // Thông báo cho Customer/Owner (người đặt xe)
@@ -100,7 +78,7 @@ public class NotificationService {
                     "BOOKING_PENDING",
                     "Your car booking has been received!",
                     "Your car booking has been received! Please wait for the Owner to approve it.",
-                    customerUrl  // ← SỬA
+                    customerUrl
             ));
 
             // Thông báo cho Owner (chủ xe)
@@ -109,7 +87,7 @@ public class NotificationService {
                     "BOOKING_NEW",
                     "New car booking request!",
                     "A new booking has been made for " + carModel + ". Please review the request.",
-                    "/owner/ownerBooking?id=" + bookingId  // ← Owner luôn xem ở ownerBooking
+                    "/owner/ownerBooking"  // ← BỎ ?id=
             ));
 
         } catch (Exception e) {
