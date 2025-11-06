@@ -55,7 +55,7 @@
 
         <li>
             <a href="${pageContext.request.contextPath}/owner/rental-calendar" class="${activePage == 'rental-calendar' ? 'active' : ''}">
-                <i class="fa fa-history"></i> View Rental Calendar
+                <i class="fa fa-calendar"></i> View Rental Calendar
             </a>
         </li>
         <li>
@@ -65,7 +65,7 @@
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/myCoupon" class="${activePage == 'myCoupon' ? 'active' : ''}">
-                <i class="fa fa-history"></i> My Coupon
+                <i class="fa fa-tag"></i> My Coupon
             </a>
         </li>
         <li>
