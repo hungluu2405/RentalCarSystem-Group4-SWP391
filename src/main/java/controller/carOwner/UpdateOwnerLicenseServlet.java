@@ -139,7 +139,7 @@ public class UpdateOwnerLicenseServlet extends HttpServlet {
                 licenseDAO.updateLicense(dl);
             }
 
-            response.sendRedirect(request.getContextPath() + "/carOwner/license?status=success");
+            response.sendRedirect(request.getContextPath() + "/owner/license?status=success");
 
         } catch (Exception e) {
             e.printStackTrace();
