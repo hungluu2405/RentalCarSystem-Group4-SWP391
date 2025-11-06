@@ -27,6 +27,13 @@ public class BookingService {
         if (license == null) return "❌ You must upload your driver license before booking!";
         if (booking.getStartDate().isBefore(today)) return "❌ The pickup date cannot be earlier than today!";
 
+        //check tgian trả > nhận
+        if (booking.getEndDate().isBefore(booking.getStartDate()))
+            return "❌ Return date must be after pickup date!";
+        if (booking.getEndDate().equals(booking.getStartDate()) &&
+                booking.getDropoffTime().isBefore(booking.getPickupTime()))
+            return "❌ Invalid time range!";
+
         LocalTime pickupTime = booking.getPickupTime();
         LocalTime dropoffTime = booking.getDropoffTime();
         if (pickupTime == null || dropoffTime == null) return "❌ Pickup and dropoff times are required!";
