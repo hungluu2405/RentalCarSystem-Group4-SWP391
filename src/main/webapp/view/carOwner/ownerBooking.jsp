@@ -121,7 +121,7 @@
                                         <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total (VND)</th>
+                                        <th>Total ($)</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -175,7 +175,7 @@
                                         <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total (VND)</th>
+                                        <th>Total ($)</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -216,6 +216,28 @@
 
                                     </tbody>
                                 </table>
+
+                                <div class="d-flex justify-content-center mt-3">
+                                    <nav>
+                                        <ul class="pagination">
+                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                <a class="page-link" href="?page=${currentPage - 1}">&laquo;</a>
+                                            </li>
+
+                                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link" href="?page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+
+                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                <a class="page-link" href="?page=${currentPage + 1}">&raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+
                             </div>
                         </div>
 
@@ -232,7 +254,7 @@
                                         <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total (VND)</th>
+                                        <th>Total ($)</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -273,6 +295,28 @@
 
                                     </tbody>
                                 </table>
+
+                                <div class="d-flex justify-content-center mt-3">
+                                    <nav>
+                                        <ul class="pagination">
+                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                <a class="page-link" href="?page=${currentPage - 1}">&laquo;</a>
+                                            </li>
+
+                                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                    <a class="page-link" href="?page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+
+                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                <a class="page-link" href="?page=${currentPage + 1}">&raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
+
                             </div>
                         </div>
 
