@@ -27,21 +27,7 @@ public class Driver_LicenseService {
             return "Issue date must be before expiry date.";
         }
 
-        // 4️⃣ Nếu có ngày sinh => kiểm tra tuổi ≥ 18
-        if (dl.getDob() != null) {
-            LocalDate dob = dl.getDob().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate today = LocalDate.now();
-            long age = ChronoUnit.YEARS.between(dob, today);
-            if (age < 18) {
-                return "Driver must be at least 18 years old.";
-            }
 
-            // 5️⃣ Ngày cấp không được trước ngày sinh
-            LocalDate issue = dl.getIssue_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if (issue.isBefore(dob)) {
-                return "Issue date cannot be before date of birth.";
-            }
-        }
 
         // ✅ Nếu qua hết thì hợp lệ
         return null;
