@@ -108,17 +108,17 @@ public class CustomerProfileController extends HttpServlet {
             return;
         }
 
-        // Validation: Check age >= 18
+        // ✅ Validate age >= 18 years old
         if (dobString != null && !dobString.isEmpty()) {
             try {
                 Date dob = Date.valueOf(dobString);
                 int age = Period.between(dob.toLocalDate(), LocalDate.now()).getYears();
                 if (age < 18) {
-                    forwardWithError(request, response, "❌ You must be at least 18 years old!");
+                    forwardWithError(request, response, "❌ You must be at least 18 years old to use this service!");
                     return;
                 }
             } catch (IllegalArgumentException e) {
-                forwardWithError(request, response, "❌ Invalid date format!");
+                forwardWithError(request, response, "❌ Invalid date of birth format!");
                 return;
             }
         }
