@@ -41,21 +41,47 @@ public class NotificationService {
     private String getBookingUrl(int userId, int bookingId) {
         try {
             User user = userDAO.getUserById(userId);
+
             if (user != null) {
-                // Role 3 = Customer
-                if (user.getRoleId() == 3) {
-                    return "/customer/customerOrder?id=" + bookingId;
+                int roleId = user.getRoleId();
+
+                // Debug log
+                System.out.println("🔍 getBookingUrl - UserId: " + userId +
+                        ", RoleId: " + roleId +
+                        ", BookingId: " + bookingId);
+
+
+                if (roleId == 2) {
+                    String url = "/customer/customerOrder?id=" + bookingId;
+                    System.out.println("✅ Customer URL: " + url);
+                    return url;
                 }
-                // Role 2 = Car Owner (khi owner book xe của người khác)
-                else if (user.getRoleId() == 2) {
-                    return "/owner/myBooking?id=" + bookingId;  // ← THAY ĐỔI URL NÀY NẾU CẦN
+
+                else if (roleId == 3) {
+                    String url = "/owner/myBooking?id=" + bookingId;
+                    System.out.println("✅ Owner URL: " + url);
+                    return url;
                 }
+
+                else if (roleId == 1) {
+                    return "/admin/dashboard";
+                }
+                else {
+                    System.out.println("⚠️ Unknown role: " + roleId);
+                    return "/home";
+                }
+            } else {
+                System.out.println("❌ User not found for userId: " + userId);
             }
+
         } catch (Exception e) {
-            System.err.println("❌ Error getting booking URL: " + e.getMessage());
+            System.err.println("❌ Error getting booking URL for userId " + userId + ": " + e.getMessage());
+            e.printStackTrace();
         }
+
         // Default fallback
-        return "/customer/customerOrder?id=" + bookingId;
+        System.out.println("⚠️ Using default URL");
+        return "/home";
     }
 
     // ==================== BOOKING NOTIFICATION METHODS ====================
