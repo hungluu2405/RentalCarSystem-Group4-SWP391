@@ -192,7 +192,7 @@
 
                                     <div class="car-price">
                                         <p>Daily rate from</p>
-                                        <h4>${car.pricePerDay}VND</h4>
+                                        <h4>${car.pricePerDay}$</h4>
                                         <a href="${pageContext.request.contextPath}/owner/manageCarDetail?carId=${car.carId}"
                                            class="btn-view">View My Car</a>
                                     </div>
