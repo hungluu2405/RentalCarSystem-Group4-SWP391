@@ -89,7 +89,7 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label>Back Imagesssssssss:</label><br>
+                                            <label>Back Image:</label><br>
                                             <img id="backImagePreview"
                                                  src="${pageContext.request.contextPath}${backImageUrl}"
                                                  alt="Back License"

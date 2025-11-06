@@ -1,7 +1,7 @@
 package controller.carOwner;
 
-import dao.implement.BookingDAO;
-import dao.implement.CarDAO;
+
+import dao.implement.Driver_LicenseDAO;
 import dao.implement.UserProfileDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -12,9 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Date;
-import java.util.List;
-import model.BookingDetail;
-import model.CarViewModel;
+import model.Driver_License;
 import model.User;
 import model.UserProfile;
 
@@ -40,6 +38,11 @@ public class CarOwnerDashboardController extends HttpServlet {
 
         UserProfileDAO dao = new UserProfileDAO();
         UserProfile profile = dao.findByUserId(user.getUserId());
+        Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
+        Driver_License license = licenseDAO.getLicenseByUserId(user.getUserId());
+
+        request.setAttribute("license",license);
+
         if (profile == null) {
             profile = new UserProfile();
             profile.setUserId(user.getUserId());

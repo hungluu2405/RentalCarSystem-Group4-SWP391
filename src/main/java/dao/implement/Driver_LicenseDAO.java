@@ -9,13 +9,21 @@ public class Driver_LicenseDAO extends DBContext {
     // 🟩 Lấy thông tin bằng lái + join thông tin user
     public Driver_License getLicenseByUserId(int userId) {
         String sql = """
-            SELECT d.LICENSE_ID, d.USER_ID, d.LICENSE_NUMBER, d.ISSUE_DATE, d.EXPIRY_DATE,
-                                                  d.FRONT_IMAGE_URL, d.BACK_IMAGE_URL,
-                                                  u.FULL_NAME, u.GENDER, u.DOB
-                                           FROM DRIVER_LICENSE d
-                                           JOIN USER_PROFILE u ON d.USER_ID = u.USER_ID
-                                           WHERE d.USER_ID = ?
-        """;
+        SELECT 
+            d.LICENSE_ID, 
+            d.USER_ID, 
+            d.LICENSE_NUMBER AS DL_LICENSE_NUMBER, 
+            d.ISSUE_DATE, 
+            d.EXPIRY_DATE,
+            d.FRONT_IMAGE_URL, 
+            d.BACK_IMAGE_URL,
+            u.FULL_NAME, 
+            u.GENDER, 
+            u.DOB
+        FROM DRIVER_LICENSE d
+        JOIN USER_PROFILE u ON d.USER_ID = u.USER_ID
+        WHERE d.USER_ID = ?
+    """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -24,17 +32,15 @@ public class Driver_LicenseDAO extends DBContext {
                     Driver_License dl = new Driver_License();
                     dl.setLicense_id(rs.getInt("LICENSE_ID"));
                     dl.setUser_id(rs.getInt("USER_ID"));
-                    dl.setLicense_number(rs.getString("LICENSE_NUMBER"));
+                    dl.setLicense_number(rs.getString("DL_LICENSE_NUMBER")); // 👈 lấy alias, không bị đè nữa
                     dl.setIssue_date(rs.getDate("ISSUE_DATE"));
                     dl.setExpiry_date(rs.getDate("EXPIRY_DATE"));
                     dl.setFront_image_url(rs.getString("FRONT_IMAGE_URL"));
                     dl.setBack_image_url(rs.getString("BACK_IMAGE_URL"));
 
-                    // Join thêm thông tin user
                     dl.setFullName(rs.getString("FULL_NAME"));
                     dl.setGender(rs.getString("GENDER"));
                     dl.setDob(rs.getDate("DOB"));
-
                     return dl;
                 }
             }
@@ -44,6 +50,7 @@ public class Driver_LicenseDAO extends DBContext {
         }
         return null;
     }
+
 
     // 🟨 Cập nhật thông tin bằng lái (update từ form JSP)
     public boolean updateLicense(Driver_License dl) {
