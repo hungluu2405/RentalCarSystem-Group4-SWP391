@@ -88,7 +88,7 @@ public class BookingDAO extends DBContext {
             WHERE CAR_ID = ? 
               AND STATUS IN ('Pending', 'Approved', 'Paid')
               AND (
-                  -- Overlap check: booking hiện tại CONFLICT với request
+                  
                   CONCAT(START_DATE, ' ', PICKUP_TIME) < ?
                   AND CONCAT(END_DATE, ' ', DROPOFF_TIME) > ?
               )
@@ -97,7 +97,7 @@ public class BookingDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, carId);
 
-            // Format: "2025-12-20 20:00:00"
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             ps.setString(2, requestEnd.format(formatter));
             ps.setString(3, requestStart.format(formatter));
