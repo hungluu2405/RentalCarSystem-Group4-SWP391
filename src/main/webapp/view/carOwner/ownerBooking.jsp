@@ -167,7 +167,7 @@
                                                 <a class="page-link" href="?page=${currentPage - 1}">&laquo;</a>
                                             </li>
 
-                                            <c:forEach begin="1" end="${totalPages}" var="i">
+
                                                 <c:forEach begin="1" end="${totalPagesPending}" var="i">
 
                                                 <li class="page-item ${i == currentPage ? 'active' : ''}">
