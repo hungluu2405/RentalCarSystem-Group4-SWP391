@@ -26,7 +26,7 @@ public class UserProfileDAO extends DBContext {
                 profile.setPhone(rs.getString("PHONE"));
                 profile.setDob(rs.getDate("DOB"));
                 profile.setGender(rs.getString("GENDER"));
-                profile.setDriverLicenseNumber(rs.getString("DRIVER_LICENSE_NUMBER"));
+//                profile.setDriverLicenseNumber(rs.getString("DRIVER_LICENSE_NUMBER"));
                 profile.setIsVerified(rs.getBoolean("IS_VERIFIED"));
                 profile.setProfileImage(rs.getString("profileImage"));
 //                profile.setEmail(rs.getString("email"));
@@ -43,7 +43,7 @@ public class UserProfileDAO extends DBContext {
         String sql = """
             UPDATE [dbo].[USER_PROFILE]
             SET FULL_NAME = ?, PHONE = ?, DOB = ?, GENDER = ?, 
-                DRIVER_LICENSE_NUMBER = ?, profileImage = ?
+                 profileImage = ?
             WHERE USER_ID = ?
         """;
         try (Connection conn = getConnection();
@@ -53,9 +53,9 @@ public class UserProfileDAO extends DBContext {
             ps.setString(2, profile.getPhone());
             ps.setDate(3, profile.getDob());
             ps.setString(4, profile.getGender());
-            ps.setString(5, profile.getDriverLicenseNumber());
-            ps.setString(6, profile.getProfileImage());
-            ps.setInt(7, profile.getUserId());
+//            ps.setString(5, profile.getDriverLicenseNumber());
+            ps.setString(5, profile.getProfileImage());
+            ps.setInt(6, profile.getUserId());
 
             int rows = ps.executeUpdate();
             System.out.println("✅ [UserProfileDAO.updateProfile] Rows affected: " + rows);
@@ -70,7 +70,7 @@ public class UserProfileDAO extends DBContext {
     public boolean insertProfile(UserProfile profile) {
         String sql = """
             INSERT INTO [dbo].[USER_PROFILE]
-                (USER_ID, FULL_NAME, PHONE, DOB, GENDER, DRIVER_LICENSE_NUMBER, profileImage, IS_VERIFIED)
+                (USER_ID, FULL_NAME, PHONE, DOB, GENDER,  profileImage, IS_VERIFIED)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """;
         try (Connection conn = getConnection();
@@ -81,9 +81,9 @@ public class UserProfileDAO extends DBContext {
             ps.setString(3, profile.getPhone());
             ps.setDate(4, profile.getDob());
             ps.setString(5, profile.getGender());
-            ps.setString(6, profile.getDriverLicenseNumber());
-            ps.setString(7, profile.getProfileImage());
-            ps.setBoolean(8, profile.isIsVerified());
+//            ps.setString(6, profile.getDriverLicenseNumber());
+            ps.setString(6, profile.getProfileImage());
+            ps.setBoolean(7, profile.isIsVerified());
 
             int rows = ps.executeUpdate();
             System.out.println("✅ [UserProfileDAO.insertProfile] Rows inserted: " + rows);
