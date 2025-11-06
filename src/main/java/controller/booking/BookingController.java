@@ -111,10 +111,7 @@ public class BookingController extends HttpServlet {
             booking.setStatus("Pending");
             booking.setCreatedAt(LocalDateTime.now());
 
-            // ✅ SET TOTAL PRICE
-            if (finalPrice > 0) {
-                booking.setTotalPrice(finalPrice);
-            }
+
 
             String finalPromoCode = (appliedPromoCode != null && !appliedPromoCode.trim().isEmpty())
                     ? appliedPromoCode.trim()
