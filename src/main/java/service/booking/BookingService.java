@@ -1,11 +1,14 @@
 package service.booking;
 
+import dao.DBContext;
 import dao.implement.*;
 import model.*;
 import service.NotificationService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,6 +22,7 @@ public class BookingService {
     private final BookingPromotionDAO bookingPromoDAO = new BookingPromotionDAO();
     private final Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
     private final NotificationService notificationService = new NotificationService();
+    private final DBContext dbContext = new DBContext();
 
     public String createBooking(Booking booking, String promoCode) {
         Driver_License license = licenseDAO.getLicenseByUserId(booking.getUserId());
@@ -101,10 +105,20 @@ public class BookingService {
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
+        // ✅ TRANSACTION: Wrap booking + promotion insert trong 1 transaction
+        Connection conn = null;
         try {
-            boolean bookingSuccess = bookingDAO.insert(booking);
-            if (!bookingSuccess) return "❌ Booking failed. Please try again!";
+            conn = dbContext.getConnection();
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
+            // Insert booking (trigger sẽ check overlap tự động)
+            boolean bookingSuccess = bookingDAO.insert(booking, conn);
+            if (!bookingSuccess) {
+                conn.rollback();
+                return "❌ Booking failed. Please try again!";
+            }
+
+            // Insert promotion nếu có
             if (discountAmount.compareTo(BigDecimal.ZERO) > 0 && promo != null) {
                 BookingPromotion bp = new BookingPromotion();
                 bp.setBookingId(booking.getBookingId());
@@ -113,16 +127,60 @@ public class BookingService {
                 bp.setFinalPrice(finalPrice.doubleValue());
                 bp.setAppliedAt(LocalDateTime.now());
                 bp.setStatus("Applied");
-                bookingPromoDAO.insert(bp);
+
+                boolean promoSuccess = bookingPromoDAO.insert(bp, conn);
+                if (!promoSuccess) {
+                    conn.rollback();
+                    return "❌ Failed to apply promotion. Booking cancelled.";
+                }
             }
 
-            notificationService.notifyBookingCreated(booking.getBookingId(),
-                    booking.getUserId(), car.getOwnerId(), car.getModel());
+            // ✅ Commit transaction - tất cả thành công
+            conn.commit();
+
+            // Gửi notification AFTER commit thành công
+            try {
+                notificationService.notifyBookingCreated(booking.getBookingId(),
+                        booking.getUserId(), car.getOwnerId(), car.getModel());
+            } catch (Exception notifEx) {
+                System.err.println("⚠️ Warning: Notification failed but booking was successful");
+                notifEx.printStackTrace();
+            }
 
             return "success";
+
+        } catch (SQLException e) {
+            // ✅ Handle trigger error (overlapping bookings)
+            String errorMsg = e.getMessage();
+            if (errorMsg != null && errorMsg.contains("already booked")) {
+                return "❌ This car is already booked for the selected period!";
+            }
+
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            return "❌ Booking failed due to system error: " + e.getMessage();
         } catch (Exception e) {
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
             return "❌ Booking failed due to system error.";
+        } finally {
+            // ✅ Đảm bảo connection được đóng và autoCommit được restore
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

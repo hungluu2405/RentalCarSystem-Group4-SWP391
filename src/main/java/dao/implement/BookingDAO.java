@@ -16,25 +16,55 @@ import java.util.List;
 public class BookingDAO extends DBContext {
 
 
+    // ✅ Original insert method - vẫn giữ để backward compatible
     public boolean insert(Booking booking) {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false); // Bật transaction
+
+            boolean result = insert(booking, conn);
+
+            if (result) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
+            }
+        } catch (SQLException e) {
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // ✅ NEW: Transaction-aware insert method
+    public boolean insert(Booking booking, Connection conn) throws SQLException {
         String sql = """
                     INSERT INTO BOOKING (CAR_ID, USER_ID, START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME, TOTAL_PRICE, STATUS, CREATED_AT, LOCATION)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
-        // Khai báo Statement và ResultSet bên ngoài try-with-resources để sử dụng getGeneratedKeys
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Connection conn = null;
 
         try {
-            conn = getConnection(); // Lấy kết nối từ DBContext
-
-            // ✅ BƯỚC 1: Yêu cầu JDBC trả về ID tự động tăng
-            // Sử dụng Statement.RETURN_GENERATED_KEYS
             ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            // Thiết lập tham số (Giữ nguyên logic của bạn)
             ps.setInt(1, booking.getCarId());
             ps.setInt(2, booking.getUserId());
             ps.setObject(3, booking.getStartDate());
@@ -49,30 +79,19 @@ public class BookingDAO extends DBContext {
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows > 0) {
-                // ✅ BƯỚC 2: Lấy ResultSet chứa ID vừa tạo
                 rs = ps.getGeneratedKeys();
                 if (rs.next()) {
-                    // ✅ BƯỚC 3: Gán ID vừa tạo TRỞ LẠI đối tượng Booking
                     int newBookingId = rs.getInt(1);
                     booking.setBookingId(newBookingId);
-
                     return true;
                 }
             }
             return false;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         } finally {
-            // Đóng các tài nguyên
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conn != null) conn.close(); // Sử dụng hàm đóng kết nối của DBContext nếu có
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            // ⚠️ KHÔNG đóng connection ở đây vì nó được quản lý bởi caller
         }
     }
 
