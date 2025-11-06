@@ -478,6 +478,37 @@ public class BookingDAO extends DBContext {
         return list;
     }
 
+    public int countBookingsByOwner(int ownerId) {
+        String sql = "SELECT COUNT(*) FROM Booking WHERE userId = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return 0;
+    }
+
+    public List<BookingDetail> getBookingsByOwnerWithPaging(int ownerId, int page, int pageSize) {
+        List<BookingDetail> list = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+
+        String sql = "SELECT * FROM BookingDetail WHERE userId = ? ORDER BY bookingId DESC LIMIT ? OFFSET ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ps.setInt(2, pageSize);
+            ps.setInt(3, offset);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                // map như bình thường
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return list;
+    }
+
+
 
     public List<Booking> getAllBookings() throws SQLException {
         List<Booking> list = new ArrayList<>();
