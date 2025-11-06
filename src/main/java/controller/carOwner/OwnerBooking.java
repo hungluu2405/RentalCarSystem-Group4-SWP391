@@ -49,7 +49,7 @@ public class OwnerBooking extends HttpServlet {
         int totalPages = (int) Math.ceil((double) totalBookingsList / pageSize);
 
         // --- LẤY DANH SÁCH PHÂN TRANG ---
-        List<BookingDetail> allBookings = bookingDAO.getBookingsByOwnerWithPaging(ownerId, page, pageSize);
+        List<BookingDetail> allBookingss = bookingDAO.getBookingsByOwnerWithPaging(ownerId, page, pageSize);
 
 
         // Thống kê
