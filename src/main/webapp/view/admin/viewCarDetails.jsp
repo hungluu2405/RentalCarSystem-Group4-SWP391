@@ -90,9 +90,13 @@
 
 
                     <!-- MAIN CONTENT -->
-
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger text-center mb-3" role="alert">
+                                ${error}
+                        </div>
+                    </c:if>
                         <div class="card padding40 rounded-5 shadow-sm">
-                            <h3 class="mb-4"><i class="fa fa-edit"></i> View and Edit Car Information</h3>
+                            <h3 class="mb-4"><i class="fa fa-car"></i>   Car Information</h3>
 
                             <form method="post"
                                   action="${pageContext.request.contextPath}/owner/manageCarDetail"
@@ -109,10 +113,8 @@
                                          src="${pageContext.request.contextPath}/${car.imageUrl}"
                                          alt="Car Image"
                                          style="max-width: 100%; max-height: 300px; border-radius: 12px; object-fit: contain; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-                                    <p class="fw-bold mt-3">Upload Car Image</p>
-                                    <input type="file" name="carImage" accept="image/*"
-                                           onchange="previewCarImage(event)"
-                                           class="form-control mt-2">
+                                    <p class="fw-bold mt-3">Car Image</p>
+
                                 </div>
 
                                 <script>
@@ -230,7 +232,7 @@
                                 </div>
                             </form>
                                 <!-- BUTTONS -->
-                            <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Xác nhận xóa xe này?');">
+                            <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Are you sure you want to delete this car ?');">
                                 <input type="hidden" name="deleteId" value="${car.carId}" />
                                 <button type="submit" class="btn btn-danger">Delete</button>
                                 <a href="${pageContext.request.contextPath}/carDB" class="btn btn-secondary">Back to list</a>
