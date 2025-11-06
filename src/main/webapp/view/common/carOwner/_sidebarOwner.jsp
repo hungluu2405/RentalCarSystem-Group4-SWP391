@@ -9,7 +9,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- Lấy tham số 'activePage' được truyền vào từ trang cha --%>
-<c:set var="activePage" value="${param.activePage}" />
+<c:if test="${empty activePage}">
+    <c:set var="activePage" value="${param.activePage}" />
+</c:if>
 
 <div class="card padding30 rounded-5">
     <div class="profile_avatar">
@@ -67,8 +69,7 @@
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/owner/license"
-               class="${activePage == 'license' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/owner/license" class="${activePage == 'license' ? 'active' : ''}">
                 <i class="fa fa-id-card"></i> Update Driver License
             </a>
         </li>
