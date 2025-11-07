@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<fmt:setLocale value="en_US" />
+<fmt:setLocale value="vi_VN" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -424,7 +424,9 @@
                                                     <div>
                                                         <span class="fs-6 text-muted">Daily rate from</span>
                                                         <h5 class="fw-bold mb-0">
-                                                            $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                                            <fmt:formatNumber value="${car.pricePerDay}"
+                                                                              type="number" groupingUsed="true"
+                                                                              minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                         </h5>
                                                     </div>
                                                     <a class="btn-main"

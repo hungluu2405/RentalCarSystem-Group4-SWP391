@@ -11,6 +11,9 @@ import java.util.List;
 
 public class PayPalService {
 
+    // ========== EXCHANGE RATE CONSTANT ==========
+    private static final double VND_TO_USD_RATE = 26000.0;
+
     private final BookingDAO bookingDAO = new BookingDAO();
 
     private APIContext getApiContext() {
@@ -29,21 +32,27 @@ public class PayPalService {
             throw new Exception("Booking ID " + bookingId + " is not approved yet.");
         }
 
-        double usdAmount = booking.getTotalPrice();
-        if (usdAmount <= 0) {
+        // ========== CONVERT VND → USD ==========
+        double priceInVND = booking.getTotalPrice();
+
+        if (priceInVND <= 0) {
             throw new Exception("Total price must be greater than zero.");
         }
 
-        // Format số USD theo chuẩn PayPal (2 chữ số thập phân)
-        String totalAmountStr = String.format("%.2f", usdAmount);
+        // Convert sang USD cho PayPal
+        double priceInUSD = priceInVND / VND_TO_USD_RATE;
+
+
+        String totalAmountStr = String.format("%.2f", priceInUSD);
 
         Amount amount = new Amount();
-        amount.setCurrency(PayPalConfig.CURRENCY); // "USD"
+        amount.setCurrency(PayPalConfig.CURRENCY);
         amount.setTotal(totalAmountStr);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setDescription("Payment for Booking ID: " + bookingId);
+        transaction.setDescription("Car Rental Payment - Booking #" + bookingId
+                + " (" + String.format("%.0f", priceInVND) + " VND)");
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
@@ -66,9 +75,7 @@ public class PayPalService {
         return payment.create(getApiContext());
     }
 
-    /**
-     * Xác nhận thanh toán PayPal & lưu record vào DB
-     */
+
     public boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
         Payment payment = new Payment();
         payment.setId(paymentId);
@@ -79,17 +86,23 @@ public class PayPalService {
         Payment executedPayment = payment.execute(getApiContext(), paymentExecution);
 
         if ("approved".equalsIgnoreCase(executedPayment.getState())) {
-            double paidAmount = Double.parseDouble(
+
+            // ========== CONVERT USD → VND ==========
+
+            double paidAmountUSD = Double.parseDouble(
                     executedPayment.getTransactions().get(0).getAmount().getTotal()
             );
 
+            // Convert về VND để lưu DB (giữ consistency với data khác)
+            double paidAmountVND = paidAmountUSD * VND_TO_USD_RATE; // VD: 30.00 × 26,000 = 780,000 VND
+
             String paypalTransactionId = executedPayment.getId();
 
-            // Lưu record thanh toán (giá trị đã là USD)
+            // Lưu giá VND vào database
             boolean paymentInserted = bookingDAO.insertPaymentRecord(
                     bookingId,
                     paypalTransactionId,
-                    paidAmount,
+                    paidAmountVND, // Lưu VND
                     "Paid"
             );
 
