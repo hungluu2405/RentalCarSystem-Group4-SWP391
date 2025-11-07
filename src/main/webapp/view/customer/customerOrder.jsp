@@ -208,6 +208,35 @@
             font-size: 32px;
             color: #667eea;
         }
+
+        /* ========== RATING STARS CSS ========== */
+        .star {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star.selected,
+        .star:hover {
+            color: #FFD700;
+        }
+
+        /* Rate link styling */
+        .car-rate-link {
+            color: #28a745;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .car-rate-link:hover {
+            text-decoration: underline;
+            color: #218838;
+        }
     </style>
 </head>
 
@@ -307,11 +336,25 @@
                                             <c:forEach var="order" items="${bookings}">
                                                 <tr>
                                                     <td>
-                                                        <a class="car-name-link"
-                                                           onclick="showOwnerInfo(${order.bookingId}, '${order.carName}')">
-                                                            <c:out value="${order.carName}"/>
-                                                            <i class="fa fa-info-circle"></i>
-                                                        </a>
+                                                        <c:choose>
+                                                            <c:when test="${tab == 'history'}">
+                                                                <!-- History Trip: Click để rate -->
+                                                                <a class="car-rate-link"
+                                                                   data-booking-id="${order.bookingId}"
+                                                                   data-car-name="${order.carName}">
+                                                                    <c:out value="${order.carName}"/>
+                                                                    <i class="fa fa-star"></i>
+                                                                </a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <!-- Current Trip: Click để xem owner info -->
+                                                                <a class="car-name-link"
+                                                                   onclick="showOwnerInfo(${order.bookingId}, '${order.carName}')">
+                                                                    <c:out value="${order.carName}"/>
+                                                                    <i class="fa fa-info-circle"></i>
+                                                                </a>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </td>
                                                     <td><c:out value="${order.location}"/></td>
                                                     <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
@@ -448,8 +491,7 @@
     <jsp:include page="../common/customer/_footer_scripts.jsp"/>
 </div>
 
-<!-- ========== THÊM MODAL MỚI ========== -->
-
+<!-- ========== OWNER INFO MODAL ========== -->
 <div id="ownerModal" class="owner-modal">
     <div class="owner-modal-content">
         <div class="owner-modal-header">
@@ -461,18 +503,18 @@
         </div>
     </div>
 </div>
-<!-- ========== MODAL ĐÁNH GIÁ XE ========== -->
+
+<!-- ========== RATE & REVIEW MODAL ========== -->
 <div id="rateModal" class="owner-modal">
     <div class="owner-modal-content">
-        <div class="owner-modal-header">
+        <div class="owner-modal-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
             <h3>Rate Your Trip</h3>
             <span class="owner-modal-close" onclick="closeRateModal()">&times;</span>
         </div>
         <div class="owner-modal-body">
-            <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px;"></div>
+            <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px; font-size:18px; color:#333;"></div>
 
-            <!-- 5 sao -->
-
+            <!-- 5 Stars -->
             <div style="text-align:center; margin-bottom:20px;">
                 <span class="star" data-value="1">&#9733;</span>
                 <span class="star" data-value="2">&#9733;</span>
@@ -485,31 +527,20 @@
             <textarea id="feedbackText"
                       class="form-control"
                       rows="4"
-                      placeholder="Share your experience..."></textarea>
+                      placeholder="Share your experience with this car..."></textarea>
 
             <div style="text-align:center; margin-top:20px;">
-                <button class="btn btn-success" id="submitRatingBtn">Submit Rating</button>
+                <button class="btn btn-success" id="submitRatingBtn">
+                    <i class="fa fa-paper-plane"></i> Submit Rating
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .star {
-        font-size: 30px;
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .star.selected,
-    .star:hover,
-    .star:hover ~ .star {
-        color: #FFD700;
-    }
-</style>
-
 <!-- ========== JAVASCRIPT ========== -->
 <script>
+    // ========== OWNER INFO MODAL FUNCTIONS ==========
     function showOwnerInfo(bookingId, carName) {
         const modal = document.getElementById('ownerModal');
         const content = document.getElementById('ownerInfoContent');
@@ -579,16 +610,94 @@
         document.getElementById('ownerModal').style.display = 'none';
     }
 
+    // ========== RATE & REVIEW MODAL FUNCTIONS ==========
+    let selectedRating = 0;
+    let currentBookingId = null;
+
+    // Event listener cho car rate links
+    document.addEventListener("click", function(e) {
+        if (e.target.closest('.car-rate-link')) {
+            e.preventDefault();
+            const link = e.target.closest('.car-rate-link');
+            currentBookingId = link.dataset.bookingId;
+            const carName = link.dataset.carName;
+
+            document.getElementById("rateCarName").innerText = carName;
+            document.getElementById("rateModal").style.display = "block";
+            document.getElementById("feedbackText").value = "";
+            selectedRating = 0;
+            document.querySelectorAll(".star").forEach(star => star.classList.remove("selected"));
+        }
+    });
+
+    // Star selection
+    document.querySelectorAll(".star").forEach(star => {
+        star.addEventListener("click", function() {
+            selectedRating = this.dataset.value;
+            document.querySelectorAll(".star").forEach(s => s.classList.remove("selected"));
+            for (let i = 0; i < selectedRating; i++) {
+                document.querySelectorAll(".star")[i].classList.add("selected");
+            }
+        });
+    });
+
+    // Submit rating
+    document.getElementById("submitRatingBtn").addEventListener("click", function() {
+        const feedback = document.getElementById("feedbackText").value.trim();
+
+        if (selectedRating === 0) {
+            alert("Please select a rating from 1 to 5 stars!");
+            return;
+        }
+
+        fetch("${pageContext.request.contextPath}/customer/rateCar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                bookingId: currentBookingId,
+                rating: selectedRating,
+                feedback: feedback
+            })
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Network error");
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert("Thank you for your feedback!");
+                    closeRateModal();
+                } else {
+                    alert(data.message || "Failed to submit feedback. Please try again.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Error while submitting feedback!");
+            });
+    });
+
+    function closeRateModal() {
+        document.getElementById("rateModal").style.display = "none";
+    }
+
+    // ========== GLOBAL MODAL CLOSE HANDLERS ==========
     window.onclick = function(event) {
-        const modal = document.getElementById('ownerModal');
-        if (event.target == modal) {
+        const ownerModal = document.getElementById('ownerModal');
+        const rateModal = document.getElementById('rateModal');
+
+        if (event.target == ownerModal) {
             closeOwnerModal();
+        }
+        if (event.target == rateModal) {
+            closeRateModal();
         }
     }
 
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closeOwnerModal();
+            closeRateModal();
         }
     });
 </script>
