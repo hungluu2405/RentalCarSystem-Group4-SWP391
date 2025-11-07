@@ -29,23 +29,29 @@ public class CarService {
 
             // ❌ 1. Ngày nhận < hiện tại
             if (startDT.isBefore(now)) {
-                return "❌ Pickup date/time cannot be earlier than the current time!";
+                return "❌ The pickup date/time cannot be earlier than the current time!";
             }
 
-            // ❌ 2. Ngày trả <= ngày nhận
-            if (!endDT.isAfter(startDT)) {
-                return "❌ Return date/time must be after pickup date/time (minimum 1 hour)!";
+            // ❌ 2. Đặt xe trước quá 7 tháng
+            LocalDateTime maxBookingDate = now.plusMonths(7);
+            if (startDT.isAfter(maxBookingDate)) {
+                return "❌ Cannot book more than 7 months in advance!";
             }
 
-            // ❌ 3. Đặt xe trước quá 6 tháng
-            if (startDT.isAfter(now.plusMonths(6))) {
-                return "❌ Cannot book more than 6 months in advance!";
+            // ❌ 3. Thời gian thuê vượt quá 7 tháng
+            if (endDT.isAfter(maxBookingDate)) {
+                return "❌ Booking period cannot extend beyond 7 months!";
             }
 
-            // ❌ 4. Thời gian thuê > 90 ngày
-            long days = ChronoUnit.DAYS.between(startDT.toLocalDate(), endDT.toLocalDate());
-            if (days > 90) {
-                return "❌ Maximum rental period is 90 days!";
+            // ❌ 4. Ngày trả < ngày nhận
+            if (endDT.isBefore(startDT)) {
+                return "❌ Return date/time must be after pickup date/time!";
+            }
+
+            // ❌ 5. Thời gian thuê < 24 giờ
+            long totalHours = ChronoUnit.HOURS.between(startDT, endDT);
+            if (totalHours < 24) {
+                return "❌ Minimum rental period is 24 hours!";
             }
 
         } catch (Exception e) {
@@ -54,6 +60,7 @@ public class CarService {
 
         return null; // ✅ Không lỗi
     }
+
 
 
     /** ✅ Lưu thông báo lỗi và dữ liệu cũ (flash attribute) */
