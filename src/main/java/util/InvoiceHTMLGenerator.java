@@ -147,7 +147,7 @@ public class InvoiceHTMLGenerator {
         html.append("        </div>\n");
 
 
-        // Invoice Breakdown
+        // Invoice Breakdown - ĐÃ XÓA PHẦN VAT
 
         html.append("        <div class=\"invoice-breakdown\">\n");
 
@@ -164,33 +164,13 @@ public class InvoiceHTMLGenerator {
         html.append("                </tr>\n");
 
 
-        // Calculate subtotal (total before tax)
-
-        double subtotal = booking.getTotalPrice();
-
-        double taxAmount = invoice.getTaxAmount() != null ? invoice.getTaxAmount() : 0;
-
-
         html.append("                <tr>\n");
 
         html.append("                    <td>Phí thuê xe</td>\n");
 
-        html.append("                    <td>").append(formatCurrency(subtotal)).append("</td>\n");
+        html.append("                    <td>").append(formatCurrency(booking.getTotalPrice())).append("</td>\n");
 
         html.append("                </tr>\n");
-
-
-        if (taxAmount > 0) {
-
-            html.append("                <tr>\n");
-
-            html.append("                    <td>Thuế VAT (10%)</td>\n");
-
-            html.append("                    <td>").append(formatCurrency(taxAmount)).append("</td>\n");
-
-            html.append("                </tr>\n");
-
-        }
 
 
         html.append("                <tr class=\"total-row\">\n");
