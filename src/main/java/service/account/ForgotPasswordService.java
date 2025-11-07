@@ -4,7 +4,7 @@ import dao.implement.UserDAO;
 import java.util.Random;
 import model.User;
 import util.EmailUtil;
-import util.ResetCodeStore;
+import util.VerificationCodeStore;
 
 public class ForgotPasswordService {
 
@@ -30,7 +30,7 @@ public class ForgotPasswordService {
         String otp = String.format("%06d", new Random().nextInt(999999));
 
         // Lưu OTP tạm thời
-        ResetCodeStore.saveCode(email, otp);
+        VerificationCodeStore.saveCode(email, otp);
 
         // Gửi email xác nhận
         String subject = "Your Rentaly Verification Code";
