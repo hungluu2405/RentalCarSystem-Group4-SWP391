@@ -7,8 +7,9 @@ import model.Notification;
 import model.User;
 import model.UserProfile;
 import util.EmailUtil;
-import java.util.Random;
 import util.VerificationCodeStore;
+
+import java.util.Random;
 
 
 public class VerificationService {
@@ -49,7 +50,7 @@ public class VerificationService {
          * ✅ Xác thực mã OTP gửi đến email người dùng.
          *
          * @param email email cần xác minh
-         * @param code mã OTP người dùng nhập
+         * @param code  mã OTP người dùng nhập
          * @return true nếu mã hợp lệ và chưa hết hạn
          */
         public boolean verifyCode(String email, String code) {
@@ -69,12 +70,16 @@ public class VerificationService {
             this.userDAO = new UserDAO();
         }
 
-        /** ✅ Kiểm tra mã xác thực OTP */
+        /**
+         * ✅ Kiểm tra mã xác thực OTP
+         */
         public boolean verifyCode(String email, String code) {
             return VerificationCodeStore.validateCode(email, code);
         }
 
-        /** ✅ Đăng ký tài khoản khi OTP hợp lệ */
+        /**
+         * ✅ Đăng ký tài khoản khi OTP hợp lệ
+         */
         public boolean registerAfterVerification(User user, UserProfile profile, Address address) {
             if (user == null || profile == null || address == null) {
                 return false;
@@ -90,7 +95,9 @@ public class VerificationService {
             return success;
         }
 
-        /** ✅ Gửi thông báo chào mừng */
+        /**
+         * ✅ Gửi thông báo chào mừng
+         */
         public void sendWelcomeNotification(int userId) {
             try {
                 notificationDAO.insertNotification(new Notification(
