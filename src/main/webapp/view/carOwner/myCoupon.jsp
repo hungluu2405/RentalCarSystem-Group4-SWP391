@@ -51,7 +51,7 @@
 
                                         <div class="d-info">
                                             <div class="d-text">
-                                                <h4>Mã: <span class="text-primary">${promo.code}</span></h4>
+                                                <h4>Coupon: <span class="text-primary">${promo.code}</span></h4>
                                                 <ul class="d-atr">
                                                     <li>
                                                         <span>Discount:</span>
@@ -85,7 +85,7 @@
                                         <div class="d-price coupon-action-area">
                                             <a href="${pageContext.request.contextPath}/cars?promo=${promo.code}"
                                                class="btn-main btn-apply-coupon">
-                                                Áp Dụng
+                                                Apply
                                             </a>
                                         </div>
 
