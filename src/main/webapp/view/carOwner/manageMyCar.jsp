@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -192,7 +193,9 @@
 
                                     <div class="car-price">
                                         <p>Daily rate from</p>
-                                        <h4>${car.pricePerDay}$</h4>
+                                        <h4><fmt:formatNumber value="${car.pricePerDay}"
+                                                              type="number" groupingUsed="true"
+                                                              minFractionDigits="0" maxFractionDigits="0"/> ₫</h4>
                                         <a href="${pageContext.request.contextPath}/owner/manageCarDetail?carId=${car.carId}"
                                            class="btn-view">View My Car</a>
                                     </div>
