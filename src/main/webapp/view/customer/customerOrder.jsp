@@ -19,10 +19,67 @@
         .bg-warning { background-color: #FFD54F; color: #222; }
         .bg-info-dark { background-color: #5bc0de; color: white; }
         .bg-primary-dark { background-color: #007bff; color: white; }
+        .bg-returning { background-color: #ff9800; color: white; }
         .bg-success { background-color: #66BB6A; color: white; }
         .bg-danger { background-color: #dc3545; color: white; }
 
-        /* ========== CSS MỚI CHO MODAL ========== */
+        /* ========== PAGINATION CSS ========== */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 25px;
+            gap: 15px;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 5px;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination a {
+            padding: 8px 14px;
+            border: 1px solid #ddd;
+            background-color: white;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .pagination a:hover {
+            background-color: #00b074;
+            color: white;
+            border-color: #00b074;
+        }
+
+        .pagination .active a {
+            background-color: #00b074;
+            color: white;
+            border-color: #00b074;
+            cursor: default;
+        }
+
+        .pagination .disabled a {
+            color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .pagination-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* ========== CSS CHO MODAL ========== */
         .owner-modal {
             display: none;
             position: fixed;
@@ -127,49 +184,6 @@
             display: block;
         }
 
-        .owner-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .btn-call, .btn-sms {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-call {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .btn-call:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
-        }
-
-        .btn-sms {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .btn-sms:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-        }
-
         .car-name-link {
             color: #0d6efd;
             cursor: pointer;
@@ -193,6 +207,35 @@
         .loading-spinner i {
             font-size: 32px;
             color: #667eea;
+        }
+
+        /* ========== RATING STARS CSS ========== */
+        .star {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star.selected,
+        .star:hover {
+            color: #FFD700;
+        }
+
+        /* Rate link styling */
+        .car-rate-link {
+            color: #28a745;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .car-rate-link:hover {
+            text-decoration: underline;
+            color: #218838;
         }
     </style>
 </head>
@@ -253,38 +296,65 @@
                             <h4>My Orders</h4>
 
                             <div class="tab-container">
-                                <button class="tab-btn active" id="tabCurrent">Current Trips</button>
-                                <button class="tab-btn" id="tabHistory">Trip History</button>
+                                <button class="tab-btn ${tab == 'current' || empty tab ? 'active' : ''}"
+                                        onclick="window.location.href='${pageContext.request.contextPath}/customer/customerOrder?tab=current&page=1'">
+                                    Current Trips
+                                </button>
+                                <button class="tab-btn ${tab == 'history' ? 'active' : ''}"
+                                        onclick="window.location.href='${pageContext.request.contextPath}/customer/customerOrder?tab=history&page=1'">
+                                    Trip History
+                                </button>
                             </div>
 
-                            <div id="currentTrips" class="tab-content active">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Car Name</th>
-                                            <th>Location</th>
-                                            <th>Pick Up Date</th>
-                                            <th>Return Date</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
+                            <!-- ========== TABLE ========== -->
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Car Name</th>
+                                        <th>Location</th>
+                                        <th>Pick Up Date</th>
+                                        <th>Return Date</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <c:if test="${tab == 'current' || empty tab}">
                                             <th>Actions</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach var="order" items="${allBookings}">
-                                            <c:set var="status" value="${order.status}"/>
-                                            <c:set var="isCurrent" value="${status == 'Pending' || status == 'Approved' || status == 'Paid'}"/>
-
-                                            <c:if test="${isCurrent}">
+                                        </c:if>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:choose>
+                                        <c:when test="${empty bookings}">
+                                            <tr>
+                                                <td colspan="7" class="text-center" style="padding: 40px;">
+                                                    <i class="fa fa-inbox fa-3x" style="color: #ccc; margin-bottom: 15px;"></i>
+                                                    <p style="color: #999;">No bookings found</p>
+                                                </td>
+                                            </tr>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:forEach var="order" items="${bookings}">
                                                 <tr>
-                                                    <!-- ========== SỬA TÊN XE THÀNH LINK ========== -->
                                                     <td>
-                                                        <a class="car-name-link"
-                                                           onclick="showOwnerInfo(${order.bookingId}, '${order.carName}')">
-                                                            <c:out value="${order.carName}"/>
-                                                            <i class="fa fa-info-circle"></i>
-                                                        </a>
+                                                        <c:choose>
+                                                            <c:when test="${tab == 'history'}">
+                                                                <!-- History Trip: Click để rate -->
+                                                                <a class="car-rate-link"
+                                                                   data-booking-id="${order.bookingId}"
+                                                                   data-car-name="${order.carName}">
+                                                                    <c:out value="${order.carName}"/>
+                                                                    <i class="fa fa-star"></i>
+                                                                </a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <!-- Current Trip: Click để xem owner info -->
+                                                                <a class="car-name-link"
+                                                                   onclick="showOwnerInfo(${order.bookingId}, '${order.carName}')">
+                                                                    <c:out value="${order.carName}"/>
+                                                                    <i class="fa fa-info-circle"></i>
+                                                                </a>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </td>
                                                     <td><c:out value="${order.location}"/></td>
                                                     <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
@@ -292,99 +362,125 @@
                                                     <td>$<c:out value="${order.totalPrice}"/></td>
                                                     <td>
                                                         <c:choose>
-                                                            <c:when test="${status == 'Pending'}">
-                                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                            <c:when test="${order.status == 'Pending'}">
+                                                                <span class="badge bg-warning text-dark">
+                                                                    <i class="fa fa-clock-o"></i> Pending
+                                                                </span>
                                                             </c:when>
-                                                            <c:when test="${status == 'Approved'}">
-                                                                <span class="badge bg-info-dark">Approved</span>
+                                                            <c:when test="${order.status == 'Approved'}">
+                                                                <span class="badge bg-info-dark">
+                                                                    <i class="fa fa-check"></i> Approved
+                                                                </span>
                                                             </c:when>
-                                                            <c:when test="${status == 'Paid'}">
-                                                                <span class="badge bg-primary-dark">Paid</span>
+                                                            <c:when test="${order.status == 'Paid'}">
+                                                                <span class="badge bg-primary-dark">
+                                                                    <i class="fa fa-credit-card"></i> Paid
+                                                                </span>
+                                                            </c:when>
+                                                            <c:when test="${order.status == 'Returning'}">
+                                                                <span class="badge bg-returning">
+                                                                    <i class="fa fa-undo"></i> Returning
+                                                                </span>
+                                                            </c:when>
+                                                            <c:when test="${order.status == 'Completed'}">
+                                                                <span class="badge bg-success">
+                                                                    <i class="fa fa-check-circle"></i> Completed
+                                                                </span>
+                                                            </c:when>
+                                                            <c:when test="${order.status == 'Cancelled'}">
+                                                                <span class="badge bg-danger">
+                                                                    <i class="fa fa-times-circle"></i> Cancelled
+                                                                </span>
+                                                            </c:when>
+                                                            <c:when test="${order.status == 'Rejected'}">
+                                                                <span class="badge bg-danger">
+                                                                    <i class="fa fa-ban"></i> Rejected
+                                                                </span>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <span class="badge bg-info text-dark">${status}</span>
+                                                                <span class="badge bg-info text-dark">${order.status}</span>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
-                                                    <td>
-                                                        <c:if test="${status == 'Pending'}">
-                                                            <a href="${pageContext.request.contextPath}/customer/cancelBooking?bookingId=${order.bookingId}"
-                                                               onclick="return confirm('Are you sure you want to cancel this booking?');"
-                                                               class="btn btn-sm btn-danger">Cancel</a>
-                                                        </c:if>
-                                                        <c:if test="${status == 'Approved'}">
-                                                            <a href="${pageContext.request.contextPath}/customer/create-payment?bookingId=${order.bookingId}" class="btn btn-sm btn-info">
-                                                                Payment
-                                                            </a>
-                                                        </c:if>
-                                                        <c:if test="${status == 'Paid'}">
-                                                            <a href="${pageContext.request.contextPath}/customer/returnCar?bookingId=${order.bookingId}"
-                                                               onclick="return confirm('Complete This Rental?');"
-                                                               class="btn btn-sm btn-success">Return Car</a>
-                                                        </c:if>
-                                                    </td>
+                                                    <c:if test="${tab == 'current' || empty tab}">
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${order.status == 'Pending'}">
+                                                                    <a href="${pageContext.request.contextPath}/customer/cancelBooking?bookingId=${order.bookingId}"
+                                                                       onclick="return confirm('Are you sure you want to cancel this booking?');"
+                                                                       class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-times"></i> Cancel
+                                                                    </a>
+                                                                </c:when>
+                                                                <c:when test="${order.status == 'Approved'}">
+                                                                    <a href="${pageContext.request.contextPath}/customer/create-payment?bookingId=${order.bookingId}"
+                                                                       class="btn btn-sm btn-info">
+                                                                        <i class="fa fa-credit-card"></i> Payment
+                                                                    </a>
+                                                                </c:when>
+                                                                <c:when test="${order.status == 'Paid'}">
+                                                                    <a href="${pageContext.request.contextPath}/customer/returnCar?bookingId=${order.bookingId}"
+                                                                       onclick="return confirm('Request to return this car? Owner will need to confirm.');"
+                                                                       class="btn btn-sm btn-success">
+                                                                        <i class="fa fa-undo"></i> Return Car
+                                                                    </a>
+                                                                </c:when>
+                                                                <c:when test="${order.status == 'Returning'}">
+                                                                    <span class="text-warning" style="font-size: 13px;">
+                                                                        <i class="fa fa-clock-o"></i> Waiting for owner...
+                                                                    </span>
+                                                                </c:when>
+                                                            </c:choose>
+                                                        </td>
+                                                    </c:if>
                                                 </tr>
-                                            </c:if>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <div id="tripHistory" class="tab-content">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Car Name</th>
-                                            <th>Location</th>
-                                            <th>Pick Up Date</th>
-                                            <th>Return Date</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach var="order" items="${allBookings}">
-                                            <c:set var="status" value="${order.status}"/>
-                                            <c:set var="isHistory" value="${status == 'Completed' || status == 'Rejected' || status == 'Cancelled'}"/>
+                            <!-- ========== PAGINATION ========== -->
+                            <c:if test="${totalPages > 1}">
+                                <div class="pagination-container">
+                                    <ul class="pagination">
+                                        <!-- Previous Button -->
+                                        <li class="${currentPage == 1 ? 'disabled' : ''}">
+                                            <a href="${pageContext.request.contextPath}/customer/customerOrder?tab=${tab}&page=${currentPage - 1}">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </a>
+                                        </li>
 
-                                            <c:if test="${isHistory}">
-                                                <tr>
-                                                    <td>
-                                                        <a href="#" class="car-rate-link text-primary fw-bold"
-                                                           data-booking-id="${order.bookingId}"
-                                                           data-car-name="${order.carName}">
-                                                                ${order.carName}
+                                        <!-- Page Numbers -->
+                                        <c:forEach begin="1" end="${totalPages}" var="i">
+                                            <c:choose>
+                                                <c:when test="${currentPage == i}">
+                                                    <li class="active"><a href="#">${i}</a></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <li>
+                                                        <a href="${pageContext.request.contextPath}/customer/customerOrder?tab=${tab}&page=${i}">
+                                                                ${i}
                                                         </a>
-                                                    </td>
-                                                    <td><c:out value="${order.location}"/></td>
-                                                    <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
-                                                    <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
-                                                    <td>$<c:out value="${order.totalPrice}"/></td>
-                                                    <td>
-                                                        <c:choose>
-                                                            <c:when test="${status == 'Completed'}">
-                                                                <span class="badge bg-success">Completed</span>
-                                                            </c:when>
-                                                            <c:when test="${status == 'Cancelled'}">
-                                                                <span class="badge bg-danger">Cancelled</span>
-                                                            </c:when>
-                                                            <c:when test="${status == 'Rejected'}">
-                                                                <span class="badge bg-danger">Rejected</span>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="badge bg-danger">${status}</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </td>
-                                                </tr>
-                                            </c:if>
+                                                    </li>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </c:forEach>
-                                        </tbody>
-                                    </table>
+
+                                        <!-- Next Button -->
+                                        <li class="${currentPage == totalPages ? 'disabled' : ''}">
+                                            <a href="${pageContext.request.contextPath}/customer/customerOrder?tab=${tab}&page=${currentPage + 1}">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="pagination-info">
+                                        Page ${currentPage} of ${totalPages}
+                                    </div>
                                 </div>
-                            </div>
+                            </c:if>
                         </div>
                     </div>
                 </div>
@@ -395,8 +491,7 @@
     <jsp:include page="../common/customer/_footer_scripts.jsp"/>
 </div>
 
-<!-- ========== THÊM MODAL MỚI ========== -->
-
+<!-- ========== OWNER INFO MODAL ========== -->
 <div id="ownerModal" class="owner-modal">
     <div class="owner-modal-content">
         <div class="owner-modal-header">
@@ -408,18 +503,18 @@
         </div>
     </div>
 </div>
-<!-- ========== MODAL ĐÁNH GIÁ XE ========== -->
+
+<!-- ========== RATE & REVIEW MODAL ========== -->
 <div id="rateModal" class="owner-modal">
     <div class="owner-modal-content">
-        <div class="owner-modal-header">
+        <div class="owner-modal-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
             <h3>Rate Your Trip</h3>
             <span class="owner-modal-close" onclick="closeRateModal()">&times;</span>
         </div>
         <div class="owner-modal-body">
-            <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px;"></div>
+            <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px; font-size:18px; color:#333;"></div>
 
-            <!-- 5 sao -->
-
+            <!-- 5 Stars -->
             <div style="text-align:center; margin-bottom:20px;">
                 <span class="star" data-value="1">&#9733;</span>
                 <span class="star" data-value="2">&#9733;</span>
@@ -432,70 +527,20 @@
             <textarea id="feedbackText"
                       class="form-control"
                       rows="4"
-                      placeholder="Share your experience..."></textarea>
+                      placeholder="Share your experience with this car..."></textarea>
 
             <div style="text-align:center; margin-top:20px;">
-                <button class="btn btn-success" id="submitRatingBtn">Submit Rating</button>
+                <button class="btn btn-success" id="submitRatingBtn">
+                    <i class="fa fa-paper-plane"></i> Submit Rating
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    .star {
-        font-size: 30px;
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .star.selected,
-    .star:hover,
-    .star:hover ~ .star {
-        color: #FFD700;
-    }
-</style>
-
 <!-- ========== JAVASCRIPT ========== -->
 <script>
-    // Tab switching (Giữ nguyên)
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabCurrent = document.getElementById("tabCurrent");
-        const tabHistory = document.getElementById("tabHistory");
-        const currentTrips = document.getElementById("currentTrips");
-        const tripHistory = document.getElementById("tripHistory");
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const tabParam = urlParams.get('tab');
-
-        function activateTab(tabId) {
-            const currentTripDiv = document.getElementById("currentTrips");
-            const historyTripDiv = document.getElementById("tripHistory");
-
-            if (tabId === 'history') {
-                tabHistory.classList.add("active");
-                tabCurrent.classList.remove("active");
-                historyTripDiv.classList.add("active");
-                currentTripDiv.classList.remove("active");
-            } else {
-                tabCurrent.classList.add("active");
-                tabHistory.classList.remove("active");
-                currentTripDiv.classList.add("active");
-                historyTripDiv.classList.remove("active");
-            }
-        }
-
-        activateTab(tabParam);
-
-        tabCurrent.addEventListener("click", function () {
-            window.location.href = window.location.pathname + "?tab=current";
-        });
-
-        tabHistory.addEventListener("click", function () {
-            window.location.href = window.location.pathname + "?tab=history";
-        });
-    });
-
-    // ========== THÊM FUNCTION MỚI ĐỂ HIỂN THỊ OWNER INFO ==========
+    // ========== OWNER INFO MODAL FUNCTIONS ==========
     function showOwnerInfo(bookingId, carName) {
         const modal = document.getElementById('ownerModal');
         const content = document.getElementById('ownerInfoContent');
@@ -524,29 +569,24 @@
                              class="owner-avatar"
                              onerror="this.src='${pageContext.request.contextPath}/images/profile/default.jpg'">
                     </div>
-
                     <div class="owner-info-item">
                         <div class="owner-info-label">
                             <i class="fa fa-car"></i> Car
                         </div>
                         <div class="owner-info-value">` + carName + `</div>
                     </div>
-
                     <div class="owner-info-item">
                         <div class="owner-info-label">
                             <i class="fa fa-user"></i> Owner Name
                         </div>
                         <div class="owner-info-value">` + (data.fullName || 'N/A') + `</div>
                     </div>
-
                     <div class="owner-info-item">
                         <div class="owner-info-label">
                             <i class="fa fa-phone"></i> Phone Number
                         </div>
                         <div class="owner-info-value">` + (data.phone || 'N/A') + `</div>
                     </div>
-
-
                 `;
             })
             .catch(error => {
@@ -570,36 +610,27 @@
         document.getElementById('ownerModal').style.display = 'none';
     }
 
-    window.onclick = function(event) {
-        const modal = document.getElementById('ownerModal');
-        if (event.target == modal) {
-            closeOwnerModal();
-        }
-    }
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeOwnerModal();
-        }
-    });
-    // ========== MODAL RATE FUNCTIONALITY ==========
+    // ========== RATE & REVIEW MODAL FUNCTIONS ==========
     let selectedRating = 0;
     let currentBookingId = null;
 
-    // Khi click vào tên xe
+    // Event listener cho car rate links
     document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("car-rate-link")) {
+        if (e.target.closest('.car-rate-link')) {
             e.preventDefault();
-            currentBookingId = e.target.dataset.bookingId;
-            const carName = e.target.dataset.carName;
+            const link = e.target.closest('.car-rate-link');
+            currentBookingId = link.dataset.bookingId;
+            const carName = link.dataset.carName;
+
             document.getElementById("rateCarName").innerText = carName;
             document.getElementById("rateModal").style.display = "block";
+            document.getElementById("feedbackText").value = "";
             selectedRating = 0;
             document.querySelectorAll(".star").forEach(star => star.classList.remove("selected"));
         }
     });
 
-    // Chọn sao
+    // Star selection
     document.querySelectorAll(".star").forEach(star => {
         star.addEventListener("click", function() {
             selectedRating = this.dataset.value;
@@ -610,7 +641,7 @@
         });
     });
 
-    // Gửi rating
+    // Submit rating
     document.getElementById("submitRatingBtn").addEventListener("click", function() {
         const feedback = document.getElementById("feedbackText").value.trim();
 
@@ -637,7 +668,7 @@
                     alert("Thank you for your feedback!");
                     closeRateModal();
                 } else {
-                    alert("Failed to submit feedback. Please try again.");
+                    alert(data.message || "Failed to submit feedback. Please try again.");
                 }
             })
             .catch(err => {
@@ -650,6 +681,25 @@
         document.getElementById("rateModal").style.display = "none";
     }
 
+    // ========== GLOBAL MODAL CLOSE HANDLERS ==========
+    window.onclick = function(event) {
+        const ownerModal = document.getElementById('ownerModal');
+        const rateModal = document.getElementById('rateModal');
+
+        if (event.target == ownerModal) {
+            closeOwnerModal();
+        }
+        if (event.target == rateModal) {
+            closeRateModal();
+        }
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeOwnerModal();
+            closeRateModal();
+        }
+    });
 </script>
 </body>
 </html>
