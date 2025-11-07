@@ -396,6 +396,7 @@
 </div>
 
 <!-- ========== THÊM MODAL MỚI ========== -->
+
 <div id="ownerModal" class="owner-modal">
     <div class="owner-modal-content">
         <div class="owner-modal-header">
@@ -418,6 +419,7 @@
             <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px;"></div>
 
             <!-- 5 sao -->
+
             <div style="text-align:center; margin-bottom:20px;">
                 <span class="star" data-value="1">&#9733;</span>
                 <span class="star" data-value="2">&#9733;</span>
