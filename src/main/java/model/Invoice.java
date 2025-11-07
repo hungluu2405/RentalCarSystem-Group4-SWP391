@@ -21,7 +21,7 @@ public class Invoice {
 
     private double totalAmount;
 
-    private Double taxAmount;
+    private Double taxAmount;  // Deprecated - không sử dụng nữa, giữ để tương thích DB
 
     private String status;
 
