@@ -13,13 +13,13 @@ import jakarta.servlet.http.HttpSession;
 import model.Address;
 import model.User;
 import model.UserProfile;
-import service.account.RegisterService;
+import service.account.AuthService;
 
 
 @WebServlet(urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
 
-    private final RegisterService registerService = new RegisterService();
+    private final AuthService.RegisterService registerService = new AuthService.RegisterService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

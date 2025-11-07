@@ -7,12 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import service.account.CompleteRegistrationService;
+import service.account.GoogleAccountService;
 
 @WebServlet(urlPatterns = {"/complete-registration"})
 public class CompleteRegistrationServlet extends HttpServlet {
 
-    private final CompleteRegistrationService completeRegistrationService = new CompleteRegistrationService();
+    private final GoogleAccountService.CompleteRegistrationService completeRegistrationService = new GoogleAccountService.CompleteRegistrationService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

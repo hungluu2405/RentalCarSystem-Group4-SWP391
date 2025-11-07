@@ -6,12 +6,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import service.account.ResendCodeService;
+import service.account.VerificationService;
 
 @WebServlet(urlPatterns = {"/resend-code"})
 public class ResendCodeServlet extends HttpServlet {
 
-    private final ResendCodeService resendCodeService = new ResendCodeService();
+    private final VerificationService.ResendCodeService resendCodeService = new VerificationService.ResendCodeService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

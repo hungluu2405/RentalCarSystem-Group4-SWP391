@@ -7,12 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import service.account.VerifyCodeService;
+import service.account.VerificationService;
 
 @WebServlet(urlPatterns = {"/verify-code"})
 public class VerifyCodeServlet extends HttpServlet {
 
-    private final VerifyCodeService verifyCodeService = new VerifyCodeService();
+    private final VerificationService.VerifyCodeService verifyCodeService = new VerificationService.VerifyCodeService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
