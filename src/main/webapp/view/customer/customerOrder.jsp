@@ -448,7 +448,8 @@
     <jsp:include page="../common/customer/_footer_scripts.jsp"/>
 </div>
 
-<!-- ========== OWNER INFO MODAL ========== -->
+<!-- ========== THÊM MODAL MỚI ========== -->
+
 <div id="ownerModal" class="owner-modal">
     <div class="owner-modal-content">
         <div class="owner-modal-header">
@@ -460,6 +461,52 @@
         </div>
     </div>
 </div>
+<!-- ========== MODAL ĐÁNH GIÁ XE ========== -->
+<div id="rateModal" class="owner-modal">
+    <div class="owner-modal-content">
+        <div class="owner-modal-header">
+            <h3>Rate Your Trip</h3>
+            <span class="owner-modal-close" onclick="closeRateModal()">&times;</span>
+        </div>
+        <div class="owner-modal-body">
+            <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px;"></div>
+
+            <!-- 5 sao -->
+
+            <div style="text-align:center; margin-bottom:20px;">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+
+            <!-- Feedback -->
+            <textarea id="feedbackText"
+                      class="form-control"
+                      rows="4"
+                      placeholder="Share your experience..."></textarea>
+
+            <div style="text-align:center; margin-top:20px;">
+                <button class="btn btn-success" id="submitRatingBtn">Submit Rating</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .star {
+        font-size: 30px;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star.selected,
+    .star:hover,
+    .star:hover ~ .star {
+        color: #FFD700;
+    }
+</style>
 
 <!-- ========== JAVASCRIPT ========== -->
 <script>
