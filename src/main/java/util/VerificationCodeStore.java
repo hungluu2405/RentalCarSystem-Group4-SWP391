@@ -3,7 +3,7 @@ package util;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ResetCodeStore {
+public class VerificationCodeStore {
 
     private static class CodeInfo {
         String code;
