@@ -20,7 +20,7 @@ public class CarViewModel {
     private int year;
     private int typeId;
     private int availability;
-
+    private String carOwnerName;
 
     public CarViewModel() {
     }
@@ -171,5 +171,13 @@ public class CarViewModel {
 
     public void setImages(List<CarImage> images) {
         this.images = images;
+    }
+
+    public String getCarOwnerName() {
+        return carOwnerName;
+    }
+
+    public void setCarOwnerName(String carOwnerName) {
+        this.carOwnerName = carOwnerName;
     }
 }
