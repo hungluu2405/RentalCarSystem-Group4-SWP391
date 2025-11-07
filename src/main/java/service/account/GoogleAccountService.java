@@ -11,11 +11,10 @@ import model.UserProfile;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import util.Constants;
+
 import java.sql.Date;
-import java.time.Period;
 import java.time.LocalDate;
-
-
+import java.time.Period;
 
 
 public class GoogleAccountService {
