@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +13,7 @@
             gap: 10px;
             margin-bottom: 20px;
         }
+
         .tab-btn {
             padding: 10px 20px;
             border: none;
@@ -21,12 +23,19 @@
             font-weight: 600;
             transition: 0.2s;
         }
+
         .tab-btn.active {
             background-color: #007bff;
             color: #fff;
         }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 
@@ -121,7 +130,7 @@
                                         <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total ($)</th>
+                                        <th>Total</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -129,8 +138,10 @@
                                     <tbody>
                                     <c:forEach var="order" items="${allBookings}">
                                         <c:set var="isPending" value="${order.status == 'Pending'}"/>
-                                        <c:set var="isHistory" value="${order.status == 'Paid' || order.status == 'Approved'}"/>
-                                        <c:set var="isHistory" value="${order.status == 'Completed' || order.status == 'Rejected'}"/>
+                                        <c:set var="isHistory"
+                                               value="${order.status == 'Paid' || order.status == 'Approved'}"/>
+                                        <c:set var="isHistory"
+                                               value="${order.status == 'Completed' || order.status == 'Rejected'}"/>
 
                                         <c:if test="${isPending}">
                                             <tr>
@@ -141,7 +152,10 @@
                                                 <td>${order.dropoffTime}</td>
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
-                                                <td>${order.totalPrice}</td>
+                                                <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
+                                                                      type="number" groupingUsed="true"
+                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                </td>
                                                 <td>
                                                     <span class="badge bg-warning text-dark">${order.status}</span>
                                                 </td>
@@ -149,9 +163,14 @@
                                                     <form method="post"
                                                           action="${pageContext.request.contextPath}/owner/ownerBooking"
                                                           class="d-flex justify-content-center gap-2">
-                                                        <input type="hidden" name="bookingId" value="${order.bookingId}">
-                                                        <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
-                                                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                                                        <input type="hidden" name="bookingId"
+                                                               value="${order.bookingId}">
+                                                        <button type="submit" name="action" value="accept"
+                                                                class="btn btn-success btn-sm">Accept
+                                                        </button>
+                                                        <button type="submit" name="action" value="reject"
+                                                                class="btn btn-danger btn-sm">Reject
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -168,7 +187,7 @@
                                             </li>
 
 
-                                                <c:forEach begin="1" end="${totalPagesPending}" var="i">
+                                            <c:forEach begin="1" end="${totalPagesPending}" var="i">
 
                                                 <li class="page-item ${i == currentPage ? 'active' : ''}">
                                                     <a class="page-link" href="?page=${i}">${i}</a>
@@ -198,7 +217,7 @@
                                         <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total ($)</th>
+                                        <th>Total</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -213,7 +232,10 @@
                                                 <td>${order.dropoffTime}</td>
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
-                                                <td>${order.totalPrice}</td>
+                                                <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
+                                                                      type="number" groupingUsed="true"
+                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                </td>
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${order.status == 'Approved'}">
@@ -277,7 +299,7 @@
                                         <th>Return car</th>
                                         <th>Start</th>
                                         <th>End</th>
-                                        <th>Total ($)</th>
+                                        <th>Total</th>
                                         <th>Status</th>
                                     </tr>
                                     </thead>
@@ -292,7 +314,10 @@
                                                 <td>${order.dropoffTime}</td>
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
-                                                <td>${order.totalPrice}</td>
+                                                <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
+                                                                      type="number" groupingUsed="true"
+                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                </td>
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${order.status == 'Approved'}">
@@ -343,9 +368,9 @@
                             </div>
                         </div>
 
-                        </div>
                     </div>
                 </div>
+            </div>
         </section>
 
         <!-- FOOTER -->
