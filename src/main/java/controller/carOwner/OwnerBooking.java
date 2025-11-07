@@ -34,6 +34,24 @@ public class OwnerBooking extends HttpServlet {
 
         int ownerId = owner.getUserId();
 
+        // --- LẤY PAGE HIỆN TẠI ---
+        int page = 1;
+        int pageSize = 5;
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try { page = Integer.parseInt(pageParam); }
+            catch (NumberFormatException ignored) {}
+        }
+
+        // --- ĐẾM TỔNG SỐ BOOKING ---
+        int totalBookingsList = bookingDAO.countBookingsByOwner(ownerId);
+        int totalPages = (int) Math.ceil((double) totalBookingsList / pageSize);
+
+        // --- LẤY DANH SÁCH PHÂN TRANG ---
+        List<BookingDetail> allBookingss = bookingDAO.getBookingsByOwnerWithPaging(ownerId, page, pageSize);
+
+
         // Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
         int totalBookings = carDAO.countTotalBookingsByOwner(ownerId);
