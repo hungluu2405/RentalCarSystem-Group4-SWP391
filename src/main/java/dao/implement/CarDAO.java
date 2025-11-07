@@ -582,6 +582,7 @@ public class CarDAO extends DBContext {
                 car.setDescription(rs.getString("DESCRIPTION"));
                 car.setLocation(rs.getString("LOCATION"));
                 car.setLicensePlate(rs.getString("LICENSE_PLATE"));
+                car.setAvailability(rs.getInt("AVAILABILITY"));
 
                 // Lấy danh sách ảnh
                 List<CarImage> images = new ArrayList<>();
