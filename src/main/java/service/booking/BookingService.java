@@ -24,30 +24,66 @@ public class BookingService {
         Driver_License license = licenseDAO.getLicenseByUserId(booking.getUserId());
         LocalDate today = LocalDate.now();
 
-        if (license == null) return "❌ You must upload your driver license before booking!";
-        if (booking.getStartDate().isBefore(today)) return "❌ The pickup date cannot be earlier than today!";
 
-        //check tgian trả > nhận
-        if (booking.getEndDate().isBefore(booking.getStartDate()))
+        if (license == null) {
+            return "❌ You must upload your driver license before booking!";
+        }
+
+
+
+        if (booking.getStartDate().isBefore(today)) {
+            return "❌ The pickup date cannot be earlier than today!";
+        }
+
+
+        LocalDate maxBookingDate = today.plusMonths(7);
+        if (booking.getStartDate().isAfter(maxBookingDate)) {
+            return "❌ Cannot book more than 7 months in advance!";
+        }
+
+
+        if (booking.getEndDate().isAfter(maxBookingDate)) {
+            return "❌ Booking period cannot extend beyond 7 months!";
+        }
+
+        // Check return date > pickup date
+        if (booking.getEndDate().isBefore(booking.getStartDate())) {
             return "❌ Return date must be after pickup date!";
-        if (booking.getEndDate().equals(booking.getStartDate()) &&
-                booking.getDropoffTime().isBefore(booking.getPickupTime()))
-            return "❌ Invalid time range!";
+        }
 
+        if (booking.getEndDate().equals(booking.getStartDate()) &&
+                booking.getDropoffTime().isBefore(booking.getPickupTime())) {
+            return "❌ Invalid time range!";
+        }
+
+        // ========== VALIDATION: TIMES ==========
         LocalTime pickupTime = booking.getPickupTime();
         LocalTime dropoffTime = booking.getDropoffTime();
-        if (pickupTime == null || dropoffTime == null) return "❌ Pickup and dropoff times are required!";
+        if (pickupTime == null || dropoffTime == null) {
+            return "❌ Pickup and dropoff times are required!";
+        }
 
         LocalDateTime pickupDateTime = LocalDateTime.of(booking.getStartDate(), pickupTime);
         LocalDateTime returnDateTime = LocalDateTime.of(booking.getEndDate(), dropoffTime);
 
         long totalHours = ChronoUnit.HOURS.between(pickupDateTime, returnDateTime);
-        if (totalHours < 24) return "❌ Minimum rental period is 24 hours!";
+        if (totalHours < 24) {
+            return "❌ Minimum rental period is 24 hours!";
+        }
 
+        // ========== VALIDATION: CAR ==========
         Car car = carDAO.findById(booking.getCarId());
-        if (car == null) return "❌ The selected car does not exist!";
-        if (car.getOwnerId() == booking.getUserId()) return "❌ You cannot book your own car!";
+        if (car == null) {
+            return "❌ The selected car does not exist!";
+        }
 
+
+
+        if (car.getOwnerId() == booking.getUserId()) {
+            return "❌ You cannot book your own car!";
+        }
+
+        // ========== VALIDATION: AVAILABILITY ==========
         boolean available = bookingDAO.isCarAvailable(
                 booking.getCarId(),
                 booking.getStartDate(),
@@ -55,8 +91,11 @@ public class BookingService {
                 booking.getEndDate(),
                 booking.getDropoffTime()
         );
-        if (!available) return "❌ This car is already booked for the selected period!";
+        if (!available) {
+            return "❌ This car is already booked for the selected period!";
+        }
 
+        // ========== PRICE CALCULATION ==========
         BigDecimal pricePerDay = car.getPricePerDay();
         long fullDays = totalHours / 24;
         long remainingHours = totalHours % 24;
@@ -82,6 +121,7 @@ public class BookingService {
         BigDecimal finalPrice = finalPriceBeforeDiscount;
         Promotion promo = null;
 
+        // ========== PROMOTION ==========
         if (promoCode != null && !promoCode.trim().isEmpty()) {
             promo = promoDAO.findByCode(promoCode.trim());
             if (promo == null) return "❌ Promo code not found!";
@@ -99,19 +139,27 @@ public class BookingService {
                 discountAmount = BigDecimal.valueOf(discountRate);
             }
 
-            if (discountAmount.compareTo(finalPriceBeforeDiscount) > 0) discountAmount = finalPriceBeforeDiscount;
+            if (discountAmount.compareTo(finalPriceBeforeDiscount) > 0) {
+                discountAmount = finalPriceBeforeDiscount;
+            }
             finalPrice = finalPriceBeforeDiscount.subtract(discountAmount);
-            if (finalPrice.compareTo(BigDecimal.ZERO) < 0) finalPrice = BigDecimal.ZERO;
+            if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
+                finalPrice = BigDecimal.ZERO;
+            }
         }
 
         booking.setTotalPrice(finalPrice.doubleValue());
         booking.setStatus("Pending");
         booking.setCreatedAt(LocalDateTime.now());
 
+        // ========== INSERT BOOKING ==========
         try {
             boolean bookingSuccess = bookingDAO.insert(booking);
-            if (!bookingSuccess) return "❌ Booking failed. Please try again!";
+            if (!bookingSuccess) {
+                return "❌ Booking failed. Please try again!";
+            }
 
+            // Insert promotion if applied
             if (discountAmount.compareTo(BigDecimal.ZERO) > 0 && promo != null) {
                 BookingPromotion bp = new BookingPromotion();
                 bp.setBookingId(booking.getBookingId());
@@ -123,8 +171,13 @@ public class BookingService {
                 bookingPromoDAO.insert(bp);
             }
 
-            notificationService.notifyBookingCreated(booking.getBookingId(),
-                    booking.getUserId(), car.getOwnerId(), car.getModel());
+            // Send notifications
+            notificationService.notifyBookingCreated(
+                    booking.getBookingId(),
+                    booking.getUserId(),
+                    car.getOwnerId(),
+                    car.getModel()
+            );
 
             return "success";
         } catch (Exception e) {
