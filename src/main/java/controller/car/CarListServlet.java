@@ -1,20 +1,21 @@
 package controller.car;
 
+import dao.implement.CarDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.CarViewModel;
+import service.car.CarListService;
+
 import java.io.IOException;
 import java.util.List;
-import model.CarViewModel;
-import service.car.CarService;
-import dao.implement.CarDAO;
 
-@WebServlet(name = "CarServlet", urlPatterns = {"/cars"})
-public class CarServlet extends HttpServlet {
+@WebServlet(name = "CarListServlet", urlPatterns = {"/cars"})
+public class CarListServlet extends HttpServlet {
 
-    private final CarService carService = new CarService();
+    private final CarListService carListService = new CarListService();
     private final CarDAO carDAO = new CarDAO();
 
     @Override
@@ -38,27 +39,28 @@ public class CarServlet extends HttpServlet {
         try {
             if (request.getParameter("page") != null)
                 page = Integer.parseInt(request.getParameter("page"));
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+        }
 
-        boolean isDateTimeSearch = carService.isDateTimeSearch(startDate, pickupTime, endDate, dropoffTime);
+        boolean isDateTimeSearch = carListService.isDateTimeSearch(startDate, pickupTime, endDate, dropoffTime);
 
         if (isDateTimeSearch) {
             // ✅ Validate thời gian (chỉ khi tìm từ /home)
-            String error = carService.validateDateTime(startDate, pickupTime, endDate, dropoffTime);
+            String error = carListService.validateDateTime(startDate, pickupTime, endDate, dropoffTime);
             if (error != null) {
-                carService.saveFlashError(request, error, location, startDate, pickupTime, endDate, dropoffTime);
+                carListService.saveFlashError(request, error, location, startDate, pickupTime, endDate, dropoffTime);
                 response.sendRedirect(request.getContextPath() + "/home");
                 return;
             }
         }
 
         // ✅ Lấy danh sách xe (theo kiểu search phù hợp)
-        List<CarViewModel> carList = carService.findCars(
+        List<CarViewModel> carList = carListService.findCars(
                 name, brand, typeId, capacity, fuel, price, location,
                 startDate, pickupTime, endDate, dropoffTime, page, pageSize, isDateTimeSearch
         );
 
-        int totalCars = carService.countCars(
+        int totalCars = carListService.countCars(
                 name, brand, typeId, capacity, fuel, price, location,
                 startDate, pickupTime, endDate, dropoffTime, isDateTimeSearch
         );
