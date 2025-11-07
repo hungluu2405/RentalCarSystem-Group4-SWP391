@@ -1105,6 +1105,52 @@ public class CarDAO extends DBContext {
 
         return cars;
     }
+    public CarViewModel getCarByIdForAdmin(int carId) {
+        String sql = """
+            SELECT n.FULL_NAME AS CAR_OWNER_NAME, c.CAR_ID, c.TYPE_ID, c.BRAND, c.MODEL, c.LOCATION,
+                   c.PRICE_PER_DAY, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, c.YEAR,
+                   t.NAME AS CAR_TYPE_NAME, i.IMAGE_URL, c.DESCRIPTION,
+                   c.LICENSE_PLATE, c.AVAILABILITY
+            FROM CAR c
+            JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID
+            LEFT JOIN CAR_IMAGE i ON c.CAR_ID = i.CAR_ID
+            JOIN USER_PROFILE n ON c.USER_ID = n.USER_ID
+            WHERE c.CAR_ID = ?
+            """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    CarViewModel car = new CarViewModel();
+                    car.setCarId(rs.getInt("CAR_ID"));
+                    car.setBrand(rs.getString("BRAND"));
+                    car.setModel(rs.getString("MODEL"));
+                    car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                    car.setCapacity(rs.getInt("CAPACITY"));
+                    car.setTransmission(rs.getString("TRANSMISSION"));
+                    car.setFuelType(rs.getString("FUEL_TYPE"));
+                    car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+                    car.setLocation(rs.getString("LOCATION"));
+                    car.setYear(rs.getInt("YEAR"));
+                    car.setLicensePlate(rs.getString("LICENSE_PLATE"));
+                    car.setDescription(rs.getString("DESCRIPTION"));
+                    car.setImageUrl(
+                            rs.getString("IMAGE_URL") != null
+                                    ? rs.getString("IMAGE_URL")
+                                    : "images/default.jpg"
+                    );
+                    car.setAvailability(rs.getInt("AVAILABILITY"));
+                    car.setCarOwnerName(rs.getString("CAR_OWNER_NAME"));
+                    return car;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

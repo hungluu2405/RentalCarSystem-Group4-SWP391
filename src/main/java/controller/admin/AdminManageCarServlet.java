@@ -23,7 +23,7 @@ public class AdminManageCarServlet extends HttpServlet {
         if (idParam != null && !idParam.isEmpty()) {
             try {
                 int carId = Integer.parseInt(idParam);
-                CarViewModel car = carDAO.getCarSingleById(carId);
+                CarViewModel car = carDAO.getCarByIdForAdmin(carId);
                 if (car == null) {
                     response.sendRedirect(request.getContextPath() + "/carDB");
                     return;
@@ -55,7 +55,7 @@ public class AdminManageCarServlet extends HttpServlet {
                     return;
                 } else {
                     request.setAttribute("error", "This car is currently in booking and cannot be deleted !");
-                    CarViewModel car = carDAO.getCarSingleById(carId);
+                    CarViewModel car = carDAO.getCarByIdForAdmin(carId);
                     request.setAttribute("car", car);
                     request.getRequestDispatcher("/view/admin/viewCarDetails.jsp").forward(request, response);
                     return;
