@@ -792,6 +792,138 @@ public class BookingDAO extends DBContext {
         return false;
     }
 
+    public int countCurrentTripsByUserId(int userId) {
+        String sql = """
+        SELECT COUNT(*) 
+        FROM BOOKING 
+        WHERE USER_ID = ? 
+        AND STATUS IN ('Pending', 'Approved', 'Paid')
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Count history trips (Completed, Rejected, Cancelled)
+     */
+    public int countHistoryTripsByUserId(int userId) {
+        String sql = """
+        SELECT COUNT(*) 
+        FROM BOOKING 
+        WHERE USER_ID = ? 
+        AND STATUS IN ('Completed', 'Rejected', 'Cancelled')
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get current trips with pagination
+     */
+    public List<BookingDetail> getCurrentTripsByUserId(int userId, int offset, int limit) {
+        List<BookingDetail> list = new ArrayList<>();
+        String sql = """
+        SELECT 
+            b.BOOKING_ID, 
+            c.MODEL + ' ' + c.BRAND AS carName,
+            b.START_DATE, b.END_DATE, 
+            b.PICKUP_TIME, b.DROPOFF_TIME, 
+            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        AND b.STATUS IN ('Pending', 'Approved', 'Paid')
+        ORDER BY b.CREATED_AT DESC
+        OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, offset);
+            ps.setInt(3, limit);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Get history trips with pagination
+     */
+    public List<BookingDetail> getHistoryTripsByUserId(int userId, int offset, int limit) {
+        List<BookingDetail> list = new ArrayList<>();
+        String sql = """
+        SELECT 
+            b.BOOKING_ID, 
+            c.MODEL + ' ' + c.BRAND AS carName,
+            b.START_DATE, b.END_DATE, 
+            b.PICKUP_TIME, b.DROPOFF_TIME, 
+            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
+        ORDER BY b.CREATED_AT DESC
+        OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, offset);
+            ps.setInt(3, limit);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
 
 
