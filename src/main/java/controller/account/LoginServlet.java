@@ -1,8 +1,5 @@
 package controller.account;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 import service.account.LoginService;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
