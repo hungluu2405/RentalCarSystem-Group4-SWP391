@@ -3,12 +3,13 @@ package service.car;
 import dao.implement.CarDAO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.time.temporal.ChronoUnit;
 import model.CarViewModel;
 
-public class CarService {
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+public class CarListService {
 
     private final CarDAO carDAO = new CarDAO();
 
