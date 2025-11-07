@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="vi_VN"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -337,8 +338,8 @@
                                                 <tr>
                                                     <td>
                                                         <c:choose>
-                                                            <c:when test="${tab == 'history'}">
-                                                                <!-- History Trip: Click để rate -->
+
+                                                            <c:when test="${tab == 'history' && order.status == 'Completed'}">
                                                                 <a class="car-rate-link"
                                                                    data-booking-id="${order.bookingId}"
                                                                    data-car-name="${order.carName}">
@@ -346,8 +347,14 @@
                                                                     <i class="fa fa-star"></i>
                                                                 </a>
                                                             </c:when>
+
+
+                                                            <c:when test="${tab == 'history'}">
+                                                                <c:out value="${order.carName}"/>
+                                                            </c:when>
+
+
                                                             <c:otherwise>
-                                                                <!-- Current Trip: Click để xem owner info -->
                                                                 <a class="car-name-link"
                                                                    onclick="showOwnerInfo(${order.bookingId}, '${order.carName}')">
                                                                     <c:out value="${order.carName}"/>
@@ -359,7 +366,13 @@
                                                     <td><c:out value="${order.location}"/></td>
                                                     <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
                                                     <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
-                                                    <td>$<c:out value="${order.totalPrice}"/></td>
+                                                    <td style="white-space: nowrap;">
+                                                        <fmt:formatNumber value="${order.totalPrice}"
+                                                                          type="number"
+                                                                          groupingUsed="true"
+                                                                          minFractionDigits="0"
+                                                                          maxFractionDigits="0"/> ₫
+                                                    </td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${order.status == 'Pending'}">

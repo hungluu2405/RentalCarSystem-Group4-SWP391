@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -119,7 +120,9 @@
                                                     <td><c:out value="${order.location}"/></td>
                                                     <td><c:out value="${order.startDate}"/> ${order.pickupTime}</td>
                                                     <td><c:out value="${order.endDate}"/> ${order.dropoffTime}</td>
-                                                    <td><c:out value="${order.totalPrice}"/></td>
+                                                    <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
+                                                                          type="number" groupingUsed="true"
+                                                                          minFractionDigits="0" maxFractionDigits="0"/> ₫</td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${status == 'Pending'}">
