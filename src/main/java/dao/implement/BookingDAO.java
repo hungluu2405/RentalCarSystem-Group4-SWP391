@@ -653,6 +653,25 @@ public class BookingDAO extends DBContext {
 
         return bookings;
     }
+    public boolean isBookingOwnedByUser(int bookingId, int userId) {
+        String sql = """
+        SELECT COUNT(*) 
+        FROM BOOKING 
+        WHERE BOOKING_ID = ? AND USER_ID = ?
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
 
 
