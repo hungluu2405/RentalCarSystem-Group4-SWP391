@@ -10,12 +10,12 @@ import jakarta.servlet.http.HttpSession;
 import model.Address;
 import model.User;
 import model.UserProfile;
-import service.account.VerifyEmailService;
+import service.account.VerificationService;
 
 @WebServlet(urlPatterns = {"/verify-email"})
 public class VerifyEmailServlet extends HttpServlet {
 
-    private final VerifyEmailService verifyEmailService = new VerifyEmailService();
+    private final VerificationService.VerifyEmailService verifyEmailService = new VerificationService.VerifyEmailService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

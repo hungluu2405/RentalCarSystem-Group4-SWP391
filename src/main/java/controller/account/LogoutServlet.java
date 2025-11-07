@@ -7,12 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import service.account.LogoutService;
+import service.account.AuthService;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
 
-    private final LogoutService logoutService = new LogoutService();
+    private final AuthService.LogoutService logoutService = new AuthService.LogoutService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

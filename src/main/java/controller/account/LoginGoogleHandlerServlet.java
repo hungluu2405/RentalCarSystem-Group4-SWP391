@@ -7,12 +7,12 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import model.GoogleUser;
 import model.User;
-import service.account.LoginGoogleHandlerService;
+import service.account.GoogleAccountService;
 
 @WebServlet(urlPatterns = {"/login-google-handler"})
 public class LoginGoogleHandlerServlet extends HttpServlet {
 
-    private final LoginGoogleHandlerService service = new LoginGoogleHandlerService();
+    private final GoogleAccountService.LoginGoogleHandlerService service = new GoogleAccountService.LoginGoogleHandlerService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
