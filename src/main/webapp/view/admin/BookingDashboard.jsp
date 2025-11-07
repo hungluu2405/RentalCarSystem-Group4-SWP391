@@ -93,8 +93,17 @@
                             <c:forEach var="b" items="${listB}">
                                 <tr>
                                     <td>${b.bookingId}</td>
-                                    <td>${b.userFullName}</td>
-                                    <td>${b.carModel}</td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/admin/manageUser?action=view&userId=${b.userId}">
+                                                ${b.userFullName}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/admin/manageCar?id=${b.carId}">
+                                                ${b.carModel}
+                                        </a>
+                                    </td>
+
                                     <td>${b.startDate}</td>
                                     <td>${b.endDate}</td>
                                     <td>${b.pickupTime}</td>
