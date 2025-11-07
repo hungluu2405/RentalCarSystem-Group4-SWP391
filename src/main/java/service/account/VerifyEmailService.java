@@ -6,7 +6,7 @@ import model.Address;
 import model.User;
 import model.UserProfile;
 import model.Notification;
-import util.ResetCodeStore;
+import util.VerificationCodeStore;
 
 public class VerifyEmailService {
 
@@ -19,7 +19,7 @@ public class VerifyEmailService {
 
     /** ✅ Kiểm tra mã xác thực OTP */
     public boolean verifyCode(String email, String code) {
-        return ResetCodeStore.validateCode(email, code);
+        return VerificationCodeStore.validateCode(email, code);
     }
 
     /** ✅ Đăng ký tài khoản khi OTP hợp lệ */
