@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="en_US" />
+<fmt:setLocale value="vi_VN"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -218,10 +218,9 @@
                                     <div class="info-row total-price-row">
                                         <span class="info-label">Total Price:</span>
                                         <span class="info-value">
-                                            $<fmt:formatNumber value="${booking.totalPrice}"
-                                                               type="number"
-                                                               minFractionDigits="2"
-                                                               maxFractionDigits="2"/>
+                                            <fmt:formatNumber value="${booking.totalPrice}"
+                                                              type="number" groupingUsed="true"
+                                                              minFractionDigits="0" maxFractionDigits="0"/> ₫
                                         </span>
                                     </div>
                                 </div>

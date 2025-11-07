@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="en_US" />
+<fmt:setLocale value="vi_VN" />
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -53,11 +53,15 @@
                     <div class="col-lg-3">
                         <h3 class="fw-bold mb-3">${car.model}</h3>
 
-                        <!-- ✅ SỬA: Thêm minFractionDigits="2" -->
+                        <!-- ✅ VND FORMAT -->
                         <div class="de-price text-center border rounded p-3 bg-white shadow-sm mb-4">
-                            <span class="text-muted">Rental Price/Day</span>
+                            <span class="text-muted">Price/Day</span>
                             <h2 class="text-success mt-2">
-                                $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                <fmt:formatNumber value="${car.pricePerDay}"
+                                                  type="number"
+                                                  groupingUsed="true"
+                                                  minFractionDigits="0"
+                                                  maxFractionDigits="0"/> ₫
                             </h2>
                         </div>
 
@@ -143,25 +147,37 @@
                                 </small>
                             </div>
 
-                            <!-- ✅ SỬA: Thêm minFractionDigits="2" cho tất cả số tiền -->
+                            <!-- ✅ VND FORMAT -->
                             <div class="border rounded p-3 bg-white mb-3">
                                 <p class="mb-1 d-flex justify-content-between small">
-                                    <span>Car Rental Fee:</span>
+                                    <span>Rental Fee:</span>
                                     <span id="priceValue" data-total="${car.pricePerDay}">
-                                        $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                        <fmt:formatNumber value="${car.pricePerDay}"
+                                                          type="number"
+                                                          groupingUsed="true"
+                                                          minFractionDigits="0"
+                                                          maxFractionDigits="0"/> ₫
                                     </span>
                                 </p>
                                 <p class="mb-1 d-flex justify-content-between small text-danger">
                                     <span>Discount:</span>
                                     <span id="discount">
-                                        $<fmt:formatNumber value="${input_calculatedDiscount != null ? input_calculatedDiscount : 0}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                        <fmt:formatNumber value="${input_calculatedDiscount != null ? input_calculatedDiscount : 0}"
+                                                          type="number"
+                                                          groupingUsed="true"
+                                                          minFractionDigits="0"
+                                                          maxFractionDigits="0"/> ₫
                                     </span>
                                 </p>
                                 <hr class="my-2">
                                 <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total:</span>
+                                    <span>Total Fee:</span>
                                     <span id="finalPrice" class="text-success">
-                                        $<fmt:formatNumber value="${input_finalCalculatedPrice != null ? input_finalCalculatedPrice : car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                        <fmt:formatNumber value="${input_finalCalculatedPrice != null ? input_finalCalculatedPrice : car.pricePerDay}"
+                                                          type="number"
+                                                          groupingUsed="true"
+                                                          minFractionDigits="0"
+                                                          maxFractionDigits="0"/> ₫
                                     </span>
                                 </div>
                             </div>
@@ -321,28 +337,22 @@
         }
     }
 
-    function formatUSD(amount) {
-        return amount.toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+    // ✅ ĐỔI: formatUSD() → formatVND()
+    function formatVND(amount) {
+        return Math.round(amount).toLocaleString('vi-VN') + ' ₫';
     }
 
     function updateDisplay(total) {
         console.log("🔄 updateDisplay() - total:", total);
-        document.getElementById("priceValue").textContent = formatUSD(total);
-        document.getElementById("discount").textContent = formatUSD(0);
-        document.getElementById("finalPrice").textContent = formatUSD(total);
-        document.getElementById("finalCalculatedPrice").value = total.toFixed(2);
+        document.getElementById("priceValue").textContent = formatVND(total);
+        document.getElementById("discount").textContent = formatVND(0);
+        document.getElementById("finalPrice").textContent = formatVND(total);
+        document.getElementById("finalCalculatedPrice").value = Math.round(total);
     }
 
     // =============== PROMO CODE ===============
 
-    // ✅ FIX: LUÔN TÍNH LẠI GIÁ TRƯỚC KHI APPLY
     function applyPromoCode(code) {
-        // ✅ TÍNH LẠI GIÁ MỖI LẦN (không dùng default parameter)
         const total = calculateTotal();
 
         const msg = document.getElementById("promoMessage");
@@ -359,8 +369,7 @@
         msg.innerHTML = "Checking code...";
         msg.className = "text-info mt-2 d-block";
 
-        // ✅ CẬP NHẬT PRICE VALUE TRƯỚC KHI GỌI API
-        document.getElementById("priceValue").textContent = formatUSD(total);
+        document.getElementById("priceValue").textContent = formatVND(total);
 
         fetch(contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total)
             .then(res => res.json())
@@ -388,20 +397,20 @@
 
     function updatePriceDisplay(discount, finalPrice) {
         console.log("💵 updatePriceDisplay() - discount:", discount, "finalPrice:", finalPrice);
-        document.getElementById("discount").textContent = formatUSD(discount);
-        document.getElementById("finalPrice").textContent = formatUSD(finalPrice);
-        document.getElementById("calculatedDiscount").value = parseFloat(discount).toFixed(2);
+        document.getElementById("discount").textContent = formatVND(discount);
+        document.getElementById("finalPrice").textContent = formatVND(finalPrice);
+        document.getElementById("calculatedDiscount").value = Math.round(discount);
         document.getElementById("appliedPromoCode").value = appliedPromo ? appliedPromo.code : "";
-        document.getElementById("finalCalculatedPrice").value = parseFloat(finalPrice).toFixed(2);
+        document.getElementById("finalCalculatedPrice").value = Math.round(finalPrice);
     }
 
     function resetPromoDisplay(total) {
         console.log("🔄 resetPromoDisplay() - total:", total);
-        document.getElementById("discount").textContent = formatUSD(0);
-        document.getElementById("finalPrice").textContent = formatUSD(total);
-        document.getElementById("calculatedDiscount").value = "0.00";
+        document.getElementById("discount").textContent = formatVND(0);
+        document.getElementById("finalPrice").textContent = formatVND(total);
+        document.getElementById("calculatedDiscount").value = "0";
         document.getElementById("appliedPromoCode").value = "";
-        document.getElementById("finalCalculatedPrice").value = parseFloat(total).toFixed(2);
+        document.getElementById("finalCalculatedPrice").value = Math.round(total);
     }
 
     // =============== EVENT HANDLING ===============
@@ -410,10 +419,9 @@
         console.log("🔄 Date/Time changed");
         const total = calculateTotal();
 
-        // ✅ Nếu đã có promo, tự động apply lại với giá mới
         if (appliedPromo && appliedPromo.code) {
             console.log("🔄 Re-applying promo:", appliedPromo.code);
-            applyPromoCode(appliedPromo.code);  // ← Tự động tính lại
+            applyPromoCode(appliedPromo.code);
         } else {
             updateDisplay(total);
         }
@@ -440,7 +448,7 @@
         // Apply promo button
         document.getElementById("applyPromo").addEventListener("click", function () {
             const code = document.getElementById("promoCode").value.trim();
-            applyPromoCode(code);  // ← Gọi function đã fix
+            applyPromoCode(code);
         });
 
         // Enter key on promo input
