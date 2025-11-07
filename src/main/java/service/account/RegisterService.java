@@ -6,10 +6,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Random;
 
-import model.*;
 import util.EmailUtil;
-import util.ResetCodeStore;
-import dao.implement.NotificationDAO;
+import util.VerificationCodeStore;
 
 
 public class RegisterService {
@@ -88,7 +86,7 @@ public class RegisterService {
     /** ✅ Tạo User, Profile, Address và gửi OTP xác thực */
     public void registerTempUser(String email) {
         String otp = String.format("%06d", new Random().nextInt(999999));
-        ResetCodeStore.saveCode(email, otp);
+        VerificationCodeStore.saveCode(email, otp);
 
         EmailUtil.sendEmail(email, "Your Rentaly Verification Code",
                 "Your verification code is: <h2><b>" + otp + "</b></h2>");

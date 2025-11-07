@@ -1,6 +1,6 @@
 package service.account;
 
-import util.ResetCodeStore;
+import util.VerificationCodeStore;
 
 public class VerifyCodeService {
 
@@ -15,6 +15,6 @@ public class VerifyCodeService {
         if (email == null || email.isEmpty() || code == null || code.isEmpty()) {
             return false;
         }
-        return ResetCodeStore.validateCode(email, code);
+        return VerificationCodeStore.validateCode(email, code);
     }
 }

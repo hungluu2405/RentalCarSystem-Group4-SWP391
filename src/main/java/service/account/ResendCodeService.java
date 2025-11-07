@@ -1,7 +1,7 @@
 package service.account;
 
 import util.EmailUtil;
-import util.ResetCodeStore;
+import util.VerificationCodeStore;
 import java.util.Random;
 
 public class ResendCodeService {
@@ -19,7 +19,7 @@ public class ResendCodeService {
             String otp = String.format("%06d", new Random().nextInt(999999));
 
             // Lưu mã vào bộ nhớ tạm (có thời hạn)
-            ResetCodeStore.saveCode(email, otp);
+            VerificationCodeStore.saveCode(email, otp);
 
             // Gửi email cho người dùng
             String subject = "Your Rentaly Verification Code";
