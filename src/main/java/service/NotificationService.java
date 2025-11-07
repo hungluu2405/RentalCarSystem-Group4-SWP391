@@ -36,26 +36,31 @@ public class NotificationService {
         notificationDAO.markAllAsRead(userId);
     }
 
-
-
     private String getBookingUrl(int userId, int bookingId) {
         try {
             User user = userDAO.getUserById(userId);
+
             if (user != null) {
-                // Role 3 = Customer
-                if (user.getRoleId() == 3) {
+                int roleId = user.getRoleId();
+
+                // Role 2 = Customer
+                if (roleId == 3) {
                     return "/customer/customerOrder?id=" + bookingId;
                 }
-                // Role 2 = Car Owner (khi owner book xe của người khác)
-                else if (user.getRoleId() == 2) {
-                    return "/owner/myBooking?id=" + bookingId;  // ← THAY ĐỔI URL NÀY NẾU CẦN
+                // Role 3 = Car Owner
+                else if (roleId == 2) {
+                    return "/owner/myBooking?id=" + bookingId;
+                }
+                // Role 1 = Admin
+                else if (roleId == 1) {
+                    return "/admin/dashboard";
                 }
             }
         } catch (Exception e) {
-            System.err.println("❌ Error getting booking URL: " + e.getMessage());
+            e.printStackTrace();
         }
-        // Default fallback
-        return "/customer/customerOrder?id=" + bookingId;
+
+        return "/home";
     }
 
     // ==================== BOOKING NOTIFICATION METHODS ====================
@@ -65,7 +70,6 @@ public class NotificationService {
      */
     public void notifyBookingCreated(int bookingId, int customerId, int ownerId, String carModel) {
         try {
-            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
             String customerUrl = getBookingUrl(customerId, bookingId);
 
             // Thông báo cho Customer/Owner (người đặt xe)
@@ -74,7 +78,7 @@ public class NotificationService {
                     "BOOKING_PENDING",
                     "Your car booking has been received!",
                     "Your car booking has been received! Please wait for the Owner to approve it.",
-                    customerUrl  // ← SỬA
+                    customerUrl
             ));
 
             // Thông báo cho Owner (chủ xe)
@@ -83,7 +87,7 @@ public class NotificationService {
                     "BOOKING_NEW",
                     "New car booking request!",
                     "A new booking has been made for " + carModel + ". Please review the request.",
-                    "/owner/ownerBooking?id=" + bookingId  // ← Owner luôn xem ở ownerBooking
+                    "/owner/ownerBooking"  // ← BỎ ?id=
             ));
 
         } catch (Exception e) {

@@ -112,7 +112,7 @@
                                     <!-- PRICE -->
                                     <div class="col-md-6">
                                         <label class="form-label">
-                                            <i class="fa fa-money-bill-wave text-primary"></i> Price per Day
+                                            <i class="fa fa-money-bill-wave text-primary"></i> Price/Day $
                                         </label>
                                         <input type="text" id="pricePerDayDisplay" class="form-control" placeholder="Enter price per day..." required>
                                         <!-- input hidden để gửi giá trị thật về server -->
