@@ -103,6 +103,7 @@
                                   enctype="multipart/form-data"
                                   class="p-4 bg-white rounded shadow-sm">
 
+
                                 <input type="hidden" name="carId" value="${car.carId}">
 
                                 <input type="hidden" name="oldImageUrl" value="${car.imageUrl}">
@@ -128,6 +129,13 @@
 
                                 <!-- GRID LAYOUT -->
                                 <div class="row">
+
+                                    <div class="col-12 mb-3">
+                                        <label class="fw-bold">
+                                            <i class="fa fa-user text-primary me-2"></i>Owner
+                                        </label>
+                                        <input type="text" class="form-control" value="${car.carOwnerName}" readonly>
+                                    </div>
                                     <!-- Brand -->
                                     <div class="col-md-6 mb-3">
                                         <label>Brand</label>
