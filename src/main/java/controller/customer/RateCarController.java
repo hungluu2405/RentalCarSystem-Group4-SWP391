@@ -25,7 +25,7 @@ public class RateCarController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        // ==== 1️⃣ Kiểm tra user đăng nhập ====
+        // ==== 1️⃣Kiểm tra user đăng nhập ====
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             out.print("{\"success\":false, \"message\":\"Unauthorized\"}");
@@ -35,7 +35,7 @@ public class RateCarController extends HttpServlet {
         User currentUser = (User) session.getAttribute("user");
 
         try {
-            // ==== 2️⃣ Đọc JSON từ body mà không dùng thư viện ====
+            // ====  Đọc JSON từ body mà không dùng thư viện ====
             StringBuilder sb = new StringBuilder();
             String line;
             try (BufferedReader reader = request.getReader()) {
@@ -80,26 +80,26 @@ public class RateCarController extends HttpServlet {
 
 
 
-            // ==== 3️⃣ Validate rating ====
+            // ==== Validate rating ====
             if (rating < 1 || rating > 5) {
                 out.print("{\"success\":false, \"message\":\"Rating must be between 1 and 5\"}");
                 return;
             }
 
-            // ==== 4️⃣ Kiểm tra quyền sở hữu booking ====
+            // ====  Kiểm tra quyền sở hữu booking ====
             boolean owns = bookingDAO.isBookingOwnedByUser(bookingId, currentUser.getUserId());
             if (!owns) {
                 out.print("{\"success\":false, \"message\":\"You are not authorized to review this booking\"}");
                 return;
             }
 
-            // ==== 5️⃣ Kiểm tra đã review chưa ====
+            // ==== Kiểm tra đã review chưa ====
             if (reviewService.hasUserReviewed(bookingId)) {
                 out.print("{\"success\":false, \"message\":\"This booking has already been reviewed\"}");
                 return;
             }
 
-            // ==== 6️⃣ Lưu review ====
+            // ==== Lưu review ====
             boolean saved = reviewService.addReview(bookingId, rating, feedback);
 
             if (saved) {
