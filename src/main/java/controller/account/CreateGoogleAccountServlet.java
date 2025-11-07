@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import model.GoogleUser;
 import model.User;
-import service.account.CreateGoogleAccountService;
 import dao.implement.UserDAO;
+import service.account.GoogleAccountService;
 
 @WebServlet(urlPatterns = {"/create-google-account"})
 public class CreateGoogleAccountServlet extends HttpServlet {
 
-    private final CreateGoogleAccountService service = new CreateGoogleAccountService();
+    private final GoogleAccountService.CreateGoogleAccountService service = new GoogleAccountService.CreateGoogleAccountService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
