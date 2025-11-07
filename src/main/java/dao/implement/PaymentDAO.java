@@ -135,9 +135,7 @@ public class PaymentDAO extends DBContext {
         return 0;
     }
 
-    // ==============================
-    // 3️⃣ Helper: map dữ liệu từ ResultSet sang Payment object
-    // ==============================
+
     private Payment mapPayment(ResultSet rs) throws SQLException {
         Payment p = new Payment();
         p.setPaymentId(rs.getInt("PAYMENT_ID"));
@@ -151,5 +149,35 @@ public class PaymentDAO extends DBContext {
         }
         p.setPaypalTransactionId(rs.getString("PAYPAL_TRANSACTION_ID"));
         return p;
+    }
+
+
+    public Payment getPaymentById(int paymentId) {
+        String sql = "SELECT PAYMENT_ID, BOOKING_ID, AMOUNT, METHOD, STATUS, PAID_AT, PAYPAL_TRANSACTION_ID FROM PAYMENT WHERE PAYMENT_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, paymentId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapPayment(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public Payment getPaymentByBookingId(int bookingId) {
+        String sql = "SELECT PAYMENT_ID, BOOKING_ID, AMOUNT, METHOD, STATUS, PAID_AT, PAYPAL_TRANSACTION_ID FROM PAYMENT WHERE BOOKING_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapPayment(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
