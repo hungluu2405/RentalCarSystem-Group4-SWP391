@@ -15,10 +15,10 @@
                 <div class="widget">
                     <h5>Contact Info</h5>
                     <address class="s1">
-                        <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
-                        <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
-                        <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
-                        <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
+                        <span><i class="id-color fa fa-map-marker fa-lg"></i>VR9V+HGF, ĐT427B, Hoa Binh, Thuong Tin, Ha Noi, Viet Nam</span>
+                        <span><i class="id-color fa fa-phone fa-lg"></i>+84 33 5821918</span>
+                        <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:tungender1508@gmail.com">tungender1508@gmail.com</a></span>
+
                     </address>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <div class="de-flex">
                         <div class="de-flex-col">
                             <a href="${pageContext.request.contextPath}/home">
-                                Copyright 2025 - Rentaly by Designesia
+                                Copyright 2025 - Car Rental
                             </a>
                         </div>
                         <ul class="menu-simple">
