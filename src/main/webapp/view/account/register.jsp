@@ -64,19 +64,16 @@
                         </div>
                         <div class="de-flex-col header-col-mid">
                             <ul id="mainmenu">
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/index.jsp">Home</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/home">Home</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars.jsp">Cars</a>
-                                </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/quick-booking.jsp">Booking</a>
-                                </li>
-                                <li><a class="menu-item"
-                                       href="${pageContext.request.contextPath}/account-dashboard.jsp">My Account</a>
-                                </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/about.jsp">About</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Car</a>
+
                                 </li>
                                 <li><a class="menu-item"
-                                       href="${pageContext.request.contextPath}/contact.jsp">Contact</a></li>
+                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
+                                </li>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About
+                                    Us</a></li>
                             </ul>
                         </div>
                         <div class="de-flex-col">
