@@ -3,9 +3,9 @@ package service.account;
 import dao.implement.UserDAO;
 import model.User;
 import util.EmailUtil;
-import java.util.Random;
 import util.VerificationCodeStore;
 
+import java.util.Random;
 
 
 public class RecoveryService {
@@ -76,6 +76,7 @@ public class RecoveryService {
 
         /**
          * Kiểm tra email có tồn tại hay không.
+         *
          * @return User nếu tồn tại, null nếu không.
          */
         public User findUserByEmail(String email) {
@@ -84,6 +85,7 @@ public class RecoveryService {
 
         /**
          * Tạo và gửi mã OTP tới email.
+         *
          * @return mã OTP đã tạo.
          */
         public String sendResetCode(String email) {
@@ -109,7 +111,9 @@ public class RecoveryService {
             this.userDAO = new UserDAO();
         }
 
-        /** ✅ Kiểm tra hợp lệ dữ liệu đầu vào */
+        /**
+         * ✅ Kiểm tra hợp lệ dữ liệu đầu vào
+         */
         public String validatePassword(String password, String rePassword) {
             if (password == null || password.isEmpty() || rePassword == null || rePassword.isEmpty()) {
                 return "Please enter both the new password and confirmation!";
@@ -126,7 +130,9 @@ public class RecoveryService {
             return null;
         }
 
-        /** ✅ Cập nhật mật khẩu người dùng */
+        /**
+         * ✅ Cập nhật mật khẩu người dùng
+         */
         public boolean resetPassword(String email, String newPassword) {
             User user = userDAO.findUserByEmail(email);
             if (user == null) {

@@ -4,13 +4,12 @@ import dao.implement.UserDAO;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 import util.EmailUtil;
-import java.time.Period;
-import java.time.LocalDate;
-import java.sql.Date;
-import java.util.Random;
 import util.VerificationCodeStore;
 
-
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Random;
 
 
 public class AuthService {
@@ -24,6 +23,7 @@ public class AuthService {
 
         /**
          * Kiểm tra thông tin đăng nhập theo email hoặc username.
+         *
          * @param loginKey email hoặc username
          * @param password mật khẩu người dùng nhập
          * @return User nếu đăng nhập thành công, null nếu thất bại
@@ -56,6 +56,7 @@ public class AuthService {
 
         /**
          * ✅ Xóa session hiện tại và đăng xuất người dùng.
+         *
          * @param session phiên làm việc hiện tại
          */
         public void logout(HttpSession session) {
@@ -70,7 +71,9 @@ public class AuthService {
 
         private final UserDAO userDAO = new UserDAO();
 
-        /** ✅ Kiểm tra dữ liệu nhập */
+        /**
+         * ✅ Kiểm tra dữ liệu nhập
+         */
         public String validateInput(String username, String email, String password, String rePassword,
                                     String fullName, String phone, String dobString, String gender,
                                     String addressLine, String city,
@@ -120,7 +123,6 @@ public class AuthService {
                 return "Invalid gender value!";
 
 
-
             try {
                 Integer.parseInt(roleParam);
             } catch (NumberFormatException e) {
@@ -130,7 +132,9 @@ public class AuthService {
             return null;
         }
 
-        /** ✅ Kiểm tra username/email trùng */
+        /**
+         * ✅ Kiểm tra username/email trùng
+         */
         public String checkDuplicate(String username, String email) {
             if (userDAO.findUserByUsername(username) != null)
                 return "This username is already taken!";
@@ -139,7 +143,9 @@ public class AuthService {
             return null;
         }
 
-        /** ✅ Tạo User, Profile, Address và gửi OTP xác thực */
+        /**
+         * ✅ Tạo User, Profile, Address và gửi OTP xác thực
+         */
         public void registerTempUser(String email) {
             String otp = String.format("%06d", new Random().nextInt(999999));
             VerificationCodeStore.saveCode(email, otp);
