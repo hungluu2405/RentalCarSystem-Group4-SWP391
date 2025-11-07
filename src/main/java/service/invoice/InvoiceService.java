@@ -67,15 +67,12 @@ public class InvoiceService {
             invoice.setDueDate(LocalDateTime.now().plusDays(7)); // Due date 7 days from now
 
 
-            // Calculate amounts
+            // Calculate amounts - CHỈ TÍNH TIỀN XE, KHÔNG CÓ VAT
 
-            double subtotal = booking.getTotalPrice();
-            double taxRate = 0.10; // 10% VAT
-            double taxAmount = subtotal * taxRate;
-            double totalAmount = subtotal + taxAmount;
+            double totalAmount = booking.getTotalPrice();
 
             invoice.setTotalAmount(totalAmount);
-            invoice.setTaxAmount(taxAmount);
+            invoice.setTaxAmount(null); // Không sử dụng VAT nữa
             invoice.setStatus("Issued");
             invoice.setNotes("Thank you for your business!");
 
