@@ -7,14 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
-import service.account.ChangePasswordService;
+import service.account.RecoveryService;
 
 import java.io.IOException;
 
 @WebServlet(name = "ChangePasswordServlet", urlPatterns = {"/change-password"})
 public class ChangePasswordServlet extends HttpServlet {
 
-    private final ChangePasswordService changePasswordService = new ChangePasswordService();
+    private final RecoveryService.ChangePasswordService changePasswordService = new RecoveryService.ChangePasswordService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
