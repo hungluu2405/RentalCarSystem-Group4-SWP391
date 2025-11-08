@@ -89,9 +89,9 @@
             <label for="price" class="mr-2 font-weight-bold">Price:</label>
             <select name="price" id="price" class="form-control mr-3">
                 <option value="">All</option>
-                <option value="under30" <c:if test="${selectedPrice == 'under30'}">selected</c:if>>Under $30/day</option>
-                <option value="30to50" <c:if test="${selectedPrice == '30to50'}">selected</c:if>>$30 to $50/day</option>
-                <option value="over50" <c:if test="${selectedPrice == 'over50'}">selected</c:if>>Over $50/day</option>
+                <option value="under1tr" <c:if test="${selectedPrice == 'under1tr'}">selected</c:if>>Under 1 000 000vnd/day</option>
+                <option value="1trto1tr5" <c:if test="${selectedPrice == '1trto1tr5'}">selected</c:if>>1 000 000vnd to 1 500 000vnd/day</option>
+                <option value="over1tr5" <c:if test="${selectedPrice == 'over1tr5'}">selected</c:if>>Over 1 500 000vnd/day</option>
             </select>
 
             <button type="submit" class="btn btn-primary mr-2">
