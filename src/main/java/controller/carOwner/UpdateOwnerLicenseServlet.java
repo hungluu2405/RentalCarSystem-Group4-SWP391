@@ -32,11 +32,14 @@ public class UpdateOwnerLicenseServlet extends HttpServlet {
         licenseService = new Driver_LicenseService();
     }
 
-    private void forwardWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
+    private void forwardWithError(HttpServletRequest request, HttpServletResponse response, String errorMessage, Driver_License dl)
             throws ServletException, IOException {
         request.setAttribute("error", errorMessage);
+        request.setAttribute("license", dl);
+        request.setAttribute("activePage", "license");
         request.getRequestDispatcher("/view/carOwner/Driver_License.jsp").forward(request, response);
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -129,9 +132,10 @@ public class UpdateOwnerLicenseServlet extends HttpServlet {
 
             String validationMsg = licenseService.validateLicense(dl);
             if (validationMsg != null) {
-                forwardWithError(request, response, validationMsg);
+                forwardWithError(request, response, validationMsg, dl);
                 return;
             }
+
 
             if (licenseDAO.getLicenseByUserId(user.getUserId()) == null) {
                 licenseDAO.insertLicense(dl);
@@ -143,8 +147,11 @@ public class UpdateOwnerLicenseServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            forwardWithError(request, response, "❌ Error updating license: " + e.getMessage());
+            Driver_License dl = new Driver_License();  // thêm dòng này để tránh null
+            dl.setUser_id(user.getUserId());
+            forwardWithError(request, response, "❌ Error updating license: " + e.getMessage(), dl);
         }
+
     }
 
     private String uploadFile(Part filePart, String uploadPath) throws IOException {
