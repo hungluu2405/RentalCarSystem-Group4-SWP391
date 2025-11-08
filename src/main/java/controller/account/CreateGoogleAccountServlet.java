@@ -18,7 +18,7 @@ import java.util.Map;
 @WebServlet(urlPatterns = {"/create-google-account"})
 public class CreateGoogleAccountServlet extends HttpServlet {
 
-    private final CreateGoogleAccountService service = new CreateGoogleAccountService();
+    private final GoogleAccountService.CreateGoogleAccountService service = new GoogleAccountService.CreateGoogleAccountService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

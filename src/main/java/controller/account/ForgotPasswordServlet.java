@@ -6,14 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
-import service.account.ForgotPasswordService;
+import service.account.RecoveryService;
 
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/forgot-password"})
 public class ForgotPasswordServlet extends HttpServlet {
 
-    private final ForgotPasswordService service = new ForgotPasswordService();
+    private final RecoveryService.ForgotPasswordService service = new RecoveryService.ForgotPasswordService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
