@@ -1,11 +1,14 @@
 package controller.car;
 
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import java.io.IOException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import model.CarViewModel;
 import service.car.CarSingleService;
+
+import java.io.IOException;
 
 @WebServlet(name = "CarSingleServlet", urlPatterns = {"/car-single"})
 public class CarSingleServlet extends HttpServlet {

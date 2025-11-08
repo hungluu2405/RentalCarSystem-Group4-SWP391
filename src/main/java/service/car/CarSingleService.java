@@ -9,7 +9,9 @@ public class CarSingleService {
     private final CarDAO carDAO = new CarDAO();
     private final CarImageDAO carImageDAO = new CarImageDAO();
 
-    /** ✅ Lấy thông tin chi tiết xe (chỉ trả về nếu xe khả dụng) */
+    /**
+     * ✅ Lấy thông tin chi tiết xe (chỉ trả về nếu xe khả dụng)
+     */
     public CarViewModel getCarDetails(int carId) {
         CarViewModel car = carDAO.getCarById(carId);
 
