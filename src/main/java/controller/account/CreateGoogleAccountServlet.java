@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.GoogleUser;
 import model.User;
-import service.account.CreateGoogleAccountService;
+import service.account.GoogleAccountService;
 
 import java.io.IOException;
 import java.util.HashMap;
