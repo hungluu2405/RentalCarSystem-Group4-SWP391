@@ -72,6 +72,39 @@
                 </div>
 
                 <div class="card-body">
+
+                    <form action="bookingDB" method="get" class="form-inline mb-3">
+                        <label for="dateRange" class="mr-2 font-weight-bold">
+                            <i class="fas fa-calendar-alt mr-1"></i>Date:
+                        </label>
+                        <select name="dateRange" id="dateRange" class="form-control mr-3">
+                            <option value="">All</option>
+                            <option value="today" <c:if test="${selectedDateRange == 'today'}">selected</c:if>>Today</option>
+                            <option value="week" <c:if test="${selectedDateRange == 'week'}">selected</c:if>>This Week</option>
+                            <option value="month" <c:if test="${selectedDateRange == 'month'}">selected</c:if>>This Month</option>
+                            <option value="year" <c:if test="${selectedDateRange == 'year'}">selected</c:if>>This Year</option>
+                        </select>
+
+                        <label for="price" class="mr-2 font-weight-bold">
+                            <i class="fas fa-tags mr-1"></i>Price:
+                        </label>
+                        <select name="price" id="price" class="form-control mr-3">
+                            <option value="">All</option>
+                            <option value="under1tr" <c:if test="${selectedPrice == 'under1tr'}">selected</c:if>>Under 1,000,000 VND</option>
+                            <option value="1trto1tr5" <c:if test="${selectedPrice == '1trto1tr5'}">selected</c:if>>1,000,000 to 1,500,000 VND</option>
+                            <option value="over1tr5" <c:if test="${selectedPrice == 'over1tr5'}">selected</c:if>>Over 1,500,000 VND</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary mr-2">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <a href="bookingDB" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo"></i> Reset
+                        </a>
+                    </form>
+
+
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
