@@ -24,7 +24,15 @@ public class AccountDBServlet extends HttpServlet {
         PaymentDAO paymentDAO = new PaymentDAO();
         ContactDAO contactDAO = new ContactDAO();
         Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
-        List<User> listU = userDAO.getAllUsersForAdmin();
+        String role = request.getParameter("role");
+        List<User> listU;
+
+        if (role != null && !role.isEmpty()) {
+            listU = userDAO.getUsers(role); // dùng hàm mới getUsers(role)
+        } else {
+            listU = userDAO.getAllUsersForAdmin();
+        }
+
 
         for (User u : listU) {
             var license = licenseDAO.getLicenseByUserId(u.getUserId());

@@ -72,6 +72,36 @@
   </div>
 
     <div class="card-body">
+
+        <form action="carDB" method="get" class="form-inline mb-3">
+            <label for="type" class="mr-2 font-weight-bold">
+                <i class="fas fa-filter mr-1"></i>Type:
+            </label>
+            <select name="type" id="type" class="form-control mr-3">
+                <option value="">All</option>
+                <option value="SUV" <c:if test="${selectedType == 'SUV'}">selected</c:if>>SUV</option>
+                <option value="Sedan" <c:if test="${selectedType == 'Sedan'}">selected</c:if>>Sedan</option>
+                <option value="Truck" <c:if test="${selectedType == 'Truck'}">selected</c:if>>Truck</option>
+                <option value="Coupe" <c:if test="${selectedType == 'Coupe'}">selected</c:if>>Coupe</option>
+                <option value="Convertible" <c:if test="${selectedType == 'Convertible'}">selected</c:if>>Convertible</option>
+            </select>
+
+            <label for="price" class="mr-2 font-weight-bold">Price:</label>
+            <select name="price" id="price" class="form-control mr-3">
+                <option value="">All</option>
+                <option value="under30" <c:if test="${selectedPrice == 'under30'}">selected</c:if>>Under $30/day</option>
+                <option value="30to50" <c:if test="${selectedPrice == '30to50'}">selected</c:if>>$30 to $50/day</option>
+                <option value="over50" <c:if test="${selectedPrice == 'over50'}">selected</c:if>>Over $50/day</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary mr-2">
+                <i class="fas fa-search"></i> Search
+            </button>
+            <a href="carlist" class="btn btn-outline-secondary">
+                <i class="fas fa-undo"></i> Reset
+            </a>
+        </form>
+
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead class="thead-dark">

@@ -1153,5 +1153,84 @@ public class CarDAO extends DBContext {
         return null;
     }
 
+    public List<Car> getCarsFiltered(String type, String priceRange) {
+        List<Car> cars = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT 
+            c.CAR_ID,
+            u.FULL_NAME AS CAR_OWNER_NAME,
+            t.NAME AS TYPE_NAME,
+            c.MODEL,
+            c.BRAND,
+            c.YEAR,
+            c.LICENSE_PLATE,
+            c.CAPACITY,
+            c.FUEL_TYPE,
+            c.PRICE_PER_DAY,
+            c.AVAILABILITY
+        FROM [CarRentalDB].[dbo].[CAR] AS c
+        JOIN [CarRentalDB].[dbo].[CAR_TYPE] AS t
+            ON c.TYPE_ID = t.TYPE_ID
+        JOIN [CarRentalDB].[dbo].[USER_PROFILE] AS u
+            ON c.USER_ID = u.USER_ID
+        WHERE 1=1
+    """);
+
+        // Lọc theo loại xe
+        if (type != null && !type.isEmpty()) {
+            sql.append(" AND t.NAME = ?");
+        }
+
+        // Lọc theo khoảng giá
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under30":
+                    sql.append(" AND c.PRICE_PER_DAY < 30");
+                    break;
+                case "30to50":
+                    sql.append(" AND c.PRICE_PER_DAY BETWEEN 30 AND 50");
+                    break;
+                case "over50":
+                    sql.append(" AND c.PRICE_PER_DAY > 50");
+                    break;
+            }
+        }
+
+        sql.append(" ORDER BY c.CAR_ID ASC");
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+            if (type != null && !type.isEmpty()) {
+                ps.setString(idx++, type);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Car car = new Car();
+                    car.setCarId(rs.getInt("CAR_ID"));
+                    car.setModel(rs.getString("MODEL"));
+                    car.setBrand(rs.getString("BRAND"));
+                    car.setYear(rs.getInt("YEAR"));
+                    car.setLicensePlate(rs.getString("LICENSE_PLATE"));
+                    car.setCapacity(rs.getInt("CAPACITY"));
+                    car.setFuelType(rs.getString("FUEL_TYPE"));
+                    car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                    car.setAvailability(rs.getBoolean("AVAILABILITY"));
+                    car.setTypeName(rs.getString("TYPE_NAME"));
+                    car.setCarOwnerName(rs.getString("CAR_OWNER_NAME"));
+                    cars.add(car);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cars;
+    }
+
 
 }
