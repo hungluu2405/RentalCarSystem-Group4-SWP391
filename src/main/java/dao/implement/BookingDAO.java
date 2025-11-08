@@ -924,6 +924,97 @@ public class BookingDAO extends DBContext {
         }
         return list;
     }
+
+    public List<Booking> getBookingsFiltered(String dateRange, String priceRange) throws SQLException {
+        List<Booking> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT b.BOOKING_ID, c.MODEL, u.FULL_NAME, 
+               b.START_DATE, b.END_DATE, b.TOTAL_PRICE, 
+               b.STATUS, b.CREATED_AT, b.PICKUP_TIME, b.DROPOFF_TIME,
+               b.CAR_ID, b.USER_ID
+        FROM BOOKING b
+        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE 1=1
+    """);
+
+        // ✅ Lọc theo thời gian
+        if (dateRange != null && !dateRange.isEmpty()) {
+            switch (dateRange) {
+                case "today":
+                    sql.append(" AND CAST(b.START_DATE AS DATE) = CAST(GETDATE() AS DATE)");
+                    break;
+                case "week":
+                    sql.append(" AND DATEPART(WEEK, b.START_DATE) = DATEPART(WEEK, GETDATE())");
+                    sql.append(" AND DATEPART(YEAR, b.START_DATE) = DATEPART(YEAR, GETDATE())");
+                    break;
+                case "month":
+                    sql.append(" AND MONTH(b.START_DATE) = MONTH(GETDATE())");
+                    sql.append(" AND YEAR(b.START_DATE) = YEAR(GETDATE())");
+                    break;
+                case "year":
+                    sql.append(" AND YEAR(b.START_DATE) = YEAR(GETDATE())");
+                    break;
+            }
+        }
+
+        // ✅ Lọc theo khoảng giá
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under1tr":
+                    sql.append(" AND b.TOTAL_PRICE < 1000000");
+                    break;
+                case "1trto1tr5":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 1500000");
+                    break;
+                case "over1tr5":
+                    sql.append(" AND b.TOTAL_PRICE > 1500000");
+                    break;
+            }
+        }
+
+        sql.append(" ORDER BY b.BOOKING_ID DESC");
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString());
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Booking b = new Booking();
+                b.setBookingId(rs.getInt("BOOKING_ID"));
+                b.setCarId(rs.getInt("CAR_ID"));
+                b.setUserId(rs.getInt("USER_ID"));
+                b.setStartDate(rs.getDate("START_DATE").toLocalDate());
+                b.setEndDate(rs.getDate("END_DATE").toLocalDate());
+                b.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                b.setStatus(rs.getString("STATUS"));
+
+                Timestamp createdAt = rs.getTimestamp("CREATED_AT");
+                if (createdAt != null) {
+                    b.setCreatedAt(createdAt.toLocalDateTime());
+                }
+
+                Time pickup = rs.getTime("PICKUP_TIME");
+                if (pickup != null) {
+                    b.setPickupTime(pickup.toLocalTime());
+                }
+
+                Time dropoff = rs.getTime("DROPOFF_TIME");
+                if (dropoff != null) {
+                    b.setDropoffTime(dropoff.toLocalTime());
+                }
+
+                b.setCarModel(rs.getString("MODEL"));
+                b.setUserFullName(rs.getString("FULL_NAME"));
+
+                list.add(b);
+            }
+        }
+
+        return list;
+    }
+
+
 }
 
 
