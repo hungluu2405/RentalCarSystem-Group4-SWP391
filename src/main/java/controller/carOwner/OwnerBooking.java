@@ -18,6 +18,7 @@ public class OwnerBooking extends HttpServlet {
     private final CarDAO carDAO = new CarDAO();
     private final BookingDAO bookingDAO = new BookingDAO();
     private final BookingService bookingService = new BookingService();
+    private static final int PAGE_SIZE = 5; // 5 records per page
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,23 +35,52 @@ public class OwnerBooking extends HttpServlet {
 
         int ownerId = owner.getUserId();
 
-        // --- LẤY PAGE HIỆN TẠI ---
-        int page = 1;
-        int pageSize = 5;
-
-        String pageParam = request.getParameter("page");
-        if (pageParam != null) {
-            try { page = Integer.parseInt(pageParam); }
-            catch (NumberFormatException ignored) {}
+        // --- LẤY TAB HIỆN TẠI ---
+        String tab = request.getParameter("tab");
+        if (tab == null || tab.isEmpty()) {
+            tab = "pending";
         }
 
-        // --- ĐẾM TỔNG SỐ BOOKING ---
-        int totalBookingsList = bookingDAO.countBookingsByOwner(ownerId);
-        int totalPages = (int) Math.ceil((double) totalBookingsList / pageSize);
+        // --- LẤY PAGE HIỆN TẠI ---
+        String pageParam = request.getParameter("page");
+        int currentPage = 1;
+        try {
+            if (pageParam != null && !pageParam.isEmpty()) {
+                currentPage = Integer.parseInt(pageParam);
+                if (currentPage < 1) currentPage = 1;
+            }
+        } catch (NumberFormatException e) {
+            currentPage = 1;
+        }
 
-        // --- LẤY DANH SÁCH PHÂN TRANG ---
-        List<BookingDetail> allBookingss = bookingDAO.getBookingsByOwnerWithPaging(ownerId, page, pageSize);
+        int offset = (currentPage - 1) * PAGE_SIZE;
 
+        // --- BIẾN DỮ LIỆU ---
+        List<BookingDetail> bookings;
+        List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
+
+        int totalRecords;
+        int totalPages;
+
+        // --- LẤY DỮ LIỆU THEO TAB ---
+        switch (tab.toLowerCase()) {
+            case "active":
+                totalRecords = bookingDAO.countActiveBookingsByOwner(ownerId);
+                totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
+                bookings = bookingDAO.getActiveBookingsByOwner(ownerId, offset, PAGE_SIZE);
+                break;
+            case "history":
+                totalRecords = bookingDAO.countHistoryBookingsByOwner(ownerId);
+                totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
+                bookings = bookingDAO.getHistoryBookingsByOwner(ownerId, offset, PAGE_SIZE);
+                break;
+            default: // pending
+                totalRecords = bookingDAO.countPendingBookingsByOwner(ownerId);
+                totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
+                bookings = bookingDAO.getPendingBookingsByOwner(ownerId, offset, PAGE_SIZE);
+                tab = "pending";
+                break;
+        }
 
         // Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
@@ -60,7 +90,6 @@ public class OwnerBooking extends HttpServlet {
 
         // Lấy danh sách xe và booking
         List<CarViewModel> myCars = carDAO.getCarsByOwner(ownerId);
-        List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
 
 
         // Gửi dữ liệu sang JSP
@@ -69,8 +98,11 @@ public class OwnerBooking extends HttpServlet {
         request.setAttribute("activeBookings", activeBookings);
         request.setAttribute("cancelledBookings", cancelledBookings);
         request.setAttribute("myCars", myCars);
+        request.setAttribute("bookings", bookings);
         request.setAttribute("allBookings", allBookings);
-
+        request.setAttribute("tab", tab);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
 
         request.getRequestDispatcher("/view/carOwner/ownerBooking.jsp").forward(request, response);
     }
