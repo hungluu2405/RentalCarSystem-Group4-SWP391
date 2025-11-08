@@ -10,6 +10,9 @@ public class Driver_License {
     private Date expiry_date;
     private String front_image_url;
     private String back_image_url;
+    private String licenseClass;
+    private String address;
+    private String nationality;
 
     //join
     private String fullName;
@@ -18,17 +21,20 @@ public class Driver_License {
     public Driver_License(){
     }
 
-    public Driver_License(Date issue_date, Date expiry_date, String front_image_url, String back_image_url, String fullName, Date dob, String gender, String license_number, int user_id, int license_id) {
+    public Driver_License(int license_id, int user_id, String license_number, Date issue_date, Date expiry_date, String front_image_url, String back_image_url, String licenseClass, String address, String nationality, String fullName, String gender, Date dob) {
+        this.license_id = license_id;
+        this.user_id = user_id;
+        this.license_number = license_number;
         this.issue_date = issue_date;
         this.expiry_date = expiry_date;
         this.front_image_url = front_image_url;
         this.back_image_url = back_image_url;
+        this.licenseClass = licenseClass;
+        this.address = address;
+        this.nationality = nationality;
         this.fullName = fullName;
-        this.dob = dob;
         this.gender = gender;
-        this.license_number = license_number;
-        this.user_id = user_id;
-        this.license_id = license_id;
+        this.dob = dob;
     }
 
     public int getLicense_id() {
@@ -109,5 +115,29 @@ public class Driver_License {
 
     public void setDob(Date dob) {
         this.dob = dob;
+    }
+
+    public String getLicenseClass() {
+        return licenseClass;
+    }
+
+    public void setLicenseClass(String licenseClass) {
+        this.licenseClass = licenseClass;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 }

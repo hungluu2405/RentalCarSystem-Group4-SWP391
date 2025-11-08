@@ -145,6 +145,27 @@
                                                class="form-control"
                                                value="<fmt:formatDate value='${license.expiry_date}' pattern='yyyy-MM-dd'/>">
                                     </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="license_class" class="form-label">Class:</label>
+                                        <input type="text" id="license_class" name="license_class"
+                                               class="form-control"
+                                               value="${license.licenseClass}">
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="address" class="form-label">Address:</label>
+                                        <input type="text" id="address" name="address"
+                                               class="form-control"
+                                               value="${license.address}">
+                                    </div>
+
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="nationality" class="form-label">Nationality:</label>
+                                        <input type="text" id="nationality" name="nationality"
+                                               class="form-control"
+                                               value="${license.nationality}">
+                                    </div>
                                 </div>
 
                                 <div class="text-center mt-4">
