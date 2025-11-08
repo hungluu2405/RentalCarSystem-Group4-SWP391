@@ -136,7 +136,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="order" items="${allBookings}">
+                                    <c:forEach var="order" items="${bookings}">
                                         <c:set var="isPending" value="${order.status == 'Pending'}"/>
                                         <c:set var="isHistory"
                                                value="${order.status == 'Paid' || order.status == 'Approved'}"/>
@@ -201,7 +201,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="order" items="${allBookings}">
+                                    <c:forEach var="order" items="${bookings}">
                                         <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">
                                             <tr>
                                                 <td>${order.carName}</td>
@@ -263,7 +263,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="order" items="${allBookings}">
+                                    <c:forEach var="order" items="${bookings}">
                                         <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">
                                             <tr>
                                                 <td>${order.carName}</td>
@@ -306,48 +306,47 @@
                             </div>
                         </div>
 
+                        <c:if test="${totalPages > 1}">
+                            <div class="pagination-container">
+                                <ul class="pagination">
+                                    <!-- Previous Button -->
+                                    <li class="${currentPage == 1 ? 'disabled' : ''}">
+                                        <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${currentPage - 1}">
+                                            <i class="fa fa-chevron-left"></i>
+                                        </a>
+                                    </li>
 
+                                    <!-- Page Numbers -->
+                                    <c:forEach begin="1" end="${totalPages}" var="i">
+                                        <c:choose>
+                                            <c:when test="${currentPage == i}">
+                                                <li class="active"><a href="#">${i}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li>
+                                                    <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${i}">
+                                                            ${i}
+                                                    </a>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                    <!-- Next Button -->
+                                    <li class="${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${currentPage + 1}">
+                                            <i class="fa fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="pagination-info">
+                                    Page ${currentPage} of ${totalPages}
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
 
-                    <c:if test="${totalPages > 1}">
-                        <div class="pagination-container">
-                            <ul class="pagination">
-                                <!-- Previous Button -->
-                                <li class="${currentPage == 1 ? 'disabled' : ''}">
-                                    <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${currentPage - 1}">
-                                        <i class="fa fa-chevron-left"></i>
-                                    </a>
-                                </li>
-
-                                <!-- Page Numbers -->
-                                <c:forEach begin="1" end="${totalPages}" var="i">
-                                    <c:choose>
-                                        <c:when test="${currentPage == i}">
-                                            <li class="active"><a href="#">${i}</a></li>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li>
-                                                <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${i}">
-                                                        ${i}
-                                                </a>
-                                            </li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-
-                                <!-- Next Button -->
-                                <li class="${currentPage == totalPages ? 'disabled' : ''}">
-                                    <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${currentPage + 1}">
-                                        <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <div class="pagination-info">
-                                Page ${currentPage} of ${totalPages}
-                            </div>
-                        </div>
-                    </c:if>
                 </div>
             </div>
         </section>
