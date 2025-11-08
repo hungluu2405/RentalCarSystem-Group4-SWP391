@@ -8,6 +8,16 @@
 
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
+    <style>
+        .btn-main:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-main .fa-spinner {
+            margin-right: 8px;
+        }
+    </style>
 </head>
 
 <body>
@@ -88,9 +98,6 @@
 
                             <c:if test="${not empty error}">
                                 <div class="alert alert-danger mt-3">${error}</div>
-                            </c:if>
-                            <c:if test="${not empty message}">
-                                <div class="alert alert-success mt-3">${message}</div>
                             </c:if>
 
                             <div class="form-group mb-2">
@@ -468,7 +475,30 @@
                 updateDisplay(total);
             }
         }, 100);
+        // =============== LOADING SPINNER + DISABLE BUTTON ===============
+        const bookingForm = document.querySelector('.booking-form');
+        const submitButton = bookingForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+
+        bookingForm.addEventListener('submit', function(e) {
+            // Disable button
+            submitButton.disabled = true;
+
+            // Show spinner
+            submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creating booking...';
+        });
     });
+
+    // Enable button lại nếu có lỗi từ server
+    <c:if test="${not empty error}">
+    window.addEventListener('load', function() {
+        const btn = document.querySelector('.booking-form button[type="submit"]');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Booking Now';
+        }
+    });
+    </c:if>
 </script>
 
 </body>
