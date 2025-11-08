@@ -18,12 +18,16 @@ public class CarDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String type = request.getParameter("type");
+        String priceRange = request.getParameter("price");
+
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
         PaymentDAO paymentDAO = new PaymentDAO();
         ContactDAO contactDAO = new ContactDAO();
-        List<Car> listC = carDAO.getAllCarsForAdmin();
+//        List<Car> listC = carDAO.getAllCarsForAdmin();
+        List<Car> listC = carDAO.getCarsFiltered(type,priceRange);
 
         int totalUsers = userDAO.countAllUsers();
         int totalCars = carDAO.countAllCars();
@@ -32,6 +36,9 @@ public class CarDBServlet extends HttpServlet {
         int totalContacts = contactDAO.countUnresolvedContacts();
         // 2️⃣ Gửi danh sách sang JSP
         request.setAttribute("listC", listC);
+        request.setAttribute("selectedType", type);
+        request.setAttribute("selectedPrice", priceRange);
+
         request.setAttribute("totalUsers",totalUsers);
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
