@@ -1,13 +1,17 @@
 package controller.account;
 
 import dao.implement.UserDAO;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import java.io.IOException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.GoogleUser;
 import model.User;
 import service.account.GoogleAccountService;
+
+import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/login-google-handler"})
 public class LoginGoogleHandlerServlet extends HttpServlet {

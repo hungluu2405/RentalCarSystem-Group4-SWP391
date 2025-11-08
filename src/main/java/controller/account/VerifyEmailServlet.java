@@ -1,6 +1,5 @@
 package controller.account;
 
-import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +10,8 @@ import model.Address;
 import model.User;
 import model.UserProfile;
 import service.account.VerificationService;
+
+import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/verify-email"})
 public class VerifyEmailServlet extends HttpServlet {

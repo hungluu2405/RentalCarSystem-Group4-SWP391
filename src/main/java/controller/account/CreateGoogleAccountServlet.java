@@ -1,15 +1,19 @@
 package controller.account;
 
-import jakarta.servlet.*;
+import dao.implement.UserDAO;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.GoogleUser;
+import model.User;
+import service.account.CreateGoogleAccountService;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import model.GoogleUser;
-import model.User;
-import dao.implement.UserDAO;
-import service.account.GoogleAccountService;
 
 @WebServlet(urlPatterns = {"/create-google-account"})
 public class CreateGoogleAccountServlet extends HttpServlet {

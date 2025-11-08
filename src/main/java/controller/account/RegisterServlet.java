@@ -1,9 +1,5 @@
 package controller.account;
 
-import java.io.IOException;
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +10,11 @@ import model.Address;
 import model.User;
 import model.UserProfile;
 import service.account.AuthService;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @WebServlet(urlPatterns = {"/register"})

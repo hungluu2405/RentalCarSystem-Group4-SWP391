@@ -8,21 +8,85 @@
     <jsp:include page="../common/customer/_head.jsp"/>
     <style>
         /* CSS Cũ Giữ Nguyên */
-        .tab-container { display: flex; gap: 30px; border-bottom: 2px solid #eaeaea; margin-top: 10px; margin-bottom: 20px; }
-        .tab-btn { background: none; border: none; font-weight: 600; font-size: 16px; padding: 8px 0; cursor: pointer; color: #222; transition: all 0.3s ease; position: relative; }
-        .tab-btn.active { color: #00b074; }
-        .tab-btn.active::after { content: ""; position: absolute; bottom: -2px; left: 0; height: 3px; width: 100%; background-color: #00b074; border-radius: 5px; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .badge { padding: 5px 10px; border-radius: 10px; font-size: 12px; }
+        .tab-container {
+            display: flex;
+            gap: 30px;
+            border-bottom: 2px solid #eaeaea;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px 0;
+            cursor: pointer;
+            color: #222;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: #00b074;
+        }
+
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background-color: #00b074;
+            border-radius: 5px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
 
         /* Màu sắc trạng thái */
-        .bg-warning { background-color: #FFD54F; color: #222; }
-        .bg-info-dark { background-color: #5bc0de; color: white; }
-        .bg-primary-dark { background-color: #007bff; color: white; }
-        .bg-returning { background-color: #ff9800; color: white; }
-        .bg-success { background-color: #66BB6A; color: white; }
-        .bg-danger { background-color: #dc3545; color: white; }
+        .bg-warning {
+            background-color: #FFD54F;
+            color: #222;
+        }
+
+        .bg-info-dark {
+            background-color: #5bc0de;
+            color: white;
+        }
+
+        .bg-primary-dark {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .bg-returning {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .bg-success {
+            background-color: #66BB6A;
+            color: white;
+        }
+
+        .bg-danger {
+            background-color: #dc3545;
+            color: white;
+        }
 
         /* ========== PAGINATION CSS ========== */
         .pagination-container {
@@ -94,8 +158,12 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .owner-modal-content {
@@ -238,6 +306,78 @@
             text-decoration: underline;
             color: #218838;
         }
+
+        .invoice-actions-cell {
+
+            display: flex;
+
+            gap: 5px;
+
+            justify-content: center;
+
+            align-items: center;
+
+        }
+
+
+        .invoice-actions-cell .btn {
+
+            padding: 5px 10px;
+
+            border-radius: 4px;
+
+            transition: all 0.2s;
+
+        }
+
+
+        .invoice-actions-cell .btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+        }
+
+
+        .btn-outline-primary {
+
+            border: 1px solid #007bff;
+
+            color: #007bff;
+
+            background: transparent;
+
+        }
+
+
+        .btn-outline-primary:hover {
+
+            background-color: #007bff;
+
+            color: white;
+
+        }
+
+
+        .btn-outline-success {
+
+            border: 1px solid #28a745;
+
+            color: #28a745;
+
+            background: transparent;
+
+        }
+
+
+        .btn-outline-success:hover {
+
+            background-color: #28a745;
+
+            color: white;
+
+        }
     </style>
 </head>
 
@@ -317,6 +457,7 @@
                                         <th>Pick Up Date</th>
                                         <th>Return Date</th>
                                         <th>Price</th>
+                                        <th>Invoice</th>
                                         <th>Status</th>
                                         <c:if test="${tab == 'current' || empty tab}">
                                             <th>Actions</th>
@@ -327,8 +468,9 @@
                                     <c:choose>
                                         <c:when test="${empty bookings}">
                                             <tr>
-                                                <td colspan="7" class="text-center" style="padding: 40px;">
-                                                    <i class="fa fa-inbox fa-3x" style="color: #ccc; margin-bottom: 15px;"></i>
+                                                <td colspan="8" class="text-center" style="padding: 40px;">
+                                                    <i class="fa fa-inbox fa-3x"
+                                                       style="color: #ccc; margin-bottom: 15px;"></i>
                                                     <p style="color: #999;">No bookings found</p>
                                                 </td>
                                             </tr>
@@ -372,6 +514,51 @@
                                                                           groupingUsed="true"
                                                                           minFractionDigits="0"
                                                                           maxFractionDigits="0"/> ₫
+                                                    </td>
+                                                    <td>
+
+                                                        <c:choose>
+
+                                                            <c:when test="${order.status == 'Paid' || order.status == 'Returning' || order.status == 'Completed'}">
+
+                                                                <div class="invoice-actions-cell">
+
+                                                                    <a href="${pageContext.request.contextPath}/customer/download-invoice?bookingId=${order.bookingId}"
+
+                                                                       class="btn btn-sm btn-outline-primary"
+
+                                                                       target="_blank"
+
+                                                                       title="Xem hóa đơn">
+
+                                                                        <i class="fa fa-file-text-o"></i>
+
+                                                                    </a>
+
+                                                                    <a href="${pageContext.request.contextPath}/customer/download-invoice?bookingId=${order.bookingId}&action=download"
+
+                                                                       class="btn btn-sm btn-outline-success"
+
+                                                                       download="invoice-${order.bookingId}.html"
+
+                                                                       title="Tải hóa đơn">
+
+                                                                        <i class="fa fa-download"></i>
+
+                                                                    </a>
+
+                                                                </div>
+
+                                                            </c:when>
+
+                                                            <c:otherwise>
+
+                                                                <span style="color: #ccc;">-</span>
+
+                                                            </c:otherwise>
+
+                                                        </c:choose>
+
                                                     </td>
                                                     <td>
                                                         <c:choose>
@@ -525,7 +712,8 @@
             <span class="owner-modal-close" onclick="closeRateModal()">&times;</span>
         </div>
         <div class="owner-modal-body">
-            <div id="rateCarName" style="font-weight:700; text-align:center; margin-bottom:15px; font-size:18px; color:#333;"></div>
+            <div id="rateCarName"
+                 style="font-weight:700; text-align:center; margin-bottom:15px; font-size:18px; color:#333;"></div>
 
             <!-- 5 Stars -->
             <div style="text-align:center; margin-bottom:20px;">
@@ -628,7 +816,7 @@
     let currentBookingId = null;
 
     // Event listener cho car rate links
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function (e) {
         if (e.target.closest('.car-rate-link')) {
             e.preventDefault();
             const link = e.target.closest('.car-rate-link');
@@ -645,7 +833,7 @@
 
     // Star selection
     document.querySelectorAll(".star").forEach(star => {
-        star.addEventListener("click", function() {
+        star.addEventListener("click", function () {
             selectedRating = this.dataset.value;
             document.querySelectorAll(".star").forEach(s => s.classList.remove("selected"));
             for (let i = 0; i < selectedRating; i++) {
@@ -655,7 +843,7 @@
     });
 
     // Submit rating
-    document.getElementById("submitRatingBtn").addEventListener("click", function() {
+    document.getElementById("submitRatingBtn").addEventListener("click", function () {
         const feedback = document.getElementById("feedbackText").value.trim();
 
         if (selectedRating === 0) {
@@ -665,7 +853,7 @@
 
         fetch("${pageContext.request.contextPath}/customer/rateCar", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 bookingId: currentBookingId,
                 rating: selectedRating,
@@ -695,7 +883,7 @@
     }
 
     // ========== GLOBAL MODAL CLOSE HANDLERS ==========
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         const ownerModal = document.getElementById('ownerModal');
         const rateModal = document.getElementById('rateModal');
 
@@ -707,7 +895,7 @@
         }
     }
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
             closeOwnerModal();
             closeRateModal();
