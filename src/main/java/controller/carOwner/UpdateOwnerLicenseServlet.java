@@ -81,6 +81,10 @@ public class UpdateOwnerLicenseServlet extends HttpServlet {
         String licenseNumber = request.getParameter("license_number");
         String issueDateStr = request.getParameter("issue_date");
         String expiryDateStr = request.getParameter("expiry_date");
+        String licenseClass = request.getParameter("license_class");
+        String address = request.getParameter("address");
+        String nationality = request.getParameter("nationality");
+
 
         String uploadPath = request.getServletContext().getRealPath("/images/license");
         File uploadDir = new File(uploadPath);
@@ -117,6 +121,10 @@ public class UpdateOwnerLicenseServlet extends HttpServlet {
             dl.setLicense_number(licenseNumber);
             dl.setIssue_date(issueDate);
             dl.setExpiry_date(expiryDate);
+            dl.setLicenseClass(licenseClass);
+            dl.setAddress(address);
+            dl.setNationality(nationality);
+
 
             if (frontImagePath != null) {
                 dl.setFront_image_url("/images/license/" + frontImagePath);
