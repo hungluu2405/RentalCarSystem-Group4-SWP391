@@ -64,12 +64,12 @@ public class OwnerBooking extends HttpServlet {
 
         // --- LẤY DỮ LIỆU THEO TAB ---
         switch (tab.toLowerCase()) {
-            case "active":
+            case "tabActive":
                 totalRecords = bookingDAO.countActiveBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getActiveBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 break;
-            case "history":
+            case "tabHistory":
                 totalRecords = bookingDAO.countHistoryBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getHistoryBookingsByOwner(ownerId, offset, PAGE_SIZE);
