@@ -72,6 +72,26 @@
                 </div>
 
                 <div class="card-body">
+
+                    <form action="contactDB" method="get" class="form-inline mb-3">
+                        <label for="status" class="mr-2 font-weight-bold">
+                            <i class="fas fa-filter mr-1"></i>Status:
+                        </label>
+                        <select name="status" id="status" class="form-control mr-3">
+                            <option value="">All</option>
+                            <option value="todo" <c:if test="${selectedStatus == 'todo'}">selected</c:if>>To do</option>
+                            <option value="done" <c:if test="${selectedStatus == 'done'}">selected</c:if>>Done</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary mr-2">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <a href="contactDB" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo"></i> Reset
+                        </a>
+                    </form>
+
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
