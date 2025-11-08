@@ -69,8 +69,31 @@
     <i class="fas fa-id-card"></i>
     User Profile Table
   </div>
-  <div class="card-body">
-    <div class="table-responsive">
+    <div class="card-body">
+
+        <form action="accountDB" method="get" class="form-inline mb-3">
+            <label for="role" class="mr-2 font-weight-bold">
+                <i class="fas fa-filter mr-1"></i>Role:
+            </label>
+            <select name="role" id="role" class="form-control mr-2">
+                <option value="">All</option>
+                <option value="Admin" <c:if test="${selectedRole == 'Admin'}">selected</c:if>>Admin</option>
+                <option value="Customer" <c:if test="${selectedRole == 'Customer'}">selected</c:if>>Customer</option>
+                <option value="Car Owner" <c:if test="${selectedRole == 'Car Owner'}">selected</c:if>>Car Owner</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary mr-2">
+                <i class="fas fa-search"></i> Search
+            </button>
+            <a href="accountDB" class="btn btn-outline-secondary">
+                <i class="fas fa-undo"></i> Reset
+            </a>
+        </form>
+
+
+
+
+        <div class="table-responsive">
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead class="thead-dark">
           <tr>

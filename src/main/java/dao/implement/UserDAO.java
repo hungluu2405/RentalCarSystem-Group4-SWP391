@@ -361,6 +361,62 @@ public class UserDAO extends GenericDAO<User> {
         }
         return null;
     }
+    public List<User> getUsers(String roleName) {
+        List<User> users = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            u.USER_ID, u.ROLE_ID, u.EMAIL, u.IS_EMAIL_VERIFIED, u.CREATED_AT,
+            up.PROFILE_ID, up.FULL_NAME, up.PHONE, up.DOB, up.GENDER,
+            up.DRIVER_LICENSE_NUMBER, up.IS_VERIFIED,
+            r.NAME AS ROLE_NAME
+        FROM [CarRentalDB].[dbo].[USER] u
+        LEFT JOIN [CarRentalDB].[dbo].[USER_PROFILE] up ON u.USER_ID = up.USER_ID
+        LEFT JOIN [CarRentalDB].[dbo].[ROLE] r ON u.ROLE_ID = r.ROLE_ID
+    """;
+
+        if (roleName != null && !roleName.isEmpty()) {
+            sql += " WHERE r.NAME = ? ";
+        }
+
+        sql += " ORDER BY u.USER_ID ASC";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            if (roleName != null && !roleName.isEmpty()) {
+                st.setString(1, roleName);
+            }
+
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("USER_ID"));
+                    user.setRoleId(rs.getInt("ROLE_ID"));
+                    user.setEmail(rs.getString("EMAIL"));
+                    user.setIsEmailVerified(rs.getBoolean("IS_EMAIL_VERIFIED"));
+                    user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+
+                    UserProfile profile = new UserProfile();
+                    profile.setProfileId(rs.getInt("PROFILE_ID"));
+                    profile.setUserId(rs.getInt("USER_ID"));
+                    profile.setFullName(rs.getString("FULL_NAME"));
+                    profile.setPhone(rs.getString("PHONE"));
+                    profile.setDob(rs.getDate("DOB"));
+                    profile.setGender(rs.getString("GENDER"));
+                    profile.setDriverLicenseNumber(rs.getString("DRIVER_LICENSE_NUMBER"));
+                    profile.setIsVerified(rs.getBoolean("IS_VERIFIED"));
+
+                    user.setUserProfile(profile);
+                    user.setRoleName(rs.getString("ROLE_NAME"));
+
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 
 
 }
