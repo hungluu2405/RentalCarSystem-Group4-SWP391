@@ -97,7 +97,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Add New Car</h1>
+                            <h1>Become Car Owner</h1>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
         <section id="section-addcar">
             <div class="container">
                 <div class="add-car-section">
-                    <h2 class="add-car-header">🚗 Add New Car</h2>
+                    <h2 class="add-car-header">Be our partner to get more offer!</h2>
 
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger text-center mb-3">${errorMessage}</div>
@@ -196,7 +196,7 @@
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <button type="submit" class="btn-submit">Add Car</button>
+                                    <button type="submit" class="btn-submit">Submit</button>
                                 </div>
                             </div>
                         </div>
