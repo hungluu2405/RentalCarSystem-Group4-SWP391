@@ -59,6 +59,7 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             dl.setFullName(user.getUserProfile().getFullName());
             dl.setGender(user.getUserProfile().getGender());
             dl.setDob(user.getUserProfile().getDob());
+
         }
 
 
@@ -82,6 +83,10 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
         String licenseNumber = request.getParameter("license_number");
         String issueDateStr = request.getParameter("issue_date");
         String expiryDateStr = request.getParameter("expiry_date");
+        String licenseClass = request.getParameter("license_class");
+        String address = request.getParameter("address");
+        String nationality = request.getParameter("nationality");
+
 
         // 🖼 Upload ảnh
         String uploadPath = request.getServletContext().getRealPath("/images/license");
@@ -119,6 +124,10 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             dl.setLicense_number(licenseNumber);
             dl.setIssue_date(issueDate);
             dl.setExpiry_date(expiryDate);
+            dl.setLicenseClass(licenseClass);
+            dl.setAddress(address);
+            dl.setNationality(nationality);
+
             // Giữ nguyên ảnh cũ nếu không upload mới
             if (frontImagePath != null) {
                 dl.setFront_image_url("/images/license/" + frontImagePath);
@@ -135,14 +144,7 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
 
 
             // 🧠 Validate qua service
-//            String validationMsg = licenseService.validateLicense(dl);
-//            if (validationMsg != null) {
-//                request.setAttribute("error", validationMsg);
-//                request.setAttribute("license", dl);
-//                request.getRequestDispatcher("view/customer/Driver_License.jsp")
-//                        .forward(request, response);
-//                return;
-//            }
+
             String validationMsg = licenseService.validateLicense(dl);
             if (validationMsg != null) {
                 forwardWithError(request, response, validationMsg, dl);

@@ -17,13 +17,17 @@ public class Driver_LicenseDAO extends DBContext {
             d.EXPIRY_DATE,
             d.FRONT_IMAGE_URL, 
             d.BACK_IMAGE_URL,
+            d.CLASS,
+            d.ADDRESS,
+            d.NATIONALITY,
             u.FULL_NAME, 
             u.GENDER, 
             u.DOB
         FROM DRIVER_LICENSE d
         JOIN USER_PROFILE u ON d.USER_ID = u.USER_ID
         WHERE d.USER_ID = ?
-    """;
+        """;
+
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -37,6 +41,10 @@ public class Driver_LicenseDAO extends DBContext {
                     dl.setExpiry_date(rs.getDate("EXPIRY_DATE"));
                     dl.setFront_image_url(rs.getString("FRONT_IMAGE_URL"));
                     dl.setBack_image_url(rs.getString("BACK_IMAGE_URL"));
+                    dl.setAddress(rs.getString("ADDRESS"));
+                    dl.setLicenseClass(rs.getString("CLASS"));
+                    dl.setNationality(rs.getString("NATIONALITY"));
+
 
                     dl.setFullName(rs.getString("FULL_NAME"));
                     dl.setGender(rs.getString("GENDER"));
@@ -55,10 +63,10 @@ public class Driver_LicenseDAO extends DBContext {
     // 🟨 Cập nhật thông tin bằng lái (update từ form JSP)
     public boolean updateLicense(Driver_License dl) {
         String sql = """
-            UPDATE DRIVER_LICENSE
-                        SET LICENSE_NUMBER = ?, ISSUE_DATE = ?, EXPIRY_DATE = ?,\s
-                            FRONT_IMAGE_URL = ?, BACK_IMAGE_URL = ?
-                        WHERE USER_ID = ?
+        UPDATE DRIVER_LICENSE
+        SET LICENSE_NUMBER = ?, ISSUE_DATE = ?, EXPIRY_DATE = ?,
+            FRONT_IMAGE_URL = ?, BACK_IMAGE_URL = ?, CLASS = ?, ADDRESS = ?, NATIONALITY = ?
+        WHERE USER_ID = ?
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -67,7 +75,10 @@ public class Driver_LicenseDAO extends DBContext {
             ps.setDate(3, dl.getExpiry_date() != null ? new java.sql.Date(dl.getExpiry_date().getTime()) : null);
             ps.setString(4, dl.getFront_image_url());
             ps.setString(5, dl.getBack_image_url());
-            ps.setInt(6, dl.getUser_id());
+            ps.setString(6, dl.getLicenseClass());  // mới
+            ps.setString(7, dl.getAddress());       // mới
+            ps.setString(8, dl.getNationality());   // mới
+            ps.setInt(9, dl.getUser_id());          // WHERE USER_ID
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -78,8 +89,9 @@ public class Driver_LicenseDAO extends DBContext {
     }
     public boolean insertLicense(Driver_License dl) {
         String sql = """
-            INSERT INTO DRIVER_LICENSE (USER_ID, LICENSE_NUMBER, ISSUE_DATE, EXPIRY_DATE, FRONT_IMAGE_URL, BACK_IMAGE_URL)
-            VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO DRIVER_LICENSE 
+        (USER_ID, LICENSE_NUMBER, ISSUE_DATE, EXPIRY_DATE, FRONT_IMAGE_URL, BACK_IMAGE_URL, CLASS, ADDRESS, NATIONALITY)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -89,6 +101,9 @@ public class Driver_LicenseDAO extends DBContext {
             ps.setDate(4, dl.getExpiry_date() != null ? new java.sql.Date(dl.getExpiry_date().getTime()) : null);
             ps.setString(5, dl.getFront_image_url());
             ps.setString(6, dl.getBack_image_url());
+            ps.setString(7, dl.getLicenseClass());
+            ps.setString(8, dl.getAddress());
+            ps.setString(9, dl.getNationality());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("❌ Error in insertLicense: " + e.getMessage());
