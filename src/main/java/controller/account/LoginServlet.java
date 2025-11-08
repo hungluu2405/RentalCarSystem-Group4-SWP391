@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
-import service.account.LoginService;
+import service.account.AuthService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.Map;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
-    private final LoginService loginService = new LoginService();
+    private final AuthService.LoginService loginService = new AuthService.LoginService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
