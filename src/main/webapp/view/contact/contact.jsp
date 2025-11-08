@@ -104,21 +104,21 @@
                     <div class="col-lg-4">
 
                         <div class="de-box mb30">
-                            <h4>US Office</h4>
+                            <h4>Ha Noi Office</h4>
                             <address class="s1">
-                                <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
-                                <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
-                                <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
+                                <span><i class="id-color fa fa-map-marker fa-lg"></i>Thach Hoa, Thach That, Ha Noi</span>
+                                <span><i class="id-color fa fa-phone fa-lg"></i>1900 1080</span>
+                                <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">rentalyhanoi@gmail.com</a></span>
                             </address>
                         </div>
 
 
                         <div class="de-box mb30">
-                            <h4>AU Office</h4>
+                            <h4>Ho Chi Minh Office</h4>
                             <address class="s1">
-                                <span><i class="fa fa-map-marker fa-lg"></i>100 Mainstreet Center, Sydney</span>
-                                <span><i class="fa fa-phone fa-lg"></i>+61 333 9296</span>
-                                <span><i class="fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
+                                <span><i class="fa fa-map-marker fa-lg"></i>7 Nguyen Duc Canh, Q3, TP.HCM</span>
+                                <span><i class="fa fa-phone fa-lg"></i>1900 1081</span>
+                                <span><i class="fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">rentalysaigon@gmail.com</a></span>
                             </address>
                         </div>
 
