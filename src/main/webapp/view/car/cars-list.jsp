@@ -369,7 +369,7 @@
 
                     <div class="col-lg-9">
                         <div class="row">
-                            <%-- Biến ${carList} này là do CarServlet gửi sang --%>
+                            <%-- Biến ${carList} này là do CarListServlet gửi sang --%>
                             <c:if test="${empty carList}">
                                 <div class="col-12">
                                     <div class="alert alert-warning text-center">No cars found matching your criteria.

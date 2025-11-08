@@ -194,10 +194,9 @@
                                     <div class="info-row">
                                         <span class="info-label">Rental Fee:</span>
                                         <span class="info-value">
-                                            $<fmt:formatNumber value="${rentalFee}"
-                                                               type="number"
-                                                               minFractionDigits="2"
-                                                               maxFractionDigits="2"/>
+                                              <fmt:formatNumber value="${rentalFee}"
+                                                                type="number" groupingUsed="true"
+                                                                minFractionDigits="0" maxFractionDigits="0"/> ₫
                                         </span>
                                     </div>
 
@@ -206,10 +205,9 @@
                                         <div class="info-row" style="color: #dc2626;">
                                             <span class="info-label">Discount:</span>
                                             <span class="info-value">
-                                                -$<fmt:formatNumber value="${discountValue}"
-                                                                    type="number"
-                                                                    minFractionDigits="2"
-                                                                    maxFractionDigits="2"/>
+                                                  -<fmt:formatNumber value="${discountValue}"
+                                                                    type="number" groupingUsed="true"
+                                                                    minFractionDigits="0" maxFractionDigits="0"/> ₫
                                             </span>
                                         </div>
                                     </c:if>
