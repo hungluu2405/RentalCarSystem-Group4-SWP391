@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +45,7 @@
                 <div class="row">
                     <div class="col-lg-3 mb30">
                         <jsp:include page="../common/customer/_sidebar.jsp">
-                            <jsp:param name="activePage" value="profile"/>
+                            <jsp:param name="activePage" value="license"/>
                         </jsp:include>
                     </div>
 
@@ -120,7 +122,7 @@
                                         <label for="dob" class="form-label">Date of Birth:</label>
                                         <input type="date" id="dob" name="dob"
                                                class="form-control"
-                                               value="${license.dob}" readonly>
+                                               value="<fmt:formatDate value='${license.dob}' pattern='yyyy-MM-dd'/>" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
@@ -134,14 +136,14 @@
                                         <label for="issue_date" class="form-label">Issue Date:</label>
                                         <input type="date" id="issue_date" name="issue_date"
                                                class="form-control"
-                                               value="${license.issue_date}">
+                                               value="<fmt:formatDate value='${license.issue_date}' pattern='yyyy-MM-dd'/>">
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
                                         <label for="expiry_date" class="form-label">Expiry Date:</label>
                                         <input type="date" id="expiry_date" name="expiry_date"
                                                class="form-control"
-                                               value="${license.expiry_date}">
+                                               value="<fmt:formatDate value='${license.expiry_date}' pattern='yyyy-MM-dd'/>">
                                     </div>
                                 </div>
 
