@@ -71,8 +71,8 @@ public class BookingDAO extends DBContext {
         String sql = """
         SELECT START_DATE, END_DATE, PICKUP_TIME, DROPOFF_TIME
         FROM BOOKING
-        WHERE CAR_ID = ? 
-          AND STATUS IN ('Pending', 'Approved', 'Paid')
+        WHERE CAR_ID = ?
+          AND STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
     """;
 
         LocalDateTime requestStart = LocalDateTime.of(startDate, startTime);
@@ -331,8 +331,8 @@ public class BookingDAO extends DBContext {
     public int countActiveBookingsByOwner(int userId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
-                "WHERE C.USER_ID = ? AND B.STATUS = 'Approved' OR B.STATUS = 'Paid'";
+                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
+                "WHERE C.USER_ID = ? AND B.STATUS IN ('Approved', 'Paid', 'Returning')";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
@@ -435,7 +435,7 @@ public class BookingDAO extends DBContext {
             JOIN CAR c ON b.CAR_ID = c.CAR_ID
             JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
             WHERE c.USER_ID = ?
-        AND b.STATUS IN ('Approved', 'Paid')
+        AND b.STATUS IN ('Approved', 'Paid', 'Returning')
          ORDER BY b.CREATED_AT DESC                       
         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
         """;
@@ -1010,10 +1010,10 @@ public class BookingDAO extends DBContext {
 
     public int countCurrentTripsByUserId(int userId) {
         String sql = """
-        SELECT COUNT(*) 
-        FROM BOOKING 
-        WHERE USER_ID = ? 
-        AND STATUS IN ('Pending', 'Approved', 'Paid')
+        SELECT COUNT(*)
+        FROM BOOKING
+        WHERE USER_ID = ?
+        AND STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
     """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -1057,16 +1057,16 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getCurrentTripsByUserId(int userId, int offset, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-        SELECT 
-            b.BOOKING_ID, 
+        SELECT
+            b.BOOKING_ID,
             c.MODEL + ' ' + c.BRAND AS carName,
-            b.START_DATE, b.END_DATE, 
-            b.PICKUP_TIME, b.DROPOFF_TIME, 
+            b.START_DATE, b.END_DATE,
+            b.PICKUP_TIME, b.DROPOFF_TIME,
             b.TOTAL_PRICE, b.STATUS, c.LOCATION
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
         WHERE b.USER_ID = ?
-        AND b.STATUS IN ('Pending', 'Approved', 'Paid')
+        AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
         ORDER BY b.CREATED_AT DESC
         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
     """;
