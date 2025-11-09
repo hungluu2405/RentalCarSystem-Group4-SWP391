@@ -55,6 +55,8 @@ public class OwnerBooking extends HttpServlet {
 
         int offset = (currentPage - 1) * PAGE_SIZE;
 
+        System.out.println("🔍 DEBUG OwnerBooking Controller - OwnerID: " + ownerId + ", Tab: " + tab + ", Page: " + currentPage);
+
         // --- BIẾN DỮ LIỆU ---
         List<BookingDetail> bookings;
         List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
@@ -64,23 +66,28 @@ public class OwnerBooking extends HttpServlet {
 
         // --- LẤY DỮ LIỆU THEO TAB ---
         switch (tab.toLowerCase()) {
-            case "tabActive":
+            case "tabactive":
+                System.out.println("   ➡️ Loading ACTIVE tab");
                 totalRecords = bookingDAO.countActiveBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getActiveBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 break;
-            case "tabHistory":
+            case "tabhistory":
+                System.out.println("   ➡️ Loading HISTORY tab");
                 totalRecords = bookingDAO.countHistoryBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getHistoryBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 break;
             default: // pending
+                System.out.println("   ➡️ Loading PENDING tab (default)");
                 totalRecords = bookingDAO.countPendingBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getPendingBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 tab = "pending";
                 break;
         }
+
+        System.out.println("   📊 Results: " + bookings.size() + " bookings, " + totalRecords + " total records");
 
         // Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
