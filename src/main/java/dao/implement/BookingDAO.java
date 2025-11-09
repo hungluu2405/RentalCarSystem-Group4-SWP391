@@ -1230,6 +1230,138 @@ public class BookingDAO extends DBContext {
         return list;
     }
 
+    public List<BookingDetail> getCurrentBookingsByUserId(int userId, int page, int pageSize) {
+        List<BookingDetail> bookings = new ArrayList<>();
+        String sql = """
+        SELECT b.booking_id, c.car_name, c.location,
+               b.start_date, b.end_date, b.total_price,
+               b.pickup_time, b.dropoff_time, b.status
+        FROM Bookings b
+        JOIN Cars c ON b.car_id = c.car_id
+        WHERE b.user_id = ?
+        AND b.status IN ('Pending', 'Approved', 'Paid', 'Returning')
+        ORDER BY b.booking_id DESC
+        LIMIT ? OFFSET ?
+    """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, pageSize);
+            ps.setInt(3, (page - 1) * pageSize);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail bd = new BookingDetail();
+                bd.setBookingId(rs.getInt("booking_id"));
+                bd.setCarName(rs.getString("car_name"));
+                bd.setLocation(rs.getString("location"));
+                bd.setStartDate(LocalDate.parse(rs.getDate("start_date").toString()));
+                bd.setEndDate(LocalDate.parse(rs.getDate("end_date").toString()));
+                bd.setTotalPrice(rs.getDouble("total_price"));
+                bd.setPickupTime(LocalTime.parse(rs.getString("pickup_time")));
+                bd.setDropoffTime(LocalTime.parse(rs.getString("dropoff_time")));
+                bd.setStatus(rs.getString("status"));
+                bookings.add(bd);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    /**
+     * Get history bookings (Completed, Rejected, Cancelled) with pagination
+     */
+    public List<BookingDetail> getHistoryBookingsByUserId(int userId, int page, int pageSize) {
+        List<BookingDetail> bookings = new ArrayList<>();
+        String sql = """
+        SELECT b.booking_id, c.car_name, c.location,
+               b.start_date, b.end_date, b.total_price,
+               b.pickup_time, b.dropoff_time, b.status
+        FROM Bookings b
+        JOIN Cars c ON b.car_id = c.car_id
+        WHERE b.user_id = ?
+        AND b.status IN ('Completed', 'Rejected', 'Cancelled')
+        ORDER BY b.booking_id DESC
+        LIMIT ? OFFSET ?
+    """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, pageSize);
+            ps.setInt(3, (page - 1) * pageSize);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail bd = new BookingDetail();
+                bd.setBookingId(rs.getInt("booking_id"));
+                bd.setCarName(rs.getString("car_name"));
+                bd.setLocation(rs.getString("location"));
+                bd.setStartDate(LocalDate.parse(rs.getDate("start_date").toString()));
+                bd.setEndDate(LocalDate.parse(rs.getDate("end_date").toString()));
+                bd.setTotalPrice(rs.getDouble("total_price"));
+                bd.setPickupTime(LocalTime.parse(rs.getString("pickup_time")));
+                bd.setDropoffTime(LocalTime.parse(rs.getString("dropoff_time")));
+                bd.setStatus(rs.getString("status"));
+                bookings.add(bd);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    /**
+     * Count current bookings for pagination
+     */
+    public int countCurrentBookings(int userId) {
+        String sql = """
+        SELECT COUNT(*) FROM Bookings
+        WHERE user_id = ?
+        AND status IN ('Pending', 'Approved', 'Paid', 'Returning')
+    """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Count history bookings for pagination
+     */
+    public int countHistoryBookings(int userId) {
+        String sql = """
+        SELECT COUNT(*) FROM Bookings
+        WHERE user_id = ?
+        AND status IN ('Completed', 'Rejected', 'Cancelled')
+    """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }
 
