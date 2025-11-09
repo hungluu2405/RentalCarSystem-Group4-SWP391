@@ -36,6 +36,65 @@
         .tab-content.active {
             display: block;
         }
+        .pagination-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding-left: 0;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination li {
+            display: inline-block;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 8px 14px;
+            border: 1px solid #28a745;
+            border-radius: 6px;
+            color: #28a745;
+            background-color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .pagination li a:hover {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .pagination li.active a {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .pagination li.disabled a {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pagination li a {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
     </style>
 </head>
 
@@ -111,9 +170,6 @@
 
                         <!-- Tabs -->
                         <div class="tab-container">
-<%--                            <button class="tab-btn active" id="tabPending">Pending Orders</button>--%>
-<%--                            <button class="tab-btn" id="tabActive">Active Orders</button>--%>
-<%--                            <button class="tab-btn" id="tabHistory">History Orders</button>--%>
                                 <button class="tab-btn ${tab == 'pending' ? 'active' : ''}" id="tabPending">Pending Orders</button>
                                 <button class="tab-btn ${tab == 'active' ? 'active' : ''}" id="tabActive">Active Orders</button>
                                 <button class="tab-btn ${tab == 'history' ? 'active' : ''}" id="tabHistory">History Orders</button>
@@ -122,7 +178,6 @@
 
 
                         <!-- === TAB 1: Pending Orders === -->
-<%--                        <div id="pendingOrders" class="tab-content active">--%>
                         <div id="pendingOrders" class="tab-content ${tab == 'pending' ? 'active' : ''}">
 
                         <div class="table-responsive">
@@ -190,7 +245,6 @@
                         </div>
 
                         <!-- === TAB 2: Order Active === -->
-<%--                        <div id="activeOrders" class="tab-content">--%>
                         <div id="activeOrders" class="tab-content ${tab == 'active' ? 'active' : ''}">
 
                         <div class="table-responsive">
@@ -210,7 +264,6 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
-<%--                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">--%>
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -243,7 +296,6 @@
                                                     </c:choose>
                                                 </td>
                                             </tr>
-<%--                                        </c:if>--%>
                                     </c:forEach>
 
                                     </tbody>
@@ -254,7 +306,6 @@
                         </div>
 
                         <!-- === TAB 3: Order History === -->
-<%--                        <div id="historyOrders" class="tab-content">--%>
                         <div id="historyOrders" class="tab-content ${tab == 'history' ? 'active' : ''}">
 
                         <div class="table-responsive">
@@ -274,7 +325,6 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
-<%--                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">--%>
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -307,7 +357,6 @@
                                                     </c:choose>
                                                 </td>
                                             </tr>
-<%--                                        </c:if>--%>
                                     </c:forEach>
 
                                     </tbody>
@@ -364,51 +413,6 @@
         <!-- FOOTER -->
         <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 
-<%--        <!-- SCRIPT: Tab Switching -->--%>
-<%--        <script>--%>
-<%--            document.addEventListener("DOMContentLoaded", function () {--%>
-<%--                const tabPending = document.getElementById("tabPending");--%>
-<%--                const tabActive = document.getElementById("tabActive");--%>
-<%--                const tabHistory = document.getElementById("tabHistory");--%>
-
-<%--                const pendingOrders = document.getElementById("pendingOrders");--%>
-<%--                const activeOrders = document.getElementById("activeOrders");--%>
-<%--                const historyOrders = document.getElementById("historyOrders");--%>
-
-<%--                // Tab 1: Pending--%>
-<%--                tabPending.addEventListener("click", function () {--%>
-<%--                    tabPending.classList.add("active");--%>
-<%--                    tabActive.classList.remove("active");--%>
-<%--                    tabHistory.classList.remove("active");--%>
-
-<%--                    pendingOrders.classList.add("active");--%>
-<%--                    activeOrders.classList.remove("active");--%>
-<%--                    historyOrders.classList.remove("active");--%>
-<%--                });--%>
-
-<%--                // Tab 2: Active--%>
-<%--                tabActive.addEventListener("click", function () {--%>
-<%--                    tabActive.classList.add("active");--%>
-<%--                    tabPending.classList.remove("active");--%>
-<%--                    tabHistory.classList.remove("active");--%>
-
-<%--                    activeOrders.classList.add("active");--%>
-<%--                    pendingOrders.classList.remove("active");--%>
-<%--                    historyOrders.classList.remove("active");--%>
-<%--                });--%>
-
-<%--                // Tab 3: History--%>
-<%--                tabHistory.addEventListener("click", function () {--%>
-<%--                    tabHistory.classList.add("active");--%>
-<%--                    tabPending.classList.remove("active");--%>
-<%--                    tabActive.classList.remove("active");--%>
-
-<%--                    historyOrders.classList.add("active");--%>
-<%--                    pendingOrders.classList.remove("active");--%>
-<%--                    activeOrders.classList.remove("active");--%>
-<%--                });--%>
-<%--            });--%>
-<%--        </script>--%>
         <!-- SCRIPT: Tab Switching -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
