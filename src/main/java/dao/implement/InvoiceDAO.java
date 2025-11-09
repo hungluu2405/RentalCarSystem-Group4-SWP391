@@ -12,23 +12,21 @@ public class InvoiceDAO extends DBContext {
     public List<Invoice> getAll() {
         List<Invoice> list = new ArrayList<>();
         String sql = "SELECT INVOICE_ID, BOOKING_ID, PAYMENT_ID, INVOICE_NUMBER, ISSUE_DATE, DUE_DATE, " +
-                "TOTAL_AMOUNT, TAX_AMOUNT, STATUS, NOTES FROM INVOICE";
+                "TOTAL_AMOUNT, STATUS, NOTES FROM INVOICE";
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(mapInvoice(rs));
             }
         } catch (SQLException e) {
-
             e.printStackTrace();
         }
         return list;
     }
 
     public Invoice getInvoiceById(int invoiceId) {
-
         String sql = "SELECT INVOICE_ID, BOOKING_ID, PAYMENT_ID, INVOICE_NUMBER, ISSUE_DATE, DUE_DATE, " +
-                "TOTAL_AMOUNT, TAX_AMOUNT, STATUS, NOTES FROM INVOICE WHERE INVOICE_ID = ?";
+                "TOTAL_AMOUNT, STATUS, NOTES FROM INVOICE WHERE INVOICE_ID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, invoiceId);
             ResultSet rs = ps.executeQuery();
@@ -43,7 +41,7 @@ public class InvoiceDAO extends DBContext {
 
     public Invoice getInvoiceByBookingId(int bookingId) {
         String sql = "SELECT INVOICE_ID, BOOKING_ID, PAYMENT_ID, INVOICE_NUMBER, ISSUE_DATE, DUE_DATE, " +
-                "TOTAL_AMOUNT, TAX_AMOUNT, STATUS, NOTES FROM INVOICE WHERE BOOKING_ID = ?";
+                "TOTAL_AMOUNT, STATUS, NOTES FROM INVOICE WHERE BOOKING_ID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, bookingId);
             ResultSet rs = ps.executeQuery();
@@ -58,7 +56,7 @@ public class InvoiceDAO extends DBContext {
 
     public Invoice getInvoiceByNumber(String invoiceNumber) {
         String sql = "SELECT INVOICE_ID, BOOKING_ID, PAYMENT_ID, INVOICE_NUMBER, ISSUE_DATE, DUE_DATE, " +
-                "TOTAL_AMOUNT, TAX_AMOUNT, STATUS, NOTES FROM INVOICE WHERE INVOICE_NUMBER = ?";
+                "TOTAL_AMOUNT, STATUS, NOTES FROM INVOICE WHERE INVOICE_NUMBER = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, invoiceNumber);
             ResultSet rs = ps.executeQuery();
@@ -73,39 +71,49 @@ public class InvoiceDAO extends DBContext {
 
     public boolean insertInvoice(Invoice invoice) {
         String sql = "INSERT INTO INVOICE (BOOKING_ID, PAYMENT_ID, INVOICE_NUMBER, ISSUE_DATE, DUE_DATE, " +
-                "TOTAL_AMOUNT, TAX_AMOUNT, STATUS, NOTES) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "TOTAL_AMOUNT, STATUS, NOTES) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, invoice.getBookingId());
+
             if (invoice.getPaymentId() != null) {
                 ps.setInt(2, invoice.getPaymentId());
+                System.out.println("✅ Setting PAYMENT_ID = " + invoice.getPaymentId());
             } else {
                 ps.setNull(2, Types.INTEGER);
+                System.out.println("⚠️ Setting PAYMENT_ID = NULL");
             }
+
             ps.setString(3, invoice.getInvoiceNumber());
             ps.setTimestamp(4, Timestamp.valueOf(invoice.getIssueDate()));
+
             if (invoice.getDueDate() != null) {
                 ps.setTimestamp(5, Timestamp.valueOf(invoice.getDueDate()));
             } else {
                 ps.setNull(5, Types.TIMESTAMP);
             }
+
             ps.setDouble(6, invoice.getTotalAmount());
-            if (invoice.getTaxAmount() != null) {
-                ps.setDouble(7, invoice.getTaxAmount());
-            } else {
-                ps.setNull(7, Types.DECIMAL);
-            }
-            ps.setString(8, invoice.getStatus());
-            ps.setString(9, invoice.getNotes());
-            return ps.executeUpdate() > 0;
+            ps.setString(7, invoice.getStatus());
+            ps.setString(8, invoice.getNotes());
+
+            int rows = ps.executeUpdate();
+            System.out.println("✅ Rows affected: " + rows);
+            System.out.println("========================================\n");
+
+            return rows > 0;
+
         } catch (SQLException e) {
+            System.err.println("❌ SQL ERROR:");
             e.printStackTrace();
         }
         return false;
     }
 
     public boolean updateInvoice(Invoice invoice) {
+
         String sql = "UPDATE INVOICE SET BOOKING_ID = ?, PAYMENT_ID = ?, INVOICE_NUMBER = ?, ISSUE_DATE = ?, " +
-                "DUE_DATE = ?, TOTAL_AMOUNT = ?, TAX_AMOUNT = ?, STATUS = ?, NOTES = ? WHERE INVOICE_ID = ?";
+                "DUE_DATE = ?, TOTAL_AMOUNT = ?, STATUS = ?, NOTES = ? WHERE INVOICE_ID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, invoice.getBookingId());
             if (invoice.getPaymentId() != null) {
@@ -121,19 +129,9 @@ public class InvoiceDAO extends DBContext {
                 ps.setNull(5, Types.TIMESTAMP);
             }
             ps.setDouble(6, invoice.getTotalAmount());
-
-            if (invoice.getTaxAmount() != null) {
-                ps.setDouble(7, invoice.getTaxAmount());
-            } else {
-                ps.setNull(7, Types.DECIMAL);
-
-            }
-
-            ps.setString(8, invoice.getStatus());
-
-            ps.setString(9, invoice.getNotes());
-
-            ps.setInt(10, invoice.getInvoiceId());
+            ps.setString(7, invoice.getStatus());
+            ps.setString(8, invoice.getNotes());
+            ps.setInt(9, invoice.getInvoiceId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,16 +163,10 @@ public class InvoiceDAO extends DBContext {
         return 0;
     }
 
-
-    // Lấy invoice theo status
-
     public List<Invoice> getInvoicesByStatus(String status) {
-
         List<Invoice> list = new ArrayList<>();
-
         String sql = "SELECT INVOICE_ID, BOOKING_ID, PAYMENT_ID, INVOICE_NUMBER, ISSUE_DATE, DUE_DATE, " +
-                "TOTAL_AMOUNT, TAX_AMOUNT, STATUS, NOTES FROM INVOICE WHERE STATUS = ?";
-
+                "TOTAL_AMOUNT, STATUS, NOTES FROM INVOICE WHERE STATUS = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
             ResultSet rs = ps.executeQuery();
@@ -207,14 +199,8 @@ public class InvoiceDAO extends DBContext {
         }
 
         invoice.setTotalAmount(rs.getDouble("TOTAL_AMOUNT"));
-        double taxAmount = rs.getDouble("TAX_AMOUNT");
-        if (!rs.wasNull()) {
-            invoice.setTaxAmount(taxAmount);
-        }
         invoice.setStatus(rs.getString("STATUS"));
         invoice.setNotes(rs.getString("NOTES"));
         return invoice;
-
     }
-
 }
