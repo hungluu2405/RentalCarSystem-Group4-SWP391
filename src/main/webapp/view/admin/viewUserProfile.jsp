@@ -216,8 +216,15 @@
                             </form>
 
 
-
-                                <form><a href="${pageContext.request.contextPath}/accountDB" class="btn btn-secondary">Back to list</a></form>
+                            <form>
+                                <a href="${pageContext.request.contextPath}/accountDB" class="btn btn-secondary">Back to list</a>
+                                <a href="${pageContext.request.contextPath}/admin/manageUser?action=remove&userId=${profile.userId}"
+                                   class="btn btn-danger ml-2"
+                                   onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </form>
+                            
 
                         </div>
                     </div>

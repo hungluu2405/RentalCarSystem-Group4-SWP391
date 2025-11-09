@@ -95,6 +95,52 @@ public class ContactDAO extends DBContext {
         return 0;
     }
 
+    public List<Contact> getContactsFiltered(String statusFilter) {
+        List<Contact> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT TICKET_ID, NAME, PHONE_NUMBER, EMAIL, MESSAGE, CREATED_AT, STATUS
+        FROM SUPPORT_TICKET_REQUIREMENT
+        WHERE 1=1
+    """);
+
+        // Nếu có chọn trạng thái thì thêm điều kiện
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            if (statusFilter.equalsIgnoreCase("todo")) {
+                sql.append(" AND STATUS = 0");  // Giả sử 0 = chưa xử lý
+            } else if (statusFilter.equalsIgnoreCase("done")) {
+                sql.append(" AND STATUS = 1");  // Giả sử 1 = đã xử lý
+            }
+        }
+
+        sql.append(" ORDER BY CREATED_AT DESC");
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString());
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Contact c = new Contact();
+                c.setTicketId(rs.getInt("TICKET_ID"));
+                c.setName(rs.getString("NAME"));
+                c.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+                c.setEmail(rs.getString("EMAIL"));
+                c.setMessage(rs.getString("MESSAGE"));
+
+                Timestamp ts = rs.getTimestamp("CREATED_AT");
+                if (ts != null) {
+                    c.setCreatedAt(ts.toLocalDateTime());
+                }
+
+                c.setStatus(rs.getBoolean("STATUS"));
+                list.add(c);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
 
 
