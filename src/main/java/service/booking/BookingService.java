@@ -251,4 +251,30 @@ public class BookingService {
         return success;
     }
 
+    public boolean returnBooking(int bookingId) {
+        boolean success = bookingDAO.updateStatus(bookingId, "Returning");
+        if (success) {
+            try {
+                notificationService.notifyBookingReturning(bookingId);
+            } catch (Exception e) {
+                System.err.println("⚠️ Warning: Failed to send returning notification");
+                e.printStackTrace();
+            }
+        }
+        return success;
+    }
+
+    public boolean confirmReturnBooking(int bookingId) {
+        boolean success = bookingDAO.updateStatus(bookingId, "Completed");
+        if (success) {
+            try {
+                notificationService.notifyReturnConfirmed(bookingId);
+            } catch (Exception e) {
+                System.err.println("⚠️ Warning: Failed to send return confirmation notification");
+                e.printStackTrace();
+            }
+        }
+        return success;
+    }
+
 }
