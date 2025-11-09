@@ -15,12 +15,21 @@ public class ContactDBServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String statusFilter = request.getParameter("status");
+
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
         BookingDAO bookingDAO = new BookingDAO();
         PaymentDAO paymentDAO = new PaymentDAO();
         ContactDAO contactDAO = new ContactDAO();
-        List<Contact> contactList = contactDAO.getAllContacts();
+
+        List<Contact> contactList;
+        if (statusFilter != null && !statusFilter.isEmpty()) {
+            contactList = contactDAO.getContactsFiltered(statusFilter);
+        } else {
+            contactList = contactDAO.getAllContacts();
+        }
 
         int totalContacts = contactDAO.countUnresolvedContacts();
         int totalUsers = userDAO.countAllUsers();
@@ -30,6 +39,7 @@ public class ContactDBServlet extends HttpServlet {
 
 
         request.setAttribute("contactList", contactList);
+        request.setAttribute("selectedStatus", statusFilter);
         request.setAttribute("totalContacts", totalContacts);
         request.setAttribute("activePage", "support");
         request.setAttribute("totalUsers",totalUsers);

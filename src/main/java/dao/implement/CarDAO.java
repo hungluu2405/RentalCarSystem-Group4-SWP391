@@ -1185,14 +1185,14 @@ public class CarDAO extends DBContext {
         // Lọc theo khoảng giá
         if (priceRange != null && !priceRange.isEmpty()) {
             switch (priceRange) {
-                case "under30":
-                    sql.append(" AND c.PRICE_PER_DAY < 30");
+                case "under1tr":
+                    sql.append(" AND c.PRICE_PER_DAY < 1000000");
                     break;
-                case "30to50":
-                    sql.append(" AND c.PRICE_PER_DAY BETWEEN 30 AND 50");
+                case "1trto1tr5":
+                    sql.append(" AND c.PRICE_PER_DAY BETWEEN 1000000 AND 1500000");
                     break;
-                case "over50":
-                    sql.append(" AND c.PRICE_PER_DAY > 50");
+                case "over1tr5":
+                    sql.append(" AND c.PRICE_PER_DAY > 1500000");
                     break;
             }
         }
