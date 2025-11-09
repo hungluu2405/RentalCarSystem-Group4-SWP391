@@ -13,7 +13,7 @@ public class ManageCarDetailService {
     public String validateCarUpdate(CarViewModel car) {
         //  Validate dung tích
         if (car.getCapacity() < 2 || car.getCapacity() > 7) {
-            return "Số chỗ ngồi phải trong khoảng từ 2 đến 7.";
+            return "Số chỗ ngồi phải trong khoảng từ 1 đến 7.";
         }
 
         //  Validate năm sản xuất
@@ -26,12 +26,8 @@ public class ManageCarDetailService {
         if (car.getPricePerDay() == null || car.getPricePerDay().compareTo(BigDecimal.ZERO) <= 0) {
             return "Giá thuê mỗi ngày phải lớn hơn 0.";
         }
-        // Validate biển số
-        String licensePlate = car.getLicensePlate();
-        if (!licensePlate.matches("^\\d{2}[A-Z]-\\d{3}\\.\\d{2}$")) {
-            return "Biển số xe không hợp lệ. Ví dụ: 29A-123.45";
-        }
 
+        // gọi lại hàm DAO bạn đã có
         // Check biển số trùng (nhưng cho phép trùng với chính xe hiện tại)
         if (isDuplicateLicensePlate(car.getLicensePlate(), car.getCarId())) {
             return "Biển số xe đã tồn tại trong hệ thống!";
