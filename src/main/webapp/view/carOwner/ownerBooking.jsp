@@ -111,14 +111,17 @@
 
                         <!-- Tabs -->
                         <div class="tab-container">
-                            <button class="tab-btn active" id="tabPending">Pending Orders</button>
-                            <button class="tab-btn" id="tabActive">Active Orders</button>
-                            <button class="tab-btn" id="tabHistory">History Orders</button>
+                            <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=pending"
+                               class="tab-btn ${tab == 'pending' ? 'active' : ''}" id="tabPending">Pending Orders</a>
+                            <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=tabActive"
+                               class="tab-btn ${tab == 'tabActive' ? 'active' : ''}" id="tabActive">Active Orders</a>
+                            <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=tabHistory"
+                               class="tab-btn ${tab == 'tabHistory' ? 'active' : ''}" id="tabHistory">History Orders</a>
                         </div>
 
 
                         <!-- === TAB 1: Pending Orders === -->
-                        <div id="pendingOrders" class="tab-content active">
+                        <div id="pendingOrders" class="tab-content ${tab == 'pending' ? 'active' : ''}">
                             <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
@@ -184,7 +187,7 @@
                         </div>
 
                         <!-- === TAB 2: Order Active === -->
-                        <div id="activeOrders" class="tab-content">
+                        <div id="activeOrders" class="tab-content ${tab == 'tabActive' ? 'active' : ''}">
                             <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
@@ -198,11 +201,12 @@
                                         <th>End</th>
                                         <th>Total</th>
                                         <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
-                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">
+                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved' || order.status == 'Returning'}">
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -229,10 +233,27 @@
                                                         <c:when test="${order.status == 'Paid'}">
                                                             <span class="badge bg-info text-dark">Paid</span>
                                                         </c:when>
+                                                        <c:when test="${order.status == 'Returning'}">
+                                                            <span class="badge bg-warning text-dark">Returning</span>
+                                                        </c:when>
                                                         <c:otherwise>
                                                             <span class="badge bg-secondary">${order.status}</span>
                                                         </c:otherwise>
                                                     </c:choose>
+                                                </td>
+                                                <td>
+                                                    <c:if test="${order.status == 'Returning'}">
+                                                        <form method="post"
+                                                              action="${pageContext.request.contextPath}/owner/ownerBooking"
+                                                              class="d-inline">
+                                                            <input type="hidden" name="bookingId" value="${order.bookingId}">
+                                                            <button type="submit" name="action" value="confirmReturn"
+                                                                    onclick="return confirm('Confirm that the car has been returned?');"
+                                                                    class="btn btn-success btn-sm">
+                                                                <i class="fa fa-check"></i> Confirm Return
+                                                            </button>
+                                                        </form>
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </c:if>
@@ -246,7 +267,7 @@
                         </div>
 
                         <!-- === TAB 3: Order History === -->
-                        <div id="historyOrders" class="tab-content">
+                        <div id="historyOrders" class="tab-content ${tab == 'tabHistory' ? 'active' : ''}">
                             <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
@@ -353,53 +374,6 @@
 
         <!-- FOOTER -->
         <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
-
-        <!-- SCRIPT: Tab Switching -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const tabPending = document.getElementById("tabPending");
-                const tabActive = document.getElementById("tabActive");
-                const tabHistory = document.getElementById("tabHistory");
-
-                const pendingOrders = document.getElementById("pendingOrders");
-                const activeOrders = document.getElementById("activeOrders");
-                const historyOrders = document.getElementById("historyOrders");
-
-                // Tab 1: Pending
-                tabPending.addEventListener("click", function () {
-                    tabPending.classList.add("active");
-                    tabActive.classList.remove("active");
-                    tabHistory.classList.remove("active");
-
-                    pendingOrders.classList.add("active");
-                    activeOrders.classList.remove("active");
-                    historyOrders.classList.remove("active");
-                });
-
-                // Tab 2: Active
-                tabActive.addEventListener("click", function () {
-                    tabActive.classList.add("active");
-                    tabPending.classList.remove("active");
-                    tabHistory.classList.remove("active");
-
-                    activeOrders.classList.add("active");
-                    pendingOrders.classList.remove("active");
-                    historyOrders.classList.remove("active");
-                });
-
-                // Tab 3: History
-                tabHistory.addEventListener("click", function () {
-                    tabHistory.classList.add("active");
-                    tabPending.classList.remove("active");
-                    tabActive.classList.remove("active");
-
-                    historyOrders.classList.add("active");
-                    pendingOrders.classList.remove("active");
-                    activeOrders.classList.remove("active");
-                });
-            });
-        </script>
-
 
     </div>
 </body>

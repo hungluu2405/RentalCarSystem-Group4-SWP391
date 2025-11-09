@@ -33,12 +33,12 @@ public class ReturnCarServletCarOwner extends HttpServlet {
 
             int bookingId = Integer.parseInt(bookingIdParam);
 
-            // --- Gọi service để cập nhật trạng thái sang "Completed" ---
-            boolean updated = bookingService.completeBooking(bookingId);
+            // --- Gọi service để cập nhật trạng thái sang "Returning" ---
+            boolean updated = bookingService.returnBooking(bookingId);
 
             if (updated) {
                 // ✅ Cập nhật thành công
-                request.getSession().setAttribute("successMessage", "✅ Bạn đã xác nhận trả xe thành công!");
+                request.getSession().setAttribute("successMessage", "✅ Yêu cầu trả xe đã được gửi! Chờ chủ xe xác nhận.");
             } else {
 
                 request.getSession().setAttribute("errorMessage", "❌ Không thể cập nhật trạng thái thuê xe.");
