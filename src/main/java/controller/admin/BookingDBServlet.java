@@ -19,6 +19,8 @@ public class BookingDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String dateRange = request.getParameter("dateRange");
+        String priceRange = request.getParameter("price");
 
         UserDAO userDAO = new UserDAO();
         CarDAO carDAO = new CarDAO();
@@ -31,14 +33,22 @@ public class BookingDBServlet extends HttpServlet {
         int totalBookings = bookingDAO.countAllBookings();
         int totalReports = paymentDAO.countAllReport();
         int totalContacts = contactDAO.countUnresolvedContacts();
-        List<Booking> listB = null;
-        try {
-            listB = bookingDAO.getAllBookings();
+        List<Booking> listB;
 
+        try {
+            if ((dateRange != null && !dateRange.isEmpty()) ||
+                    (priceRange != null && !priceRange.isEmpty())) {
+                listB = bookingDAO.getBookingsFiltered(dateRange, priceRange);
+            } else {
+                listB = bookingDAO.getAllBookings();
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new ServletException(e);
         }
         request.setAttribute("listB", listB);
+        request.setAttribute("selectedDateRange", dateRange);
+        request.setAttribute("selectedPrice", priceRange);
+
         request.setAttribute("totalUsers",totalUsers);
         request.setAttribute("totalCars",totalCars);
         request.setAttribute("totalBookings",totalBookings);
