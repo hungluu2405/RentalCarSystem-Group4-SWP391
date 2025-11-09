@@ -316,7 +316,7 @@ public class BookingDAO extends DBContext {
     public int countPendingBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
+                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
                 "WHERE C.USER_ID = ? AND B.STATUS = 'Pending'";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
@@ -331,8 +331,8 @@ public class BookingDAO extends DBContext {
     public int countActiveBookingsByOwner(int userId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
-                "WHERE C.USER_ID = ? AND B.STATUS = 'Approved' OR B.STATUS = 'Paid'";
+                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
+                "WHERE C.USER_ID = ? AND b.STATUS IN ('Approved', 'Paid')";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
@@ -346,8 +346,8 @@ public class BookingDAO extends DBContext {
     public int countHistoryBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
-                "WHERE C.USER_ID = ? AND (B.STATUS = 'Rejected' OR B.STATUS = 'Completed')";
+                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
+                "WHERE C.USER_ID = ? AND b.STATUS IN ('Rejected', 'Completed')";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
             ResultSet rs = ps.executeQuery();
@@ -477,7 +477,7 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getHistoryBookingsByOwner(int userId, int offset, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-        SELECT 
+        SELECT
             b.BOOKING_ID,
             c.BRAND + ' ' + c.MODEL AS carName,
             u.FULL_NAME AS customerName,
