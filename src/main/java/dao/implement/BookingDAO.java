@@ -1370,5 +1370,3 @@ public class BookingDAO extends DBContext {
     }
 
 }
-
-
