@@ -35,12 +35,6 @@ public class OwnerBooking extends HttpServlet {
 
         int ownerId = owner.getUserId();
 
-        // --- LẤY TAB HIỆN TẠI ---
-        String tab = request.getParameter("tab");
-        if (tab == null || tab.isEmpty()) {
-            tab = "pending";
-        }
-
         // --- LẤY PAGE HIỆN TẠI ---
         String pageParam = request.getParameter("page");
         int currentPage = 1;
@@ -55,25 +49,28 @@ public class OwnerBooking extends HttpServlet {
 
         int offset = (currentPage - 1) * PAGE_SIZE;
 
-        System.out.println("🔍 DEBUG OwnerBooking Controller - OwnerID: " + ownerId + ", Tab: " + tab + ", Page: " + currentPage);
-
         // --- BIẾN DỮ LIỆU ---
-        List<BookingDetail> bookings;
         List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
+        List<BookingDetail> bookings;
 
         int totalRecords;
         int totalPages;
+        String tab = request.getParameter("tab");
 
+        // --- LẤY TAB HIỆN TẠI ---
+
+        if (tab == null) {
+            tab = "pending";
+        }
         // --- LẤY DỮ LIỆU THEO TAB ---
+
         switch (tab.toLowerCase()) {
-            case "tabactive":
-                System.out.println("   ➡️ Loading ACTIVE tab");
+            case "active":
                 totalRecords = bookingDAO.countActiveBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getActiveBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 break;
-            case "tabhistory":
-                System.out.println("   ➡️ Loading HISTORY tab");
+            case "history":
                 totalRecords = bookingDAO.countHistoryBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getHistoryBookingsByOwner(ownerId, offset, PAGE_SIZE);
@@ -87,7 +84,6 @@ public class OwnerBooking extends HttpServlet {
                 break;
         }
 
-        System.out.println("   📊 Results: " + bookings.size() + " bookings, " + totalRecords + " total records");
 
         // Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
@@ -110,8 +106,11 @@ public class OwnerBooking extends HttpServlet {
         request.setAttribute("tab", tab);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("totalRecords", totalRecords);
 
         request.getRequestDispatcher("/view/carOwner/ownerBooking.jsp").forward(request, response);
+
+
     }
 
     @Override
