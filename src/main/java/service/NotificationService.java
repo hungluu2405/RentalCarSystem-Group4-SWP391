@@ -256,4 +256,78 @@ public class NotificationService {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Gửi thông báo khi customer request return car (status = Returning)
+     */
+    public void notifyBookingReturning(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            int customerId = booking.getUserId();
+            int ownerId = car.getOwnerId();
+
+            String customerUrl = getBookingUrl(customerId, bookingId);
+
+            // Thông báo cho Customer/Owner (người đặt xe)
+            notificationDAO.insertNotification(new Notification(
+                    customerId,
+                    "BOOKING_RETURNING",
+                    "Return Request Sent!",
+                    "Your return request for " + car.getModel() + " has been sent. Waiting for owner confirmation.",
+                    customerUrl
+            ));
+
+            // Thông báo cho Owner (chủ xe)
+            notificationDAO.insertNotification(new Notification(
+                    ownerId,
+                    "BOOKING_RETURNING",
+                    "Customer Requesting to Return Car!",
+                    "Customer wants to return " + car.getModel() + ". Please confirm the car return.",
+                    "/owner/ownerBooking"
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending booking returning notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gửi thông báo khi owner confirm return (status = Completed)
+     */
+    public void notifyReturnConfirmed(int bookingId) {
+        try {
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            Car car = carDAO.findById(booking.getCarId());
+
+            int customerId = booking.getUserId();
+            int ownerId = car.getOwnerId();
+
+            String customerUrl = getBookingUrl(customerId, bookingId);
+
+            // Thông báo cho Customer/Owner (người đặt xe)
+            notificationDAO.insertNotification(new Notification(
+                    customerId,
+                    "RETURN_CONFIRMED",
+                    "Return Confirmed!",
+                    "Owner has confirmed the return of " + car.getModel() + ". Your trip is now completed!",
+                    customerUrl
+            ));
+
+            // Thông báo cho Owner (chủ xe) - optional
+            notificationDAO.insertNotification(new Notification(
+                    ownerId,
+                    "RETURN_CONFIRMED",
+                    "You Confirmed Car Return!",
+                    "You have confirmed the return of " + car.getModel() + ". Trip completed successfully.",
+                    "/owner/ownerBooking"
+            ));
+
+        } catch (Exception e) {
+            System.err.println("❌ Error sending return confirmed notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
