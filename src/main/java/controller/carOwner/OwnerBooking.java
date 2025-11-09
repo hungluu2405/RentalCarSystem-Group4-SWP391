@@ -51,6 +51,8 @@ public class OwnerBooking extends HttpServlet {
 
         int offset = (currentPage - 1) * PAGE_SIZE;
 
+        System.out.println("🔍 DEBUG OwnerBooking Controller - OwnerID: " + ownerId + ", Tab: " + tab + ", Page: " + currentPage);
+
         // --- BIẾN DỮ LIỆU ---
         List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
 //        List<BookingDetail> bookings;
@@ -81,6 +83,7 @@ public class OwnerBooking extends HttpServlet {
                 bookings = bookingDAO.getHistoryBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 break;
             default: // pending
+                System.out.println("   ➡️ Loading PENDING tab (default)");
                 totalRecords = bookingDAO.countPendingBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getPendingBookingsByOwner(ownerId, offset, PAGE_SIZE);
@@ -138,6 +141,14 @@ public class OwnerBooking extends HttpServlet {
                     break;
                 case "reject":
                     result = bookingService.rejectBooking(bookingId);
+                    break;
+                case "confirmreturn":
+                    result = bookingService.confirmReturnBooking(bookingId);
+                    if (result) {
+                        request.getSession().setAttribute("successMessage", "✅ Bạn đã xác nhận xe được trả thành công!");
+                    } else {
+                        request.getSession().setAttribute("errorMessage", "❌ Không thể xác nhận trả xe.");
+                    }
                     break;
                 default:
                     break;
