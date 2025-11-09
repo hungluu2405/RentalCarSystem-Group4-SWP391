@@ -111,15 +111,21 @@
 
                         <!-- Tabs -->
                         <div class="tab-container">
-                            <button class="tab-btn active" id="tabPending">Pending Orders</button>
-                            <button class="tab-btn" id="tabActive">Active Orders</button>
-                            <button class="tab-btn" id="tabHistory">History Orders</button>
+<%--                            <button class="tab-btn active" id="tabPending">Pending Orders</button>--%>
+<%--                            <button class="tab-btn" id="tabActive">Active Orders</button>--%>
+<%--                            <button class="tab-btn" id="tabHistory">History Orders</button>--%>
+                                <button class="tab-btn ${tab == 'pending' ? 'active' : ''}" id="tabPending">Pending Orders</button>
+                                <button class="tab-btn ${tab == 'active' ? 'active' : ''}" id="tabActive">Active Orders</button>
+                                <button class="tab-btn ${tab == 'history' ? 'active' : ''}" id="tabHistory">History Orders</button>
+
                         </div>
 
 
                         <!-- === TAB 1: Pending Orders === -->
-                        <div id="pendingOrders" class="tab-content active">
-                            <div class="table-responsive">
+<%--                        <div id="pendingOrders" class="tab-content active">--%>
+                        <div id="pendingOrders" class="tab-content ${tab == 'pending' ? 'active' : ''}">
+
+                        <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
@@ -184,8 +190,10 @@
                         </div>
 
                         <!-- === TAB 2: Order Active === -->
-                        <div id="activeOrders" class="tab-content">
-                            <div class="table-responsive">
+<%--                        <div id="activeOrders" class="tab-content">--%>
+                        <div id="activeOrders" class="tab-content ${tab == 'active' ? 'active' : ''}">
+
+                        <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
@@ -202,7 +210,7 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
-                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">
+<%--                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">--%>
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -235,7 +243,7 @@
                                                     </c:choose>
                                                 </td>
                                             </tr>
-                                        </c:if>
+<%--                                        </c:if>--%>
                                     </c:forEach>
 
                                     </tbody>
@@ -246,8 +254,10 @@
                         </div>
 
                         <!-- === TAB 3: Order History === -->
-                        <div id="historyOrders" class="tab-content">
-                            <div class="table-responsive">
+<%--                        <div id="historyOrders" class="tab-content">--%>
+                        <div id="historyOrders" class="tab-content ${tab == 'history' ? 'active' : ''}">
+
+                        <div class="table-responsive">
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
@@ -264,7 +274,7 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
-                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">
+<%--                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">--%>
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -297,7 +307,7 @@
                                                     </c:choose>
                                                 </td>
                                             </tr>
-                                        </c:if>
+<%--                                        </c:if>--%>
                                     </c:forEach>
 
                                     </tbody>
@@ -354,48 +364,75 @@
         <!-- FOOTER -->
         <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 
+<%--        <!-- SCRIPT: Tab Switching -->--%>
+<%--        <script>--%>
+<%--            document.addEventListener("DOMContentLoaded", function () {--%>
+<%--                const tabPending = document.getElementById("tabPending");--%>
+<%--                const tabActive = document.getElementById("tabActive");--%>
+<%--                const tabHistory = document.getElementById("tabHistory");--%>
+
+<%--                const pendingOrders = document.getElementById("pendingOrders");--%>
+<%--                const activeOrders = document.getElementById("activeOrders");--%>
+<%--                const historyOrders = document.getElementById("historyOrders");--%>
+
+<%--                // Tab 1: Pending--%>
+<%--                tabPending.addEventListener("click", function () {--%>
+<%--                    tabPending.classList.add("active");--%>
+<%--                    tabActive.classList.remove("active");--%>
+<%--                    tabHistory.classList.remove("active");--%>
+
+<%--                    pendingOrders.classList.add("active");--%>
+<%--                    activeOrders.classList.remove("active");--%>
+<%--                    historyOrders.classList.remove("active");--%>
+<%--                });--%>
+
+<%--                // Tab 2: Active--%>
+<%--                tabActive.addEventListener("click", function () {--%>
+<%--                    tabActive.classList.add("active");--%>
+<%--                    tabPending.classList.remove("active");--%>
+<%--                    tabHistory.classList.remove("active");--%>
+
+<%--                    activeOrders.classList.add("active");--%>
+<%--                    pendingOrders.classList.remove("active");--%>
+<%--                    historyOrders.classList.remove("active");--%>
+<%--                });--%>
+
+<%--                // Tab 3: History--%>
+<%--                tabHistory.addEventListener("click", function () {--%>
+<%--                    tabHistory.classList.add("active");--%>
+<%--                    tabPending.classList.remove("active");--%>
+<%--                    tabActive.classList.remove("active");--%>
+
+<%--                    historyOrders.classList.add("active");--%>
+<%--                    pendingOrders.classList.remove("active");--%>
+<%--                    activeOrders.classList.remove("active");--%>
+<%--                });--%>
+<%--            });--%>
+<%--        </script>--%>
         <!-- SCRIPT: Tab Switching -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const tabPending = document.getElementById("tabPending");
-                const tabActive = document.getElementById("tabActive");
-                const tabHistory = document.getElementById("tabHistory");
+                const tabs = document.querySelectorAll(".tab-btn");
+                const contents = document.querySelectorAll(".tab-content");
 
-                const pendingOrders = document.getElementById("pendingOrders");
-                const activeOrders = document.getElementById("activeOrders");
-                const historyOrders = document.getElementById("historyOrders");
+                tabs.forEach((tab) => {
+                    tab.addEventListener("click", function () {
+                        const targetId = this.id.replace("tab", "").toLowerCase(); // -> pending, active, history
 
-                // Tab 1: Pending
-                tabPending.addEventListener("click", function () {
-                    tabPending.classList.add("active");
-                    tabActive.classList.remove("active");
-                    tabHistory.classList.remove("active");
+                        // đổi class active của nút
+                        tabs.forEach((t) => t.classList.remove("active"));
+                        this.classList.add("active");
 
-                    pendingOrders.classList.add("active");
-                    activeOrders.classList.remove("active");
-                    historyOrders.classList.remove("active");
-                });
+                        // đổi class active của nội dung
+                        contents.forEach((c) => c.classList.remove("active"));
+                        document.getElementById(targetId + "Orders").classList.add("active");
 
-                // Tab 2: Active
-                tabActive.addEventListener("click", function () {
-                    tabActive.classList.add("active");
-                    tabPending.classList.remove("active");
-                    tabHistory.classList.remove("active");
-
-                    activeOrders.classList.add("active");
-                    pendingOrders.classList.remove("active");
-                    historyOrders.classList.remove("active");
-                });
-
-                // Tab 3: History
-                tabHistory.addEventListener("click", function () {
-                    tabHistory.classList.add("active");
-                    tabPending.classList.remove("active");
-                    tabActive.classList.remove("active");
-
-                    historyOrders.classList.add("active");
-                    pendingOrders.classList.remove("active");
-                    activeOrders.classList.remove("active");
+                        // cập nhật URL để gọi lại servlet
+                        const url = new URL(window.location.href);
+                        url.searchParams.set("tab", targetId);
+                        url.searchParams.set("page", 1); // reset về trang đầu
+                        window.location.href = url.toString(); // tải lại trang với tab mới
+                    });
                 });
             });
         </script>
