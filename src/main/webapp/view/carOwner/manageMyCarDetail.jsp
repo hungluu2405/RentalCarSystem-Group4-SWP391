@@ -56,15 +56,6 @@
             border-radius: 10px;
             margin-bottom: 15px;
         }
-        .alert {
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            font-size: 15px;
-            border-left: 5px solid #dc3545;
-            background: #ffe5e5;
-            color: #a10000;
-        }
-
     </style>
 </head>
 
@@ -105,19 +96,6 @@
                     <div class="col-lg-9">
                         <div class="card padding40 rounded-5 shadow-sm">
                             <h3 class="mb-4"><i class="fa fa-edit"></i> View and Edit Car Information</h3>
-
-                            <c:if test="${not empty success}">
-                                <div class="alert alert-success" role="alert" style="border-radius:8px;">
-                                    <i class="fa fa-check-circle"></i> ${success}
-                                </div>
-                            </c:if>
-
-                            <c:if test="${not empty error}">
-                                <div class="alert" role="alert">
-                                    <i class="fa fa-exclamation-circle"></i> ${error}
-                                </div>
-                            </c:if>
-
 
                             <form method="post"
                                   action="${pageContext.request.contextPath}/owner/manageCarDetail"
@@ -167,9 +145,9 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Fuel Type</label>
                                         <select name="fuelType" class="form-select" required>
+                                            <option value="">Select fuel type...</option>
                                             <c:forEach var="f" items="${fuelTypes}">
-                                                <option value="${f}"
-                                                        <c:if test="${f == car.fuelType}">selected</c:if>>${f}</option>
+                                                <option value="${f}" <c:if test="${car.fuelType eq f}">selected</c:if>>${f}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -178,9 +156,9 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Transmission</label>
                                         <select name="transmission" class="form-select" required>
+                                            <option value="">Select transmission...</option>
                                             <c:forEach var="t" items="${transmissions}">
-                                                <option value="${t}"
-                                                        <c:if test="${t == car.transmission}">selected</c:if>>${t}</option>
+                                                <option value="${t}" <c:if test="${car.transmission eq t}">selected</c:if>>${t}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -188,10 +166,10 @@
                                     <!-- Car Type -->
                                     <div class="col-md-6 mb-3">
                                         <label>Car Type</label>
-                                        <select name="typeId" class="form-select">
-                                            <c:forEach var="type" items="${carTypes}">
-                                                <option value="${type.typeId}"
-                                                        <c:if test="${type.typeId == car.typeId}">selected</c:if>>${type.name}</option>
+                                        <select name="typeId" class="form-select" required>
+                                            <option value="">Select car type...</option>
+                                            <c:forEach var="c" items="${carTypes}">
+                                                <option value="${c.typeId}" <c:if test="${car.carTypeName eq c.name}">selected</c:if>>${c.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -230,6 +208,7 @@
                                     <div class="col-md-12 mb-3">
                                         <label class="form-label d-block">Availability</label>
 
+                                        <!-- hidden để gửi 0 khi không check -->
                                         <input type="hidden" name="availability" value="0">
 
                                         <div class="form-check form-switch">
@@ -240,7 +219,10 @@
                                                    value="1"
                                                    <c:if test="${car.availability == 1}">checked</c:if>>
                                             <label class="form-check-label" for="availabilitySwitch" id="availabilityLabel">
-                                                ${car.availability == 1 ? 'Available' : 'Not Available'}
+                                                <c:choose>
+                                                    <c:when test="${car.availability == 1}">Available</c:when>
+                                                    <c:otherwise>Not Available</c:otherwise>
+                                                </c:choose>
                                             </label>
                                         </div>
                                     </div>
@@ -248,15 +230,10 @@
                                     <script>
                                         const toggle = document.getElementById('availabilitySwitch');
                                         const label = document.getElementById('availabilityLabel');
-
-                                        function updateLabel() {
-                                            label.textContent = toggle.checked ? "Available" : "Not Available";
-                                        }
-
-                                        toggle.addEventListener('change', updateLabel);
-                                        updateLabel();
+                                        toggle.addEventListener('change', function () {
+                                            label.textContent = this.checked ? 'Available' : 'Not Available';
+                                        });
                                     </script>
-
 
                                     <!-- Description -->
                                     <div class="col-md-12 mb-3">
