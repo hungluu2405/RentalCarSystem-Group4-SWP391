@@ -14,13 +14,11 @@ import java.io.IOException;
 @WebServlet("/owner/create-payment")
 public class CreatePaymentServletCarOwner extends HttpServlet {
 
-
     private final PayPalService paypalService = new PayPalService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
 
         String bookingIdStr = request.getParameter("bookingId");
         String contextPath = request.getContextPath();
@@ -33,8 +31,13 @@ public class CreatePaymentServletCarOwner extends HttpServlet {
         try {
             int bookingId = Integer.parseInt(bookingIdStr);
 
-            Payment payment = paypalService.createOrder(bookingId, contextPath);
+            // ========== BUILD RETURN & CANCEL URLs FOR CAR OWNER ==========
+            String baseUrl = "http://localhost:8080" + contextPath;
+            String returnUrl = baseUrl + "/owner/execute-payment?bookingId=" + bookingId;
+            String cancelUrl = baseUrl + "/owner/myBooking?payment=cancelled";
 
+            // Create payment with custom URLs
+            Payment payment = paypalService.createOrder(bookingId, contextPath, returnUrl, cancelUrl);
 
             String approvalLink = null;
             for (Links link : payment.getLinks()) {
@@ -43,7 +46,6 @@ public class CreatePaymentServletCarOwner extends HttpServlet {
                     break;
                 }
             }
-
 
             if (approvalLink != null) {
                 response.sendRedirect(approvalLink);
@@ -54,7 +56,6 @@ public class CreatePaymentServletCarOwner extends HttpServlet {
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Booking ID format.");
         } catch (Exception e) {
-
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Payment creation failed: " + e.getMessage());
         }
