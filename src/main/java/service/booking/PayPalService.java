@@ -21,7 +21,16 @@ public class PayPalService {
     }
 
 
+    @Deprecated
     public Payment createOrder(int bookingId, String contextPath) throws Exception {
+        String baseUrl = "http://localhost:8080" + contextPath;
+        String returnUrl = baseUrl + "/customer/execute-payment?bookingId=" + bookingId;
+        String cancelUrl = baseUrl + "/customer/customerOrder?id=" + bookingId + "&payment=cancel";
+        return createOrder(bookingId, contextPath, returnUrl, cancelUrl);
+    }
+
+
+    public Payment createOrder(int bookingId, String contextPath, String returnUrl, String cancelUrl) throws Exception {
         Booking booking = bookingDAO.getBookingById(bookingId);
 
         if (booking == null) {
@@ -42,7 +51,6 @@ public class PayPalService {
         // Convert sang USD cho PayPal
         double priceInUSD = priceInVND / VND_TO_USD_RATE;
 
-
         String totalAmountStr = String.format("%.2f", priceInUSD);
 
         Amount amount = new Amount();
@@ -60,11 +68,9 @@ public class PayPalService {
         Payer payer = new Payer();
         payer.setPaymentMethod("paypal");
 
-        String baseUrl = "http://localhost:8080" + contextPath;
-
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setReturnUrl(baseUrl + "/customer/execute-payment?bookingId=" + bookingId);
-        redirectUrls.setCancelUrl(baseUrl + "/customer/customerOrder?id=" + bookingId + "&payment=cancel");
+        redirectUrls.setReturnUrl(returnUrl);
+        redirectUrls.setCancelUrl(cancelUrl);
 
         Payment payment = new Payment();
         payment.setIntent("sale");
@@ -74,7 +80,6 @@ public class PayPalService {
 
         return payment.create(getApiContext());
     }
-
 
     public boolean executeAndRecordPayment(int bookingId, String paymentId, String payerId) throws Exception {
         Payment payment = new Payment();
@@ -88,13 +93,12 @@ public class PayPalService {
         if ("approved".equalsIgnoreCase(executedPayment.getState())) {
 
             // ========== CONVERT USD → VND ==========
-
             double paidAmountUSD = Double.parseDouble(
                     executedPayment.getTransactions().get(0).getAmount().getTotal()
             );
 
             // Convert về VND để lưu DB (giữ consistency với data khác)
-            double paidAmountVND = paidAmountUSD * VND_TO_USD_RATE; // VD: 30.00 × 26,000 = 780,000 VND
+            double paidAmountVND = paidAmountUSD * VND_TO_USD_RATE;
 
             String paypalTransactionId = executedPayment.getId();
 
@@ -102,7 +106,7 @@ public class PayPalService {
             boolean paymentInserted = bookingDAO.insertPaymentRecord(
                     bookingId,
                     paypalTransactionId,
-                    paidAmountVND, // Lưu VND
+                    paidAmountVND,
                     "Paid"
             );
 
