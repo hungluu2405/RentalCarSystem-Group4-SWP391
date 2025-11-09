@@ -198,11 +198,12 @@
                                         <th>End</th>
                                         <th>Total</th>
                                         <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
-                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">
+                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved' || order.status == 'Returning'}">
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -229,10 +230,27 @@
                                                         <c:when test="${order.status == 'Paid'}">
                                                             <span class="badge bg-info text-dark">Paid</span>
                                                         </c:when>
+                                                        <c:when test="${order.status == 'Returning'}">
+                                                            <span class="badge bg-warning text-dark">Returning</span>
+                                                        </c:when>
                                                         <c:otherwise>
                                                             <span class="badge bg-secondary">${order.status}</span>
                                                         </c:otherwise>
                                                     </c:choose>
+                                                </td>
+                                                <td>
+                                                    <c:if test="${order.status == 'Returning'}">
+                                                        <form method="post"
+                                                              action="${pageContext.request.contextPath}/owner/ownerBooking"
+                                                              class="d-inline">
+                                                            <input type="hidden" name="bookingId" value="${order.bookingId}">
+                                                            <button type="submit" name="action" value="confirmReturn"
+                                                                    onclick="return confirm('Confirm that the car has been returned?');"
+                                                                    class="btn btn-success btn-sm">
+                                                                <i class="fa fa-check"></i> Confirm Return
+                                                            </button>
+                                                        </form>
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </c:if>
