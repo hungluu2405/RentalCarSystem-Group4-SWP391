@@ -136,7 +136,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="order" items="${allBookings}">
+                                    <c:forEach var="order" items="${bookings}">
                                         <c:set var="isPending" value="${order.status == 'Pending'}"/>
                                         <c:set var="isHistory"
                                                value="${order.status == 'Paid' || order.status == 'Approved'}"/>
@@ -179,27 +179,6 @@
                                     </tbody>
                                 </table>
 
-                                <div class="d-flex justify-content-center mt-3">
-                                    <nav>
-                                        <ul class="pagination">
-                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage - 1}">&laquo;</a>
-                                            </li>
-
-
-                                            <c:forEach begin="1" end="${totalPagesPending}" var="i">
-
-                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                    <a class="page-link" href="?page=${i}">${i}</a>
-                                                </li>
-                                            </c:forEach>
-
-                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage + 1}">&raquo;</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
 
                             </div>
                         </div>
@@ -222,7 +201,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="order" items="${allBookings}">
+                                    <c:forEach var="order" items="${bookings}">
                                         <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">
                                             <tr>
                                                 <td>${order.carName}</td>
@@ -262,26 +241,6 @@
                                     </tbody>
                                 </table>
 
-                                <div class="d-flex justify-content-center mt-3">
-                                    <nav>
-                                        <ul class="pagination">
-                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage - 1}">&laquo;</a>
-                                            </li>
-
-                                            <c:forEach begin="1" end="${totalPages}" var="i">
-                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                    <a class="page-link" href="?page=${i}">${i}</a>
-                                                </li>
-                                            </c:forEach>
-
-                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage + 1}">&raquo;</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-
 
                             </div>
                         </div>
@@ -304,7 +263,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="order" items="${allBookings}">
+                                    <c:forEach var="order" items="${bookings}">
                                         <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">
                                             <tr>
                                                 <td>${order.carName}</td>
@@ -344,31 +303,50 @@
                                     </tbody>
                                 </table>
 
-                                <div class="d-flex justify-content-center mt-3">
-                                    <nav>
-                                        <ul class="pagination">
-                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage - 1}">&laquo;</a>
-                                            </li>
-
-                                            <c:forEach begin="1" end="${totalPages}" var="i">
-                                                <li class="page-item ${i == currentPage ? 'active' : ''}">
-                                                    <a class="page-link" href="?page=${i}">${i}</a>
-                                                </li>
-                                            </c:forEach>
-
-                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                                <a class="page-link" href="?page=${currentPage + 1}">&raquo;</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-
-
                             </div>
                         </div>
 
+                        <c:if test="${totalPages > 1}">
+                            <div class="pagination-container">
+                                <ul class="pagination">
+                                    <!-- Previous Button -->
+                                    <li class="${currentPage == 1 ? 'disabled' : ''}">
+                                        <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${currentPage - 1}">
+                                            <i class="fa fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    <!-- Page Numbers -->
+                                    <c:forEach begin="1" end="${totalPages}" var="i">
+                                        <c:choose>
+                                            <c:when test="${currentPage == i}">
+                                                <li class="active"><a href="#">${i}</a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li>
+                                                    <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${i}">
+                                                            ${i}
+                                                    </a>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                    <!-- Next Button -->
+                                    <li class="${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a href="${pageContext.request.contextPath}/owner/ownerBooking?tab=${tab}&page=${currentPage + 1}">
+                                            <i class="fa fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="pagination-info">
+                                    Page ${currentPage} of ${totalPages}
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -376,7 +354,6 @@
         <!-- FOOTER -->
         <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 
-        <!-- SCRIPT: Tab Switching -->
         <!-- SCRIPT: Tab Switching -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
