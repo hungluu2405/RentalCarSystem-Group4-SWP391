@@ -156,8 +156,8 @@
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
                                                 <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
-                                                                      type="number" groupingUsed="true"
-                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                                                                   type="number" groupingUsed="true"
+                                                                                                   minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                 </td>
                                                 <td>
                                                     <span class="badge bg-warning text-dark">${order.status}</span>
@@ -216,8 +216,8 @@
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
                                                 <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
-                                                                      type="number" groupingUsed="true"
-                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                                                                   type="number" groupingUsed="true"
+                                                                                                   minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                 </td>
                                                 <td>
                                                     <c:choose>
@@ -295,8 +295,8 @@
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
                                                 <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
-                                                                      type="number" groupingUsed="true"
-                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                                                                   type="number" groupingUsed="true"
+                                                                                                   minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                 </td>
                                                 <td>
                                                     <c:choose>
@@ -379,4 +379,53 @@
 </body>
 </html>
 
+        <!-- SCRIPT: Tab Switching -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const tabPending = document.getElementById("tabPending");
+                const tabActive = document.getElementById("tabActive");
+                const tabHistory = document.getElementById("tabHistory");
 
+                const pendingOrders = document.getElementById("pendingOrders");
+                const activeOrders = document.getElementById("activeOrders");
+                const historyOrders = document.getElementById("historyOrders");
+
+                // Tab 1: Pending
+                tabPending.addEventListener("click", function () {
+                    tabPending.classList.add("active");
+                    tabActive.classList.remove("active");
+                    tabHistory.classList.remove("active");
+
+                    pendingOrders.classList.add("active");
+                    activeOrders.classList.remove("active");
+                    historyOrders.classList.remove("active");
+                });
+
+                // Tab 2: Active
+                tabActive.addEventListener("click", function () {
+                    tabActive.classList.add("active");
+                    tabPending.classList.remove("active");
+                    tabHistory.classList.remove("active");
+
+                    activeOrders.classList.add("active");
+                    pendingOrders.classList.remove("active");
+                    historyOrders.classList.remove("active");
+                });
+
+                // Tab 3: History
+                tabHistory.addEventListener("click", function () {
+                    tabHistory.classList.add("active");
+                    tabPending.classList.remove("active");
+                    tabActive.classList.remove("active");
+
+                    historyOrders.classList.add("active");
+                    pendingOrders.classList.remove("active");
+                    activeOrders.classList.remove("active");
+                });
+            });
+        </script>
+
+
+    </div>
+</body>
+</html>
