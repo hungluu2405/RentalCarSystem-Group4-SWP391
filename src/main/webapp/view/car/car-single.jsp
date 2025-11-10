@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="mt-4 pt-3">
-                            <h3 class="mb-3 fw-semibold">Description</h3>
+                            <h3 class="mb-3 fw-semibold">Mô Tả</h3>
                             <p style="font-size:1.05rem; line-height:1.6; text-align:justify;">
                                 ${car.description}
                             </p>
@@ -75,17 +75,17 @@
                             </h2>
                         </div>
 
-                        <h4 class="text-secondary mb-3">Specifications</h4>
+                        <h4 class="text-secondary mb-3">Đặc Điểm</h4>
                         <div class="de-spec p-3 rounded border bg-light shadow-sm">
-                            <div class="d-row mb-2"><span class="d-title">Type:</span><span class="d-value">${car.carTypeName}</span></div>
-                            <div class="d-row mb-2"><span class="d-title">Seat:</span><span class="d-value">${car.capacity}</span></div>
-                            <div class="d-row mb-2"><span class="d-title">Transmission:</span><span class="d-value">${car.transmission}</span></div>
-                            <div class="d-row"><span class="d-title">Fuel:</span><span class="d-value">${car.fuelType}</span></div>
+                            <div class="d-row mb-2"><span class="d-title">Loại:</span><span class="d-value">${car.carTypeName}</span></div>
+                            <div class="d-row mb-2"><span class="d-title">Số ghế:</span><span class="d-value">${car.capacity}</span></div>
+                            <div class="d-row mb-2"><span class="d-title">Truyền Động:</span><span class="d-value">${car.transmission}</span></div>
+                            <div class="d-row"><span class="d-title">Nhiên Liệu:</span><span class="d-value">${car.fuelType}</span></div>
                         </div>
                     </div>
 
                     <div class="col-lg-4">
-                        <h5 class="fw-bold mb-3">Booking this car</h5>
+                        <h5 class="fw-bold mb-3">Thuê Xe Này</h5>
 
                         <form action="${pageContext.request.contextPath}/booking" method="post"
                               class="booking-form p-3 rounded shadow-sm bg-light border">
@@ -101,12 +101,12 @@
                             </c:if>
 
                             <div class="form-group mb-2">
-                                <label class="mb-1 small">Pickup Date & Time</label>
+                                <label class="mb-1 small">Thời Gian Nhận Xe</label>
                                 <div class="input-group-date-time">
                                     <input type="date" name="startDate" class="form-control form-control-sm" required
                                            value="${input_startDate}">
                                     <select name="pickupTime" class="form-select form-select-sm" required>
-                                        <option value="" disabled ${empty input_pickupTime ? 'selected' : ''}>-- Time --</option>
+                                        <option value="" disabled ${empty input_pickupTime ? 'selected' : ''}>-- Giờ --</option>
                                         <c:forEach var="hour" begin="6" end="22">
                                             <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00"/>
                                             <option value="${timeValue}" ${input_pickupTime == timeValue ? 'selected' : ''}>${timeValue}</option>
@@ -116,12 +116,12 @@
                             </div>
 
                             <div class="form-group mb-2">
-                                <label class="mb-1 small">Return Date & Time</label>
+                                <label class="mb-1 small">Thời Gian Trả Xe</label>
                                 <div class="input-group-date-time">
                                     <input type="date" name="endDate" class="form-control form-control-sm" required
                                            value="${input_endDate}">
                                     <select name="dropoffTime" class="form-select form-select-sm" required>
-                                        <option value="" disabled ${empty input_dropoffTime ? 'selected' : ''}>-- Time --</option>
+                                        <option value="" disabled ${empty input_dropoffTime ? 'selected' : ''}>-- Giờ --</option>
                                         <c:forEach var="hour" begin="6" end="22">
                                             <c:set var="timeValue" value="${hour < 10 ? '0' : ''}${hour}:00"/>
                                             <option value="${timeValue}" ${input_dropoffTime == timeValue ? 'selected' : ''}>${timeValue}</option>
@@ -131,21 +131,22 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="mb-1 small">The Location</label>
+                                <label class="mb-1 small">Địa Điểm</label>
                                 <div class="p-2 border rounded bg-white small">
                                     <i class="fa fa-map-marker text-success me-2"></i>
                                     <input type="hidden" name="location" value="${input_location != null ? input_location : car.location}">
                                     ${car.location}
                                 </div>
-                                <small class="text-muted">The car can only be picked up and returned at this fixed address.</small>
+                                <small class="text-muted">
+                                    Xe chỉ có thể được nhận và trả tại địa chỉ cố định này.</small>
                             </div>
 
                             <div class="form-group mb-3">
-                                <h6 class="fw-bold mb-2">Discount</h6>
+                                <h6 class="fw-bold mb-2">Khuyến Mãi</h6>
                                 <div class="input-group input-group-sm">
                                     <input type="text" id="promoCode" name="promoCode" class="form-control"
                                            placeholder="Enter your discount ..." value="${input_appliedPromoCode}">
-                                    <button type="button" id="applyPromo" class="btn btn-success btn-sm">Apply</button>
+                                    <button type="button" id="applyPromo" class="btn btn-success btn-sm">Áp Dụng</button>
                                 </div>
                                 <small id="promoMessage" class="text-danger mt-2 d-block">
                                     <c:if test="${not empty input_appliedPromoCode && empty error}">
@@ -157,7 +158,7 @@
                             <!-- ✅ VND FORMAT -->
                             <div class="border rounded p-3 bg-white mb-3">
                                 <p class="mb-1 d-flex justify-content-between small">
-                                    <span>Rental Fee:</span>
+                                    <span>Đơn Giá Thuê:</span>
                                     <span id="priceValue" data-total="${car.pricePerDay}">
                                         <fmt:formatNumber value="${car.pricePerDay}"
                                                           type="number"
@@ -167,7 +168,7 @@
                                     </span>
                                 </p>
                                 <p class="mb-1 d-flex justify-content-between small text-danger">
-                                    <span>Discount:</span>
+                                    <span>Khuyến Mãi:</span>
                                     <span id="discount">
                                         <fmt:formatNumber value="${input_calculatedDiscount != null ? input_calculatedDiscount : 0}"
                                                           type="number"
@@ -178,7 +179,7 @@
                                 </p>
                                 <hr class="my-2">
                                 <div class="d-flex justify-content-between fw-bold">
-                                    <span>Total Fee:</span>
+                                    <span>Thành Tiền:</span>
                                     <span id="finalPrice" class="text-success">
                                         <fmt:formatNumber value="${input_finalCalculatedPrice != null ? input_finalCalculatedPrice : car.pricePerDay}"
                                                           type="number"
