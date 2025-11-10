@@ -778,6 +778,7 @@ public class CarDAO extends DBContext {
             if (rs.next()) {
                 CarViewModel car = new CarViewModel();
                 car.setCarId(rs.getInt("CAR_ID"));
+                car.setTypeId(rs.getInt("TYPE_ID"));
                 car.setBrand(rs.getString("BRAND"));
                 car.setModel(rs.getString("MODEL"));
                 car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
