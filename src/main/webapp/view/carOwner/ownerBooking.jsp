@@ -36,45 +36,6 @@
         .tab-content.active {
             display: block;
         }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            padding: 20px 0;
-            list-style: none;
-        }
-
-        .pagination li {
-            margin: 0 5px;
-        }
-
-        .pagination li a {
-            display: block;
-            padding: 8px 14px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .pagination li a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .pagination li.active a {
-            background-color: #28a745;
-            color: #fff;
-            border-color: #28a745;
-        }
-        .pagination-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-
-
     </style>
 </head>
 
@@ -150,6 +111,9 @@
 
                         <!-- Tabs -->
                         <div class="tab-container">
+<%--                            <button class="tab-btn active" id="tabPending">Pending Orders</button>--%>
+<%--                            <button class="tab-btn" id="tabActive">Active Orders</button>--%>
+<%--                            <button class="tab-btn" id="tabHistory">History Orders</button>--%>
                                 <button class="tab-btn ${tab == 'pending' ? 'active' : ''}" id="tabPending">Pending Orders</button>
                                 <button class="tab-btn ${tab == 'active' ? 'active' : ''}" id="tabActive">Active Orders</button>
                                 <button class="tab-btn ${tab == 'history' ? 'active' : ''}" id="tabHistory">History Orders</button>
@@ -158,6 +122,7 @@
 
 
                         <!-- === TAB 1: Pending Orders === -->
+<%--                        <div id="pendingOrders" class="tab-content active">--%>
                         <div id="pendingOrders" class="tab-content ${tab == 'pending' ? 'active' : ''}">
 
                         <div class="table-responsive">
@@ -194,8 +159,8 @@
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
                                                 <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
-                                                                                                   type="number" groupingUsed="true"
-                                                                                                   minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                                      type="number" groupingUsed="true"
+                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                 </td>
                                                 <td>
                                                     <span class="badge bg-warning text-dark">${order.status}</span>
@@ -225,6 +190,7 @@
                         </div>
 
                         <!-- === TAB 2: Order Active === -->
+<%--                        <div id="activeOrders" class="tab-content">--%>
                         <div id="activeOrders" class="tab-content ${tab == 'active' ? 'active' : ''}">
 
                         <div class="table-responsive">
@@ -240,11 +206,11 @@
                                         <th>End</th>
                                         <th>Total</th>
                                         <th>Status</th>
-                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
+<%--                                        <c:if test="${order.status == 'Paid' || order.status == 'Approved'}">--%>
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -254,8 +220,8 @@
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
                                                 <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
-                                                                                                   type="number" groupingUsed="true"
-                                                                                                   minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                                      type="number" groupingUsed="true"
+                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                 </td>
                                                 <td>
                                                     <c:choose>
@@ -271,29 +237,13 @@
                                                         <c:when test="${order.status == 'Paid'}">
                                                             <span class="badge bg-info text-dark">Paid</span>
                                                         </c:when>
-                                                        <c:when test="${order.status == 'Returning'}">
-                                                            <span class="badge bg-warning text-dark">Returning</span>
-                                                        </c:when>
                                                         <c:otherwise>
                                                             <span class="badge bg-secondary">${order.status}</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
-                                                <td>
-                                                    <c:if test="${order.status == 'Returning'}">
-                                                        <form method="post"
-                                                              action="${pageContext.request.contextPath}/owner/ownerBooking"
-                                                              class="d-inline">
-                                                            <input type="hidden" name="bookingId" value="${order.bookingId}">
-                                                            <button type="submit" name="action" value="confirmReturn"
-                                                                    onclick="return confirm('Confirm that the car has been returned?');"
-                                                                    class="btn btn-success btn-sm">
-                                                                <i class="fa fa-check"></i> Confirm Return
-                                                            </button>
-                                                        </form>
-                                                    </c:if>
-                                                </td>
                                             </tr>
+<%--                                        </c:if>--%>
                                     </c:forEach>
 
                                     </tbody>
@@ -304,6 +254,7 @@
                         </div>
 
                         <!-- === TAB 3: Order History === -->
+<%--                        <div id="historyOrders" class="tab-content">--%>
                         <div id="historyOrders" class="tab-content ${tab == 'history' ? 'active' : ''}">
 
                         <div class="table-responsive">
@@ -323,6 +274,7 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="order" items="${bookings}">
+<%--                                        <c:if test="${order.status == 'Completed' || order.status == 'Rejected'}">--%>
                                             <tr>
                                                 <td>${order.carName}</td>
                                                 <td>${order.customerProfile.fullName}</td>
@@ -332,8 +284,8 @@
                                                 <td>${order.startDate}</td>
                                                 <td>${order.endDate}</td>
                                                 <td style="white-space: nowrap;"><fmt:formatNumber value="${order.totalPrice}"
-                                                                                                   type="number" groupingUsed="true"
-                                                                                                   minFractionDigits="0" maxFractionDigits="0"/> ₫
+                                                                      type="number" groupingUsed="true"
+                                                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
                                                 </td>
                                                 <td>
                                                     <c:choose>
@@ -355,6 +307,7 @@
                                                     </c:choose>
                                                 </td>
                                             </tr>
+<%--                                        </c:if>--%>
                                     </c:forEach>
 
                                     </tbody>
@@ -411,10 +364,51 @@
         <!-- FOOTER -->
         <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 
-    </div>
-</body>
-</html>
+<%--        <!-- SCRIPT: Tab Switching -->--%>
+<%--        <script>--%>
+<%--            document.addEventListener("DOMContentLoaded", function () {--%>
+<%--                const tabPending = document.getElementById("tabPending");--%>
+<%--                const tabActive = document.getElementById("tabActive");--%>
+<%--                const tabHistory = document.getElementById("tabHistory");--%>
 
+<%--                const pendingOrders = document.getElementById("pendingOrders");--%>
+<%--                const activeOrders = document.getElementById("activeOrders");--%>
+<%--                const historyOrders = document.getElementById("historyOrders");--%>
+
+<%--                // Tab 1: Pending--%>
+<%--                tabPending.addEventListener("click", function () {--%>
+<%--                    tabPending.classList.add("active");--%>
+<%--                    tabActive.classList.remove("active");--%>
+<%--                    tabHistory.classList.remove("active");--%>
+
+<%--                    pendingOrders.classList.add("active");--%>
+<%--                    activeOrders.classList.remove("active");--%>
+<%--                    historyOrders.classList.remove("active");--%>
+<%--                });--%>
+
+<%--                // Tab 2: Active--%>
+<%--                tabActive.addEventListener("click", function () {--%>
+<%--                    tabActive.classList.add("active");--%>
+<%--                    tabPending.classList.remove("active");--%>
+<%--                    tabHistory.classList.remove("active");--%>
+
+<%--                    activeOrders.classList.add("active");--%>
+<%--                    pendingOrders.classList.remove("active");--%>
+<%--                    historyOrders.classList.remove("active");--%>
+<%--                });--%>
+
+<%--                // Tab 3: History--%>
+<%--                tabHistory.addEventListener("click", function () {--%>
+<%--                    tabHistory.classList.add("active");--%>
+<%--                    tabPending.classList.remove("active");--%>
+<%--                    tabActive.classList.remove("active");--%>
+
+<%--                    historyOrders.classList.add("active");--%>
+<%--                    pendingOrders.classList.remove("active");--%>
+<%--                    activeOrders.classList.remove("active");--%>
+<%--                });--%>
+<%--            });--%>
+<%--        </script>--%>
         <!-- SCRIPT: Tab Switching -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -447,3 +441,5 @@
     </div>
 </body>
 </html>
+
+
