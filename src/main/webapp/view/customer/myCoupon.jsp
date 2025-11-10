@@ -54,7 +54,7 @@
                                                 <h4>Coupon: <span class="text-primary">${promo.code}</span></h4>
                                                 <ul class="d-atr">
                                                     <li>
-                                                        <span>Discount:</span>
+                                                        <span>Khuyến Mãi:</span>
                                                         <c:choose>
                                                             <c:when test="${promo.discountType == 'PERCENT'}">
                                                                 <b class="text-success">${promo.discountRate}%</b>
@@ -76,7 +76,7 @@
                                                         </b>
                                                     </li>
                                                     <li>
-                                                        <span>Description:</span> ${promo.description}
+                                                        <span>Mô Tả:</span> ${promo.description}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -85,7 +85,7 @@
                                         <div class="d-price coupon-action-area">
                                             <a href="${pageContext.request.contextPath}/cars?promo=${promo.code}"
                                                class="btn-main btn-apply-coupon">
-                                                Apply
+                                                Áp Dụng
                                             </a>
                                         </div>
 
