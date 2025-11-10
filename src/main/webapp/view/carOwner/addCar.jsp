@@ -144,7 +144,7 @@
                                     <!-- LICENSE PLATE -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-id-card text-primary"></i> License Plate</label>
-                                        <input type="text" name="licensePlate" class="form-control" placeholder="Enter license plate..." required>
+                                        <input type="text" name="licensePlate" class="form-control" placeholder="Enter license plate...(format: 29A-123.45)" required>
                                     </div>
 
                                     <!-- CAR TYPE -->
