@@ -26,8 +26,12 @@ public class ManageCarDetailService {
         if (car.getPricePerDay() == null || car.getPricePerDay().compareTo(BigDecimal.ZERO) <= 0) {
             return "Giá thuê mỗi ngày phải lớn hơn 0.";
         }
+        // Validate biển số
+        String licensePlate = car.getLicensePlate();
+        if (!licensePlate.matches("^\\d{2}[A-Z]-\\d{3}\\.\\d{2}$")) {
+            return "Biển số xe không hợp lệ. Ví dụ: 29A-123.45";
+        }
 
-        // gọi lại hàm DAO bạn đã có
         // Check biển số trùng (nhưng cho phép trùng với chính xe hiện tại)
         if (isDuplicateLicensePlate(car.getLicensePlate(), car.getCarId())) {
             return "Biển số xe đã tồn tại trong hệ thống!";
