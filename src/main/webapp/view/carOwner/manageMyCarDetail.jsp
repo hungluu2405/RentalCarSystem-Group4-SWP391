@@ -56,6 +56,15 @@
             border-radius: 10px;
             margin-bottom: 15px;
         }
+        .alert {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            border-left: 5px solid #dc3545;
+            background: #ffe5e5;
+            color: #a10000;
+        }
+
     </style>
 </head>
 
@@ -96,6 +105,19 @@
                     <div class="col-lg-9">
                         <div class="card padding40 rounded-5 shadow-sm">
                             <h3 class="mb-4"><i class="fa fa-edit"></i> View and Edit Car Information</h3>
+
+                            <c:if test="${not empty success}">
+                                <div class="alert alert-success" role="alert" style="border-radius:8px;">
+                                    <i class="fa fa-check-circle"></i> ${success}
+                                </div>
+                            </c:if>
+
+                            <c:if test="${not empty error}">
+                                <div class="alert" role="alert">
+                                    <i class="fa fa-exclamation-circle"></i> ${error}
+                                </div>
+                            </c:if>
+
 
                             <form method="post"
                                   action="${pageContext.request.contextPath}/owner/manageCarDetail"
