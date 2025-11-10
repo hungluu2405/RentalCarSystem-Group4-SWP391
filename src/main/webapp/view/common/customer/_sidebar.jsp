@@ -24,7 +24,7 @@
         <li>
             <a href="${pageContext.request.contextPath}/customer/profile"
                class="${activePage == 'profile' ? 'active' : ''}">
-                <i class="fa fa-user"></i> My Profile
+                <i class="fa fa-user"></i> Thông Tin Của Tôi
             </a>
         </li>
 
@@ -32,25 +32,25 @@
         <li>
             <a href="${pageContext.request.contextPath}/customer/customerOrder"
                class="${activePage == 'orders' ? 'active' : ''}">
-                <i class="fa fa-home"></i> My Orders
+                <i class="fa fa-home"></i> Chuyến Của Tôi
             </a>
         </li>
 
         <li>
             <a href="${pageContext.request.contextPath}/customer/myCoupon"
                class="${activePage == 'myCoupon' ? 'active' : ''}">
-                <i class="fa fa-calendar"></i> My Coupon
+                <i class="fa fa-calendar"></i> Quà Tặng
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/customer/license"
                class="${activePage == 'license' ? 'active' : ''}">
-                <i class="fa fa-id-card"></i> Update Driver License
+                <i class="fa fa-id-card"></i> Xác Minh Bằng Lái Xe
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/logout">
-                <i class="fa fa-sign-out"></i> Sign Out
+                <i class="fa fa-sign-out"></i> Đăng Xuất
             </a>
         </li>
     </ul>
