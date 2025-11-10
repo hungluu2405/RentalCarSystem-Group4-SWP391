@@ -23,12 +23,7 @@ public class ManageMyCarDetailController extends HttpServlet {
 
     private final CarDAO carDAO = new CarDAO();
     private final ManageCarDetailService carService = new ManageCarDetailService();
-    private void reloadFormData(HttpServletRequest request, CarViewModel car) {
-        request.setAttribute("car", car);
-        request.setAttribute("carTypes", carDAO.getAllCarTypes());
-        request.setAttribute("fuelTypes", carDAO.getAllFuelTypess());
-        request.setAttribute("transmissions", carDAO.getAllTransmissions());
-    }
+
     // Xử lý hiển thị chi tiết xe
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -56,7 +51,6 @@ public class ManageMyCarDetailController extends HttpServlet {
         request.setAttribute("carTypes", carTypes);
         request.setAttribute("fuelTypes", fuelTypes);
         request.setAttribute("transmissions", transmissions);
-
 
         request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
     }
