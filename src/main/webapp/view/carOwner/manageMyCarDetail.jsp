@@ -145,9 +145,9 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Fuel Type</label>
                                         <select name="fuelType" class="form-select" required>
-                                            <option value="">Select fuel type...</option>
                                             <c:forEach var="f" items="${fuelTypes}">
-                                                <option value="${f}" <c:if test="${car.fuelType eq f}">selected</c:if>>${f}</option>
+                                                <option value="${f}"
+                                                        <c:if test="${f == car.fuelType}">selected</c:if>>${f}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -156,9 +156,9 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Transmission</label>
                                         <select name="transmission" class="form-select" required>
-                                            <option value="">Select transmission...</option>
                                             <c:forEach var="t" items="${transmissions}">
-                                                <option value="${t}" <c:if test="${car.transmission eq t}">selected</c:if>>${t}</option>
+                                                <option value="${t}"
+                                                        <c:if test="${t == car.transmission}">selected</c:if>>${t}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -166,10 +166,10 @@
                                     <!-- Car Type -->
                                     <div class="col-md-6 mb-3">
                                         <label>Car Type</label>
-                                        <select name="typeId" class="form-select" required>
-                                            <option value="">Select car type...</option>
-                                            <c:forEach var="c" items="${carTypes}">
-                                                <option value="${c.typeId}" <c:if test="${car.carTypeName eq c.name}">selected</c:if>>${c.name}</option>
+                                        <select name="typeId" class="form-select">
+                                            <c:forEach var="type" items="${carTypes}">
+                                                <option value="${type.typeId}"
+                                                        <c:if test="${type.typeId == car.typeId}">selected</c:if>>${type.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -203,37 +203,6 @@
                                         <label>License Plate</label>
                                         <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" required>
                                     </div>
-
-<%--                                    <!-- Availability -->--%>
-<%--                                    <div class="col-md-12 mb-3">--%>
-<%--                                        <label class="form-label d-block">Availability</label>--%>
-
-<%--                                        <!-- hidden để gửi 0 khi không check -->--%>
-<%--                                        <input type="hidden" name="availability" value="0">--%>
-
-<%--                                        <div class="form-check form-switch">--%>
-<%--                                            <input type="checkbox"--%>
-<%--                                                   class="form-check-input"--%>
-<%--                                                   id="availabilitySwitch"--%>
-<%--                                                   name="availability"--%>
-<%--                                                   value="1"--%>
-<%--                                                   <c:if test="${car.availability == 1}">checked</c:if>>--%>
-<%--                                            <label class="form-check-label" for="availabilitySwitch" id="availabilityLabel">--%>
-<%--                                                <c:choose>--%>
-<%--                                                    <c:when test="${car.availability == 1}">Available</c:when>--%>
-<%--                                                    <c:otherwise>Not Available</c:otherwise>--%>
-<%--                                                </c:choose>--%>
-<%--                                            </label>--%>
-<%--                                        </div>--%>
-<%--                                    </div>--%>
-
-<%--                                    <script>--%>
-<%--                                        const toggle = document.getElementById('availabilitySwitch');--%>
-<%--                                        const label = document.getElementById('availabilityLabel');--%>
-<%--                                        toggle.addEventListener('change', function () {--%>
-<%--                                            label.textContent = this.checked ? 'Available' : 'Not Available';--%>
-<%--                                        });--%>
-<%--                                    </script>--%>
 
                                     <!-- Availability -->
                                     <div class="col-md-12 mb-3">
