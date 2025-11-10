@@ -393,7 +393,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>My Orders</h1>
+                            <h1>Chuyến của tôi</h1>
                         </div>
                     </div>
                 </div>
@@ -414,21 +414,21 @@
                             <div class="col-lg-4 col-6 mb25">
                                 <div class="card padding30 text-center rounded-5">
                                     <i class="fa fa-calendar-check-o fa-2x text-success mb10"></i>
-                                    <span class="h2 mb0">${upcoming}</span><br>Upcoming Orders
+                                    <span class="h2 mb0">${upcoming}</span><br>Chuyến Sắp Tới
                                 </div>
                             </div>
 
                             <div class="col-lg-4 col-6 mb25">
                                 <div class="card padding30 text-center rounded-5">
                                     <i class="fa fa-calendar fa-2x text-success mb10"></i>
-                                    <span class="h2 mb0">${total}</span><br>Total Orders
+                                    <span class="h2 mb0">${total}</span><br>Tổng Số Chuyến
                                 </div>
                             </div>
 
                             <div class="col-lg-4 col-6 mb25">
                                 <div class="card padding30 text-center rounded-5">
                                     <i class="fa fa-calendar-times-o fa-2x text-danger mb10"></i>
-                                    <span class="h2 mb0">${cancelled}</span><br>Cancel Orders
+                                    <span class="h2 mb0">${cancelled}</span><br>Số Chuyến Hủy
                                 </div>
                             </div>
                         </div>
@@ -439,11 +439,11 @@
                             <div class="tab-container">
                                 <button class="tab-btn ${tab == 'current' || empty tab ? 'active' : ''}"
                                         onclick="window.location.href='${pageContext.request.contextPath}/customer/customerOrder?tab=current&page=1'">
-                                    Current Trips
+                                    Chuyến Hiện Tại
                                 </button>
                                 <button class="tab-btn ${tab == 'history' ? 'active' : ''}"
                                         onclick="window.location.href='${pageContext.request.contextPath}/customer/customerOrder?tab=history&page=1'">
-                                    Trip History
+                                    Lịch Sử Chuyến
                                 </button>
                             </div>
 
@@ -452,15 +452,15 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Car Name</th>
-                                        <th>Location</th>
-                                        <th>Pick Up Date</th>
-                                        <th>Return Date</th>
-                                        <th>Price</th>
-                                        <th>Invoice</th>
-                                        <th>Status</th>
+                                        <th>Tên Xe</th>
+                                        <th>Địa Điểm </th>
+                                        <th>Thời gian lấy xe</th>
+                                        <th>Thời Gian trả xe</th>
+                                        <th>Giá Tiền</th>
+                                        <th>Hóa Đơn</th>
+                                        <th>Trạng Thái</th>
                                         <c:if test="${tab == 'current' || empty tab}">
-                                            <th>Actions</th>
+                                            <th>Thao Tác</th>
                                         </c:if>
                                     </tr>
                                     </thead>
@@ -564,37 +564,37 @@
                                                         <c:choose>
                                                             <c:when test="${order.status == 'Pending'}">
                                                                 <span class="badge bg-warning text-dark">
-                                                                    <i class="fa fa-clock-o"></i> Pending
+                                                                    <i class="fa fa-clock-o"></i> Chờ Duyệt
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Approved'}">
                                                                 <span class="badge bg-info-dark">
-                                                                    <i class="fa fa-check"></i> Approved
+                                                                    <i class="fa fa-check"></i> Được Chấp Nhận
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Paid'}">
                                                                 <span class="badge bg-primary-dark">
-                                                                    <i class="fa fa-credit-card"></i> Paid
+                                                                    <i class="fa fa-credit-card"></i> Đã Thanh Toán
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Returning'}">
                                                                 <span class="badge bg-returning">
-                                                                    <i class="fa fa-undo"></i> Returning
+                                                                    <i class="fa fa-undo"></i> Đang Trả Xe
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Completed'}">
                                                                 <span class="badge bg-success">
-                                                                    <i class="fa fa-check-circle"></i> Completed
+                                                                    <i class="fa fa-check-circle"></i> Đã Hoàn Tất
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Cancelled'}">
                                                                 <span class="badge bg-danger">
-                                                                    <i class="fa fa-times-circle"></i> Cancelled
+                                                                    <i class="fa fa-times-circle"></i> Đã hủy
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Rejected'}">
                                                                 <span class="badge bg-danger">
-                                                                    <i class="fa fa-ban"></i> Rejected
+                                                                    <i class="fa fa-ban"></i> Bị Từ Chối
                                                                 </span>
                                                             </c:when>
                                                             <c:otherwise>
@@ -609,25 +609,25 @@
                                                                     <a href="${pageContext.request.contextPath}/customer/cancelBooking?bookingId=${order.bookingId}"
                                                                        onclick="return confirm('Are you sure you want to cancel this booking?');"
                                                                        class="btn btn-sm btn-danger">
-                                                                        <i class="fa fa-times"></i> Cancel
+                                                                        <i class="fa fa-times"></i> Hủy
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Approved'}">
                                                                     <a href="${pageContext.request.contextPath}/customer/create-payment?bookingId=${order.bookingId}"
                                                                        class="btn btn-sm btn-info">
-                                                                        <i class="fa fa-credit-card"></i> Payment
+                                                                        <i class="fa fa-credit-card"></i> Thanh Toán
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Paid'}">
                                                                     <a href="${pageContext.request.contextPath}/customer/returnCar?bookingId=${order.bookingId}"
                                                                        onclick="return confirm('Request to return this car? Owner will need to confirm.');"
                                                                        class="btn btn-sm btn-success">
-                                                                        <i class="fa fa-undo"></i> Return Car
+                                                                        <i class="fa fa-undo"></i> Trả Xe
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Returning'}">
                                                                     <span class="text-warning" style="font-size: 13px;">
-                                                                        <i class="fa fa-clock-o"></i> Waiting for owner...
+                                                                        <i class="fa fa-clock-o"></i> Vui Lòng Chờ Chủ Xe...
                                                                     </span>
                                                                 </c:when>
                                                             </c:choose>
@@ -708,7 +708,7 @@
 <div id="rateModal" class="owner-modal">
     <div class="owner-modal-content">
         <div class="owner-modal-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-            <h3>Rate Your Trip</h3>
+            <h3>Đánh Giá Chuyến Đi</h3>
             <span class="owner-modal-close" onclick="closeRateModal()">&times;</span>
         </div>
         <div class="owner-modal-body">
@@ -732,7 +732,7 @@
 
             <div style="text-align:center; margin-top:20px;">
                 <button class="btn btn-success" id="submitRatingBtn">
-                    <i class="fa fa-paper-plane"></i> Submit Rating
+                    <i class="fa fa-paper-plane"></i> Gửi
                 </button>
             </div>
         </div>
