@@ -32,6 +32,7 @@ public class ManageCarDetailService {
             return "Biển số xe không hợp lệ. Ví dụ: 29A-123.45";
         }
 
+        // gọi lại hàm DAO bạn đã có
         // Check biển số trùng (nhưng cho phép trùng với chính xe hiện tại)
         if (isDuplicateLicensePlate(car.getLicensePlate(), car.getCarId())) {
             return "Biển số xe đã tồn tại trong hệ thống!";

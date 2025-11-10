@@ -226,6 +226,37 @@
                                         <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" required>
                                     </div>
 
+<%--                                    <!-- Availability -->--%>
+<%--                                    <div class="col-md-12 mb-3">--%>
+<%--                                        <label class="form-label d-block">Availability</label>--%>
+
+<%--                                        <!-- hidden để gửi 0 khi không check -->--%>
+<%--                                        <input type="hidden" name="availability" value="0">--%>
+
+<%--                                        <div class="form-check form-switch">--%>
+<%--                                            <input type="checkbox"--%>
+<%--                                                   class="form-check-input"--%>
+<%--                                                   id="availabilitySwitch"--%>
+<%--                                                   name="availability"--%>
+<%--                                                   value="1"--%>
+<%--                                                   <c:if test="${car.availability == 1}">checked</c:if>>--%>
+<%--                                            <label class="form-check-label" for="availabilitySwitch" id="availabilityLabel">--%>
+<%--                                                <c:choose>--%>
+<%--                                                    <c:when test="${car.availability == 1}">Available</c:when>--%>
+<%--                                                    <c:otherwise>Not Available</c:otherwise>--%>
+<%--                                                </c:choose>--%>
+<%--                                            </label>--%>
+<%--                                        </div>--%>
+<%--                                    </div>--%>
+
+<%--                                    <script>--%>
+<%--                                        const toggle = document.getElementById('availabilitySwitch');--%>
+<%--                                        const label = document.getElementById('availabilityLabel');--%>
+<%--                                        toggle.addEventListener('change', function () {--%>
+<%--                                            label.textContent = this.checked ? 'Available' : 'Not Available';--%>
+<%--                                        });--%>
+<%--                                    </script>--%>
+
                                     <!-- Availability -->
                                     <div class="col-md-12 mb-3">
                                         <label class="form-label d-block">Availability</label>

@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
-    <title>Rentaly - My Profile</title>
+    <title>Rentaly - Tài Khoản Của Tôi</title>
 
     <style>
 
@@ -33,7 +33,7 @@
             <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img" alt="">
             <div class="center-y text-center">
                 <div class="container">
-                    <h1>My Profile</h1>
+                    <h1>Tài Khoản Của Tôi</h1>
                 </div>
             </div>
         </section>
@@ -53,7 +53,7 @@
 
                             <c:if test="${param.status == 'success'}">
                                 <div class="alert alert-success text-center mb-4">
-                                    ✅ Profile updated successfully!
+                                    ✅ Cập Nhật Thông Tin Thành Công!
                                 </div>
                             </c:if>
 
@@ -88,42 +88,42 @@
                                                style="display: none;">
                                     </div>
                                     <p style="font-size: 14px; color: #777; margin-top: 10px;">
-                                        Click the camera icon to change your photo
+                                        Bấm Vào Biểu Tượng Camera Để Đổi Ảnh Của Bạn
                                     </p>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-6 mb20">
-                                        <h5>Full Name</h5>
+                                        <h5>Họ và Tên</h5>
 
                                         <input type="text" name="fullName" class="form-control"
                                                value="${not empty input_fullName ? input_fullName : sessionScope.user.userProfile.fullName}"
-                                               placeholder="Enter your full name">
+                                               placeholder="Nhập Họ và Tên Của Bạn">
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Email Address</h5>
+                                        <h5>Email</h5>
                                         <input type="text" name="email" class="form-control"
                                                value="${sessionScope.user.email}" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Phone Number</h5>
+                                        <h5>Số Điện Thoại</h5>
 
                                         <input type="text" name="phone" class="form-control"
                                                value="${not empty input_phone ? input_phone : sessionScope.user.userProfile.phone}"
-                                               placeholder="Enter your phone number">
+                                               placeholder="Nhập Số Điện Thoại Của Bạn">
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Date of Birth</h5>
+                                        <h5>Ngày Sinh</h5>
 
                                         <input type="date" name="dob" class="form-control"
                                                value="${not empty input_dob ? input_dob : sessionScope.user.userProfile.dob}">
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Driver License Number</h5>
+                                        <h5>Bằng Lái Xe</h5>
 
                                         <input type="text"
                                                class="form-control"
@@ -131,9 +131,9 @@
                                                readonly>
 
                                         <small class="text-muted">
-                                            To update your license, please visit
+                                            Để Xác Minh Bằng Lái Xe,Vui Lòng Bấm
                                             <a href="${pageContext.request.contextPath}/customer/license" class="text-primary">
-                                                License Management
+                                                Xác Minh Bằng Lái Xe
                                             </a>.
                                         </small>
                                     </div>
@@ -144,12 +144,12 @@
                                         <c:set var="currentGender"
                                                value="${not empty input_gender ? input_gender : sessionScope.user.userProfile.gender}" />
 
-                                        <h5>Gender</h5>
+                                        <h5>Giới Tính</h5>
                                         <select name="gender" class="form-control">
-                                            <option value="" ${empty currentGender ? 'selected' : ''}>-- Select Gender --</option>
-                                            <option value="Male" ${currentGender == 'Male' ? 'selected' : ''}>Male</option>
-                                            <option value="Female" ${currentGender == 'Female' ? 'selected' : ''}>Female</option>
-                                            <option value="Other" ${currentGender == 'Other' ? 'selected' : ''}>Other</option>
+                                            <option value="" ${empty currentGender ? 'selected' : ''}>-- Giới Tính --</option>
+                                            <option value="Male" ${currentGender == 'Male' ? 'selected' : ''}>Nam</option>
+                                            <option value="Female" ${currentGender == 'Female' ? 'selected' : ''}>Nữ</option>
+                                            <option value="Other" ${currentGender == 'Other' ? 'selected' : ''}>Khác</option>
                                         </select>
                                     </div>
                                 </div>
