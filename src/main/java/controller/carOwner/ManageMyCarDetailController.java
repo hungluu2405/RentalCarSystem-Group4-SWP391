@@ -84,8 +84,18 @@ public class ManageMyCarDetailController extends HttpServlet {
                 car.setLocation(request.getParameter("location"));
                 car.setLicensePlate(request.getParameter("licensePlate"));
                 car.setTypeId(Integer.parseInt(request.getParameter("typeId")));
-                String availabilityParam = request.getParameter("availability");
-                if (availabilityParam != null && availabilityParam.equals("1")) {
+                // Lấy tất cả các giá trị của tham số "availability" (có thể là ["0"] hoặc ["0","1"] khi checkbox checked)
+                String[] availabilityValues = request.getParameterValues("availability");
+                boolean isAvailable = false;
+                if (availabilityValues != null) {
+                    for (String v : availabilityValues) {
+                        if ("1".equals(v)) {
+                            isAvailable = true;
+                            break;
+                        }
+                    }
+                }
+                if (isAvailable) {
                     car.setAvailability(1);
                 } else {
                     car.setAvailability(0);

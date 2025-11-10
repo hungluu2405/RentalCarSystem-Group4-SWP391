@@ -51,18 +51,13 @@ public class OwnerBooking extends HttpServlet {
 
         int offset = (currentPage - 1) * PAGE_SIZE;
 
-        System.out.println("🔍 DEBUG OwnerBooking Controller - OwnerID: " + ownerId + ", Tab: " + tab + ", Page: " + currentPage);
-
         // --- BIẾN DỮ LIỆU ---
         List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
-//        List<BookingDetail> bookings;
-//
-//        int totalRecords;
-//        int totalPages;
+        List<BookingDetail> bookings;
 
-        int totalRecords = 0;
-        int totalPages = 1;
-        List<BookingDetail> bookings = List.of();
+        int totalRecords;
+        int totalPages;
+
         // --- LẤY TAB HIỆN TẠI ---
 
         String tab = request.getParameter("tab");
