@@ -95,7 +95,7 @@
                  style="background-image: url('${pageContext.request.contextPath}/images/background/2.jpg');">
             <div class="center-y relative text-center">
                 <div class="container-content">
-                    <h1>Booking Confirmation</h1>
+                    <h1>Xác Nhận Thuê Xe</h1>
                 </div>
             </div>
         </section>
@@ -106,9 +106,9 @@
                 <c:choose>
                     <c:when test="${booking == null}">
                         <div class="alert alert-danger container-content">
-                            <h3>❌ Booking information not found!</h3>
+                            <h3>❌ Không Tìm Được Chuyến </h3>
                             <p>Please try again.</p>
-                            <a href="${pageContext.request.contextPath}/home" class="btn-home">Back to Home</a>
+                            <a href="${pageContext.request.contextPath}/home" class="btn-home">Quay Về Trang Chủ</a>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -118,8 +118,8 @@
 
                         <div class="success-box">
                             <div class="success-icon">✓</div>
-                            <h2 style="color: #10b981; margin: 0;">Booking Successfully!</h2>
-                            <p style="margin: 10px 0 0 0; color: #059669;">Please wait for car owner response.</p>
+                            <h2 style="color: #10b981; margin: 0;">Thuê Xe Thành Công!</h2>
+                            <p style="margin: 10px 0 0 0; color: #059669;">Vui Lòng Đợi Chủ Xe Duyệt</p>
                         </div>
 
                         <div class="row">
@@ -127,34 +127,34 @@
                             <div class="col-md-6">
                                 <!-- Customer Information -->
                                 <div class="info-section">
-                                    <h4>👤 Customer Information</h4>
+                                    <h4>👤 Thông Tin Khách Hàng</h4>
                                     <div class="info-row">
-                                        <span class="info-label">Name:</span>
+                                        <span class="info-label">Họ Và Tên:</span>
                                         <span class="info-value">${u.fullName}</span>
                                     </div>
                                     <div class="info-row">
-                                        <span class="info-label">Phone Number:</span>
+                                        <span class="info-label">Số Điện Thoại:</span>
                                         <span class="info-value">${u.phone}</span>
                                     </div>
                                 </div>
 
                                 <!-- Booking Details -->
                                 <div class="info-section">
-                                    <h4>📅 Booking Details</h4>
+                                    <h4>📅 Thông Tin Chuyến</h4>
                                     <div class="info-row">
-                                        <span class="info-label">Pickup Date:</span>
+                                        <span class="info-label">Thời Gian Lấy Xe:</span>
                                         <span class="info-value">
                                             ${booking.startDate} ${booking.pickupTime}
                                         </span>
                                     </div>
                                     <div class="info-row">
-                                        <span class="info-label">Return Date:</span>
+                                        <span class="info-label">Thời Gian Trả Xe:</span>
                                         <span class="info-value">
                                             ${booking.endDate} ${booking.dropoffTime}
                                         </span>
                                     </div>
                                     <div class="info-row">
-                                        <span class="info-label">Location:</span>
+                                        <span class="info-label">Địa Điểm:</span>
                                         <span class="info-value">
                                             <c:choose>
                                                 <c:when test="${not empty booking.location}">
@@ -174,13 +174,13 @@
                                 <!-- Car Details -->
                                 <c:if test="${car != null}">
                                     <div class="info-section">
-                                        <h4>🚗 Car Details</h4>
+                                        <h4>🚗 Thông Tin Xe</h4>
                                         <div class="info-row">
-                                            <span class="info-label">Car Model:</span>
+                                            <span class="info-label">Xe:</span>
                                             <span class="info-value">${car.model}</span>
                                         </div>
                                         <div class="info-row">
-                                            <span class="info-label">License Plate:</span>
+                                            <span class="info-label">Biển Số Xe:</span>
                                             <span class="info-value">${car.licensePlate}</span>
                                         </div>
                                     </div>
@@ -188,11 +188,11 @@
 
                                 <!-- Payment Summary -->
                                 <div class="info-section">
-                                    <h4>💰 Payment Summary</h4>
+                                    <h4>💰 Thông Tin Thanh Toán</h4>
 
                                     <!-- Rental Fee (GIÁ GỐC) -->
                                     <div class="info-row">
-                                        <span class="info-label">Rental Fee:</span>
+                                        <span class="info-label">Đơn Giá Thuê:</span>
                                         <span class="info-value">
                                               <fmt:formatNumber value="${rentalFee}"
                                                                 type="number" groupingUsed="true"
@@ -203,7 +203,7 @@
                                     <!-- Discount (CHỈ HIỂN THỊ NẾU > 0) -->
                                     <c:if test="${discountValue > 0}">
                                         <div class="info-row" style="color: #dc2626;">
-                                            <span class="info-label">Discount:</span>
+                                            <span class="info-label">Khuyến Mãi:</span>
                                             <span class="info-value">
                                                   -<fmt:formatNumber value="${discountValue}"
                                                                     type="number" groupingUsed="true"
@@ -214,7 +214,7 @@
 
                                     <!-- Total Price (GIÁ CUỐI CÙNG) -->
                                     <div class="info-row total-price-row">
-                                        <span class="info-label">Total Price:</span>
+                                        <span class="info-label">Thành Tiền:</span>
                                         <span class="info-value">
                                             <fmt:formatNumber value="${booking.totalPrice}"
                                                               type="number" groupingUsed="true"
@@ -227,7 +227,7 @@
 
                         <div style="text-align: center;">
                             <a href="${pageContext.request.contextPath}/home" class="btn-home">
-                                🏠 Back to Home
+                                🏠 Quay Về Trang Chủ
                             </a>
                         </div>
                     </c:otherwise>
