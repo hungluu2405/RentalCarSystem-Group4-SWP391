@@ -351,7 +351,7 @@
                                 <li><a class="menu-item"
                                        href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/carOwner/becomeCarOwner.jsp">Become Car Owner</a></li>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/customer/becomeCarOwner">Become Car Owner</a></li>
 
 
                         </div>
