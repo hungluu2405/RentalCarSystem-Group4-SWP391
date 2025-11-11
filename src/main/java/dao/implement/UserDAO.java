@@ -417,6 +417,21 @@ public class UserDAO extends GenericDAO<User> {
 
         return users;
     }
+    public boolean updateUserRoleByName(int userId, String roleName) {
+        String sql = """
+        UPDATE [USER]
+        SET ROLE_ID = (SELECT ROLE_ID FROM ROLE WHERE NAME = ?)
+        WHERE USER_ID = ?
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, roleName);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
 }
