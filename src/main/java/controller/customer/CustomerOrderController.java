@@ -39,12 +39,10 @@ public class CustomerOrderController extends HttpServlet {
             tab = "current";
         }
 
-        // Get filter parameters
+        // Get filter parameters (simplified - only 2 date fields)
         String filterStatus = request.getParameter("filterStatus");
-        String startDateFrom = request.getParameter("startDateFrom");
-        String startDateTo = request.getParameter("startDateTo");
-        String endDateFrom = request.getParameter("endDateFrom");
-        String endDateTo = request.getParameter("endDateTo");
+        String dateFrom = request.getParameter("dateFrom");
+        String dateTo = request.getParameter("dateTo");
         String carName = request.getParameter("carName");
         String priceRange = request.getParameter("priceRange");
 
@@ -70,40 +68,35 @@ public class CustomerOrderController extends HttpServlet {
         // Get bookings with filters
         List<BookingDetail> bookings;
         int totalRecords;
-        int totalPages;
 
         if ("history".equals(tab)) {
             // Check if any filter is applied
-            boolean hasFilters = hasFilters(filterStatus, startDateFrom, startDateTo,
-                    endDateFrom, endDateTo, carName, priceRange);
+            boolean hasFilters = hasFilters(filterStatus, dateFrom, dateTo, carName, priceRange);
 
             if (hasFilters) {
                 bookings = bookingDAO.getHistoryTripsWithFilters(userId, filterStatus,
-                        startDateFrom, startDateTo, endDateFrom, endDateTo, carName, priceRange,
-                        offset, PAGE_SIZE);
+                        dateFrom, dateTo, carName, priceRange, offset, PAGE_SIZE);
                 totalRecords = bookingDAO.countHistoryTripsWithFilters(userId, filterStatus,
-                        startDateFrom, startDateTo, endDateFrom, endDateTo, carName, priceRange);
+                        dateFrom, dateTo, carName, priceRange);
             } else {
                 bookings = bookingDAO.getHistoryTripsByUserId(userId, offset, PAGE_SIZE);
                 totalRecords = bookingDAO.countHistoryTripsByUserId(userId);
             }
         } else {
-            boolean hasFilters = hasFilters(filterStatus, startDateFrom, startDateTo,
-                    endDateFrom, endDateTo, carName, priceRange);
+            boolean hasFilters = hasFilters(filterStatus, dateFrom, dateTo, carName, priceRange);
 
             if (hasFilters) {
                 bookings = bookingDAO.getCurrentTripsWithFilters(userId, filterStatus,
-                        startDateFrom, startDateTo, endDateFrom, endDateTo, carName, priceRange,
-                        offset, PAGE_SIZE);
+                        dateFrom, dateTo, carName, priceRange, offset, PAGE_SIZE);
                 totalRecords = bookingDAO.countCurrentTripsWithFilters(userId, filterStatus,
-                        startDateFrom, startDateTo, endDateFrom, endDateTo, carName, priceRange);
+                        dateFrom, dateTo, carName, priceRange);
             } else {
                 bookings = bookingDAO.getCurrentTripsByUserId(userId, offset, PAGE_SIZE);
                 totalRecords = bookingDAO.countCurrentTripsByUserId(userId);
             }
         }
 
-        totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
+        int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
 
         // Set attributes
         request.setAttribute("upcoming", upcoming);
@@ -116,23 +109,18 @@ public class CustomerOrderController extends HttpServlet {
 
         // Set filter parameters for JSP
         request.setAttribute("filterStatus", filterStatus);
-        request.setAttribute("startDateFrom", startDateFrom);
-        request.setAttribute("startDateTo", startDateTo);
-        request.setAttribute("endDateFrom", endDateFrom);
-        request.setAttribute("endDateTo", endDateTo);
+        request.setAttribute("dateFrom", dateFrom);
+        request.setAttribute("dateTo", dateTo);
         request.setAttribute("carName", carName);
         request.setAttribute("priceRange", priceRange);
 
         request.getRequestDispatcher("/view/customer/customerOrder.jsp").forward(request, response);
     }
 
-    private boolean hasFilters(String status, String startFrom, String startTo,
-                               String endFrom, String endTo, String carName, String price) {
+    private boolean hasFilters(String status, String dateFrom, String dateTo, String carName, String price) {
         return (status != null && !status.isEmpty() && !status.equals("All")) ||
-                (startFrom != null && !startFrom.isEmpty()) ||
-                (startTo != null && !startTo.isEmpty()) ||
-                (endFrom != null && !endFrom.isEmpty()) ||
-                (endTo != null && !endTo.isEmpty()) ||
+                (dateFrom != null && !dateFrom.isEmpty()) ||
+                (dateTo != null && !dateTo.isEmpty()) ||
                 (carName != null && !carName.isEmpty()) ||
                 (price != null && !price.isEmpty());
     }
