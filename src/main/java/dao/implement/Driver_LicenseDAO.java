@@ -111,4 +111,32 @@ public class Driver_LicenseDAO extends DBContext {
             return false;
         }
     }
+    // 🔍 Tìm bằng lái theo số license_number
+    public Driver_License findByLicenseNumber(String licenseNumber) {
+        String sql = "SELECT * FROM DRIVER_LICENSE WHERE LICENSE_NUMBER = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, licenseNumber);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Driver_License dl = new Driver_License();
+                    dl.setLicense_id(rs.getInt("LICENSE_ID"));
+                    dl.setUser_id(rs.getInt("USER_ID"));
+                    dl.setLicense_number(rs.getString("LICENSE_NUMBER"));
+                    dl.setIssue_date(rs.getDate("ISSUE_DATE"));
+                    dl.setExpiry_date(rs.getDate("EXPIRY_DATE"));
+                    dl.setFront_image_url(rs.getString("FRONT_IMAGE_URL"));
+                    dl.setBack_image_url(rs.getString("BACK_IMAGE_URL"));
+                    dl.setLicenseClass(rs.getString("CLASS"));
+                    dl.setAddress(rs.getString("ADDRESS"));
+                    dl.setNationality(rs.getString("NATIONALITY"));
+                    return dl;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Error in findByLicenseNumber: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
