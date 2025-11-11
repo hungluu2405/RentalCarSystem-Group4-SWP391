@@ -101,7 +101,7 @@ public class BecomeCarOwnerController extends HttpServlet {
 
             int carId = carDAO.addCarAndReturnId(car);
 
-            // upload image
+            // ✅ Upload ảnh xe
             for (Part part : request.getParts()) {
                 if (part.getName().equals("carImage") && part.getSize() > 0) {
                     String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
@@ -113,18 +113,31 @@ public class BecomeCarOwnerController extends HttpServlet {
                 }
             }
 
-            // đổi role Customer -> Car Owner
-            if ("Customer".equalsIgnoreCase(currentUser.getRoleName())) {
-                boolean updated = userDAO.updateUserRoleByName(currentUser.getUserId(), "Car Owner");
+            // ✅ Đổi role Customer -> Car Owner (chính xác)
+            if (currentUser.getRoleId() == 3) { // 3 = Customer
+                System.out.println(">>> [DEBUG] Role before update: " + currentUser.getRoleId() + " (" + currentUser.getRoleName() + ")");
+
+                boolean updated = userDAO.updateUserRoleById(currentUser.getUserId(), 2); // 2 = Car Owner
+                System.out.println(">>> [DEBUG] Role update in DB = " + updated);
+
                 if (updated) {
-                    currentUser.setRoleName("Car Owner");
-                    currentUser.setRoleId(2); // role_id 2 = Car Owner
-                    session.setAttribute("user", currentUser);
+                    // ✅ Reload lại user sau khi đổi role
+                    User refreshedUser = userDAO.getUserByIdWithRole(currentUser.getUserId());
+                    if (refreshedUser != null) {
+                        session.setAttribute("user", refreshedUser);
+                        System.out.println(">>> [DEBUG] Reloaded user from DB. New roleId = " +
+                                refreshedUser.getRoleId() + ", roleName = " + refreshedUser.getRoleName());
+                    }
+                } else {
+                    System.out.println(">>> [DEBUG] Role update failed!");
                 }
             }
 
+            // ✅ Lưu carId vào session (nếu cần)
             session.setAttribute("addedCarId", carId);
-            response.sendRedirect(request.getContextPath() + "/owner/myCars");
+
+            // ✅ Chuyển sang trang My Cars của Car Owner
+            response.sendRedirect(request.getContextPath() + "/home");
 
         } catch (Exception e) {
             e.printStackTrace();
