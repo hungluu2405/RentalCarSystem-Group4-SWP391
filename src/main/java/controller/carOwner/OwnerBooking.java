@@ -52,7 +52,6 @@ public class OwnerBooking extends HttpServlet {
         int offset = (currentPage - 1) * PAGE_SIZE;
 
         // --- BIẾN DỮ LIỆU ---
-        List<BookingDetail> allBookings = bookingDAO.getAllBookingsForOwner(ownerId,100);
         List<BookingDetail> bookings;
 
         int totalRecords;
@@ -104,7 +103,6 @@ public class OwnerBooking extends HttpServlet {
         request.setAttribute("cancelledBookings", cancelledBookings);
         request.setAttribute("myCars", myCars);
         request.setAttribute("bookings", bookings);
-        request.setAttribute("allBookings", allBookings);
         request.setAttribute("tab", tab);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
