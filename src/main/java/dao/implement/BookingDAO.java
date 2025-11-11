@@ -346,8 +346,8 @@ public class BookingDAO extends DBContext {
     public int countHistoryBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
-                "WHERE C.USER_ID = ? AND B.STATUS IN ('Rejected', 'Completed')";
+                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
+                "WHERE C.USER_ID = ? AND (B.STATUS = 'Rejected' OR B.STATUS = 'Completed')";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
             ResultSet rs = ps.executeQuery();
