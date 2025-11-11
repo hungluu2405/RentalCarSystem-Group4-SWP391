@@ -725,7 +725,7 @@ public class CarDAO extends DBContext {
     public List<CarViewModel> getCarsByOwner(int ownerId) {
         List<CarViewModel> list = new ArrayList<>();
         String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
-                "c.TRANSMISSION, c.FUEL_TYPE, c.YEAR, t.NAME AS CAR_TYPE_NAME, i.IMAGE_URL " +
+                "c.TRANSMISSION, c.FUEL_TYPE, c.YEAR, c.AVAILABILITY, t.NAME AS CAR_TYPE_NAME, i.IMAGE_URL " +
                 "FROM CAR c " +
                 "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
                 "LEFT JOIN CAR_IMAGE i ON c.CAR_ID = i.CAR_ID " +
@@ -747,12 +747,12 @@ public class CarDAO extends DBContext {
                 car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
                 car.setLocation(rs.getString("LOCATION"));
                 car.setYear(rs.getInt("YEAR"));
+                car.setAvailability(rs.getInt("AVAILABILITY"));
                 car.setImageUrl(
                         rs.getString("IMAGE_URL") != null
                                 ? rs.getString("IMAGE_URL")
                                 : "images/default.jpg"
                 );
-
                 list.add(car);
             }
         } catch (SQLException e) {
