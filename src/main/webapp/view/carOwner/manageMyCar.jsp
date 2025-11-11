@@ -125,36 +125,35 @@
                 object-fit: cover;         /* Cắt cho vừa khung mà không méo ảnh */
                 display: block;
             }
-            .availability-dot {
-                display: inline-block;
-                width: 12px;
-                height: 12px;
-                border-radius: 50%;
-                margin-left: 8px;
-                background-color: transparent; /* default = không sáng */
-                border: 2px solid #999; /* viền mờ khi tắt */
-                vertical-align: middle;
-            }
-
-            .availability-dot.active {
-                background-color: #00cc00; /* sáng màu khi xe đang bật */
-                border-color: #00cc00;
-            }
-
-            @media (max-width: 992px) {
-                /* phần responsive của car-card, không liên quan dấu chấm */
-                .car-card {
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 20px;
-                    margin-bottom: 30px;
-                    padding: 10px;
-                    border-bottom: 1px solid #ddd;
-                }
-            }
-
 
         }
+        .availability-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+            background-color: transparent;
+            border: 2px solid #999;
+            vertical-align: middle;
+        }
+
+        .availability-dot.active {
+            background-color: #00cc00;
+            border-color: #00cc00;
+        }
+
+        @media (max-width: 992px) {
+            .car-card {
+                display: flex;
+                align-items: flex-start;
+                gap: 20px;
+                margin-bottom: 30px;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+
     </style>
 </head>
 
@@ -211,9 +210,18 @@
                                     </div>
 
                                         <div class="car-info">
-                                        <h3>${car.brand} ${car.model}
-                                            <span class="availability-dot ${car.availability == 1 ? 'active' : ''}"></span>
+                                        <h3>
+                                                ${car.brand} ${car.model}
+                                            <c:choose>
+                                                <c:when test="${car.availability == 1}">
+                                                    <span class="availability-dot active"></span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="availability-dot"></span>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </h3>
+
                                         <p><strong>Seats:</strong> ${car.capacity}</p>
                                         <p><strong>Fuel:</strong> ${car.fuelType}</p>
                                         <p><strong>Transmission:</strong> ${car.transmission}</p>
