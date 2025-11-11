@@ -408,43 +408,28 @@
                                     <div class="row" style="margin-top: 10px;">
                                         <div class="col-12">
                                             <a href="#" onclick="toggleAdvancedFilters(); return false;" style="font-size: 13px; color: #00b074;">
-                                                <i class="fa fa-caret-down" id="advancedFilterIcon"></i> Advanced Filters (Date Ranges)
+                                                <i class="fa fa-caret-down" id="advancedFilterIcon"></i> Advanced Filters (Date Range)
                                             </a>
                                         </div>
                                     </div>
 
                                     <div id="advancedFilters" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
                                         <div class="row">
-                                            <!-- Pick-up Date Range -->
-                                            <div class="col-md-6 mb-3">
+                                            <!-- Simplified Date Range -->
+                                            <div class="col-md-12 mb-3">
                                                 <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
-                                                    <i class="fa fa-calendar"></i> Pick-up Date Range
+                                                    <i class="fa fa-calendar"></i> Booking Date Range
                                                 </label>
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <input type="date" name="startDateFrom" class="form-control form-control-sm"
-                                                               value="${startDateFrom}" placeholder="From">
+                                                        <input type="date" name="dateFrom" class="form-control form-control-sm"
+                                                               value="${dateFrom}" placeholder="From Date">
+                                                        <small class="text-muted">From</small>
                                                     </div>
                                                     <div class="col-6">
-                                                        <input type="date" name="startDateTo" class="form-control form-control-sm"
-                                                               value="${startDateTo}" placeholder="To">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Return Date Range -->
-                                            <div class="col-md-6 mb-3">
-                                                <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
-                                                    <i class="fa fa-calendar"></i> Return Date Range
-                                                </label>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <input type="date" name="endDateFrom" class="form-control form-control-sm"
-                                                               value="${endDateFrom}" placeholder="From">
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input type="date" name="endDateTo" class="form-control form-control-sm"
-                                                               value="${endDateTo}" placeholder="To">
+                                                        <input type="date" name="dateTo" class="form-control form-control-sm"
+                                                               value="${dateTo}" placeholder="To Date">
+                                                        <small class="text-muted">To</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -623,7 +608,7 @@
                                     <ul class="pagination">
                                         <!-- Previous Button -->
                                         <li class="${currentPage == 1 ? 'disabled' : ''}">
-                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage - 1}&filterStatus=${filterStatus}&startDateFrom=${startDateFrom}&startDateTo=${startDateTo}&endDateFrom=${endDateFrom}&endDateTo=${endDateTo}&carName=${carName}&priceRange=${priceRange}">
+                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage - 1}&filterStatus=${filterStatus}&dateFrom=${dateFrom}&dateTo=${dateTo}&carName=${carName}&priceRange=${priceRange}">
                                                 <i class="fa fa-chevron-left"></i>
                                             </a>
                                         </li>
@@ -636,7 +621,7 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <li>
-                                                        <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${i}&filterStatus=${filterStatus}&startDateFrom=${startDateFrom}&startDateTo=${startDateTo}&endDateFrom=${endDateFrom}&endDateTo=${endDateTo}&carName=${carName}&priceRange=${priceRange}">
+                                                        <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${i}&filterStatus=${filterStatus}&dateFrom=${dateFrom}&dateTo=${dateTo}&carName=${carName}&priceRange=${priceRange}">
                                                                 ${i}
                                                         </a>
                                                     </li>
@@ -646,7 +631,7 @@
 
                                         <!-- Next Button -->
                                         <li class="${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage + 1}&filterStatus=${filterStatus}&startDateFrom=${startDateFrom}&startDateTo=${startDateTo}&endDateFrom=${endDateFrom}&endDateTo=${endDateTo}&carName=${carName}&priceRange=${priceRange}">
+                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage + 1}&filterStatus=${filterStatus}&dateFrom=${dateFrom}&dateTo=${dateTo}&carName=${carName}&priceRange=${priceRange}">
                                                 <i class="fa fa-chevron-right"></i>
                                             </a>
                                         </li>
@@ -771,6 +756,26 @@
                 alert("Error while submitting feedback!");
             });
     });
+
+    // Toggle advanced filters
+    function toggleAdvancedFilters() {
+        const advFilters = document.getElementById('advancedFilters');
+        const icon = document.getElementById('advancedFilterIcon');
+
+        if (advFilters.style.display === 'none') {
+            advFilters.style.display = 'block';
+            icon.className = 'fa fa-caret-up';
+        } else {
+            advFilters.style.display = 'none';
+            icon.className = 'fa fa-caret-down';
+        }
+    }
+
+    // Clear all filters
+    function clearFilters() {
+        const tab = '${tab}';
+        window.location.href = '${pageContext.request.contextPath}/owner/myBooking?tab=' + tab + '&page=1';
+    }
 
     function closeRateModal() {
         document.getElementById("rateModal").style.display = "none";
