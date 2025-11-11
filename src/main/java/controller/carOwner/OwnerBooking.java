@@ -35,6 +35,8 @@ public class OwnerBooking extends HttpServlet {
 
         int ownerId = owner.getUserId();
 
+
+
         // --- LẤY PAGE HIỆN TẠI ---
         String pageParam = request.getParameter("page");
         int currentPage = 1;
@@ -55,10 +57,10 @@ public class OwnerBooking extends HttpServlet {
 
         int totalRecords;
         int totalPages;
-        String tab = request.getParameter("tab");
 
         // --- LẤY TAB HIỆN TẠI ---
 
+        String tab = request.getParameter("tab");
         if (tab == null) {
             tab = "pending";
         }

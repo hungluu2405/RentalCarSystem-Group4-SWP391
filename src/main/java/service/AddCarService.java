@@ -26,6 +26,9 @@ public class AddCarService {
         if (capacity > 7) {
             return "Sức chứa của xe không được lớn hơn 7!";
         }
+        if (licensePlate == null || !licensePlate.matches("^\\d{2}[A-Z]-\\d{3}\\.\\d{2}$")) {
+            return "Biển số xe không hợp lệ. Ví dụ: 29A-123.45";
+        }
         if (isDuplicateLicensePlate(licensePlate)) {
             return "Biển số xe đã tồn tại trong hệ thống!";
         }
