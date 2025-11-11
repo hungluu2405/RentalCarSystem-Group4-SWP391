@@ -60,6 +60,11 @@
             box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
         }
 
+        .form-label {
+            font-weight: 600; /* ✅ Làm label đậm */
+            color: #2c3e50;
+        }
+
         .btn-submit {
             background: linear-gradient(90deg, #007bff, #00bfff);
             color: white;
@@ -112,11 +117,14 @@
                                 <div class="upload-section">
                                     <img id="previewImage"
                                          src="${pageContext.request.contextPath}/images/default-car.png"
-                                         alt="Car Preview">
-                                    <h6>Upload Car Image</h6>
+                                         alt="Car Preview"
+                                         style="display: none;">  <%-- ✅ ẩn ảnh mặc định --%>
+
+                                    <h6 class="fw-bold text-primary mt-2">Upload Car Image</h6>
                                     <input type="file" name="carImage" id="carImage" class="form-control mt-2"
                                            accept="image/*"
                                            onchange="previewFile(event)" required>
+
                                 </div>
                             </div>
 
@@ -124,14 +132,19 @@
                             <div class="col-md-7">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label>Brand</label>
+                                        <label class="form-label">Brand</label>
                                         <input type="text" class="form-control" name="brand"
                                                placeholder="Enter car brand..." required>
                                     </div>
 
-                                    <!-- Transmission -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-cogs text-primary"></i> Transmission</label>
+                                        <label class="form-label">Model</label>
+                                        <input type="text" class="form-control" name="model"
+                                               placeholder="Enter car model..." required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Transmission</label>
                                         <select name="transmission" class="form-select" required>
                                             <option value="">Select transmission...</option>
                                             <c:forEach var="t" items="${transmissions}">
@@ -140,9 +153,8 @@
                                         </select>
                                     </div>
 
-                                    <!-- Fuel Type -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-gas-pump text-primary"></i> Fuel Type</label>
+                                        <label class="form-label">Fuel Type</label>
                                         <select name="fuelType" class="form-select" required>
                                             <option value="">Select fuel type...</option>
                                             <c:forEach var="f" items="${fuelTypes}">
@@ -151,44 +163,32 @@
                                         </select>
                                     </div>
 
-                                    <!-- Car Type -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-tags text-primary"></i> Car Type</label>
-                                        <select name="typeId" class="form-select" required>
-                                            <option value="">Select car type...</option>
-                                            <c:forEach var="c" items="${carTypes}">
-                                                <option value="${c.typeId}">${c.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-
-
-                                    <div class="col-md-6">
-                                        <label>Year</label>
+                                        <label class="form-label">Year</label>
                                         <input type="number" class="form-control" name="year"
                                                placeholder="Enter manufacturing year..." required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Price/Day ($)</label>
+                                        <label class="form-label">Price/Day (VND)</label>
                                         <input type="text" class="form-control" name="pricePerDay"
-                                               placeholder="Enter price per day..." required>
+                                               placeholder="Enter price per day...(VND)" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Capacity</label>
+                                        <label class="form-label">Capacity</label>
                                         <input type="number" class="form-control" name="capacity"
                                                placeholder="Enter car capacity..." required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>License Plate</label>
+                                        <label class="form-label">License Plate</label>
                                         <input type="text" class="form-control" name="licensePlate"
-                                               placeholder="Enter license plate..." required>
+                                               placeholder="Enter license plate...(format: 29A-123.45)" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Car Type</label>
+                                        <label class="form-label">Car Type</label>
                                         <select name="typeId" class="form-select" required>
                                             <option value="">Select car type...</option>
                                             <c:forEach var="c" items="${carTypes}">
@@ -198,13 +198,13 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Location</label>
+                                        <label class="form-label">Location</label>
                                         <input type="text" class="form-control" name="location"
-                                               placeholder="Enter car location...">
+                                               placeholder="Enter car location..." required>
                                     </div>
 
                                     <div class="col-12">
-                                        <label>Description</label>
+                                        <label class="form-label">Description</label>
                                         <textarea name="description" class="form-control" rows="3"
                                                   placeholder="Enter description about the car..."></textarea>
                                     </div>
@@ -216,6 +216,7 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </section>
@@ -233,6 +234,19 @@
             reader.readAsDataURL(file);
         }
     }
+    function previewFile(event) {
+        const file = event.target.files[0];
+        const img = document.getElementById('previewImage');
+        if (file) {
+            img.style.display = 'block'; // ✅ hiện ảnh sau khi chọn
+            const reader = new FileReader();
+            reader.onload = e => img.src = e.target.result;
+            reader.readAsDataURL(file);
+        } else {
+            img.style.display = 'none'; // ✅ ẩn lại nếu không chọn file
+        }
+    }
+
 </script>
 </body>
 </html>
