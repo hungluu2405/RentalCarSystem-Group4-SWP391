@@ -344,6 +344,115 @@
                                 </button>
                             </div>
 
+                            <div class="filter-section" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <form method="get" action="${pageContext.request.contextPath}/owner/myBooking" id="filterForm">
+                                    <input type="hidden" name="tab" value="${tab}">
+
+                                    <div class="row">
+                                        <!-- Status Filter -->
+                                        <div class="col-md-3 mb-3">
+                                            <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
+                                                <i class="fa fa-filter"></i> Status
+                                            </label>
+                                            <select name="filterStatus" class="form-control form-control-sm">
+                                                <option value="All" ${filterStatus == null || filterStatus == 'All' ? 'selected' : ''}>All Status</option>
+                                                <c:if test="${tab == 'current' || empty tab}">
+                                                    <option value="Pending" ${filterStatus == 'Pending' ? 'selected' : ''}>Pending</option>
+                                                    <option value="Approved" ${filterStatus == 'Approved' ? 'selected' : ''}>Approved</option>
+                                                    <option value="Paid" ${filterStatus == 'Paid' ? 'selected' : ''}>Paid</option>
+                                                    <option value="Returning" ${filterStatus == 'Returning' ? 'selected' : ''}>Returning</option>
+                                                </c:if>
+                                                <c:if test="${tab == 'history'}">
+                                                    <option value="Completed" ${filterStatus == 'Completed' ? 'selected' : ''}>Completed</option>
+                                                    <option value="Cancelled" ${filterStatus == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                                    <option value="Rejected" ${filterStatus == 'Rejected' ? 'selected' : ''}>Rejected</option>
+                                                </c:if>
+                                            </select>
+                                        </div>
+
+                                        <!-- Car Name Search -->
+                                        <div class="col-md-3 mb-3">
+                                            <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
+                                                <i class="fa fa-car"></i> Car Name
+                                            </label>
+                                            <input type="text" name="carName" class="form-control form-control-sm"
+                                                   placeholder="Search by car name..." value="${carName}">
+                                        </div>
+
+                                        <!-- Price Range -->
+                                        <div class="col-md-3 mb-3">
+                                            <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
+                                                <i class="fa fa-money"></i> Price Range
+                                            </label>
+                                            <select name="priceRange" class="form-control form-control-sm">
+                                                <option value="" ${priceRange == null || priceRange == '' ? 'selected' : ''}>All Prices</option>
+                                                <option value="under1m" ${priceRange == 'under1m' ? 'selected' : ''}>Under 1M VND</option>
+                                                <option value="1m-3m" ${priceRange == '1m-3m' ? 'selected' : ''}>1M - 3M VND</option>
+                                                <option value="3m-5m" ${priceRange == '3m-5m' ? 'selected' : ''}>3M - 5M VND</option>
+                                                <option value="over5m" ${priceRange == 'over5m' ? 'selected' : ''}>Over 5M VND</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <div class="col-md-3 mb-3" style="display: flex; align-items: flex-end; gap: 5px;">
+                                            <button type="submit" class="btn btn-sm btn-primary" style="flex: 1;">
+                                                <i class="fa fa-search"></i> Filter
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-secondary" onclick="clearFilters()" style="flex: 1;">
+                                                <i class="fa fa-times"></i> Clear
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Range Filters (Collapsible) -->
+                                    <div class="row" style="margin-top: 10px;">
+                                        <div class="col-12">
+                                            <a href="#" onclick="toggleAdvancedFilters(); return false;" style="font-size: 13px; color: #00b074;">
+                                                <i class="fa fa-caret-down" id="advancedFilterIcon"></i> Advanced Filters (Date Ranges)
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div id="advancedFilters" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                                        <div class="row">
+                                            <!-- Pick-up Date Range -->
+                                            <div class="col-md-6 mb-3">
+                                                <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
+                                                    <i class="fa fa-calendar"></i> Pick-up Date Range
+                                                </label>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="date" name="startDateFrom" class="form-control form-control-sm"
+                                                               value="${startDateFrom}" placeholder="From">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="date" name="startDateTo" class="form-control form-control-sm"
+                                                               value="${startDateTo}" placeholder="To">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Return Date Range -->
+                                            <div class="col-md-6 mb-3">
+                                                <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
+                                                    <i class="fa fa-calendar"></i> Return Date Range
+                                                </label>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="date" name="endDateFrom" class="form-control form-control-sm"
+                                                               value="${endDateFrom}" placeholder="From">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="date" name="endDateTo" class="form-control form-control-sm"
+                                                               value="${endDateTo}" placeholder="To">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
                             <!-- ========== TABLE ========== -->
                             <div class="table-responsive">
                                 <table class="table">
@@ -514,7 +623,7 @@
                                     <ul class="pagination">
                                         <!-- Previous Button -->
                                         <li class="${currentPage == 1 ? 'disabled' : ''}">
-                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage - 1}">
+                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage - 1}&filterStatus=${filterStatus}&startDateFrom=${startDateFrom}&startDateTo=${startDateTo}&endDateFrom=${endDateFrom}&endDateTo=${endDateTo}&carName=${carName}&priceRange=${priceRange}">
                                                 <i class="fa fa-chevron-left"></i>
                                             </a>
                                         </li>
@@ -527,7 +636,7 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <li>
-                                                        <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${i}">
+                                                        <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${i}&filterStatus=${filterStatus}&startDateFrom=${startDateFrom}&startDateTo=${startDateTo}&endDateFrom=${endDateFrom}&endDateTo=${endDateTo}&carName=${carName}&priceRange=${priceRange}">
                                                                 ${i}
                                                         </a>
                                                     </li>
@@ -537,7 +646,7 @@
 
                                         <!-- Next Button -->
                                         <li class="${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage + 1}">
+                                            <a href="${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=${currentPage + 1}&filterStatus=${filterStatus}&startDateFrom=${startDateFrom}&startDateTo=${startDateTo}&endDateFrom=${endDateFrom}&endDateTo=${endDateTo}&carName=${carName}&priceRange=${priceRange}">
                                                 <i class="fa fa-chevron-right"></i>
                                             </a>
                                         </li>
