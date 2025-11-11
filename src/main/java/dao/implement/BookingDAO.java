@@ -1369,6 +1369,438 @@ public class BookingDAO extends DBContext {
         return 0;
     }
 
+    public List<BookingDetail> getCurrentTripsWithFilters(
+            int userId,
+            String status,
+            String startDateFrom,
+            String startDateTo,
+            String endDateFrom,
+            String endDateTo,
+            String carName,
+            String priceRange,
+            int offset,
+            int limit) {
+
+        List<BookingDetail> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("""
+        SELECT
+            b.BOOKING_ID,
+            c.MODEL + ' ' + c.BRAND AS carName,
+            b.START_DATE, b.END_DATE,
+            b.PICKUP_TIME, b.DROPOFF_TIME,
+            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
+    """);
+
+        // Filter by specific status
+        if (status != null && !status.isEmpty() && !status.equals("All")) {
+            sql.append(" AND b.STATUS = ?");
+        }
+
+        // Filter by start date range
+        if (startDateFrom != null && !startDateFrom.isEmpty()) {
+            sql.append(" AND b.START_DATE >= ?");
+        }
+        if (startDateTo != null && !startDateTo.isEmpty()) {
+            sql.append(" AND b.START_DATE <= ?");
+        }
+
+        // Filter by end date range
+        if (endDateFrom != null && !endDateFrom.isEmpty()) {
+            sql.append(" AND b.END_DATE >= ?");
+        }
+        if (endDateTo != null && !endDateTo.isEmpty()) {
+            sql.append(" AND b.END_DATE <= ?");
+        }
+
+        // Filter by car name
+        if (carName != null && !carName.isEmpty()) {
+            sql.append(" AND (c.MODEL + ' ' + c.BRAND) LIKE ?");
+        }
+
+        // Filter by price range
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under1m":
+                    sql.append(" AND b.TOTAL_PRICE < 1000000");
+                    break;
+                case "1m-3m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                    break;
+                case "3m-5m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                    break;
+                case "over5m":
+                    sql.append(" AND b.TOTAL_PRICE > 5000000");
+                    break;
+            }
+        }
+
+        sql.append(" ORDER BY b.CREATED_AT DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            ps.setInt(paramIndex++, userId);
+
+            if (status != null && !status.isEmpty() && !status.equals("All")) {
+                ps.setString(paramIndex++, status);
+            }
+
+            if (startDateFrom != null && !startDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, startDateFrom);
+            }
+            if (startDateTo != null && !startDateTo.isEmpty()) {
+                ps.setString(paramIndex++, startDateTo);
+            }
+
+            if (endDateFrom != null && !endDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, endDateFrom);
+            }
+            if (endDateTo != null && !endDateTo.isEmpty()) {
+                ps.setString(paramIndex++, endDateTo);
+            }
+
+            if (carName != null && !carName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + carName + "%");
+            }
+
+            ps.setInt(paramIndex++, offset);
+            ps.setInt(paramIndex++, limit);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Count current trips with filters
+     */
+    public int countCurrentTripsWithFilters(
+            int userId,
+            String status,
+            String startDateFrom,
+            String startDateTo,
+            String endDateFrom,
+            String endDateTo,
+            String carName,
+            String priceRange) {
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT COUNT(*)
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
+    """);
+
+        if (status != null && !status.isEmpty() && !status.equals("All")) {
+            sql.append(" AND b.STATUS = ?");
+        }
+
+        if (startDateFrom != null && !startDateFrom.isEmpty()) {
+            sql.append(" AND b.START_DATE >= ?");
+        }
+        if (startDateTo != null && !startDateTo.isEmpty()) {
+            sql.append(" AND b.START_DATE <= ?");
+        }
+
+        if (endDateFrom != null && !endDateFrom.isEmpty()) {
+            sql.append(" AND b.END_DATE >= ?");
+        }
+        if (endDateTo != null && !endDateTo.isEmpty()) {
+            sql.append(" AND b.END_DATE <= ?");
+        }
+
+        if (carName != null && !carName.isEmpty()) {
+            sql.append(" AND (c.MODEL + ' ' + c.BRAND) LIKE ?");
+        }
+
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under1m":
+                    sql.append(" AND b.TOTAL_PRICE < 1000000");
+                    break;
+                case "1m-3m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                    break;
+                case "3m-5m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                    break;
+                case "over5m":
+                    sql.append(" AND b.TOTAL_PRICE > 5000000");
+                    break;
+            }
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            ps.setInt(paramIndex++, userId);
+
+            if (status != null && !status.isEmpty() && !status.equals("All")) {
+                ps.setString(paramIndex++, status);
+            }
+
+            if (startDateFrom != null && !startDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, startDateFrom);
+            }
+            if (startDateTo != null && !startDateTo.isEmpty()) {
+                ps.setString(paramIndex++, startDateTo);
+            }
+
+            if (endDateFrom != null && !endDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, endDateFrom);
+            }
+            if (endDateTo != null && !endDateTo.isEmpty()) {
+                ps.setString(paramIndex++, endDateTo);
+            }
+
+            if (carName != null && !carName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + carName + "%");
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Get history trips with filters
+     */
+    public List<BookingDetail> getHistoryTripsWithFilters(
+            int userId,
+            String status,
+            String startDateFrom,
+            String startDateTo,
+            String endDateFrom,
+            String endDateTo,
+            String carName,
+            String priceRange,
+            int offset,
+            int limit) {
+
+        List<BookingDetail> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("""
+        SELECT 
+            b.BOOKING_ID, 
+            c.MODEL + ' ' + c.BRAND AS carName,
+            b.START_DATE, b.END_DATE, 
+            b.PICKUP_TIME, b.DROPOFF_TIME, 
+            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ?
+        AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
+    """);
+
+        if (status != null && !status.isEmpty() && !status.equals("All")) {
+            sql.append(" AND b.STATUS = ?");
+        }
+
+        if (startDateFrom != null && !startDateFrom.isEmpty()) {
+            sql.append(" AND b.START_DATE >= ?");
+        }
+        if (startDateTo != null && !startDateTo.isEmpty()) {
+            sql.append(" AND b.START_DATE <= ?");
+        }
+
+        if (endDateFrom != null && !endDateFrom.isEmpty()) {
+            sql.append(" AND b.END_DATE >= ?");
+        }
+        if (endDateTo != null && !endDateTo.isEmpty()) {
+            sql.append(" AND b.END_DATE <= ?");
+        }
+
+        if (carName != null && !carName.isEmpty()) {
+            sql.append(" AND (c.MODEL + ' ' + c.BRAND) LIKE ?");
+        }
+
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under1m":
+                    sql.append(" AND b.TOTAL_PRICE < 1000000");
+                    break;
+                case "1m-3m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                    break;
+                case "3m-5m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                    break;
+                case "over5m":
+                    sql.append(" AND b.TOTAL_PRICE > 5000000");
+                    break;
+            }
+        }
+
+        sql.append(" ORDER BY b.CREATED_AT DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            ps.setInt(paramIndex++, userId);
+
+            if (status != null && !status.isEmpty() && !status.equals("All")) {
+                ps.setString(paramIndex++, status);
+            }
+
+            if (startDateFrom != null && !startDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, startDateFrom);
+            }
+            if (startDateTo != null && !startDateTo.isEmpty()) {
+                ps.setString(paramIndex++, startDateTo);
+            }
+
+            if (endDateFrom != null && !endDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, endDateFrom);
+            }
+            if (endDateTo != null && !endDateTo.isEmpty()) {
+                ps.setString(paramIndex++, endDateTo);
+            }
+
+            if (carName != null && !carName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + carName + "%");
+            }
+
+            ps.setInt(paramIndex++, offset);
+            ps.setInt(paramIndex++, limit);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                BookingDetail detail = new BookingDetail();
+                detail.setBookingId(rs.getInt("BOOKING_ID"));
+                detail.setCarName(rs.getString("carName"));
+                detail.setStartDate(rs.getObject("START_DATE", LocalDate.class));
+                detail.setEndDate(rs.getObject("END_DATE", LocalDate.class));
+                detail.setPickupTime(rs.getObject("PICKUP_TIME", LocalTime.class));
+                detail.setDropoffTime(rs.getObject("DROPOFF_TIME", LocalTime.class));
+                detail.setStatus(rs.getString("STATUS"));
+                detail.setLocation(rs.getString("LOCATION"));
+                detail.setTotalPrice(rs.getDouble("TOTAL_PRICE"));
+                list.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Count history trips with filters
+     */
+    public int countHistoryTripsWithFilters(
+            int userId,
+            String status,
+            String startDateFrom,
+            String startDateTo,
+            String endDateFrom,
+            String endDateTo,
+            String carName,
+            String priceRange) {
+
+        StringBuilder sql = new StringBuilder("""
+        SELECT COUNT(*) 
+        FROM BOOKING b 
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE b.USER_ID = ? 
+        AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
+    """);
+
+        if (status != null && !status.isEmpty() && !status.equals("All")) {
+            sql.append(" AND b.STATUS = ?");
+        }
+
+        if (startDateFrom != null && !startDateFrom.isEmpty()) {
+            sql.append(" AND b.START_DATE >= ?");
+        }
+        if (startDateTo != null && !startDateTo.isEmpty()) {
+            sql.append(" AND b.START_DATE <= ?");
+        }
+
+        if (endDateFrom != null && !endDateFrom.isEmpty()) {
+            sql.append(" AND b.END_DATE >= ?");
+        }
+        if (endDateTo != null && !endDateTo.isEmpty()) {
+            sql.append(" AND b.END_DATE <= ?");
+        }
+
+        if (carName != null && !carName.isEmpty()) {
+            sql.append(" AND (c.MODEL + ' ' + c.BRAND) LIKE ?");
+        }
+
+        if (priceRange != null && !priceRange.isEmpty()) {
+            switch (priceRange) {
+                case "under1m":
+                    sql.append(" AND b.TOTAL_PRICE < 1000000");
+                    break;
+                case "1m-3m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                    break;
+                case "3m-5m":
+                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                    break;
+                case "over5m":
+                    sql.append(" AND b.TOTAL_PRICE > 5000000");
+                    break;
+            }
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            ps.setInt(paramIndex++, userId);
+
+            if (status != null && !status.isEmpty() && !status.equals("All")) {
+                ps.setString(paramIndex++, status);
+            }
+
+            if (startDateFrom != null && !startDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, startDateFrom);
+            }
+            if (startDateTo != null && !startDateTo.isEmpty()) {
+                ps.setString(paramIndex++, startDateTo);
+            }
+
+            if (endDateFrom != null && !endDateFrom.isEmpty()) {
+                ps.setString(paramIndex++, endDateFrom);
+            }
+            if (endDateTo != null && !endDateTo.isEmpty()) {
+                ps.setString(paramIndex++, endDateTo);
+            }
+
+            if (carName != null && !carName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + carName + "%");
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }
 
 
