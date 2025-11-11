@@ -13,7 +13,7 @@ public class ManageCarDetailService {
     public String validateCarUpdate(CarViewModel car) {
         //  Validate dung tích
         if (car.getCapacity() < 2 || car.getCapacity() > 7) {
-            return "Số chỗ ngồi phải trong khoảng từ 1 đến 7.";
+            return "Số chỗ ngồi phải trong khoảng từ 2 đến 7.";
         }
 
         //  Validate năm sản xuất
