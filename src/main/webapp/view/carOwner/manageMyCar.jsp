@@ -127,6 +127,33 @@
             }
 
         }
+        .availability-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+            background-color: transparent;
+            border: 2px solid #999;
+            vertical-align: middle;
+        }
+
+        .availability-dot.active {
+            background-color: #00cc00;
+            border-color: #00cc00;
+        }
+
+        @media (max-width: 992px) {
+            .car-card {
+                display: flex;
+                align-items: flex-start;
+                gap: 20px;
+                margin-bottom: 30px;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+
     </style>
 </head>
 
@@ -183,7 +210,18 @@
                                     </div>
 
                                         <div class="car-info">
-                                        <h3>${car.brand} ${car.model} </h3>
+                                        <h3>
+                                                ${car.brand} ${car.model}
+                                            <c:choose>
+                                                <c:when test="${car.availability == 1}">
+                                                    <span class="availability-dot active"></span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="availability-dot"></span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </h3>
+
                                         <p><strong>Seats:</strong> ${car.capacity}</p>
                                         <p><strong>Fuel:</strong> ${car.fuelType}</p>
                                         <p><strong>Transmission:</strong> ${car.transmission}</p>
