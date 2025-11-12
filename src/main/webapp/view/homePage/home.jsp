@@ -351,7 +351,14 @@
                                 <li><a class="menu-item"
                                        href="${pageContext.request.contextPath}/view/contact/contact.jsp">Liên hệ</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/carOwner/becomeCarOwner.jsp">Trở thành chủ xe</a></li>
+                                <li><c:if test="${empty sessionScope.user or (sessionScope.user.roleId != 1 and sessionScope.user.roleId != 2)}">
+                                <li>
+                                    <a class="menu-item" href="${pageContext.request.contextPath}/customer/becomeCarOwner">
+                                        Become Car Owner
+                                    </a>
+                                </li>
+                                </c:if>
+                                </li>
 
 
                         </div>

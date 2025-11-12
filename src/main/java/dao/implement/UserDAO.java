@@ -417,6 +417,78 @@ public class UserDAO extends GenericDAO<User> {
 
         return users;
     }
+    public boolean updateUserRoleByName(int userId, String roleName) {
+        String sql = """
+        UPDATE [USER]
+        SET ROLE_ID = (SELECT ROLE_ID FROM ROLE WHERE NAME = ?)
+        WHERE USER_ID = ?
+    """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, roleName);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    // cập nhật role trực tiếp bằng ROLE_ID
+    public boolean updateUserRoleById(int userId, int newRoleId) {
+        String sql = "UPDATE [USER] SET ROLE_ID = ? WHERE USER_ID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, newRoleId);
+            ps.setInt(2, userId);
+            int rows = ps.executeUpdate();
+            System.out.println(">>> [DEBUG] Updated ROLE_ID for USER_ID=" + userId + " to " + newRoleId + " (rows=" + rows + ")");
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // lấy user từ DB có cả Role name (sau khi update role xong reload session)
+    public User getUserByIdWithRole(int userId) {
+        String sql = """
+            SELECT u.USER_ID, u.USER_NAME, u.EMAIL, u.PASSWORD, u.ROLE_ID, 
+                   r.NAME AS ROLE_NAME, u.IS_EMAIL_VERIFIED, u.CREATED_AT
+            FROM [USER] u
+            LEFT JOIN [ROLE] r ON u.ROLE_ID = r.ROLE_ID
+            WHERE u.USER_ID = ?
+        """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("USER_ID"));
+                user.setUsername(rs.getString("USER_NAME"));
+                user.setEmail(rs.getString("EMAIL"));
+                user.setPassword(rs.getString("PASSWORD"));
+                user.setRoleId(rs.getInt("ROLE_ID"));
+                user.setRoleName(rs.getString("ROLE_NAME"));
+                try {
+                    user.setIsEmailVerified(rs.getBoolean("IS_EMAIL_VERIFIED"));
+                } catch (SQLException e) {
+                    user.setIsEmailVerified(false);
+                }
+                try {
+                    user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                } catch (SQLException e) {
+                    // ignore
+                }
+
+                // Load thêm profile
+                UserProfileDAO profileDAO = new UserProfileDAO();
+                user.setUserProfile(profileDAO.findByUserId(userId));
+
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

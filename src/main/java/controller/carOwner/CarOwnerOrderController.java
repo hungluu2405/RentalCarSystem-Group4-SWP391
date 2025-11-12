@@ -31,15 +31,22 @@ public class CarOwnerOrderController extends HttpServlet {
         }
 
         BookingDAO bookingDAO = new BookingDAO();
-        int userId = user.getUserId();
+        int ownerId = user.getUserId();
 
-        // Lấy tham số tab
+        // Get tab parameter
         String tab = request.getParameter("tab");
         if (tab == null || tab.isEmpty()) {
             tab = "current";
         }
 
-        // Lấy tham số page
+        // Get filter parameters (simplified - only 2 date fields)
+        String filterStatus = request.getParameter("filterStatus");
+        String dateFrom = request.getParameter("dateFrom");
+        String dateTo = request.getParameter("dateTo");
+        String carName = request.getParameter("carName");
+        String priceRange = request.getParameter("priceRange");
+
+        // Get page parameter
         int currentPage = 1;
         try {
             String pageParam = request.getParameter("page");
@@ -53,25 +60,45 @@ public class CarOwnerOrderController extends HttpServlet {
 
         int offset = (currentPage - 1) * PAGE_SIZE;
 
-        // Thống kê
-        int upcoming = bookingDAO.countByStatus(userId, "Pending");
-        int total = bookingDAO.countByUser(userId);
-        int cancelled = bookingDAO.countByStatus(userId, "Cancelled");
+        // Statistics (using owner ID)
+        int upcoming = bookingDAO.countByOwnerAndStatus(ownerId, "Pending");
+        int total = bookingDAO.countByOwner(ownerId);
+        int cancelled = bookingDAO.countByOwnerAndStatus(ownerId, "Cancelled");
 
-        // Lấy bookings theo tab
+        // Get bookings with filters
         List<BookingDetail> bookings;
         int totalRecords;
 
         if ("history".equals(tab)) {
-            bookings = bookingDAO.getHistoryTripsByUserId(userId, offset, PAGE_SIZE);
-            totalRecords = bookingDAO.countHistoryTripsByUserId(userId);
+            // Check if any filter is applied
+            boolean hasFilters = hasFilters(filterStatus, dateFrom, dateTo, carName, priceRange);
+
+            if (hasFilters) {
+                bookings = bookingDAO.getHistoryTripsForOwnerWithFilters(ownerId, filterStatus,
+                        dateFrom, dateTo, carName, priceRange, offset, PAGE_SIZE);
+                totalRecords = bookingDAO.countHistoryTripsForOwnerWithFilters(ownerId, filterStatus,
+                        dateFrom, dateTo, carName, priceRange);
+            } else {
+                bookings = bookingDAO.getHistoryTripsByOwnerId(ownerId, offset, PAGE_SIZE);
+                totalRecords = bookingDAO.countHistoryTripsByOwnerId(ownerId);
+            }
         } else {
-            bookings = bookingDAO.getCurrentTripsByUserId(userId, offset, PAGE_SIZE);
-            totalRecords = bookingDAO.countCurrentTripsByUserId(userId);
+            boolean hasFilters = hasFilters(filterStatus, dateFrom, dateTo, carName, priceRange);
+
+            if (hasFilters) {
+                bookings = bookingDAO.getCurrentTripsForOwnerWithFilters(ownerId, filterStatus,
+                        dateFrom, dateTo, carName, priceRange, offset, PAGE_SIZE);
+                totalRecords = bookingDAO.countCurrentTripsForOwnerWithFilters(ownerId, filterStatus,
+                        dateFrom, dateTo, carName, priceRange);
+            } else {
+                bookings = bookingDAO.getCurrentTripsByOwnerId(ownerId, offset, PAGE_SIZE);
+                totalRecords = bookingDAO.countCurrentTripsByOwnerId(ownerId);
+            }
         }
 
         int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
 
+        // Set attributes
         request.setAttribute("bookings", bookings);
         request.setAttribute("upcoming", upcoming);
         request.setAttribute("total", total);
@@ -80,6 +107,21 @@ public class CarOwnerOrderController extends HttpServlet {
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
 
+        // Set filter parameters for JSP
+        request.setAttribute("filterStatus", filterStatus);
+        request.setAttribute("dateFrom", dateFrom);
+        request.setAttribute("dateTo", dateTo);
+        request.setAttribute("carName", carName);
+        request.setAttribute("priceRange", priceRange);
+
         request.getRequestDispatcher("/view/carOwner/carOwnerOrder.jsp").forward(request, response);
+    }
+
+    private boolean hasFilters(String status, String dateFrom, String dateTo, String carName, String price) {
+        return (status != null && !status.isEmpty() && !status.equals("All")) ||
+                (dateFrom != null && !dateFrom.isEmpty()) ||
+                (dateTo != null && !dateTo.isEmpty()) ||
+                (carName != null && !carName.isEmpty()) ||
+                (price != null && !price.isEmpty());
     }
 }
