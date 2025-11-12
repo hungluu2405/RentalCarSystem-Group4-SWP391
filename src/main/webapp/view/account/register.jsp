@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-    <title>Rentaly - Create an Account</title>
+    <title>Rentaly - Tạo tài khoản</title>
     <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -64,21 +64,20 @@
                         </div>
                         <div class="de-flex-col header-col-mid">
                             <ul id="mainmenu">
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/home">Home</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/home">Trang chủ</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Car</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Danh sách xe</a>
 
                                 </li>
                                 <li><a class="menu-item"
-                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
+                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Liên hệ</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About
-                                    Us</a></li>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">Về chúng tôi</a></li>
                             </ul>
                         </div>
                         <div class="de-flex-col">
                             <div class="menu_side_area">
-                                <a href="${pageContext.request.contextPath}/login" class="btn-main">Sign In</a>
+                                <a href="${pageContext.request.contextPath}/login" class="btn-main">Đăng nhập</a>
                                 <span id="menu-btn"></span>
                             </div>
                         </div>
@@ -97,7 +96,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Register</h1>
+                            <h1>Đăng ký</h1>
                         </div>
                     </div>
                 </div>
@@ -110,8 +109,8 @@
                     <div class="col-md-10 offset-md-1">
                         <div class="padding40 rounded-3 shadow-soft" data-bgcolor="#ffffff">
                             <div class="text-center">
-                                <h3>Create Your Account</h3>
-                                <p>Please fill in the information below to create your account.</p>
+                                <h3>Tạo tài khoản của bạn</h3>
+                                <p>Vui lòng điền đầy đủ thông tin bên dưới để đăng ký tài khoản.</p>
                             </div>
                             <div class="spacer-10"></div>
                             <p style="color: red; font-weight: bold;" class="text-center">${requestScope.error}</p>
@@ -121,44 +120,44 @@
                                   action='${pageContext.request.contextPath}/register'>
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <h5>Personal Details</h5>
+                                        <h5>Thông tin cá nhân</h5>
 
                                         <div class="field-set">
-                                            <label>Username <span class="text-danger">*</span></label>
+                                            <label>Tên đăng nhập<span class="text-danger">*</span></label>
                                             <input type='text' name='username' class="form-control"
                                                    value='${formData.username}' required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Full Name <span class="text-danger">*</span></label>
+                                            <label>Họ và tên <span class="text-danger">*</span></label>
                                             <input type='text' name='full_name' class="form-control"
                                                    value='${formData.full_name}' required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Phone Number <span class="text-danger">*</span></label>
+                                            <label>Số điện thoại <span class="text-danger">*</span></label>
                                             <input type='tel' name='phone' class="form-control"
                                                    value='${formData.phone}' required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Date of Birth <span class="text-danger">*</span></label>
+                                            <label>Ngày sinh <span class="text-danger">*</span></label>
                                             <input type='date' name='dob' class="form-control" value='${formData.dob}'
                                                    required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Gender <span class="text-danger">*</span></label>
+                                            <label>Giới tính <span class="text-danger">*</span></label>
                                             <select name="gender" class="form-control" required>
-                                                <option value="">-- Select --</option>
+                                                <option value="">-- Chọn --</option>
                                                 <option value="Male" ${formData.gender == 'Male' ? 'selected' : ''}>
-                                                    Male
+                                                    Nam
                                                 </option>
                                                 <option value="Female" ${formData.gender == 'Female' ? 'selected' : ''}>
-                                                    Female
+                                                    Nữ
                                                 </option>
                                                 <option value="Other" ${formData.gender == 'Other' ? 'selected' : ''}>
-                                                    Other
+                                                    Khác
                                                 </option>
                                             </select>
                                         </div>
@@ -167,39 +166,39 @@
                                     </div>
 
                                     <div class="col-lg-6">
-                                        <h5>Account & Address</h5>
+                                        <h5>Tài khoản & Địa chỉ</h5>
 
                                         <div class="field-set">
-                                            <label>Email Address <span class="text-danger">*</span></label>
+                                            <label>Địa chỉ email <span class="text-danger">*</span></label>
                                             <input type='email' name='email' class="form-control"
                                                    value='${formData.email}' required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Password <span class="text-danger">*</span></label>
+                                            <label>Mật khẩu <span class="text-danger">*</span></label>
                                             <input type='password' name='password' class="form-control" required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Re-enter Password <span class="text-danger">*</span></label>
+                                            <label>Nhập lại mật khẩu <span class="text-danger">*</span></label>
                                             <input type='password' name='re_password' class="form-control" required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Role <span class="text-danger">*</span></label>
+                                            <label>Vai trò <span class="text-danger">*</span></label>
                                             <select name="role_id" class="form-control" required>
-                                                <option value="">-- Select Role --</option>
+                                                <option value="">-- Chọn vai trò --</option>
                                                 <option value="3" ${formData.role_id == '3' ? 'selected' : ''}>
-                                                    Customer
+                                                    Khách hàng
                                                 </option>
-                                                <option value="2" ${formData.role_id == '2' ? 'selected' : ''}>Car
-                                                    Owner
+                                                <option value="2" ${formData.role_id == '2' ? 'selected' : ''}>
+                                                    Chủ xe
                                                 </option>
                                             </select>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Address Line <span class="text-danger">*</span></label>
+                                            <label>Địa chỉ cụ thể <span class="text-danger">*</span></label>
                                             <input type='text' name='address_line' class="form-control"
                                                    value='${formData.address_line}' required>
                                         </div>
@@ -207,7 +206,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="field-set">
-                                                    <label>City / Province <span class="text-danger">*</span></label>
+                                                    <label>Thành phố / Tỉnh <span class="text-danger">*</span></label>
                                                     <input type='text' name='city' class="form-control"
                                                            value='${formData.city}' required>
                                                 </div>
@@ -215,16 +214,16 @@
 
                                             <div class="col-md-6">
                                                 <div class="field-set">
-                                                    <label>Country <span class="text-danger">*</span></label>
+                                                    <label>Quốc gia <span class="text-danger">*</span></label>
                                                     <input type='text' name='country' class="form-control"
-                                                           value='${formData.country != null ? formData.country : "Vietnam"}'
+                                                           value='${formData.country != null ? formData.country : "Việt Nam"}'
                                                            required>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Postal Code</label>
+                                            <label>Mã bưu điện</label>
                                             <input type='text' name='postal_code' class="form-control"
                                                    value='${formData.postal_code}'>
                                         </div>
@@ -232,10 +231,10 @@
 
 
                                     <div class="col-lg-12 text-center mt-4">
-                                        <input type='submit' value='Create Account' class="btn-main">
+                                        <input type='submit' value='Tạo tài khoản' class="btn-main">
                                         <div class="mt-3">
-                                            <span>Already have an account? <a
-                                                    href="${pageContext.request.contextPath}/login">Sign In</a></span>
+                                            <span>Đã có tài khoản? <a
+                                                    href="${pageContext.request.contextPath}/login">Đăng nhập</a></span>
                                         </div>
                                     </div>
                                 </div>

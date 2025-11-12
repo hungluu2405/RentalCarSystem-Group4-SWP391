@@ -52,7 +52,7 @@
                             <div class="row align-items-center">
                                 <div class="col-lg-4 offset-lg-4">
                                     <div class="padding40 rounded-3 shadow-soft" data-bgcolor="#ffffff">
-                                        <h4>Change Password</h4>
+                                        <h4>Đổi mật khẩu</h4>
                                         <div class="spacer-10"></div>
                                         <p style="color:red;">${requestScope.error}</p>
                                         <p style="color:green;">${requestScope.message}</p>
@@ -77,7 +77,7 @@
                                         </form>
                                         <div class="spacer-10"></div>
                                         <div class="text-center">
-                                            <a href="${pageContext.request.contextPath}/customer/profile">Back to Profile</a>
+                                            <a href="${pageContext.request.contextPath}/customer/profile">Quay lại hồ sơ</a>
                                         </div>
                                     </div>
                                 </div>
