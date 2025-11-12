@@ -155,7 +155,7 @@
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <input type="submit" class="btn-main" value="Update Profile">
+                                    <input type="submit" class="btn-main" value="Cập Nhật">
                                 </div>
                             </form>
                         </div>

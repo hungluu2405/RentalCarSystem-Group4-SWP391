@@ -8,7 +8,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Rentaly - Cars List</title>
+    <title>Rentaly - Danh Sách Xe</title>
 
     <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -89,14 +89,14 @@
                                                     <c:when test="${sessionScope.user.roleId == 2}">
                                                         <a class="menu-item"
                                                            href="${pageContext.request.contextPath}/owner/profile"
-                                                           role="menuitem">My Profile</a>
+                                                           role="menuitem">Tài khoản của tôi</a>
                                                     </c:when>
 
                                                     <%-- Giả sử: 3 = Customer --%>
                                                     <c:when test="${sessionScope.user.roleId == 3}">
                                                         <a class="menu-item"
                                                            href="${pageContext.request.contextPath}/customer/profile"
-                                                           role="menuitem">My Profile</a>
+                                                           role="menuitem">Tài khoản của tôi</a>
                                                     </c:when>
 
                                                     <%-- Trường hợp mặc định nếu không khớp role nào --%>
@@ -108,9 +108,9 @@
                                                 </c:choose>
                                                 <a class="menu-item"
                                                    href="${pageContext.request.contextPath}/change-password"
-                                                   role="menuitem">Change Password</a>
+                                                   role="menuitem">Đổi Mật Khẩu</a>
                                                 <a class="menu-item" href="${pageContext.request.contextPath}/logout"
-                                                   role="menuitem">Sign Out</a>
+                                                   role="menuitem">Đăng Xuất</a>
                                             </div>
                                         </div>
 
@@ -242,9 +242,8 @@
 
 
                                     <c:otherwise>
-                                        <a href="${pageContext.request.contextPath}/login" class="btn-main">Sign In</a>
-                                        <a href="${pageContext.request.contextPath}/register" class="btn-main">Sign
-                                            Up</a>
+                                        <a href="${pageContext.request.contextPath}/login" class="btn-main">Đăng Nhập</a>
+                                        <a href="${pageContext.request.contextPath}/register" class="btn-main">Đăng Ký</a>
                                     </c:otherwise>
                                 </c:choose>
                                 <span id="menu-btn"></span>
@@ -264,7 +263,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Cars List</h1>
+                            <h1>Danh Sách Xe</h1>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -277,7 +276,7 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="item_filter_group">
-                            <h4>Filter Cars</h4>
+                            <h4>Tìm Kiếm Xe</h4>
                             <div class="p-3" data-bgcolor="#f5f5f5" style="border-radius: 5px;">
                                 <form action="${pageContext.request.contextPath}/cars" method="get">
                                     <%-- ✅ Giữ lại dữ liệu ngày/giờ khi chuyển từ /home --%>
@@ -291,15 +290,15 @@
                                            value="${param.dropoffTime != null ? param.dropoffTime : requestScope.dropoffTime}">
 
                                     <div class="mb-3">
-                                        <label class="form-label">Car Name</label>
+                                        <label class="form-label">Tên Xe</label>
                                         <input type="text" name="name" class="form-control"
                                                value="${param.name != null ? param.name : requestScope.name}">
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Brand</label>
+                                        <label class="form-label">Hãng</label>
                                         <select name="brand" class="form-control">
-                                            <option value="">All Brands</option>
+                                            <option value="">Tất Cả Hãng</option>
                                             <c:forEach var="b" items="${brandList}">
                                                 <option value="${b}" ${b == param.brand || b == requestScope.brand ? 'selected' : ''}>
                                                         ${b}
@@ -309,9 +308,9 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Type</label>
+                                        <label class="form-label">Loại</label>
                                         <select name="type" class="form-control">
-                                            <option value="">All Types</option>
+                                            <option value="">Tất cả loại xe</option>
                                             <c:forEach var="t" items="${typeList}">
                                                 <c:set var="parts" value="${fn:split(t, ':')}"/>
                                                 <option value="${parts[0]}"
@@ -323,9 +322,9 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Seats</label>
+                                        <label class="form-label">Số Chỗ Ngồi</label>
                                         <select name="capacity" class="form-control">
-                                            <option value="">Any</option>
+                                            <option value="">Bất Kỳ</option>
                                             <c:forEach var="c" items="${capacityList}">
                                                 <option value="${c}"
                                                     ${c.toString() == param.capacity || c.toString() == requestScope.capacity ? 'selected' : ''}>
@@ -336,9 +335,9 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Fuel</label>
+                                        <label class="form-label">Loại nhiên liệu</label>
                                         <select name="fuel" class="form-control">
-                                            <option value="">Any</option>
+                                            <option value="">Bất Kỳ</option>
                                             <c:forEach var="f" items="${fuelTypeList}">
                                                 <option value="${f}"
                                                     ${f == param.fuel || f == requestScope.fuel ? 'selected' : ''}>${f}</option>
@@ -347,20 +346,20 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Location</label>
+                                        <label class="form-label">Địa Điểm</label>
                                         <input type="text" name="location" class="form-control"
                                                value="${param.location != null ? param.location : requestScope.location}"
-                                               placeholder="Enter location...">
+                                               placeholder="Nhập Địa Điểm ...">
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Max Price (VND/day)</label>
+                                        <label class="form-label">Số Tiền Tối Đa (VND/ngày)</label>
                                         <input type="number" name="price" class="form-control"
                                                value="${param.price != null ? param.price : requestScope.price}"
                                                min="0">
                                     </div>
 
-                                    <button type="submit" class="btn-main w-100">Apply Filter</button>
+                                    <button type="submit" class="btn-main w-100">Tìm Kiếm</button>
                                 </form>
 
                             </div>
@@ -372,7 +371,7 @@
                             <%-- Biến ${carList} này là do CarListServlet gửi sang --%>
                             <c:if test="${empty carList}">
                                 <div class="col-12">
-                                    <div class="alert alert-warning text-center">No cars found matching your criteria.
+                                    <div class="alert alert-warning text-center">Không tìm được xe
                                     </div>
                                 </div>
                             </c:if>
@@ -403,7 +402,7 @@
                                                     <%-- LƯỚI THUỘC TÍNH 2X2 --%>
                                                 <div class="row g-2 my-3">
                                                     <div class="col-6">
-                                                        <i class="fa fa-users text-muted me-2"></i>${car.capacity} Seats
+                                                        <i class="fa fa-users text-muted me-2"></i>${car.capacity} Chỗ
                                                     </div>
                                                     <div class="col-6">
                                                         <i class="fa fa-cogs text-muted me-2"></i>${car.transmission}
@@ -422,7 +421,7 @@
                                                     <%-- PHẦN GIÁ TIỀN VÀ NÚT BẤM --%>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <span class="fs-6 text-muted">Daily rate from</span>
+                                                        <span class="fs-6 text-muted">Giá Chỉ Từ</span>
                                                         <h5 class="fw-bold mb-0">
                                                             <fmt:formatNumber value="${car.pricePerDay}"
                                                                               type="number" groupingUsed="true"
@@ -430,8 +429,7 @@
                                                         </h5>
                                                     </div>
                                                     <a class="btn-main"
-                                                       href="${pageContext.request.contextPath}/car-single?id=${car.carId}">Rent
-                                                        Now</a>
+                                                       href="${pageContext.request.contextPath}/car-single?id=${car.carId}">Thuê Ngay</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -556,9 +554,7 @@
                 <div class="col-lg-3">
                     <div class="widget">
                         <h5>About Rentaly</h5>
-                        <p>Where quality meets affordability. We understand the importance of a smooth and enjoyable
-                            journey without the burden of excessive costs. That's why we have meticulously crafted our
-                            offerings to provide you with top-notch vehicles at minimum expense.</p>
+                        <p>Nơi chất lượng gặp gỡ sự tiết kiệm. Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần xe tốt mà còn phải thoải mái và hợp lý về chi phí. Vì thế, Rentaly luôn nỗ lực mang đến cho bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất, giúp bạn tận hưởng hành trình êm ái, an toàn và không lo về chi phí..</p>
                     </div>
                 </div>
                 <div class="col-lg-3">
