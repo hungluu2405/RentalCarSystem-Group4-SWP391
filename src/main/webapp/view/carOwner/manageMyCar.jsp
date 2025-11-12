@@ -194,6 +194,40 @@
 
                     <!-- MAIN CONTENT -->
                     <div class="col-lg-9">
+
+                        <!-- STATISTICS SECTION -->
+                        <div class="row mb-4">
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <div class="card padding30 rounded-5 text-center">
+                                    <div class="symbol mb40">
+                                        <i class="fa id-color fa-2x fa-car"></i>
+                                    </div>
+                                    <span class="h1 mb0">${totalCars}</span><br>
+                                    <span class="text-gray">Total Cars</span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <div class="card padding30 rounded-5 text-center">
+                                    <div class="symbol mb40">
+                                        <i class="fa id-color fa-2x fa-check-circle"></i>
+                                    </div>
+                                    <span class="h1 mb0">${availableCars}</span><br>
+                                    <span class="text-gray">Available Cars</span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 mb-3">
+                                <div class="card padding30 rounded-5 text-center">
+                                    <div class="symbol mb40">
+                                        <i class="fa id-color fa-2x fa-ban"></i>
+                                    </div>
+                                    <span class="h1 mb0">${unavailableCars}</span><br>
+                                    <span class="text-gray">Unavailable Cars</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="dashboard-content">
                             <h3 class="fw-bold mb-3 text-secondary">
                                 <i class="fa fa-car"></i> My Cars
