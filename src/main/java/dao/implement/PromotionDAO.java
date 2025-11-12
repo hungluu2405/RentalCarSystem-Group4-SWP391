@@ -20,11 +20,11 @@ public class PromotionDAO extends DBContext {
                 p.setPromoId(rs.getInt("PROMO_ID"));
                 p.setCode(rs.getString("CODE"));
                 p.setDescription(rs.getString("DESCRIPTION"));
-                p.setDiscountRate(rs.getDouble("DISCOUNT_RATE")); // ✅ sửa ở đây
-                p.setDiscountType(rs.getString("DISCOUNT_TYPE")); // ✅ thêm dòng này
+                p.setDiscountRate(rs.getDouble("DISCOUNT_RATE"));
+                p.setDiscountType(rs.getString("DISCOUNT_TYPE"));
                 p.setStartDate(rs.getDate("START_DATE"));
                 p.setEndDate(rs.getDate("END_DATE"));
-                p.setActive(rs.getBoolean("ACTIVE")); // ✅ thêm dòng này
+                p.setActive(rs.getBoolean("ACTIVE"));
                 return p;
             }
         } catch (SQLException e) {
