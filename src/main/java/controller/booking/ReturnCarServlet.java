@@ -37,7 +37,7 @@ public class ReturnCarServlet extends HttpServlet {
             boolean updated = bookingService.returnBooking(bookingId);
 
             if (updated) {
-                // ✅ Cập nhật thành công
+
                 request.getSession().setAttribute("successMessage", "✅ Yêu cầu trả xe đã được gửi! Chờ chủ xe xác nhận.");
             } else {
 

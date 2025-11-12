@@ -41,7 +41,7 @@ public class PayPalService {
             throw new Exception("Booking ID " + bookingId + " is not approved yet.");
         }
 
-        // ========== CONVERT VND → USD ==========
+
         double priceInVND = booking.getTotalPrice();
 
         if (priceInVND <= 0) {
