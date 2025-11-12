@@ -11,7 +11,6 @@
     <meta charset="UTF-8">
     <title>Rentaly - Multipurpose Vehicle Car Rental Website Template</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/v4-shims.min.css">
     <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -295,195 +294,6 @@
             color: #999;
             font-style: italic;
         }
-        /* === Floating Chat Button === */
-        #floatingChatBtn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #28a745, #34c759);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            transition: all 0.25s ease;
-            z-index: 10500;
-        }
-        #floatingChatBtn:hover {
-            transform: scale(1.1);
-            background: linear-gradient(135deg, #24993f, #2fb84a);
-        }
-
-        /* === Chat Dropdown (Danh sách hội thoại) === */
-        .chat-dropdown {
-            position: fixed;
-            bottom: 90px;
-            right: 25px;
-            width: 270px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 22px rgba(0,0,0,0.15);
-            overflow: hidden;
-            display: none;
-            animation: fadeUp .2s ease-out;
-            z-index: 10400; /* thấp hơn chat box */
-        }
-        .chat-dropdown.open { display: block; }
-
-        .chat-dropdown-header {
-            background: linear-gradient(135deg, #28a745, #34c759);
-            color: #fff;
-            padding: 12px 16px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        #chatList {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            max-height: 260px;
-            overflow-y: auto;
-        }
-        #chatList li {
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: background-color 0.15s ease;
-        }
-        #chatList li:hover {
-            background: #f5f8f8;
-        }
-        #chatList li img {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        #chatList li span {
-            font-weight: 500;
-            color: #333;
-            font-size: 14px;
-        }
-
-        /* === Dock chứa các chat box nổi === */
-        #chatDock {
-            position: fixed;
-            bottom: 25px;
-            right: 100px;
-            display: flex;
-            gap: 12px;
-            z-index: 10501;
-        }
-
-        /* === Chat Box === */
-        .chat-box {
-            width: 290px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            animation: fadeUp .25s ease-out;
-        }
-        .chat-head {
-            background: linear-gradient(135deg, #28a745, #34c759);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 12px;
-        }
-        .chat-head .left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .chat-head img.avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.5);
-        }
-        .chat-head .actions button {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            margin-left: 6px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        .chat-head .actions button:hover {
-            opacity: 1;
-        }
-
-        .chat-content {
-            flex: 1;
-            padding: 10px 12px;
-            font-size: 13px;
-            overflow-y: auto;
-            background: #fdfdfd;
-        }
-        .chat-input {
-            display: flex;
-            border-top: 1px solid #eee;
-        }
-        .chat-input input {
-            flex: 1;
-            border: none;
-            padding: 10px;
-            font-size: 13px;
-            outline: none;
-        }
-        .chat-input button {
-            background: #28a745;
-            border: none;
-            color: white;
-            padding: 10px 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .chat-input button:hover {
-            background: #24993f;
-        }
-
-        /* === Tin nhắn === */
-        .chat-content .msg {
-            margin-bottom: 8px;
-        }
-        .msg.you { text-align: right; }
-        .msg span {
-            padding: 6px 10px;
-            border-radius: 10px;
-            display: inline-block;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-        .msg.you span {
-            background: #28a745;
-            color: white;
-        }
-        .msg.other span {
-            background: #ececec;
-            color: #333;
-        }
-
-        /* === Hiệu ứng === */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-
-
     </style>
 </head>
 
@@ -541,18 +351,10 @@
                                 <li><a class="menu-item"
                                        href="${pageContext.request.contextPath}/view/contact/contact.jsp">Liên hệ</a>
                                 </li>
-                                <li><c:if test="${empty sessionScope.user or (sessionScope.user.roleId != 1 and sessionScope.user.roleId != 2)}">
-                                <li>
-                                    <a class="menu-item" href="${pageContext.request.contextPath}/customer/becomeCarOwner">
-                                        Trở Thành Chủ Xe
-                                    </a>
-                                </li>
-                                </c:if>
-                                </li>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/carOwner/becomeCarOwner.jsp">Trở thành chủ xe</a></li>
 
 
                         </div>
-
                         <div class="de-flex-col">
                             <div class="menu_side_area">
 
@@ -628,14 +430,14 @@
                                                     <c:when test="${sessionScope.user.roleId == 2}">
                                                         <a class="menu-item"
                                                            href="${pageContext.request.contextPath}/owner/profile"
-                                                           role="menuitem">Tài Khoản Của Tôi</a>
+                                                           role="menuitem">My Account</a>
                                                     </c:when>
 
                                                     <%-- Giả sử: 3 = Customer --%>
                                                     <c:when test="${sessionScope.user.roleId == 3}">
                                                         <a class="menu-item"
                                                            href="${pageContext.request.contextPath}/customer/profile"
-                                                           role="menuitem">Tài Khoản Của Tôi</a>
+                                                           role="menuitem">My Account</a>
                                                     </c:when>
 
                                                     <%-- Trường hợp mặc định nếu không khớp role nào --%>
@@ -649,9 +451,9 @@
                                                     <%-- Các link còn lại thì giữ nguyên --%>
                                                 <a class="menu-item"
                                                    href="${pageContext.request.contextPath}/change-password"
-                                                   role="menuitem">Đổi Mật Khẩu</a>
+                                                   role="menuitem">Change Password</a>
                                                 <a class="menu-item" href="${pageContext.request.contextPath}/logout"
-                                                   role="menuitem">Đăng Xuất</a>
+                                                   role="menuitem">Log Out</a>
                                             </div>
                                         </div>
 
@@ -1160,11 +962,11 @@
                                             </div>
                                             <div class="d-price">
                                                 <h3 class="fw-bold mb-0">
-                                                    <fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="0" maxFractionDigits="0"/>đ
+                                                    $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </h3>
                                                 <a class="btn-main"
                                                    href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
-                                                    Thuê Ngay
+                                                    Rent Now
                                                 </a>
                                             </div>
                                         </div>
@@ -1368,7 +1170,6 @@
 </div>
 
 
-
 <!-- Javascript Files
 ================================================== -->
 <%--<script src="js/plugins.js"></script>--%>
@@ -1407,97 +1208,9 @@
             }
         });
     })();
-    </script>
-
-</script>
-<!-- 💬 Floating Chat Button -->
-<div id="floatingChatBtn">
-    <i class="fa-solid fa-message"></i>
-</div>
-
-<!-- 💬 Dropdown danh sách hội thoại -->
-<div id="chatDropdown" class="chat-dropdown">
-    <div class="chat-dropdown-header">
-        <h5>Messages</h5>
-    </div>
-    <ul id="chatList">
-        <li data-user="Linh" data-avatar="images/users/linh.jpg">Linh</li>
-        <li data-user="Kiet" data-avatar="images/users/kiet.jpg">Kiet</li>
-        <li data-user="Admin" data-avatar="images/users/admin.jpg">Admin Support</li>
-    </ul>
-</div>
-
-<!-- 💬 Dock chứa các chat box nổi -->
-<div id="chatDock"></div>
-
-<!-- 💬 Template chat box -->
-<template id="chatBoxTpl">
-    <div class="chat-box">
-        <div class="chat-head">
-            <div class="left">
-                <img class="avatar" src="" alt="">
-                <span class="name"></span>
-            </div>
-            <div class="actions">
-                <button class="minimize"><i class="fa-solid fa-chevron-down"></i></button>
-                <button class="close"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-        </div>
-        <div class="chat-content"></div>
-        <div class="chat-input">
-            <input type="text" class="msg-input" placeholder="Type a message...">
-            <button class="send"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
-</template>
-<script>
-    const chatBtn = document.getElementById('floatingChatBtn');
-    const chatDropdown = document.getElementById('chatDropdown');
-    const chatList = document.getElementById('chatList');
-    const chatDock = document.getElementById('chatDock');
-    const chatTpl = document.getElementById('chatBoxTpl');
-
-    chatBtn.onclick = () => chatDropdown.classList.toggle('open');
-
-    // Click 1 người -> mở chat box nổi
-    chatList.addEventListener('click', e => {
-        if(e.target.tagName !== 'LI') return;
-        const name = e.target.dataset.user;
-        const avatar = e.target.dataset.avatar;
-
-        // Nếu box đã mở thì không tạo thêm
-        if (document.querySelector(`.chat-box[data-user="${name}"]`)) return;
-
-        const box = chatTpl.content.cloneNode(true).querySelector('.chat-box');
-        box.dataset.user = name;
-        box.querySelector('.avatar').src = avatar;
-        box.querySelector('.name').textContent = name;
-
-        // Sự kiện nút
-        box.querySelector('.close').onclick = () => box.remove();
-        box.querySelector('.minimize').onclick = () => {
-            const content = box.querySelector('.chat-content');
-            const input = box.querySelector('.chat-input');
-            const hidden = content.style.display === 'none';
-            content.style.display = hidden ? 'block' : 'none';
-            input.style.display = hidden ? 'flex' : 'none';
-        };
-        box.querySelector('.send').onclick = () => {
-            const input = box.querySelector('.msg-input');
-            const text = input.value.trim();
-            if(!text) return;
-            const msg = document.createElement('div');
-            msg.className = 'msg you';
-            msg.innerHTML = `<span>${text}</span>`;
-            box.querySelector('.chat-content').appendChild(msg);
-            input.value = '';
-        };
-
-
-        chatDock.appendChild(box);
-        chatDropdown.classList.remove('open');
-    });
 </script>
 </body>
 
+
+<!-- Mirrored from www.madebydesignesia.com/themes/rentaly/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Sep 2025 10:55:35 GMT -->
 </html>
