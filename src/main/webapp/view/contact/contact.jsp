@@ -43,7 +43,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Contact Us</h1>
+                            <h1>Liên Hệ Chúng Tôi</h1>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -59,7 +59,7 @@
 
                     <div class="col-lg-8 mb-sm-30">
 
-                        <h3>Do you have any question?</h3>
+                        <h3>Bạn Có Câu Hỏi Nào Không?</h3>
 
                         <form name="contactForm" id="contact_form" class="form-border" method="post"
                               action="<%= request.getContextPath() %>/contact">
@@ -93,7 +93,7 @@
                             </div>
                                 <p style="color: green;">${msg}</p>
                             <div id="success_message" class='success'>
-                                Your message has been sent successfully. Refresh this page if you want to send more messages.
+                                Yêu cầu hỗ trợ của bạn đã được gửi thành công.Vui lòng chờ admin liên hệ hỗ trợ.
                             </div>
                             <div id="error_message" class='error'>
                                 Sorry there was an error sending your form.
@@ -140,11 +140,7 @@
 
 </div>
 
-<div id="selector">
-    <div id="demo-rtl" class="sc-opt">
-        <div class="sc-icon">RTL</div><span class="sc-val">Click to Enable</span>
-    </div>
-</div>
+
 
 <!-- Javascript Files
 ================================================== -->
