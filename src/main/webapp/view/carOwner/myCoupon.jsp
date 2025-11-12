@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/carOwner/_headOwner.jsp"/>
-    <title>My Coupons | Rentaly</title>
+    <title>Quà Của Tôi | Rentaly</title>
 </head>
 
 <body>
@@ -24,7 +24,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>My Coupons</h1>
+                            <h1>Quà Của Tôi</h1>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                                                 <h4>Coupon: <span class="text-primary">${promo.code}</span></h4>
                                                 <ul class="d-atr">
                                                     <li>
-                                                        <span>Discount:</span>
+                                                        <span>Giảm Giá:</span>
                                                         <c:choose>
                                                             <c:when test="${promo.discountType == 'PERCENT'}">
                                                                 <b class="text-success">${promo.discountRate}%</b>
@@ -70,13 +70,13 @@
                                                         </c:choose>
                                                     </li>
                                                     <li>
-                                                        <span>Expires:</span>
+                                                        <span>Hết Hạn:</span>
                                                         <b class="text-danger">
                                                             <fmt:formatDate value="${promo.endDate}" pattern="dd/MM/yyyy"/>
                                                         </b>
                                                     </li>
                                                     <li>
-                                                        <span>Description:</span> ${promo.description}
+                                                        <span>Mô Tả:</span> ${promo.description}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -85,7 +85,7 @@
                                         <div class="d-price coupon-action-area">
                                             <a href="${pageContext.request.contextPath}/cars?promo=${promo.code}"
                                                class="btn-main btn-apply-coupon">
-                                                Apply
+                                                Áp Dụng
                                             </a>
                                         </div>
 
