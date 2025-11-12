@@ -37,13 +37,14 @@ public class CreateGoogleAccountServlet extends HttpServlet {
 
         // ✅ Lấy dữ liệu form
         Map<String, String> data = new HashMap<>();
-        String[] fields = {
-                "username", "password", "re_password", "phone", "dob", "gender",
+            String[] fields = {
+                "full_name", "username", "password", "re_password", "phone", "dob", "gender",
                 "role_id", "address_line", "city", "country", "postal_code"
-        };
-        for (String f : fields) {
-            data.put(f, request.getParameter(f) != null ? request.getParameter(f).trim() : "");
-        }
+            };
+
+            for (String f : fields) {
+                data.put(f, request.getParameter(f) != null ? request.getParameter(f).trim() : "");
+            }
 
         request.setAttribute("formData", data); // Giữ lại dữ liệu nếu có lỗi để đổ lại form
 

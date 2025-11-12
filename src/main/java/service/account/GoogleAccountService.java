@@ -139,7 +139,7 @@ public class GoogleAccountService {
             user.setRoleId(Integer.parseInt(data.get("role_id")));
 
             UserProfile profile = new UserProfile();
-            profile.setFullName(googleUser.getName());
+            profile.setFullName(data.get("full_name"));
             profile.setPhone(data.get("phone"));
 
             String dobString = data.get("dob");
@@ -156,6 +156,8 @@ public class GoogleAccountService {
                     data.get("postal_code"),
                     data.get("country")
             );
+            System.out.println("👉 Full name nhận được từ form: " + data.get("full_name"));
+
 
             return userDAO.registerUser(user, profile, address);
         }
