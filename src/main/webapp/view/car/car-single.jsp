@@ -1,10 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+
 <fmt:setLocale value="vi_VN" />
+
 
 <!DOCTYPE html>
 <html lang="vi">
+
 
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
@@ -14,18 +19,22 @@
             cursor: not-allowed;
         }
 
+
         .btn-main .fa-spinner {
             margin-right: 8px;
         }
     </style>
 </head>
 
+
 <body>
 <div id="wrapper">
     <jsp:include page="../common/customer/_header.jsp"/>
 
+
     <div class="no-bottom no-top zebra" id="content">
         <div id="top"></div>
+
 
         <section id="subheader" class="jarallax text-light">
             <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
@@ -36,9 +45,11 @@
             </div>
         </section>
 
+
         <section id="section-car-details" class="py-5">
             <div class="container-fluid px-5">
                 <div class="row g-5 align-items-start">
+
 
                     <div class="col-lg-5">
                         <div id="slider-carousel" class="owl-carousel" style="max-width:100%; margin:auto;">
@@ -52,16 +63,44 @@
                             </c:forEach>
                         </div>
 
+
                         <div class="mt-4 pt-3">
                             <h3 class="mb-3 fw-semibold">Mô Tả</h3>
                             <p style="font-size:1.05rem; line-height:1.6; text-align:justify;">
                                 ${car.description}
                             </p>
                         </div>
+
+
+                        <!-- ========== THÔNG TIN CHỦ XE ========== -->
+                        <div class="mt-4 pt-4 border-top pt-3">
+                            <h3 class="fw-semibold mb-3" style="font-size:1.75rem;">Chủ xe</h3>
+                            <c:if test="${not empty ownerProfile}">
+                                <div class="d-flex align-items-center">
+                                    <a href="${pageContext.request.contextPath}/carOwner/info?id=${car.ownerId}"
+                                       class="d-flex align-items-center text-decoration-none text-dark">
+                                        <img src="${pageContext.request.contextPath}/${ownerProfile.profileImage != null ? ownerProfile.profileImage : 'images/default-avatar.png'}"
+                                             alt="${ownerProfile.fullName}"
+                                             class="rounded-circle shadow-sm me-3"
+                                             style="width:64px; height:64px; object-fit:cover;">
+                                        <div>
+                                            <h6 class="mb-1">${ownerProfile.fullName}</h6>
+                                            <small class="text-muted">Xem thông tin chủ xe</small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </c:if>
+                        </div>
+
+
+
+
                     </div>
+
 
                     <div class="col-lg-3">
                         <h3 class="fw-bold mb-3">${car.model}</h3>
+
 
                         <!-- ✅ VND FORMAT -->
                         <div class="de-price text-center border rounded p-3 bg-white shadow-sm mb-4">
@@ -75,6 +114,7 @@
                             </h2>
                         </div>
 
+
                         <h4 class="text-secondary mb-3">Đặc Điểm</h4>
                         <div class="de-spec p-3 rounded border bg-light shadow-sm">
                             <div class="d-row mb-2"><span class="d-title">Loại:</span><span class="d-value">${car.carTypeName}</span></div>
@@ -84,11 +124,14 @@
                         </div>
                     </div>
 
+
                     <div class="col-lg-4">
                         <h5 class="fw-bold mb-3">Thuê Xe Này</h5>
 
+
                         <form action="${pageContext.request.contextPath}/booking" method="post"
                               class="booking-form p-3 rounded shadow-sm bg-light border">
+
 
                             <input type="hidden" name="carId" value="${car.carId}"/>
                             <input type="hidden" id="calculatedDiscount" name="calculatedDiscount" value="${input_calculatedDiscount != null ? input_calculatedDiscount : 0}">
@@ -96,9 +139,11 @@
                             <input type="hidden" id="finalCalculatedPrice" name="finalCalculatedPrice" value="${input_finalCalculatedPrice != null ? input_finalCalculatedPrice : car.pricePerDay}">
                             <input type="hidden" id="originalPrice" name="originalPrice" value="${car.pricePerDay}">
 
+
                             <c:if test="${not empty error}">
                                 <div class="alert alert-danger mt-3">${error}</div>
                             </c:if>
+
 
                             <div class="form-group mb-2">
                                 <label class="mb-1 small">Thời Gian Nhận Xe</label>
@@ -115,6 +160,7 @@
                                 </div>
                             </div>
 
+
                             <div class="form-group mb-2">
                                 <label class="mb-1 small">Thời Gian Trả Xe</label>
                                 <div class="input-group-date-time">
@@ -130,6 +176,7 @@
                                 </div>
                             </div>
 
+
                             <div class="form-group mb-3">
                                 <label class="mb-1 small">Địa Điểm</label>
                                 <div class="p-2 border rounded bg-white small">
@@ -140,6 +187,7 @@
                                 <small class="text-muted">
                                     Xe chỉ có thể được nhận và trả tại địa chỉ cố định này.</small>
                             </div>
+
 
                             <div class="form-group mb-3">
                                 <h6 class="fw-bold mb-2">Khuyến Mãi</h6>
@@ -155,42 +203,45 @@
                                 </small>
                             </div>
 
+
                             <!-- ✅ VND FORMAT -->
                             <div class="border rounded p-3 bg-white mb-3">
                                 <p class="mb-1 d-flex justify-content-between small">
                                     <span>Đơn Giá Thuê:</span>
                                     <span id="priceValue" data-total="${car.pricePerDay}">
-                                        <fmt:formatNumber value="${car.pricePerDay}"
-                                                          type="number"
-                                                          groupingUsed="true"
-                                                          minFractionDigits="0"
-                                                          maxFractionDigits="0"/> ₫
-                                    </span>
+                                       <fmt:formatNumber value="${car.pricePerDay}"
+                                                         type="number"
+                                                         groupingUsed="true"
+                                                         minFractionDigits="0"
+                                                         maxFractionDigits="0"/> ₫
+                                   </span>
                                 </p>
                                 <p class="mb-1 d-flex justify-content-between small text-danger">
                                     <span>Khuyến Mãi:</span>
                                     <span id="discount">
-                                        <fmt:formatNumber value="${input_calculatedDiscount != null ? input_calculatedDiscount : 0}"
-                                                          type="number"
-                                                          groupingUsed="true"
-                                                          minFractionDigits="0"
-                                                          maxFractionDigits="0"/> ₫
-                                    </span>
+                                       <fmt:formatNumber value="${input_calculatedDiscount != null ? input_calculatedDiscount : 0}"
+                                                         type="number"
+                                                         groupingUsed="true"
+                                                         minFractionDigits="0"
+                                                         maxFractionDigits="0"/> ₫
+                                   </span>
                                 </p>
                                 <hr class="my-2">
                                 <div class="d-flex justify-content-between fw-bold">
                                     <span>Thành Tiền:</span>
                                     <span id="finalPrice" class="text-success">
-                                        <fmt:formatNumber value="${input_finalCalculatedPrice != null ? input_finalCalculatedPrice : car.pricePerDay}"
-                                                          type="number"
-                                                          groupingUsed="true"
-                                                          minFractionDigits="0"
-                                                          maxFractionDigits="0"/> ₫
-                                    </span>
+                                       <fmt:formatNumber value="${input_finalCalculatedPrice != null ? input_finalCalculatedPrice : car.pricePerDay}"
+                                                         type="number"
+                                                         groupingUsed="true"
+                                                         minFractionDigits="0"
+                                                         maxFractionDigits="0"/> ₫
+                                   </span>
                                 </div>
                             </div>
 
+
                             <button type="submit" class="btn-main btn-fullwidth">Booking Now</button>
+
 
                         </form>
                     </div>
@@ -198,9 +249,136 @@
             </div>
         </section>
 
+
+        <!-- ========== ĐÁNH GIÁ CỦA KHÁCH HÀNG ========== -->
+        <section class="py-5">
+            <div class="container">
+                <h4 class="mb-4 text-center">Đánh giá của khách hàng</h4>
+
+
+                <!-- Bộ lọc -->
+                <form method="get" class="row g-2 mb-4 justify-content-center">
+                    <input type="hidden" name="id" value="${car.carId}">
+                    <div class="col-md-3">
+                        <select name="rating" class="form-select" onchange="this.form.submit()">
+                            <option value="">Tất cả sao</option>
+                            <c:forEach var="r" begin="1" end="5">
+                                <option value="${r}" ${ratingFilter == r ? 'selected' : ''}>${r} sao</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </form>
+
+
+                <!-- Danh sách review -->
+                <c:choose>
+                    <c:when test="${empty reviews}">
+                        <div class="alert alert-warning text-center">
+                            Chưa có đánh giá nào cho xe này.
+                        </div>
+                    </c:when>
+
+
+                    <c:otherwise>
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-md-10">
+                                <c:forEach var="r" items="${reviews}">
+                                    <div class="card mb-3 shadow-sm border-0" style="border-radius:14px;">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="${pageContext.request.contextPath}/${empty r.profileImage ? 'images/default-avatar.png' : r.profileImage}"
+                                                     alt="${r.fullName}"
+                                                     class="rounded-circle me-3 shadow-sm"
+                                                     style="width:50px; height:50px; object-fit:cover;">
+                                                <div>
+                                                    <h6 class="mb-0 fw-semibold">${r.fullName}</h6>
+                                                    <small class="text-muted">
+                                                            ${fn:replace(r.review.createdAt, 'T', ' ')}
+                                                    </small>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="mb-2">
+                                                <c:forEach begin="1" end="${r.review.rating}">
+                                                    <i class="fa fa-star text-warning"></i>
+                                                </c:forEach>
+                                                <c:forEach begin="${r.review.rating + 1}" end="5">
+                                                    <i class="fa fa-star text-muted"></i>
+                                                </c:forEach>
+                                            </div>
+
+
+                                            <p class="mb-0" style="color:#374151;">
+                                                <c:choose>
+                                                    <c:when test="${not empty r.review.comment}">
+                                                        ${r.review.comment}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                       <span class="text-muted fst-italic">
+                                                           Người dùng không để lại bình luận.
+                                                       </span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+
+
+                        <!-- ✅ Phân trang -->
+                        <c:if test="${totalPages > 1}">
+                            <nav class="mt-4">
+                                <ul class="pagination justify-content-center">
+
+
+                                    <!-- Nút Trang Trước -->
+                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           href="?id=${car.carId}&page=${currentPage - 1}&rating=${ratingFilter}">
+                                            &laquo; Trước
+                                        </a>
+                                    </li>
+
+
+                                    <!-- Danh sách trang -->
+                                    <c:forEach var="i" begin="1" end="${totalPages}">
+                                        <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                            <a class="page-link"
+                                               href="?id=${car.carId}&page=${i}&rating=${ratingFilter}">
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+
+
+                                    <!-- Nút Trang Sau -->
+                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           href="?id=${car.carId}&page=${currentPage + 1}&rating=${ratingFilter}">
+                                            Sau &raquo;
+                                        </a>
+                                    </li>
+
+
+                                </ul>
+                            </nav>
+                        </c:if>
+
+
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </section>
+
+
     </div>
 
+
     <a href="#" id="back-to-top"></a>
+
 
     <footer class="text-light">
         <div class="container">
@@ -212,6 +390,7 @@
                             your journey is smooth and enjoyable.</p>
                     </div>
                 </div>
+
 
                 <div class="col-lg-3">
                     <div class="widget">
@@ -225,6 +404,7 @@
                     </div>
                 </div>
 
+
                 <div class="col-lg-3">
                     <h5>Quick Links</h5>
                     <div class="widget">
@@ -237,6 +417,7 @@
                         </ul>
                     </div>
                 </div>
+
 
                 <div class="col-lg-3">
                     <div class="widget">
@@ -252,6 +433,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="subfooter">
             <div class="container">
@@ -273,12 +455,15 @@
     </footer>
 </div>
 
+
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+
 
 <script>
     const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value) || 0;
     let appliedPromo = ${not empty input_appliedPromoCode ? '{"code": "' + input_appliedPromoCode + '", "rate": 0}' : 'null'};
+
 
     // =============== CALCULATION ===============
     function calculateTotal() {
@@ -287,18 +472,23 @@
         const pickupTime = document.querySelector('select[name="pickupTime"]').value;
         const dropoffTime = document.querySelector('select[name="dropoffTime"]').value;
 
+
         if (!startDate || !endDate || !pickupTime || !dropoffTime) return ORIGINAL_PRICE_PER_DAY;
+
 
         const [sy, sm, sd] = startDate.split('-').map(Number);
         const [ey, em, ed] = endDate.split('-').map(Number);
         const [sh, smin] = pickupTime.split(':').map(Number);
         const [eh, emin] = dropoffTime.split(':').map(Number);
 
+
         const start = new Date(sy, sm - 1, sd, sh, smin || 0, 0);
         const end = new Date(ey, em - 1, ed, eh, emin || 0, 0);
 
+
         const diffMs = end.getTime() - start.getTime();
         const diffHours = diffMs / (1000 * 60 * 60);
+
 
         if (diffHours < 24) {
             showWarning("⚠️ Minimum rental period is 24 hours!");
@@ -307,12 +497,15 @@
             hideWarning();
         }
 
+
         // Pricing logic
         const fullDays = Math.floor(diffHours / 24);
         const remaining = diffHours % 24;
 
+
         let total = fullDays * ORIGINAL_PRICE_PER_DAY;
         const hourlyRate = ORIGINAL_PRICE_PER_DAY / 24;
+
 
         if (remaining <= 1) {
             // free
@@ -322,13 +515,16 @@
             total += ORIGINAL_PRICE_PER_DAY;
         }
 
+
         console.log("💰 calculateTotal():", {
             startDate, endDate, pickupTime, dropoffTime,
             diffHours, fullDays, remaining, total
         });
 
+
         return total;
     }
+
 
     // =============== UI UPDATES ===============
     function showWarning(msg) {
@@ -336,6 +532,7 @@
         el.innerHTML = msg;
         el.className = "text-danger mt-2 d-block";
     }
+
 
     function hideWarning() {
         const el = document.getElementById("promoMessage");
@@ -345,10 +542,12 @@
         }
     }
 
+
     // ✅ ĐỔI: formatUSD() → formatVND()
     function formatVND(amount) {
         return Math.round(amount).toLocaleString('vi-VN') + ' ₫';
     }
+
 
     function updateDisplay(total) {
         console.log("🔄 updateDisplay() - total:", total);
@@ -358,15 +557,20 @@
         document.getElementById("finalCalculatedPrice").value = Math.round(total);
     }
 
+
     // =============== PROMO CODE ===============
+
 
     function applyPromoCode(code) {
         const total = calculateTotal();
 
+
         const msg = document.getElementById("promoMessage");
         const contextPath = "${pageContext.request.contextPath}";
 
+
         console.log("🎫 applyPromoCode() - code:", code, "total:", total);
+
 
         if (!code) {
             msg.innerHTML = "⚠️ Please enter a promo code!";
@@ -374,15 +578,19 @@
             return;
         }
 
+
         msg.innerHTML = "Checking code...";
         msg.className = "text-info mt-2 d-block";
 
+
         document.getElementById("priceValue").textContent = formatVND(total);
+
 
         fetch(contextPath + "/check-promo?code=" + encodeURIComponent(code) + "&total=" + total)
             .then(res => res.json())
             .then(data => {
                 console.log("📥 Promo API response:", data);
+
 
                 if (data.error) {
                     msg.innerHTML = "❌ " + data.error;
@@ -403,6 +611,7 @@
             });
     }
 
+
     function updatePriceDisplay(discount, finalPrice) {
         console.log("💵 updatePriceDisplay() - discount:", discount, "finalPrice:", finalPrice);
         document.getElementById("discount").textContent = formatVND(discount);
@@ -411,6 +620,7 @@
         document.getElementById("appliedPromoCode").value = appliedPromo ? appliedPromo.code : "";
         document.getElementById("finalCalculatedPrice").value = Math.round(finalPrice);
     }
+
 
     function resetPromoDisplay(total) {
         console.log("🔄 resetPromoDisplay() - total:", total);
@@ -421,11 +631,14 @@
         document.getElementById("finalCalculatedPrice").value = Math.round(total);
     }
 
+
     // =============== EVENT HANDLING ===============
+
 
     function updatePriceOnChange() {
         console.log("🔄 Date/Time changed");
         const total = calculateTotal();
+
 
         if (appliedPromo && appliedPromo.code) {
             console.log("🔄 Re-applying promo:", appliedPromo.code);
@@ -435,8 +648,10 @@
         }
     }
 
+
     document.addEventListener("DOMContentLoaded", function () {
         console.log("✅ DOM loaded - ORIGINAL_PRICE_PER_DAY:", ORIGINAL_PRICE_PER_DAY);
+
 
         // Listen to date/time changes
         const elements = [
@@ -446,6 +661,7 @@
             'select[name="dropoffTime"]'
         ];
 
+
         elements.forEach(sel => {
             const el = document.querySelector(sel);
             if (el) {
@@ -453,11 +669,13 @@
             }
         });
 
+
         // Apply promo button
         document.getElementById("applyPromo").addEventListener("click", function () {
             const code = document.getElementById("promoCode").value.trim();
             applyPromoCode(code);
         });
+
 
         // Enter key on promo input
         document.getElementById("promoCode").addEventListener("keypress", function (e) {
@@ -466,6 +684,7 @@
                 document.getElementById("applyPromo").click();
             }
         });
+
 
         // Initial load
         setTimeout(() => {
@@ -481,14 +700,17 @@
         const submitButton = bookingForm.querySelector('button[type="submit"]');
         const originalButtonText = submitButton.innerHTML;
 
+
         bookingForm.addEventListener('submit', function(e) {
             // Disable button
             submitButton.disabled = true;
+
 
             // Show spinner
             submitButton.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creating booking...';
         });
     });
+
 
     // Enable button lại nếu có lỗi từ server
     <c:if test="${not empty error}">
@@ -501,6 +723,7 @@
     });
     </c:if>
 </script>
+
 
 </body>
 </html>
