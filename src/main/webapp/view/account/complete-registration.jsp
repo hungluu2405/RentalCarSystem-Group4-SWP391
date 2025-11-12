@@ -48,7 +48,7 @@
                                 <p>Email của bạn đã được xác minh qua Google. Vui lòng cung cấp các thông tin còn lại và tạo mật khẩu cho tài khoản Rentaly của bạn.</p>
                             </div>
 
-                            <p class="text-center text-danger fw-bold">${requestScope.error}</p>
+                                    <p class="text-center text-danger fw-bold">${requestScope.error}</p>
 
                             <form name="completeForm" class="form-border" method="post"
                                   action="${pageContext.request.contextPath}/create-google-account">
@@ -137,15 +137,30 @@
                                                    value='${formData.address_line}' required>
                                         </div>
 
-                                        <div class="row">
-                                            <div class="col-md-6">
                                                 <div class="field-set">
                                                     <label>Thành phố / Tỉnh <span class="text-danger">*</span></label>
                                                     <input type='text' name='city' class="form-control"
                                                            value='${formData.city}' required>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="field-set">
+                                                            <label>City / Province <span class="text-danger">*</span></label>
+                                                            <input type='text' name='city' class="form-control"
+                                                                   value='${formData.city}' required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="field-set">
+                                                            <label>Country <span class="text-danger">*</span></label>
+                                                            <input type='text' name='country' class="form-control"
+                                                                   value='${formData.country != null ? formData.country : "Vietnam"}'
+                                                                   required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="field-set">
                                                     <label>Quốc Gia <span class="text-danger">*</span></label>
                                                     <input type='text' name='country' class="form-control"
@@ -166,20 +181,20 @@
                                     <div class="col-lg-12 text-center mt-4">
                                         <input type="submit" value="Tạo Tài Khoản" class="btn-main btn-fullwidth rounded-3">
 
-                                    </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
-        </section>
-    </div>
 
-    <footer class="text-light"></footer>
-</div>
+            <footer class="text-light"></footer>
+        </div>
 
-<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
-<script src="${pageContext.request.contextPath}/js/designesia.js"></script>
-</body>
+        <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+        <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+    </body>
 </html>

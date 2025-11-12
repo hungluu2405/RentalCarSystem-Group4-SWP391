@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         User user = loginService.authenticate(loginKey, password);
 
         if (user == null) {
-            request.setAttribute("error", "Invalid email or password!");
+            request.setAttribute("error", "Email hoặc mật khẩu không hợp lệ!");
             request.getRequestDispatcher("view/account/login.jsp").forward(request, response);
             return;
         }

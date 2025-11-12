@@ -38,7 +38,7 @@ public class ChangePasswordServlet extends HttpServlet {
         if (error != null) {
             request.setAttribute("error", error);
         } else {
-            request.setAttribute("message", "Password changed successfully!");
+            request.setAttribute("message", "Đổi mật khẩu thành công!");
         }
 
         request.getRequestDispatcher("view/account/change-password.jsp").forward(request, response);

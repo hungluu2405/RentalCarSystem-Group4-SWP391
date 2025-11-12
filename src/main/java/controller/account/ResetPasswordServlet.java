@@ -57,7 +57,7 @@ public class ResetPasswordServlet extends HttpServlet {
             session.removeAttribute("reset_email");
             response.sendRedirect(request.getContextPath() + "/login?reset=success");
         } else {
-            request.setAttribute("error", "No matching user found!");
+            request.setAttribute("error", "Không tìm thấy người dùng phù hợp!");
             request.getRequestDispatcher("view/account/reset-password.jsp").forward(request, response);
         }
     }
