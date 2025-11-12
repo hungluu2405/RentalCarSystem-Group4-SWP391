@@ -6,8 +6,11 @@
         <div class="row g-custom-x">
             <div class="col-lg-3">
                 <div class="widget">
-                    <h5>About Rentaly</h5>
-                    <p>Where quality meets affordability. We understand the importance of a smooth and enjoyable journey without the burden of excessive costs. That's why we have meticulously crafted our offerings to provide you with top-notch vehicles at minimum expense.</p>
+                    <h5>Về Rentaly</h5>
+                    <p>Nơi chất lượng gặp gỡ sự tiết kiệm.
+                        Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần xe tốt mà còn phải thoải mái và hợp lý về chi phí.
+                        Vì thế, Rentaly luôn nỗ lực mang đến cho bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất,
+                        giúp bạn tận hưởng hành trình êm ái, an toàn và không lo về chi phí.</p>
                 </div>
             </div>
 
@@ -15,7 +18,7 @@
                 <div class="widget">
                     <h5>Contact Info</h5>
                     <address class="s1">
-                        <span><i class="id-color fa fa-map-marker fa-lg"></i>VR9V+HGF, ĐT427B, Hoa Binh, Thuong Tin, Ha Noi, Viet Nam</span>
+                        <span><i class="id-color fa fa-map-marker fa-lg"></i>VR9V+HGF, ĐT427B, Hòa Bình, Thường Tín, Hà Nội, Việt Nam</span>
                         <span><i class="id-color fa fa-phone fa-lg"></i>+84 33 5821918</span>
                         <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:tungender1508@gmail.com">tungender1508@gmail.com</a></span>
 
@@ -52,8 +55,8 @@
                             </a>
                         </div>
                         <ul class="menu-simple">
-                            <li><a href="#">Terms &amp; Conditions</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Nghiệp vụ và điều kiện</a></li>
+                            <li><a href="#">Chính sách bảo mật</a></li>
                         </ul>
                     </div>
                 </div>

@@ -77,7 +77,8 @@
                             <option value="week" <c:if test="${type == 'week'}">selected</c:if>>Week</option>
                             <option value="month" <c:if test="${type == 'month'}">selected</c:if>>Month</option>
                         </select>
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn btn-primary mr-2">Search</button>
+                        <a href="reportDB" class="btn btn-secondary">Reset</a>
                     </form>
                 </div>
 
