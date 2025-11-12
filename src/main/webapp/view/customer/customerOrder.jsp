@@ -378,6 +378,52 @@
             color: white;
 
         }
+
+        .filter-buttons-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-apply-filter {
+            background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-apply-filter:hover {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-apply-filter:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear-filter {
+            background: transparent;
+            color: #6B7280;
+            border: none;
+            padding: 10px 0;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-clear-filter:hover {
+            color: #1F2937;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -458,17 +504,17 @@
                                                 <i class="fa fa-filter"></i> Status
                                             </label>
                                             <select name="filterStatus" class="form-control form-control-sm">
-                                                <option value="All" ${filterStatus == null || filterStatus == 'All' ? 'selected' : ''}>All Status</option>
+                                                <option value="All" ${filterStatus == null || filterStatus == 'All' ? 'selected' : ''}>Tất Cả Trạng Thái</option>
                                                 <c:if test="${tab == 'current' || empty tab}">
-                                                    <option value="Pending" ${filterStatus == 'Pending' ? 'selected' : ''}>Pending</option>
-                                                    <option value="Approved" ${filterStatus == 'Approved' ? 'selected' : ''}>Approved</option>
-                                                    <option value="Paid" ${filterStatus == 'Paid' ? 'selected' : ''}>Paid</option>
-                                                    <option value="Returning" ${filterStatus == 'Returning' ? 'selected' : ''}>Returning</option>
+                                                    <option value="Pending" ${filterStatus == 'Pending' ? 'selected' : ''}>Chờ Duyệt</option>
+                                                    <option value="Approved" ${filterStatus == 'Approved' ? 'selected' : ''}>Được Chấp nhận</option>
+                                                    <option value="Paid" ${filterStatus == 'Paid' ? 'selected' : ''}>Đã Thanh Toán</option>
+                                                    <option value="Returning" ${filterStatus == 'Returning' ? 'selected' : ''}>Đang Trả</option>
                                                 </c:if>
                                                 <c:if test="${tab == 'history'}">
-                                                    <option value="Completed" ${filterStatus == 'Completed' ? 'selected' : ''}>Completed</option>
-                                                    <option value="Cancelled" ${filterStatus == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                                                    <option value="Rejected" ${filterStatus == 'Rejected' ? 'selected' : ''}>Rejected</option>
+                                                    <option value="Completed" ${filterStatus == 'Completed' ? 'selected' : ''}>Đã Hoàn Tất</option>
+                                                    <option value="Cancelled" ${filterStatus == 'Cancelled' ? 'selected' : ''}>Đã Hủy</option>
+                                                    <option value="Rejected" ${filterStatus == 'Rejected' ? 'selected' : ''}>Bị Từ Chối</option>
                                                 </c:if>
                                             </select>
                                         </div>
@@ -476,42 +522,43 @@
                                         <!-- Car Name Search -->
                                         <div class="col-md-3 mb-3">
                                             <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
-                                                <i class="fa fa-car"></i> Car Name
+                                                <i class="fa fa-car"></i> Tên Xe
                                             </label>
                                             <input type="text" name="carName" class="form-control form-control-sm"
-                                                   placeholder="Search by car name..." value="${carName}">
+                                                   placeholder="Tìm Kiếm Theo Tên Xe..." value="${carName}">
                                         </div>
 
                                         <!-- Price Range -->
                                         <div class="col-md-3 mb-3">
                                             <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
-                                                <i class="fa fa-money"></i> Price Range
+                                                <i class="fa fa-money"></i> Khoảng Tiền
                                             </label>
                                             <select name="priceRange" class="form-control form-control-sm">
-                                                <option value="" ${priceRange == null || priceRange == '' ? 'selected' : ''}>All Prices</option>
-                                                <option value="under1m" ${priceRange == 'under1m' ? 'selected' : ''}>Under 1M VND</option>
-                                                <option value="1m-3m" ${priceRange == '1m-3m' ? 'selected' : ''}>1M - 3M VND</option>
-                                                <option value="3m-5m" ${priceRange == '3m-5m' ? 'selected' : ''}>3M - 5M VND</option>
-                                                <option value="over5m" ${priceRange == 'over5m' ? 'selected' : ''}>Over 5M VND</option>
+                                                <option value="" ${priceRange == null || priceRange == '' ? 'selected' : ''}>Tất Cả</option>
+                                                <option value="under1m" ${priceRange == 'under1m' ? 'selected' : ''}>Dưới 1 triệu</option>
+                                                <option value="1m-3m" ${priceRange == '1m-3m' ? 'selected' : ''}>1 triệu - 3 triệu</option>
+                                                <option value="3m-5m" ${priceRange == '3m-5m' ? 'selected' : ''}>3 triệu - 5 triệu</option>
+                                                <option value="over5m" ${priceRange == 'over5m' ? 'selected' : ''}>Trên 5 triệu</option>
                                             </select>
                                         </div>
 
                                         <!-- Buttons -->
                                         <div class="col-md-3 mb-3" style="display: flex; align-items: flex-end; gap: 5px;">
-                                            <button type="submit" class="btn btn-sm btn-primary" style="flex: 1;">
-                                                <i class="fa fa-search"></i> Filter
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-secondary" onclick="clearFilters()" style="flex: 1;">
-                                                <i class="fa fa-times"></i> Clear
-                                            </button>
-                                        </div>
+                                            <div class="filter-buttons-container">
+                                                <a href="#" onclick="clearFilters(); return false;" class="btn-clear-filter">
+                                                    Xóa bộ lọc
+                                                </a>
+                                                <button type="submit" class="btn-apply-filter">
+                                                    Áp dụng
+                                                </button>
+                                            </div>
                                     </div>
 
                                     <!-- Date Range Filters (Collapsible) -->
                                     <div class="row" style="margin-top: 10px;">
                                         <div class="col-12">
                                             <a href="#" onclick="toggleAdvancedFilters(); return false;" style="font-size: 13px; color: #00b074;">
-                                                <i class="fa fa-caret-down" id="advancedFilterIcon"></i> Advanced Filters (Date Range)
+                                                <i class="fa fa-caret-down" id="advancedFilterIcon"></i> Lọc Nâng Cao
                                             </a>
                                         </div>
                                     </div>
@@ -521,18 +568,18 @@
                                             <!-- Simplified Date Range -->
                                             <div class="col-md-12 mb-3">
                                                 <label style="font-weight: 600; font-size: 13px; color: #666; margin-bottom: 5px;">
-                                                    <i class="fa fa-calendar"></i> Booking Date Range
+                                                    <i class="fa fa-calendar"></i> Khoảng Thời Gian Thuê
                                                 </label>
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <input type="date" name="dateFrom" class="form-control form-control-sm"
                                                                value="${dateFrom}" placeholder="From Date">
-                                                        <small class="text-muted">From</small>
+                                                        <small class="text-muted">Từ</small>
                                                     </div>
                                                     <div class="col-6">
                                                         <input type="date" name="dateTo" class="form-control form-control-sm"
                                                                value="${dateTo}" placeholder="To Date">
-                                                        <small class="text-muted">To</small>
+                                                        <small class="text-muted">Đến</small>
                                                     </div>
                                                 </div>
                                             </div>

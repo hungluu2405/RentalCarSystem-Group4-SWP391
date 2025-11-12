@@ -10,7 +10,7 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/carOwner/_headOwner.jsp"/>
-    <title>Car Owner Dashboard - Rental Calendar</title>
+    <title>Lịch Thuê Xe</title>
 
     <style>
         /* ================= Filter Section ================= */
@@ -371,7 +371,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Car Owner Dashboard - Rental Calendar</h1>
+                            <h1>Lịch Thuê Xe</h1>
                         </div>
                     </div>
                 </div>
@@ -442,7 +442,7 @@
                                     </span>
 
                                     <!-- Next Button -->
-                                    <button type="button" class="btn-nav" onclick="changeMonth(1)" title="Next Month">
+                                    <button type="button" class="btn-nav" onclick="changeMonth(1)" title="Tháng Sau">
                                         <i class="fa fa-chevron-right"></i>
                                     </button>
 
@@ -453,7 +453,7 @@
                                     </button>
 
                                     <!-- Today Button -->
-                                    <button type="button" class="btn-today" onclick="goToToday()" title="Today">
+                                    <button type="button" class="btn-today" onclick="goToToday()" title="Hôm Nay">
                                         <i class="fa fa-calendar-day"></i> Today
                                     </button>
 
@@ -469,7 +469,7 @@
                             <c:if test="${empty ownerCars}">
                                 <div class="alert alert-warning text-center">
                                     <i class="fa fa-exclamation-triangle"></i>
-                                    You don't have any cars yet. Please add a car first.
+                                    Bạn không có xe hiện tại.Vui lòng thêm xe trước.
                                 </div>
                             </c:if>
 
@@ -561,19 +561,19 @@
                                 <!-- Legend -->
                                 <div class="legend">
                                     <div class="legend-item">
-                                        <span class="legend-color available"></span> Available
+                                        <span class="legend-color available"></span> Trống
                                     </div>
                                     <div class="legend-item">
-                                        <span class="legend-color pending"></span> Pending
+                                        <span class="legend-color pending"></span> Đang chờ duyệt
                                     </div>
                                     <div class="legend-item">
-                                        <span class="legend-color approved"></span> Approved
+                                        <span class="legend-color approved"></span> Được Chấp Nhận
                                     </div>
                                     <div class="legend-item">
-                                        <span class="legend-color paid"></span> Paid
+                                        <span class="legend-color paid"></span> Đã Thanh Toán
                                     </div>
                                     <div class="legend-item">
-                                        <span class="legend-color completed"></span> Completed
+                                        <span class="legend-color completed"></span> Đã Hoàn Thành
                                     </div>
                                 </div>
                             </c:if>

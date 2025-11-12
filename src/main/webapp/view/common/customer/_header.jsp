@@ -350,20 +350,20 @@
                                         <div class="my-user-dropdown" role="menu" aria-labelledby="myUserBtn">
                                             <a class="menu-item"
                                                href="${pageContext.request.contextPath}/customer/profile"
-                                               role="menuitem">My Account</a>
+                                               role="menuitem">Tài khoản của tôi</a>
                                             <a class="menu-item"
                                                href="${pageContext.request.contextPath}/change-password"
-                                               role="menuitem">Change Password</a>
+                                               role="menuitem">Đổi mật khẩu</a>
                                             <a class="menu-item"
                                                href="${pageContext.request.contextPath}/logout"
-                                               role="menuitem">Log Out</a>
+                                               role="menuitem">Đăng xuất</a>
                                         </div>
                                     </div>
 
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="${pageContext.request.contextPath}/login" class="btn-main">Sign In</a>
-                                    <a href="${pageContext.request.contextPath}/register" class="btn-main">Sign Up</a>
+                                    <a href="${pageContext.request.contextPath}/login" class="btn-main">Đăng Nhập</a>
+                                    <a href="${pageContext.request.contextPath}/register" class="btn-main">Đăng Ký</a>
                                 </c:otherwise>
                             </c:choose>
                             <span id="menu-btn"></span>
