@@ -969,7 +969,7 @@
                                             </div>
                                             <div class="d-price">
                                                 <h3 class="fw-bold mb-0">
-                                                    $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    <fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="0" maxFractionDigits="0"/>đ
                                                 </h3>
                                                 <a class="btn-main"
                                                    href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
