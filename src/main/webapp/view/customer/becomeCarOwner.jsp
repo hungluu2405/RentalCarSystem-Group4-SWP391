@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/carOwner/_headOwner.jsp"/>
-    <title>Add New Car</title>
+    <title>Become Car Owner</title>
     <style>
         body {
             background-color: #f4f6f8;
@@ -14,7 +14,7 @@
         .add-car-section {
             background: #fff;
             border-radius: 16px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
             padding: 40px 50px;
             margin: 40px auto;
             max-width: 1100px;
@@ -49,12 +49,6 @@
             object-fit: cover;
         }
 
-        label {
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: #34495e;
-        }
-
         .form-control, .form-select {
             border-radius: 10px;
             border: 1px solid #d0d0d0;
@@ -63,7 +57,12 @@
 
         .form-control:focus, .form-select:focus {
             border-color: #007bff;
-            box-shadow: 0 0 6px rgba(0,123,255,0.3);
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+        }
+
+        .form-label {
+            font-weight: 600; /* ✅ Làm label đậm */
+            color: #2c3e50;
         }
 
         .btn-submit {
@@ -90,21 +89,17 @@
     <div id="content" class="no-bottom no-top zebra">
         <div id="top"></div>
 
-        <!-- Ảnh nền tiêu đề -->
+        <!-- Banner -->
         <section id="subheader" class="jarallax text-light">
             <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img" alt="">
             <div class="center-y relative text-center">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h1>Become Car Owner</h1>
-                        </div>
-                    </div>
+                    <h1>Become Car Owner</h1>
                 </div>
             </div>
         </section>
 
-        <!-- FORM ADD CAR -->
+        <!-- FORM -->
         <section id="section-addcar">
             <div class="container">
                 <div class="add-car-section">
@@ -114,27 +109,42 @@
                         <div class="alert alert-danger text-center mb-3">${errorMessage}</div>
                     </c:if>
 
-                    <form action="${pageContext.request.contextPath}/owner/addCar" method="post" enctype="multipart/form-data">
+                    <form action="${pageContext.request.contextPath}/customer/becomeCarOwner"
+                          method="post" enctype="multipart/form-data">
                         <div class="row">
-                            <!-- Cột trái: Upload hình -->
+                            <!-- Upload ảnh -->
                             <div class="col-md-5">
                                 <div class="upload-section">
-                                    <img id="previewImage" src="${pageContext.request.contextPath}/images/default-car.png" alt="Car Preview">
-                                    <h6>Upload Car Image</h6>
-                                    <input type="file" name="carImage" id="carImage" class="form-control mt-2" accept="image/*"
-                                           onchange="previewFile(event)">
+                                    <img id="previewImage"
+                                         src="${pageContext.request.contextPath}/images/default-car.png"
+                                         alt="Car Preview"
+                                         style="display: none;">  <%-- ✅ ẩn ảnh mặc định --%>
+
+                                    <h6 class="fw-bold text-primary mt-2">Upload Car Image</h6>
+                                    <input type="file" name="carImage" id="carImage" class="form-control mt-2"
+                                           accept="image/*"
+                                           onchange="previewFile(event)" required>
+
                                 </div>
                             </div>
 
-                            <!-- Cột phải: Form nhập thông tin -->
+                            <!-- Thông tin xe -->
                             <div class="col-md-7">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label>Brand</label>
-                                        <input type="text" class="form-control" name="brand" placeholder="Enter car brand..." required>
+                                        <label class="form-label">Brand</label>
+                                        <input type="text" class="form-control" name="brand"
+                                               placeholder="Enter car brand..." required>
                                     </div>
+
                                     <div class="col-md-6">
-                                        <label>Transmission</label>
+                                        <label class="form-label">Model</label>
+                                        <input type="text" class="form-control" name="model"
+                                               placeholder="Enter car model..." required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Transmission</label>
                                         <select name="transmission" class="form-select" required>
                                             <option value="">Select transmission...</option>
                                             <c:forEach var="t" items="${transmissions}">
@@ -144,11 +154,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Model</label>
-                                        <input type="text" class="form-control" name="model" placeholder="Enter car model..." required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Fuel Type</label>
+                                        <label class="form-label">Fuel Type</label>
                                         <select name="fuelType" class="form-select" required>
                                             <option value="">Select fuel type...</option>
                                             <c:forEach var="f" items="${fuelTypes}">
@@ -158,25 +164,31 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Year</label>
-                                        <input type="number" class="form-control" name="year" placeholder="Enter manufacturing year..." required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Price/Day ($)</label>
-                                        <input type="text" class="form-control" name="pricePerDay" placeholder="Enter price per day..." required>
+                                        <label class="form-label">Year</label>
+                                        <input type="number" class="form-control" name="year"
+                                               placeholder="Enter manufacturing year..." required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Capacity</label>
-                                        <input type="number" class="form-control" name="capacity" placeholder="Enter car capacity..." required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>License Plate</label>
-                                        <input type="text" class="form-control" name="licensePlate" placeholder="Enter license plate..." required>
+                                        <label class="form-label">Price/Day (VND)</label>
+                                        <input type="text" class="form-control" name="pricePerDay"
+                                               placeholder="Enter price per day...(VND)" required>
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label>Car Type</label>
+                                        <label class="form-label">Capacity</label>
+                                        <input type="number" class="form-control" name="capacity"
+                                               placeholder="Enter car capacity..." required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">License Plate</label>
+                                        <input type="text" class="form-control" name="licensePlate"
+                                               placeholder="Enter license plate...(format: 29A-123.45)" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Car Type</label>
                                         <select name="typeId" class="form-select" required>
                                             <option value="">Select car type...</option>
                                             <c:forEach var="c" items="${carTypes}">
@@ -184,14 +196,17 @@
                                             </c:forEach>
                                         </select>
                                     </div>
+
                                     <div class="col-md-6">
-                                        <label>Location</label>
-                                        <input type="text" class="form-control" name="location" placeholder="Enter car location...">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" name="location"
+                                               placeholder="Enter car location..." required>
                                     </div>
 
                                     <div class="col-12">
-                                        <label>Description</label>
-                                        <textarea name="description" class="form-control" rows="3" placeholder="Enter description about the car..."></textarea>
+                                        <label class="form-label">Description</label>
+                                        <textarea name="description" class="form-control" rows="3"
+                                                  placeholder="Enter description about the car..."></textarea>
                                     </div>
                                 </div>
 
@@ -201,12 +216,12 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- FOOTER -->
     <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
 
@@ -215,12 +230,23 @@
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('previewImage').src = e.target.result;
-            }
+            reader.onload = e => document.getElementById('previewImage').src = e.target.result;
             reader.readAsDataURL(file);
         }
     }
+    function previewFile(event) {
+        const file = event.target.files[0];
+        const img = document.getElementById('previewImage');
+        if (file) {
+            img.style.display = 'block'; // ✅ hiện ảnh sau khi chọn
+            const reader = new FileReader();
+            reader.onload = e => img.src = e.target.result;
+            reader.readAsDataURL(file);
+        } else {
+            img.style.display = 'none'; // ✅ ẩn lại nếu không chọn file
+        }
+    }
+
 </script>
 </body>
 </html>
