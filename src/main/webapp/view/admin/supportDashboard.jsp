@@ -20,7 +20,7 @@
     <!-- Custom styles for this template-->
     <link href="${pageContext.request.contextPath}/css/sb-admin.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/colReorder-bootstrap4.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/colReorder-bootstrap4.css">
 
 </head>
 
