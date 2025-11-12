@@ -18,14 +18,11 @@
             margin-right: 8px;
         }
 
-
-
         /* ============================================
 
            MODAL OVERLAY & POPUP
 
            ============================================ */
-
         .promo-modal-overlay {
 
             display: none;
