@@ -1186,7 +1186,6 @@ public class CarDAO extends DBContext {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-
             ps.setInt(1, car.getOwnerId());
             ps.setInt(2, car.getTypeId());
             ps.setString(3, car.getModel());
@@ -1201,7 +1200,6 @@ public class CarDAO extends DBContext {
             ps.setBoolean(12, car.isAvailability());
             ps.setString(13, car.getLocation());
             ps.executeUpdate();
-
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {

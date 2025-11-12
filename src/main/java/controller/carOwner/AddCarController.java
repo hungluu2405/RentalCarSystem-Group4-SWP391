@@ -56,12 +56,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String fuelType = request.getParameter("fuelType");
     String description = request.getParameter("description");
     String location = request.getParameter("location");
-
-    // Dùng hàm parse an toàn trong service
-    int year = AddCarService.safeParseInt(request.getParameter("year"));
-    int capacity = AddCarService.safeParseInt(request.getParameter("capacity"));
-    int typeId = AddCarService.safeParseInt(request.getParameter("typeId"));
-    BigDecimal pricePerDay = AddCarService.safeParseBigDecimal(request.getParameter("pricePerDay"));
+    int year = Integer.parseInt(request.getParameter("year"));
+    int capacity = Integer.parseInt(request.getParameter("capacity"));
+    int typeId = Integer.parseInt(request.getParameter("typeId"));
+    BigDecimal pricePerDay = new BigDecimal(request.getParameter("pricePerDay"));
 
     // Nếu user không upload lại ảnh, dùng ảnh tạm cũ từ form
     String tempImagePath = request.getParameter("tempImagePath");
@@ -82,15 +80,15 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("errorMessage", validationError);
         request.setAttribute("brand", brand);
         request.setAttribute("model", model);
-        request.setAttribute("year", year > 0 ? year : "");
+        request.setAttribute("year", year);
         request.setAttribute("licensePlate", licensePlate);
-        request.setAttribute("capacity", capacity > 0 ? capacity : "");
+        request.setAttribute("capacity", capacity);
         request.setAttribute("transmission", transmission);
         request.setAttribute("fuelType", fuelType);
-        request.setAttribute("pricePerDay", pricePerDay != null ? pricePerDay : "");
+        request.setAttribute("pricePerDay", pricePerDay);
         request.setAttribute("description", description);
         request.setAttribute("location", location);
-        request.setAttribute("typeId", typeId > 0 ? typeId : "");
+        request.setAttribute("typeId", typeId);
         request.setAttribute("tempImagePath", tempImagePath);
 
         // Gắn lại dropdown
