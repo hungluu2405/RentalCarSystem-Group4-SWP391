@@ -309,7 +309,7 @@
                         <div class="topbar-widget"><a href="#"><i class="fa fa-phone"></i>+208 333 9296</a></div>
                         <div class="topbar-widget"><a href="#"><i class="fa fa-envelope"></i>contact@rentaly.com</a>
                         </div>
-                        <div class="topbar-widget"><a href="#"><i class="fa fa-clock-o"></i>Mon - Fri 08.00 - 18.00</a>
+                        <div class="topbar-widget"><a href="#"><i class="fa fa-clock-o"></i>T2 - CN 06.00 - 22.00</a>
                         </div>
                     </div>
                 </div>
@@ -345,11 +345,11 @@
                         <div class="de-flex-col header-col-mid">
                             <ul id="mainmenu">
 
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Cars</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Danh sách xe</a>
 
                                 </li>
                                 <li><a class="menu-item"
-                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
+                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Liên hệ</a>
                                 </li>
                                 <li><c:if test="${empty sessionScope.user or (sessionScope.user.roleId != 1 and sessionScope.user.roleId != 2)}">
                                 <li>
@@ -614,9 +614,8 @@
 
 
                                     <c:otherwise>
-                                        <a href="${pageContext.request.contextPath}/login" class="btn-main">Sign In</a>
-                                        <a href="${pageContext.request.contextPath}/register" class="btn-main">Sign
-                                            Up</a>
+                                        <a href="${pageContext.request.contextPath}/login" class="btn-main">Đăng nhập</a>
+                                        <a href="${pageContext.request.contextPath}/register" class="btn-main">Đăng ký</a>
                                     </c:otherwise>
                                 </c:choose>
 
@@ -638,7 +637,7 @@
                     <div class="col-lg-12 text-light">
                         <div class="spacer-double"></div>
                         <div class="spacer-double"></div>
-                        <h1 class="mb-2">Looking for a <span class="id-color">vehicle</span>? You're at the right place.
+                        <h1 class="mb-2">Tìm xe <span class="id-color">dễ dàng</span>? Vì bạn đang ở đúng nơi!
                         </h1>
                         <div class="spacer-single"></div>
                     </div>
@@ -665,23 +664,23 @@
                                     <div class="search-form-grid-simplified">
 
                                         <div class="input-group-simplified location-group-simplified">
-                                            <label for="location">Pickup and return location</label>
+                                            <label for="location">Địa điểm nhận và trả xe</label>
                                             <input type="text" id="autocomplete_location" name="location"
                                                    placeholder="Chọn địa điểm tìm xe" class="form-control" required
                                                    value="${sessionScope.flashForm_location != null ? sessionScope.flashForm_location : location}">
                                         </div>
 
                                         <div class="input-group-simplified">
-                                            <label for="pickupDate">Pickup Date</label>
+                                            <label for="pickupDate">Ngày nhận</label>
                                             <input type="date" id="pickupDate" name="startDate" class="form-control" required
                                                    value="${sessionScope.flashForm_startDate != null ? sessionScope.flashForm_startDate : startDate}">
                                         </div>
 
                                         <div class="input-group-simplified">
-                                            <label for="pickupTime">Pickup Time</label>
+                                            <label for="pickupTime">Giờ nhận</label>
                                             <select id="pickupTime" name="pickupTime" class="form-control" required>
                                                 <option ${empty pickupTime and empty sessionScope.flashForm_pickupTime ? 'selected' : ''} disabled value="">
-                                                    Select Time
+                                                    Chọn thời gian
                                                 </option>
                                                 <c:forEach var="hour" begin="6" end="22">
                                                     <c:set var="timeValue" value="${hour lt 10 ? '0' : ''}${hour}:00"/>
@@ -694,16 +693,16 @@
                                         </div>
 
                                         <div class="input-group-simplified">
-                                            <label for="returnDate">Return Date</label>
+                                            <label for="returnDate">Ngày trả xe</label>
                                             <input type="date" id="returnDate" name="endDate" class="form-control" required
                                                    value="${sessionScope.flashForm_endDate != null ? sessionScope.flashForm_endDate : endDate}">
                                         </div>
 
                                         <div class="input-group-simplified">
-                                            <label for="returnTime">Return Time</label>
+                                            <label for="returnTime">Thời gian trả xe</label>
                                             <select id="returnTime" name="dropoffTime" class="form-control" required>
                                                 <option ${empty dropoffTime and empty sessionScope.flashForm_dropoffTime ? 'selected' : ''} disabled value="">
-                                                    Select Time
+                                                    Chọn thời gian
                                                 </option>
                                                 <c:forEach var="hour" begin="6" end="22">
                                                     <c:set var="timeValue" value="${hour lt 10 ? '0' : ''}${hour}:00"/>
@@ -717,7 +716,7 @@
 
                                         <div class="search-button-group-simplified">
                                             <button type="submit" id='send_message' value='Find a Vehicle' class="btn-search-final">
-                                                Search
+                                                Tìm kiếm
                                             </button>
                                         </div>
                                     </div>
@@ -739,24 +738,20 @@
                             <div class="container-timeline">
                                 <ul>
                                     <li>
-                                        <h4>Choose a vehicle</h4>
-                                        <p>Unlock unparalleled adventures and memorable journeys with our vast fleet of
-                                            vehicles tailored to suit every need, taste, and destination.</p>
+                                        <h4>Chọn địa điểm nhận xe</h4>
+                                        <p>Khám phá hành trình tuyệt vời của riêng bạn với hệ thống xe đa dạng, phù hợp mọi nhu cầu và điểm đến.</p>
                                     </li>
                                     <li>
-                                        <h4>Pick location &amp; date</h4>
-                                        <p>Pick your ideal location and date, and let us take you on a journey filled
-                                            with convenience, flexibility, and unforgettable experiences.</p>
+                                        <h4>Chọn ngày giờ nhận và trả xe</h4>
+                                        <p>Chọn địa điểm và thời gian thuận tiện nhất. Chúng tôi sẽ giúp bạn bắt đầu chuyến đi dễ dàng và linh hoạt.</p>
                                     </li>
                                     <li>
-                                        <h4>Make a booking</h4>
-                                        <p>Secure your reservation with ease, unlocking a world of possibilities and
-                                            embarking on your next adventure with confidence.</p>
+                                        <h4>Thanh toán dễ dàng</h4>
+                                        <p>Đặt xe nhanh chóng, thanh toán an toàn. Mở ra hành trình mới đầy tự tin và hứng khởi.</p>
                                     </li>
                                     <li>
-                                        <h4>Sit back &amp; relax</h4>
-                                        <p>Hassle-free convenience as we take care of every detail, allowing you to
-                                            unwind and embrace a journey filled comfort.</p>
+                                        <h4>Nhận xe và tận hưởng</h4>
+                                        <p>Hãy thư giãn và tận hưởng chuyến đi. Mọi chi tiết đã có chúng tôi lo.</p>
                                     </li>
                                 </ul>
                             </div>
@@ -782,7 +777,7 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Convertible</span>
+                        <span class="d-item-txt">Mui trần</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -790,7 +785,7 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Sports Car</span>
+                        <span class="d-item-txt">Thể Thao</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -798,7 +793,7 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Minivan</span>
+                        <span class="d-item-txt">Xe Bán Tải</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -806,7 +801,7 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Truck</span>
+                        <span class="d-item-txt">Xe Tải</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -814,7 +809,7 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Exotic Cars</span>
+                        <span class="d-item-txt">Xe Điện</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -880,10 +875,9 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6 offset-lg-3 text-center">
-                        <span class="subtitle">Why Choose Us</span>
-                        <h2>Our Features</h2>
-                        <p>Discover a world of convenience, safety, and customization, paving the way for unforgettable
-                            adventures and seamless mobility solutions.</p>
+                        <span class="subtitle">Xe Dành Cho Bạn</span>
+                        <h2>Ưu điểm của Rentaly</h2>
+                        <p>Khám phá thế giới của sự tiện lợi, an toàn và cá nhân hóa, mở ra hành trình trọn vẹn với những trải nghiệm di chuyển mượt mà và đáng nhớ.</p>
                         <div class="spacer-20"></div>
                     </div>
                     <div class="clearfix"></div>
@@ -891,17 +885,15 @@
                         <div class="box-icon s2 p-small mb20 wow fadeInRight" data-wow-delay=".5s">
                             <i class="fa bg-color fa-trophy"></i>
                             <div class="d-inner">
-                                <h4>First class services</h4>
-                                Where luxury meets exceptional care, creating unforgettable moments and exceeding your
-                                every expectation.
+                                <h4>Dịch vụ hạng nhất</h4>
+                                <p>Nơi sang trọng hòa quyện cùng sự tận tâm, mang đến những khoảnh khắc khó quên và vượt xa mọi kỳ vọng của bạn.</p>
                             </div>
                         </div>
                         <div class="box-icon s2 p-small mb20 wow fadeInL fadeInRight" data-wow-delay=".75s">
                             <i class="fa bg-color fa-road"></i>
                             <div class="d-inner">
-                                <h4>24/7 road assistance</h4>
-                                Reliable support when you need it most, keeping you on the move with confidence and
-                                peace of mind.
+                                <h4>Hỗ trợ 24/7 trên mọi hành trình</h4>
+                                <p>Luôn sẵn sàng đồng hành khi bạn cần, giúp bạn yên tâm lăn bánh với sự tự tin và an toàn tuyệt đối.</p>
                             </div>
                         </div>
                     </div>
@@ -915,17 +907,15 @@
                         <div class="box-icon s2 d-invert p-small mb20 wow fadeInL fadeInLeft" data-wow-delay="1s">
                             <i class="fa bg-color fa-tag"></i>
                             <div class="d-inner">
-                                <h4>Quality at Minimum Expense</h4>
-                                Unlocking affordable brilliance with elevating quality while minimizing costs for
-                                maximum value.
+                                <h4>Chất lượng với chi phí tối ưu</h4>
+                                <p>Mang đến dịch vụ hoàn hảo với chi phí hợp lý, giúp bạn tận hưởng chất lượng cao mà vẫn tiết kiệm tối đa.</p>
                             </div>
                         </div>
                         <div class="box-icon s2 d-invert p-small mb20 wow fadeInL fadeInLeft" data-wow-delay="1.25s">
                             <i class="fa bg-color fa-map-pin"></i>
                             <div class="d-inner">
-                                <h4>Free Pick-Up & Drop-Off</h4>
-                                Enjoy free pickup and drop-off services, adding an extra layer of ease to your car
-                                rental experience.
+                                <h4>Đón – Trả xe miễn phí</h4>
+                                <p>Trải nghiệm tiện ích đón trả xe tận nơi hoàn toàn miễn phí, mang lại sự thoải mái và tiện lợi tuyệt đối cho chuyến đi của bạn.</p>
                             </div>
                         </div>
                     </div>
@@ -938,18 +928,17 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6 offset-lg-3 text-center">
-                        <span class="subtitle">Enjoy Your Ride</span>
-                        <h2>Our Vehicle Fleet</h2>
-                        <p>Driving your dreams to reality with an exquisite fleet of versatile vehicles for
-                            unforgettable journeys.</p>
+                        <span class="subtitle">Tận hưởng chuyến đi của bạn</span>
+                        <h2>Dòng xe của chúng tôi</h2>
+                        <p>Biến ước mơ lái xe của bạn thành hiện thực với dàn xe đa dạng, hiện đại và sang trọng, sẵn sàng đồng hành cùng bạn trên mọi hành trình đáng nhớ.</p>
 
                         <!-- Nút xem tất cả xe -->
                         <div class="spacer-10"></div>
-                        <a href="${pageContext.request.contextPath}/cars" class="btn-main">View All Cars</a>
+                        <a href="${pageContext.request.contextPath}/cars" class="btn-main">Xem danh sách xe</a>
                         </br>
                         </br>
 
-                        <span class="subtitle">The best-selling product in our system</span>
+                        <span class="subtitle">Xe bán chạy nhất trong hệ thống</span>
                         <div class="spacer-20"></div>
                     </div>
 
@@ -1004,26 +993,23 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3">
-                        <h1>Let's Your Adventure Begin</h1>
+                        <h1>Hãy bắt đầu hành trình của bạn</h1>
                         <div class="spacer-20"></div>
                     </div>
                     <div class="col-md-3">
                         <i class="fa fa-trophy de-icon mb20"></i>
-                        <h4>First Class Services</h4>
-                        <p>Where luxury meets exceptional care, creating unforgettable moments and exceeding your every
-                            expectation.</p>
+                        <h4>Dịch vụ hạng nhất</h4>
+                        <p>Nơi sang trọng hòa quyện cùng sự tận tâm, mang đến những khoảnh khắc khó quên và vượt xa mọi kỳ vọng của bạn.</p>
                     </div>
                     <div class="col-md-3">
                         <i class="fa fa-road de-icon mb20"></i>
-                        <h4>24/7 road assistance</h4>
-                        <p>Reliable support when you need it most, keeping you on the move with confidence and peace of
-                            mind.</p>
+                        <h4>Hỗ trợ 24/7 trên mọi hành trình</h4>
+                        <p>Luôn sẵn sàng đồng hành khi bạn cần, giúp bạn yên tâm lăn bánh với sự tự tin và an toàn tuyệt đối.</p>
                     </div>
                     <div class="col-md-3">
                         <i class="fa fa-map-pin de-icon mb20"></i>
-                        <h4>Free Pick-Up & Drop-Off</h4>
-                        <p>Enjoy free pickup and drop-off services, adding an extra layer of ease to your car rental
-                            experience.</p>
+                        <h4>Đón – Trả xe miễn phí</h4>
+                        <p>Trải nghiệm tiện ích đón trả xe tận nơi hoàn toàn miễn phí, mang lại sự thoải mái và tiện lợi tuyệt đối cho chuyến đi của bạn.</p>
                     </div>
                 </div>
             </div>
@@ -1038,13 +1024,10 @@
                         <div class="de-image-text">
                             <div class="d-text">
                                 <div class="d-quote id-color"><i class="fa fa-quote-right"></i></div>
-                                <h4>Excellent Service! Car Rent Service!</h4>
+                                <h4>Dịch vụ tuyệt vời! Thuê xe chuyên nghiệp!</h4>
                                 <blockquote>
-                                    I have been using Rentaly for my Car Rental needs for over 5 years now. I have never
-                                    had any problems with their service. Their customer support is always responsive and
-                                    helpful. I would recommend Rentaly to anyone looking for a reliable Car Rental
-                                    provider.
-                                    <span class="by">Thuy Linh</span>
+                                    Tôi đã sử dụng Rentaly cho nhu cầu thuê xe của mình hơn 5 năm nay. Tôi chưa bao giờ gặp bất kỳ vấn đề nào với dịch vụ của họ. Bộ phận hỗ trợ khách hàng luôn phản hồi nhanh và rất tận tâm. Tôi chắc chắn sẽ giới thiệu Rentaly cho bất kỳ ai đang tìm kiếm dịch vụ thuê xe uy tín.
+                                    <span class="by">Thùy Linh</span>
                                 </blockquote>
                             </div>
                             <img src="images/testimonial/anh5.jpg" class="img-fluid" alt="">
@@ -1056,13 +1039,10 @@
                         <div class="de-image-text">
                             <div class="d-text">
                                 <div class="d-quote id-color"><i class="fa fa-quote-right"></i></div>
-                                <h4>Excellent Service! Car Rent Service!</h4>
+                                <h4>Thuê xe dễ dàng – Dịch vụ tận tâm, uy tín!</h4>
                                 <blockquote>
-                                    We have been using Rentaly for our trips needs for several years now and have always
-                                    been happy with their service. Their customer support is Excellent Service! and they
-                                    are always available to help with any issues we have. Their prices are also very
-                                    competitive.
-                                    <span class="by">Bang Kieu</span>
+                                    Chúng tôi đã sử dụng Rentaly cho các chuyến đi của mình trong nhiều năm và luôn hài lòng với dịch vụ mà họ mang lại. Đội ngũ hỗ trợ khách hàng cực kỳ chuyên nghiệp, luôn sẵn sàng giúp đỡ khi có bất kỳ vấn đề nào. Giá thuê xe cũng rất cạnh tranh so với thị trường.
+                                    <span class="by">Bằng Kiều</span>
                                 </blockquote>
                             </div>
                             <img src="images/testimonial/anh6.jpg" class="img-fluid" alt="">
@@ -1073,12 +1053,10 @@
                         <div class="de-image-text">
                             <div class="d-text">
                                 <div class="d-quote id-color"><i class="fa fa-quote-right"></i></div>
-                                <h4>Excellent Service! Car Rent Service!</h4>
+                                <h4>Tận hưởng dịch vụ hoàn hảo – Thuê xe không lo nghĩ!</h4>
                                 <blockquote>
-                                    Endorsed by industry experts, Rentaly is the Car Rental solution you can trust. With
-                                    years of experience in the field, we provide fast, reliable and secure Car Rental
-                                    services.
-                                    <span class="by">Tuan Vu Manh</span>
+                                    Rentaly được các chuyên gia trong ngành đánh giá cao là giải pháp thuê xe đáng tin cậy nhất. Với nhiều năm kinh nghiệm, chúng tôi mang đến dịch vụ thuê xe nhanh chóng, an toàn và chuyên nghiệp.
+                                    <span class="by">Tuấn Vũ Mạnh</span>
                                 </blockquote>
                             </div>
                             <img src="images/testimonial/anh7.jpg" class="img-fluid" alt="">
@@ -1093,8 +1071,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col text-center">
-                        <span class="subtitle">Do You Have</h2></span>
-                        <h2>Any Questions?</h2>
+                        <span class="subtitle">Bạn đang thắc mắc?</h2></span>
+                        <h2>Liên hệ ngay!</h2>
                         <div class="spacer-20"></div>
                     </div>
                 </div>
@@ -1103,30 +1081,29 @@
                         <div class="accordion secondary">
                             <div class="accordion-section">
                                 <div class="accordion-section-title" data-tab="#accordion-1">
-                                    How do I get started with Car Rental?
+                                    Bắt đầu thế nào với Car Rental?
                                 </div>
                                 <div class="accordion-section-content" id="accordion-1">
-                                    <p>Getting started is easy! Simply create an account, choose your preferred car,
-                                        select the rental dates, and confirm your booking. You’ll receive a confirmation
-                                        email with all the details and pickup instructions.</p>
+                                    <p>Rất đơn giản! Bạn chỉ cần tạo tài khoản, chọn chiếc xe mình muốn, đặt ngày thuê và xác nhận.
+                                        Ngay sau đó, bạn sẽ nhận được email xác nhận với đầy đủ thông tin chi tiết và hướng dẫn nhận xe.</p>
                                 </div>
                                 <div class="accordion-section-title" data-tab="#accordion-2">
-                                    Can I pay online?
+                                    Tôi thanh toán online được chứ?
                                 </div>
                                 <div class="accordion-section-content" id="accordion-2">
-                                    <p>Yes, you can conveniently pay online using a credit or debit card. Online payment
-                                        ensures your reservation is confirmed instantly. Some locations may also allow
-                                        partial payment or pay-at-pickup options.</p>
+                                    <p>Hoàn toàn có thể! Bạn có thể thanh toán trực tuyến nhanh chóng bằng thẻ tín dụng hoặc thẻ ghi nợ.
+                                        Thanh toán online giúp đơn đặt xe của bạn được xác nhận ngay lập tức.
+                                        Một số địa điểm còn hỗ trợ trả sau hoặc đặt cọc trước – thanh toán khi nhận xe.</p>
                                 </div>
                                 <div class="accordion-section-title" data-tab="#accordion-3">
-                                    What kind of Car Rental do I need?
+                                    Tôi có thể thuê những loại xe nào?
                                 </div>
                                 <div class="accordion-section-content" id="accordion-3">
-                                    <p>It depends on your trip and preferences:</br>
-                                        Economy or Compact: Best for city travel and fuel efficiency.</br>
-                                        SUV or Minivan: Great for family trips or extra luggage space.</br>
-                                        Luxury or Premium: Perfect for business or special occasions.</br>
-                                        You can filter cars by size, price, or purpose when booking.</p>
+                                    <p>Tùy theo nhu cầu và hành trình của bạn, Rentaly có nhiều lựa chọn:<br>
+                                        Xe nhỏ hoặc tiết kiệm nhiên liệu: Phù hợp cho di chuyển trong thành phố.<br>
+                                        SUV hoặc Minivan: Dành cho chuyến đi gia đình hoặc cần nhiều không gian hành lý.<br>
+                                        Xe sang hoặc cao cấp: Dành cho công việc, sự kiện hay dịp đặc biệt.<br>
+                                        Bạn có thể lọc xe theo kích thước, giá hoặc mục đích sử dụng khi đặt.</p>
                                 </div>
                             </div>
                         </div>
@@ -1136,28 +1113,26 @@
                         <div class="accordion secondary">
                             <div class="accordion-section">
                                 <div class="accordion-section-title" data-tab="#accordion-b-4">
-                                    What is a rental car security deposit?
+                                    Hệ thống bảo mật thế nào?
                                 </div>
                                 <div class="accordion-section-content" id="accordion-b-4">
-                                    <p>A security deposit is a temporary hold placed on your payment card at the start
-                                        of your rental. It covers potential damages, traffic fines, or extra charges.
-                                        The hold is released once you return the car in good condition.</p>
+                                    <p>Rentaly sẽ giữ một khoản đặt cọc tạm thời trên thẻ thanh toán của bạn khi bắt đầu thuê xe.
+                                        Khoản tiền này nhằm đảm bảo cho các chi phí phát sinh như hư hại, vi phạm giao thông, hoặc phụ phí khác.
+                                        Khoản đặt cọc sẽ được hoàn trả đầy đủ khi bạn trả xe trong tình trạng tốt.</p>
                                 </div>
                                 <div class="accordion-section-title" data-tab="#accordion-b-5">
-                                    Can I cancel or modify my reservation?
+                                    Tôi có thể hủy đặt xe không?
                                 </div>
                                 <div class="accordion-section-content" id="accordion-b-5">
-                                    <p>No, you can't cancel or modify your reservation online before the pickup time.
-                                        Cancellation fees may apply depending on how close to the pickup time you make
-                                        the change.</p>
+                                    <p>Rất tiếc, hiện bạn không thể hủy hoặc chỉnh sửa đặt xe online sau khi đã xác nhận.
+                                        Nếu muốn thay đổi hoặc hủy, vui lòng liên hệ sớm với chúng tôi — phí hủy có thể áp dụng tùy thời điểm bạn thực hiện.</p>
                                 </div>
                                 <div class="accordion-section-title" data-tab="#accordion-b-6">
-                                    Is it possible to extend my rental period?
+                                    Liệu tôi có thể thuê dài ngày không?
                                 </div>
                                 <div class="accordion-section-content" id="accordion-b-6">
-                                    <p>No. Once your rental agreement is confirmed, the rental period cannot be
-                                        extended. You will need to create a new booking if you wish to rent the car for
-                                        a longer duration.</p>
+                                    <p>Sau khi đặt xe và hợp đồng đã được xác nhận, thời gian thuê sẽ không thể kéo dài thêm.
+                                        Nếu bạn muốn thuê lâu hơn, chỉ cần tạo một đơn đặt xe mới với ngày mong muốn — chúng tôi sẽ hỗ trợ nhanh nhất có thể.</p>
                                 </div>
                             </div>
                         </div>
@@ -1172,22 +1147,21 @@
                     <div class="row">
 
                         <div class="col-lg-4 offset-lg-2">
-                            <span class="subtitle text-white">Call us for further information</span>
-                            <h2 class="s2">Rentaly customer care is here to help you anytime.</h2>
+                            <span class="subtitle text-white">Liên hệ để được tư vấn thêm</span>
+                            <h2 class="s2">Khách hàng của Rentaly sẽ được chăm sóc miễn phí, tận tâm</h2>
                         </div>
 
                         <div class="col-lg-4 text-lg-center text-sm-center">
                             <div class="phone-num-big">
                                 <i class="fa fa-phone"></i>
                                 <span class="pnb-text">
-                                            Call Us Now
+                                            Liên hệ ngay
                                         </span>
                                 <span class="pnb-num">
                                             033 5821918
                                         </span>
                             </div>
-                            <a href="${pageContext.request.contextPath}/view/contact/contact.jsp" class="btn-main">Contact
-                                Us</a>
+                            <a href="${pageContext.request.contextPath}/view/contact/contact.jsp" class="btn-main">Liên hệ</a>
                         </div>
                     </div>
                 </div>
@@ -1205,9 +1179,9 @@
 
 <!-- Javascript Files
 ================================================== -->
-<script src="js/plugins.js"></script>
-<script src="js/designesia.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places"></script>
+<%--<script src="js/plugins.js"></script>--%>
+<%--<script src="js/designesia.js"></script>--%>
+<%--<script src="https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places"></script>--%>
 
 <script>
     (function () {
