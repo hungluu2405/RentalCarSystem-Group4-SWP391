@@ -23,9 +23,9 @@ public class VerifyEmailServlet extends HttpServlet {
             throws ServletException, IOException {
         String msg = request.getParameter("msg");
         if ("resent".equals(msg)) {
-            request.setAttribute("message", "A new code has been sent to your email.");
+            request.setAttribute("message", "Một mã mới đã được gửi đến email của bạn.");
         } else if ("failed".equals(msg)) {
-            request.setAttribute("error", "Failed to resend code. Please try again.");
+            request.setAttribute("error", "Gửi lại mã không thành công. Vui lòng thử lại.");
         }
 
         request.getRequestDispatcher("view/account/verify-email.jsp").forward(request, response);
@@ -39,7 +39,7 @@ public class VerifyEmailServlet extends HttpServlet {
         String code = request.getParameter("code");
 
         if (!verifyEmailService.verifyCode(email, code)) {
-            request.setAttribute("error", "Incorrect or expired code.");
+            request.setAttribute("error", "Mã không chính xác hoặc đã hết hạn.");
             request.getRequestDispatcher("view/account/verify-email.jsp").forward(request, response);
             return;
         }
@@ -52,11 +52,10 @@ public class VerifyEmailServlet extends HttpServlet {
         // Kiểm tra session
         if (user == null) {
             String emails = request.getParameter("email");
-            request.setAttribute("error", "Your session expired. Please verify again.");
+            request.setAttribute("error", "Phiên của bạn đã hết hạn. Vui lòng xác thực lại.");
             response.sendRedirect(request.getContextPath() + "/register?email=" + emails);
             return;
         }
-
 
         // Gọi service để lưu vào DB
         boolean isSuccess = verifyEmailService.registerAfterVerification(user, profile, address);
@@ -69,10 +68,9 @@ public class VerifyEmailServlet extends HttpServlet {
             // Đăng nhập tự động sau xác thực thành công
             session.setAttribute("user", user);
 
-            //them ham thong bao o day ha?
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
-            request.setAttribute("error", "Error creating account. Please try registering again.");
+            request.setAttribute("error", "Đã xảy ra lỗi khi tạo tài khoản. Vui lòng thử đăng ký lại.");
             request.getRequestDispatcher("view/account/register.jsp").forward(request, response);
         }
     }
