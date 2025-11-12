@@ -189,15 +189,17 @@ public class BookingDAO extends DBContext {
 
     public int countByOwner(int ownerId) {
         String sql = """
-                    SELECT COUNT(*) 
-                    FROM BOOKING b 
-                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
-                    WHERE c.USER_ID = ?
-                """;
+        SELECT COUNT(*)
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
+    """;
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
+            ps.setInt(2, ownerId);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            return rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -206,16 +208,18 @@ public class BookingDAO extends DBContext {
 
     public int countByOwnerAndStatus(int ownerId, String status) {
         String sql = """
-                    SELECT COUNT(*) 
-                    FROM BOOKING b 
-                    JOIN CAR c ON b.CAR_ID = c.CAR_ID
-                    WHERE c.USER_ID = ? AND b.STATUS = ?
-                """;
+        SELECT COUNT(*)
+        FROM BOOKING b
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?) AND b.STATUS = ?
+    """;
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
-            ps.setString(2, status);
+            ps.setInt(2, ownerId);
+            ps.setString(3, status);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            return rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -1743,26 +1747,17 @@ public class BookingDAO extends DBContext {
      * Get current trips for CAR OWNER with simplified filters
      */
     public List<BookingDetail> getCurrentTripsForOwnerWithFilters(
-            int ownerId,
-            String status,
-            String dateFrom,
-            String dateTo,
-            String carName,
-            String priceRange,
-            int offset,
-            int limit) {
+            int ownerId, String status, String dateFrom, String dateTo,
+            String carName, String priceRange, int offset, int limit) {
 
         List<BookingDetail> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("""
-        SELECT
-            b.BOOKING_ID,
-            c.MODEL + ' ' + c.BRAND AS carName,
-            b.START_DATE, b.END_DATE,
-            b.PICKUP_TIME, b.DROPOFF_TIME,
-            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        SELECT b.BOOKING_ID, c.MODEL + ' ' + c.BRAND AS carName,
+               b.START_DATE, b.END_DATE, b.PICKUP_TIME, b.DROPOFF_TIME,
+               b.TOTAL_PRICE, b.STATUS, c.LOCATION
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ?
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
     """);
 
@@ -1783,18 +1778,10 @@ public class BookingDAO extends DBContext {
 
         if (priceRange != null && !priceRange.isEmpty()) {
             switch (priceRange) {
-                case "under1m":
-                    sql.append(" AND b.TOTAL_PRICE < 1000000");
-                    break;
-                case "1m-3m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
-                    break;
-                case "3m-5m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
-                    break;
-                case "over5m":
-                    sql.append(" AND b.TOTAL_PRICE > 5000000");
-                    break;
+                case "under1m" -> sql.append(" AND b.TOTAL_PRICE < 1000000");
+                case "1m-3m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                case "3m-5m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                case "over5m" -> sql.append(" AND b.TOTAL_PRICE > 5000000");
             }
         }
 
@@ -1802,6 +1789,7 @@ public class BookingDAO extends DBContext {
 
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
+            ps.setInt(paramIndex++, ownerId);
             ps.setInt(paramIndex++, ownerId);
 
             if (status != null && !status.isEmpty() && !status.equals("All")) {
@@ -1820,7 +1808,7 @@ public class BookingDAO extends DBContext {
             }
 
             ps.setInt(paramIndex++, offset);
-            ps.setInt(paramIndex++, limit);
+            ps.setInt(paramIndex, limit);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -1846,18 +1834,14 @@ public class BookingDAO extends DBContext {
      * Count current trips for CAR OWNER with simplified filters
      */
     public int countCurrentTripsForOwnerWithFilters(
-            int ownerId,
-            String status,
-            String dateFrom,
-            String dateTo,
-            String carName,
-            String priceRange) {
+            int ownerId, String status, String dateFrom, String dateTo,
+            String carName, String priceRange) {
 
         StringBuilder sql = new StringBuilder("""
         SELECT COUNT(*)
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ?
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
     """);
 
@@ -1878,23 +1862,16 @@ public class BookingDAO extends DBContext {
 
         if (priceRange != null && !priceRange.isEmpty()) {
             switch (priceRange) {
-                case "under1m":
-                    sql.append(" AND b.TOTAL_PRICE < 1000000");
-                    break;
-                case "1m-3m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
-                    break;
-                case "3m-5m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
-                    break;
-                case "over5m":
-                    sql.append(" AND b.TOTAL_PRICE > 5000000");
-                    break;
+                case "under1m" -> sql.append(" AND b.TOTAL_PRICE < 1000000");
+                case "1m-3m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                case "3m-5m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                case "over5m" -> sql.append(" AND b.TOTAL_PRICE > 5000000");
             }
         }
 
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
+            ps.setInt(paramIndex++, ownerId);
             ps.setInt(paramIndex++, ownerId);
 
             if (status != null && !status.isEmpty() && !status.equals("All")) {
@@ -1913,9 +1890,7 @@ public class BookingDAO extends DBContext {
             }
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            return rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -1926,26 +1901,17 @@ public class BookingDAO extends DBContext {
      * Get history trips for CAR OWNER with simplified filters
      */
     public List<BookingDetail> getHistoryTripsForOwnerWithFilters(
-            int ownerId,
-            String status,
-            String dateFrom,
-            String dateTo,
-            String carName,
-            String priceRange,
-            int offset,
-            int limit) {
+            int ownerId, String status, String dateFrom, String dateTo,
+            String carName, String priceRange, int offset, int limit) {
 
         List<BookingDetail> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("""
-        SELECT 
-            b.BOOKING_ID, 
-            c.MODEL + ' ' + c.BRAND AS carName,
-            b.START_DATE, b.END_DATE, 
-            b.PICKUP_TIME, b.DROPOFF_TIME, 
-            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        SELECT b.BOOKING_ID, c.MODEL + ' ' + c.BRAND AS carName,
+               b.START_DATE, b.END_DATE, b.PICKUP_TIME, b.DROPOFF_TIME,
+               b.TOTAL_PRICE, b.STATUS, c.LOCATION
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ?
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
     """);
 
@@ -1966,18 +1932,10 @@ public class BookingDAO extends DBContext {
 
         if (priceRange != null && !priceRange.isEmpty()) {
             switch (priceRange) {
-                case "under1m":
-                    sql.append(" AND b.TOTAL_PRICE < 1000000");
-                    break;
-                case "1m-3m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
-                    break;
-                case "3m-5m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
-                    break;
-                case "over5m":
-                    sql.append(" AND b.TOTAL_PRICE > 5000000");
-                    break;
+                case "under1m" -> sql.append(" AND b.TOTAL_PRICE < 1000000");
+                case "1m-3m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                case "3m-5m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                case "over5m" -> sql.append(" AND b.TOTAL_PRICE > 5000000");
             }
         }
 
@@ -1985,6 +1943,7 @@ public class BookingDAO extends DBContext {
 
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
+            ps.setInt(paramIndex++, ownerId);
             ps.setInt(paramIndex++, ownerId);
 
             if (status != null && !status.isEmpty() && !status.equals("All")) {
@@ -2003,7 +1962,7 @@ public class BookingDAO extends DBContext {
             }
 
             ps.setInt(paramIndex++, offset);
-            ps.setInt(paramIndex++, limit);
+            ps.setInt(paramIndex, limit);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -2029,18 +1988,14 @@ public class BookingDAO extends DBContext {
      * Count history trips for CAR OWNER with simplified filters
      */
     public int countHistoryTripsForOwnerWithFilters(
-            int ownerId,
-            String status,
-            String dateFrom,
-            String dateTo,
-            String carName,
-            String priceRange) {
+            int ownerId, String status, String dateFrom, String dateTo,
+            String carName, String priceRange) {
 
         StringBuilder sql = new StringBuilder("""
-        SELECT COUNT(*) 
-        FROM BOOKING b 
+        SELECT COUNT(*)
+        FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ? 
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
     """);
 
@@ -2061,23 +2016,16 @@ public class BookingDAO extends DBContext {
 
         if (priceRange != null && !priceRange.isEmpty()) {
             switch (priceRange) {
-                case "under1m":
-                    sql.append(" AND b.TOTAL_PRICE < 1000000");
-                    break;
-                case "1m-3m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
-                    break;
-                case "3m-5m":
-                    sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
-                    break;
-                case "over5m":
-                    sql.append(" AND b.TOTAL_PRICE > 5000000");
-                    break;
+                case "under1m" -> sql.append(" AND b.TOTAL_PRICE < 1000000");
+                case "1m-3m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 1000000 AND 3000000");
+                case "3m-5m" -> sql.append(" AND b.TOTAL_PRICE BETWEEN 3000000 AND 5000000");
+                case "over5m" -> sql.append(" AND b.TOTAL_PRICE > 5000000");
             }
         }
 
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
+            ps.setInt(paramIndex++, ownerId);
             ps.setInt(paramIndex++, ownerId);
 
             if (status != null && !status.isEmpty() && !status.equals("All")) {
@@ -2096,9 +2044,7 @@ public class BookingDAO extends DBContext {
             }
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            return rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -2111,16 +2057,15 @@ public class BookingDAO extends DBContext {
         SELECT COUNT(*)
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ?
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
     """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
+            ps.setInt(2, ownerId);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            return rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -2129,19 +2074,18 @@ public class BookingDAO extends DBContext {
 
     public int countHistoryTripsByOwnerId(int ownerId) {
         String sql = """
-        SELECT COUNT(*) 
+        SELECT COUNT(*)
         FROM BOOKING b
-        JOIN CAR c ON b.CAR_ID = c.CAR_ID 
-        WHERE c.USER_ID = ? 
+        JOIN CAR c ON b.CAR_ID = c.CAR_ID
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
     """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
+            ps.setInt(2, ownerId);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+            return rs.next() ? rs.getInt(1) : 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -2151,15 +2095,12 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getCurrentTripsByOwnerId(int ownerId, int offset, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-        SELECT
-            b.BOOKING_ID,
-            c.MODEL + ' ' + c.BRAND AS carName,
-            b.START_DATE, b.END_DATE,
-            b.PICKUP_TIME, b.DROPOFF_TIME,
-            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        SELECT b.BOOKING_ID, c.MODEL + ' ' + c.BRAND AS carName,
+               b.START_DATE, b.END_DATE, b.PICKUP_TIME, b.DROPOFF_TIME,
+               b.TOTAL_PRICE, b.STATUS, c.LOCATION
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ?
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Pending', 'Approved', 'Paid', 'Returning')
         ORDER BY b.CREATED_AT DESC
         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
@@ -2167,8 +2108,9 @@ public class BookingDAO extends DBContext {
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
-            ps.setInt(2, offset);
-            ps.setInt(3, limit);
+            ps.setInt(2, ownerId);
+            ps.setInt(3, offset);
+            ps.setInt(4, limit);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -2193,15 +2135,12 @@ public class BookingDAO extends DBContext {
     public List<BookingDetail> getHistoryTripsByOwnerId(int ownerId, int offset, int limit) {
         List<BookingDetail> list = new ArrayList<>();
         String sql = """
-        SELECT 
-            b.BOOKING_ID, 
-            c.MODEL + ' ' + c.BRAND AS carName,
-            b.START_DATE, b.END_DATE, 
-            b.PICKUP_TIME, b.DROPOFF_TIME, 
-            b.TOTAL_PRICE, b.STATUS, c.LOCATION
+        SELECT b.BOOKING_ID, c.MODEL + ' ' + c.BRAND AS carName,
+               b.START_DATE, b.END_DATE, b.PICKUP_TIME, b.DROPOFF_TIME,
+               b.TOTAL_PRICE, b.STATUS, c.LOCATION
         FROM BOOKING b
         JOIN CAR c ON b.CAR_ID = c.CAR_ID
-        WHERE c.USER_ID = ?
+        WHERE (c.USER_ID = ? OR b.USER_ID = ?)
         AND b.STATUS IN ('Completed', 'Rejected', 'Cancelled')
         ORDER BY b.CREATED_AT DESC
         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
@@ -2209,8 +2148,9 @@ public class BookingDAO extends DBContext {
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
-            ps.setInt(2, offset);
-            ps.setInt(3, limit);
+            ps.setInt(2, ownerId);
+            ps.setInt(3, offset);
+            ps.setInt(4, limit);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
