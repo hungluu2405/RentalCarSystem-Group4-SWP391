@@ -21,50 +21,48 @@ public class CarListService {
                 && dropoffTime != null && !dropoffTime.isEmpty();
     }
 
-    /** ✅ Validate ngày giờ (chỉ dùng cho form ở /home) */
+    /** ✅ Kiểm tra hợp lệ ngày giờ (dành cho form tìm kiếm ở trang chủ) */
     public String validateDateTime(String startDate, String pickupTime, String endDate, String dropoffTime) {
         try {
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime startDT = LocalDateTime.parse(startDate + "T" + pickupTime);
             LocalDateTime endDT = LocalDateTime.parse(endDate + "T" + dropoffTime);
 
-            // ❌ 1. Ngày nhận < hiện tại
+            // ❌ 1. Ngày nhận xe < thời điểm hiện tại
             if (startDT.isBefore(now)) {
-                return "❌ The pickup date/time cannot be earlier than the current time!";
+                return "❌ Thời gian nhận xe không được sớm hơn thời điểm hiện tại!";
             }
 
             // ❌ 2. Đặt xe trước quá 7 tháng
             LocalDateTime maxBookingDate = now.plusMonths(7);
             if (startDT.isAfter(maxBookingDate)) {
-                return "❌ Cannot book more than 7 months in advance!";
+                return "❌ Không thể đặt xe trước quá 7 tháng!";
             }
 
-            // ❌ 3. Thời gian thuê vượt quá 7 tháng
+            // ❌ 3. Thời gian thuê kéo dài quá 7 tháng
             if (endDT.isAfter(maxBookingDate)) {
-                return "❌ Booking period cannot extend beyond 7 months!";
+                return "❌ Thời gian thuê không được vượt quá 7 tháng!";
             }
 
-            // ❌ 4. Ngày trả < ngày nhận
+            // ❌ 4. Ngày trả xe < ngày nhận xe
             if (endDT.isBefore(startDT)) {
-                return "❌ Return date/time must be after pickup date/time!";
+                return "❌ Ngày trả xe phải sau ngày nhận xe!";
             }
 
             // ❌ 5. Thời gian thuê < 24 giờ
             long totalHours = ChronoUnit.HOURS.between(startDT, endDT);
             if (totalHours < 24) {
-                return "❌ Minimum rental period is 24 hours!";
+                return "❌ Thời gian thuê tối thiểu là 24 giờ!";
             }
 
         } catch (Exception e) {
-            return "❌ Invalid date/time format.";
+            return "❌ Định dạng ngày hoặc giờ không hợp lệ!";
         }
 
-        return null; // ✅ Không lỗi
+        return null; // ✅ Không có lỗi
     }
 
-
-
-    /** ✅ Lưu thông báo lỗi và dữ liệu cũ (flash attribute) */
+    /** ✅ Lưu thông báo lỗi và dữ liệu form cũ (flash attribute) */
     public void saveFlashError(HttpServletRequest request, String message,
                                String location, String startDate, String pickupTime,
                                String endDate, String dropoffTime) {
@@ -88,7 +86,7 @@ public class CarListService {
         return carDAO.findCars(name, brand, typeId, capacity, fuel, price, location, page, pageSize);
     }
 
-    /** ✅ Đếm tổng số xe */
+    /** ✅ Đếm tổng số xe phù hợp */
     public int countCars(String name, String brand, String typeId, String capacity, String fuel,
                          String price, String location, String startDate, String pickupTime,
                          String endDate, String dropoffTime, boolean isDateTime) {

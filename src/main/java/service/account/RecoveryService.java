@@ -7,8 +7,11 @@ import util.VerificationCodeStore;
 
 import java.util.Random;
 
-
 public class RecoveryService {
+
+    /**
+     * ✅ Dịch vụ đổi mật khẩu khi người dùng đã đăng nhập
+     */
     public static class ChangePasswordService {
 
         private final UserDAO userDAO;
@@ -19,53 +22,57 @@ public class RecoveryService {
 
         // ✅ Hàm xử lý logic đổi mật khẩu
         public String changePassword(User user, String oldPass, String newPass, String confirmPass) {
+
             // 🟩 Kiểm tra user hợp lệ
             if (user == null) {
-                return "User not logged in!";
+                return "Người dùng chưa đăng nhập!";
             }
 
             // 🟩 Kiểm tra nhập thiếu
             if (oldPass == null || oldPass.isEmpty()) {
-                return "Old password cannot be empty!";
+                return "Vui lòng nhập mật khẩu hiện tại!";
             }
             if (newPass == null || newPass.isEmpty()) {
-                return "New password cannot be empty!";
+                return "Vui lòng nhập mật khẩu mới!";
             }
             if (confirmPass == null || confirmPass.isEmpty()) {
-                return "Please confirm your new password!";
+                return "Vui lòng nhập lại mật khẩu mới!";
             }
 
             // 🟩 Kiểm tra mật khẩu cũ có đúng không
             User existingUser = userDAO.checkLoginByEmailOrUsername(user.getEmail(), oldPass);
             if (existingUser == null) {
-                return "Incorrect old password!";
+                return "Mật khẩu hiện tại không chính xác!";
             }
 
-            // 🟩 Kiểm tra độ dài
+            // 🟩 Kiểm tra độ dài mật khẩu
             if (newPass.length() < 6) {
-                return "Password must be at least 6 characters long!";
+                return "Mật khẩu mới phải có ít nhất 6 ký tự!";
             }
 
-            // 🟩 Kiểm tra xác nhận khớp
+            // 🟩 Kiểm tra xác nhận mật khẩu
             if (!newPass.equals(confirmPass)) {
-                return "Confirm password does not match!";
+                return "Mật khẩu nhập lại không khớp!";
             }
 
             // 🟩 Không cho phép trùng mật khẩu cũ
             if (newPass.equals(oldPass)) {
-                return "New password must be different from the old password!";
+                return "Mật khẩu mới không được trùng với mật khẩu hiện tại!";
             }
 
-            // 🟩 Cập nhật mật khẩu trong database
+            // 🟩 Cập nhật mật khẩu trong cơ sở dữ liệu
             boolean success = userDAO.changePassword(user.getEmail(), oldPass, newPass);
             if (!success) {
-                return "Failed to update password. Please try again later.";
+                return "Không thể cập nhật mật khẩu. Vui lòng thử lại sau!";
             }
 
             return null; // null = không có lỗi
         }
     }
 
+    /**
+     * ✅ Dịch vụ quên mật khẩu (gửi mã OTP đến email)
+     */
     public static class ForgotPasswordService {
 
         private final UserDAO userDAO;
@@ -84,9 +91,7 @@ public class RecoveryService {
         }
 
         /**
-         * Tạo và gửi mã OTP tới email.
-         *
-         * @return mã OTP đã tạo.
+         * Gửi mã OTP khôi phục mật khẩu đến email.
          */
         public String sendResetCode(String email) {
             String otp = String.format("%06d", new Random().nextInt(999999));
@@ -95,14 +100,17 @@ public class RecoveryService {
             VerificationCodeStore.saveCode(email, otp);
 
             // Gửi email xác nhận
-            String subject = "Your Rentaly Verification Code";
-            String body = "Your reset code is: <h2><b>" + otp + "</b></h2>";
+            String subject = "Mã xác minh khôi phục mật khẩu Rentaly";
+            String body = "Mã xác minh của bạn là: <h2><b>" + otp + "</b></h2>";
 
             EmailUtil.sendEmail(email, subject, body);
             return otp;
         }
     }
 
+    /**
+     * ✅ Dịch vụ đặt lại mật khẩu mới sau khi xác minh OTP
+     */
     public static class ResetPasswordService {
 
         private final UserDAO userDAO;
@@ -116,15 +124,15 @@ public class RecoveryService {
          */
         public String validatePassword(String password, String rePassword) {
             if (password == null || password.isEmpty() || rePassword == null || rePassword.isEmpty()) {
-                return "Please enter both the new password and confirmation!";
+                return "Vui lòng nhập đầy đủ mật khẩu mới và xác nhận!";
             }
 
             if (!password.equals(rePassword)) {
-                return "Passwords do not match!";
+                return "Mật khẩu nhập lại không khớp!";
             }
 
             if (password.length() < 6) {
-                return "Password must be at least 6 characters long!";
+                return "Mật khẩu phải có ít nhất 6 ký tự!";
             }
 
             return null;
