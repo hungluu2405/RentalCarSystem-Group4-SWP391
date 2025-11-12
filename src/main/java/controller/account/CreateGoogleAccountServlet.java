@@ -73,7 +73,7 @@ public class CreateGoogleAccountServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
             // Trường hợp lỗi DB
-            request.setAttribute("error", "Error creating account. Please try again.");
+            request.setAttribute("error", "Đã xảy ra lỗi khi tạo tài khoản. Vui lòng thử lại!");
             request.getRequestDispatcher("view/account/complete-registration.jsp").forward(request, response);
         }
     }
