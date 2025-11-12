@@ -351,7 +351,14 @@
                                 <li><a class="menu-item"
                                        href="${pageContext.request.contextPath}/view/contact/contact.jsp">Liên hệ</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/view/carOwner/becomeCarOwner.jsp">Trở thành chủ xe</a></li>
+                                <li><c:if test="${empty sessionScope.user or (sessionScope.user.roleId != 1 and sessionScope.user.roleId != 2)}">
+                                <li>
+                                    <a class="menu-item" href="${pageContext.request.contextPath}/customer/becomeCarOwner">
+                                        Trở Thành Chủ Xe
+                                    </a>
+                                </li>
+                                </c:if>
+                                </li>
 
 
                         </div>
@@ -430,14 +437,14 @@
                                                     <c:when test="${sessionScope.user.roleId == 2}">
                                                         <a class="menu-item"
                                                            href="${pageContext.request.contextPath}/owner/profile"
-                                                           role="menuitem">My Account</a>
+                                                           role="menuitem">Tài Khoản Của Tôi</a>
                                                     </c:when>
 
                                                     <%-- Giả sử: 3 = Customer --%>
                                                     <c:when test="${sessionScope.user.roleId == 3}">
                                                         <a class="menu-item"
                                                            href="${pageContext.request.contextPath}/customer/profile"
-                                                           role="menuitem">My Account</a>
+                                                           role="menuitem">Tài Khoản Của Tôi</a>
                                                     </c:when>
 
                                                     <%-- Trường hợp mặc định nếu không khớp role nào --%>
@@ -451,9 +458,9 @@
                                                     <%-- Các link còn lại thì giữ nguyên --%>
                                                 <a class="menu-item"
                                                    href="${pageContext.request.contextPath}/change-password"
-                                                   role="menuitem">Change Password</a>
+                                                   role="menuitem">Đổi Mật Khẩu</a>
                                                 <a class="menu-item" href="${pageContext.request.contextPath}/logout"
-                                                   role="menuitem">Log Out</a>
+                                                   role="menuitem">Đăng Xuất</a>
                                             </div>
                                         </div>
 
