@@ -20,9 +20,9 @@ public class VerifyCodeServlet extends HttpServlet {
             throws ServletException, IOException {
         String msg = request.getParameter("msg");
         if ("resent".equals(msg)) {
-            request.setAttribute("message", "A new code has been sent to your email.");
+            request.setAttribute("message", "Một mã mới đã được gửi đến email của bạn.");
         } else if ("failed".equals(msg)) {
-            request.setAttribute("error", "Failed to resend code. Please try again.");
+            request.setAttribute("error", "Gửi lại mã không thành công. Vui lòng thử lại.");
         }
 
         request.getRequestDispatcher("view/account/verify-code.jsp").forward(request, response);
@@ -42,7 +42,7 @@ public class VerifyCodeServlet extends HttpServlet {
             session.setAttribute("reset_email", email);
             response.sendRedirect(request.getContextPath() + "/reset-password");
         } else {
-            request.setAttribute("error", "Incorrect code or code has expired.");
+            request.setAttribute("error", "Mã không chính xác hoặc đã hết hạn.");
             request.getRequestDispatcher("view/account/verify-code.jsp?email=" + email).forward(request, response);
         }
     }
