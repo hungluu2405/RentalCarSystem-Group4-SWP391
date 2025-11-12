@@ -29,7 +29,7 @@ public class ForgotPasswordServlet extends HttpServlet {
 
         User user = service.findUserByEmail(email);
         if (user == null) {
-            request.setAttribute("error", "Email address not found.");
+            request.setAttribute("error", "Không tìm thấy địa chỉ email.");
             request.getRequestDispatcher("view/account/forgot-password.jsp").forward(request, response);
             return;
         }

@@ -16,8 +16,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 
-
 public class GoogleAccountService {
+
     public static class LoginGoogleHandlerService {
 
         public String getAccessToken(String code) throws Exception {
@@ -50,7 +50,7 @@ public class GoogleAccountService {
         }
 
         /**
-         * ✅ Kiểm tra dữ liệu nhập
+         * ✅ Kiểm tra dữ liệu nhập từ form hoàn tất đăng ký Google
          */
         public String validateForm(java.util.Map<String, String> data, GoogleUser googleUser) {
             String username = data.get("username");
@@ -75,55 +75,55 @@ public class GoogleAccountService {
                     || city == null || city.isEmpty()
                     || country == null || country.isEmpty()
                     || roleParam == null || roleParam.isEmpty()) {
-                return "Please fill in all required fields!";
+                return "Vui lòng điền đầy đủ tất cả các trường bắt buộc!";
             }
 
             // 🟩 Kiểm tra mật khẩu
             if (!password.equals(rePassword))
-                return "Passwords do not match!";
+                return "Mật khẩu nhập lại không khớp!";
             if (password.length() < 6)
-                return "Password must be at least 6 characters long!";
+                return "Mật khẩu phải có ít nhất 6 ký tự!";
 
             // 🟩 Kiểm tra username
             if (!username.matches("^[a-zA-Z0-9_]{4,20}$"))
-                return "Username must be 4–20 characters and contain only letters, numbers or underscore!";
+                return "Tên đăng nhập phải từ 4–20 ký tự và chỉ chứa chữ, số hoặc dấu gạch dưới!";
 
             // 🟩 Kiểm tra số điện thoại
             if (!phone.matches("^\\d{9,11}$"))
-                return "Phone number must contain 9 to 11 digits!";
+                return "Số điện thoại phải gồm từ 9 đến 11 chữ số!";
 
             // 🟩 Kiểm tra ngày sinh hợp lệ
             Date dob;
             try {
                 dob = Date.valueOf(dobString);
             } catch (IllegalArgumentException e) {
-                return "Invalid date of birth format!";
+                return "Ngày sinh không hợp lệ!";
             }
 
-            // 🟩 Kiểm tra tuổi >= 18
+            // 🟩 Kiểm tra tuổi hợp lệ
             int age = Period.between(dob.toLocalDate(), LocalDate.now()).getYears();
-            if (age < 18)
-                return "You must be at least 18 years old to register!";
+            if (age < 18 || age > 70)
+                return "Độ tuổi hợp lệ để đăng ký là từ 18 đến 70 tuổi!";
 
             // 🟩 Kiểm tra giới tính
             if (!gender.equalsIgnoreCase("male")
                     && !gender.equalsIgnoreCase("female")
                     && !gender.equalsIgnoreCase("other")) {
-                return "Invalid gender value!";
+                return "Giới tính không hợp lệ!";
             }
 
             // 🟩 Kiểm tra role ID hợp lệ
             try {
                 Integer.parseInt(roleParam);
             } catch (NumberFormatException e) {
-                return "Invalid role selected!";
+                return "Vai trò được chọn không hợp lệ!";
             }
 
             // 🟩 Kiểm tra trùng username/email
             if (userDAO.findUserByUsername(username) != null)
-                return "This username is already taken!";
+                return "Tên đăng nhập này đã được sử dụng!";
             if (userDAO.findUserByEmail(googleUser.getEmail()) != null)
-                return "This email is already registered!";
+                return "Email này đã được đăng ký!";
 
             return null;
         }
@@ -139,7 +139,7 @@ public class GoogleAccountService {
             user.setRoleId(Integer.parseInt(data.get("role_id")));
 
             UserProfile profile = new UserProfile();
-            profile.setFullName(googleUser.getName());
+            profile.setFullName(data.get("full_name"));
             profile.setPhone(data.get("phone"));
 
             String dobString = data.get("dob");
@@ -156,21 +156,20 @@ public class GoogleAccountService {
                     data.get("postal_code"),
                     data.get("country")
             );
+            System.out.println("👉 Full name nhận được từ form: " + data.get("full_name"));
+
 
             return userDAO.registerUser(user, profile, address);
         }
     }
 
     /**
-     * Service xử lý logic kiểm tra và chuẩn bị cho việc hoàn tất đăng ký bằng Google.
+     * ✅ Service kiểm tra người dùng Google trong session.
      */
     public static class CompleteRegistrationService {
 
         /**
-         * ✅ Kiểm tra xem người dùng Google đã có trong session chưa.
-         *
-         * @param session HttpSession hiện tại
-         * @return true nếu có googleUser trong session, ngược lại false
+         * Kiểm tra xem người dùng Google đã có trong session chưa.
          */
         public boolean hasGoogleUser(HttpSession session) {
             return session != null && session.getAttribute("googleUser") != null;
