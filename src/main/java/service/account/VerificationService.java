@@ -11,13 +11,13 @@ import util.VerificationCodeStore;
 
 import java.util.Random;
 
-
 public class VerificationService {
+
+    /**
+     * ✅ Gửi lại mã xác minh qua email
+     */
     public static class ResendCodeService {
 
-        /**
-         * ✅ Gửi lại mã xác minh qua email
-         */
         public boolean resendVerificationCode(String email) {
             if (email == null || email.isEmpty()) {
                 return false;
@@ -31,8 +31,9 @@ public class VerificationService {
                 VerificationCodeStore.saveCode(email, otp);
 
                 // Gửi email cho người dùng
-                String subject = "Your Rentaly Verification Code";
-                String body = "Your new code is: <h2><b>" + otp + "</b></h2>";
+                String subject = "Mã xác minh tài khoản Rentaly của bạn";
+                String body = "Mã xác minh mới của bạn là: <h2><b>" + otp + "</b></h2>"
+                        + "<p>Mã này có hiệu lực trong 15 phút. Vui lòng không chia sẻ cho bất kỳ ai.</p>";
 
                 EmailUtil.sendEmail(email, subject, body);
                 return true;
@@ -44,14 +45,13 @@ public class VerificationService {
         }
     }
 
+    /**
+     * ✅ Xác thực mã OTP được gửi đến email
+     */
     public static class VerifyCodeService {
 
         /**
-         * ✅ Xác thực mã OTP gửi đến email người dùng.
-         *
-         * @param email email cần xác minh
-         * @param code  mã OTP người dùng nhập
-         * @return true nếu mã hợp lệ và chưa hết hạn
+         * Kiểm tra mã OTP có hợp lệ và chưa hết hạn.
          */
         public boolean verifyCode(String email, String code) {
             if (email == null || email.isEmpty() || code == null || code.isEmpty()) {
@@ -61,6 +61,9 @@ public class VerificationService {
         }
     }
 
+    /**
+     * ✅ Dịch vụ xác minh email và hoàn tất đăng ký
+     */
     public static class VerifyEmailService {
 
         private final UserDAO userDAO;
@@ -71,14 +74,14 @@ public class VerificationService {
         }
 
         /**
-         * ✅ Kiểm tra mã xác thực OTP
+         * Kiểm tra mã xác thực OTP hợp lệ.
          */
         public boolean verifyCode(String email, String code) {
             return VerificationCodeStore.validateCode(email, code);
         }
 
         /**
-         * ✅ Đăng ký tài khoản khi OTP hợp lệ
+         * Hoàn tất đăng ký tài khoản khi OTP hợp lệ.
          */
         public boolean registerAfterVerification(User user, UserProfile profile, Address address) {
             if (user == null || profile == null || address == null) {
@@ -87,7 +90,7 @@ public class VerificationService {
 
             boolean success = userDAO.registerUser(user, profile, address);
 
-            // 🔹 Chỉ gửi thông báo khi đăng ký thành công
+            // 🔹 Gửi thông báo chào mừng khi đăng ký thành công
             if (success) {
                 sendWelcomeNotification(user.getUserId());
             }
@@ -96,20 +99,20 @@ public class VerificationService {
         }
 
         /**
-         * ✅ Gửi thông báo chào mừng
+         * Gửi thông báo chào mừng người dùng mới.
          */
         public void sendWelcomeNotification(int userId) {
             try {
                 notificationDAO.insertNotification(new Notification(
                         userId,
                         "WELCOME_VOUCHER",
-                        "Welcome to Rentaly! 🎉",
-                        "Welcome! As a new member, you receive a special voucher code: NEWUSER. Get 15% off your first booking!",
+                        "Chào mừng đến với Rentaly! 🎉",
+                        "Xin chào! Cảm ơn bạn đã tham gia Rentaly. 🎁 Như một món quà chào mừng, bạn nhận được mã khuyến mãi <b>NEWUSER</b> giảm 15% cho lần thuê xe đầu tiên của mình!",
                         "/home"
                 ));
-                System.out.println("✅ Notification sent for userId = " + userId);
+                System.out.println("✅ Đã gửi thông báo chào mừng cho userId = " + userId);
             } catch (Exception e) {
-                System.err.println("❌ Failed to send welcome notification: " + e.getMessage());
+                System.err.println("❌ Không thể gửi thông báo chào mừng: " + e.getMessage());
             }
         }
     }

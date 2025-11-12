@@ -11,8 +11,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Random;
 
-
 public class AuthService {
+
     public static class LoginService {
 
         private final UserDAO userDAO;
@@ -22,11 +22,7 @@ public class AuthService {
         }
 
         /**
-         * Kiểm tra thông tin đăng nhập theo email hoặc username.
-         *
-         * @param loginKey email hoặc username
-         * @param password mật khẩu người dùng nhập
-         * @return User nếu đăng nhập thành công, null nếu thất bại
+         * Kiểm tra thông tin đăng nhập theo email hoặc tên đăng nhập.
          */
         public User authenticate(String loginKey, String password) {
             if (loginKey == null || loginKey.isEmpty() || password == null || password.isEmpty()) {
@@ -40,28 +36,21 @@ public class AuthService {
          */
         public String validateInput(String loginKey, String password) {
             if (loginKey == null || loginKey.isEmpty()) {
-                return "Email or username cannot be empty!";
+                return "Email hoặc tên đăng nhập không được để trống!";
             }
             if (password == null || password.isEmpty()) {
-                return "Password cannot be empty!";
+                return "Mật khẩu không được để trống!";
             }
             return null;
         }
     }
 
     /**
-     * LogoutService - Xử lý logic đăng xuất người dùng.
+     * Xử lý đăng xuất người dùng.
      */
     public static class LogoutService {
-
-        /**
-         * ✅ Xóa session hiện tại và đăng xuất người dùng.
-         *
-         * @param session phiên làm việc hiện tại
-         */
         public void logout(HttpSession session) {
             if (session != null) {
-                // Có thể mở rộng thêm: ghi log, cập nhật DB, v.v.
                 session.invalidate();
             }
         }
@@ -72,12 +61,13 @@ public class AuthService {
         private final UserDAO userDAO = new UserDAO();
 
         /**
-         * ✅ Kiểm tra dữ liệu nhập
+         * Kiểm tra dữ liệu nhập khi đăng ký.
          */
         public String validateInput(String username, String email, String password, String rePassword,
                                     String fullName, String phone, String dobString, String gender,
                                     String addressLine, String city,
                                     String country, String roleParam) {
+
             if (username == null || username.isEmpty()
                     || email == null || email.isEmpty()
                     || password == null || password.isEmpty()
@@ -90,69 +80,76 @@ public class AuthService {
                     || city == null || city.isEmpty()
                     || country == null || country.isEmpty()
                     || roleParam == null || roleParam.isEmpty()) {
-                return "Please fill in all required fields!";
+                return "Vui lòng điền đầy đủ tất cả các trường bắt buộc!";
             }
 
-            if (!password.equals(rePassword))
-                return "Passwords do not match!";
+            if (!password.equals(rePassword)) {
+                return "Mật khẩu nhập lại không khớp!";
+            }
 
-            if (!username.matches("^[a-zA-Z0-9_]{4,20}$"))
-                return "Username must be 4–20 characters and contain only letters, numbers or underscore!";
+            if (!username.matches("^[a-zA-Z0-9_]{4,20}$")) {
+                return "Tên đăng nhập phải từ 4–20 ký tự và chỉ chứa chữ, số hoặc dấu gạch dưới!";
+            }
 
-            if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
-                return "Invalid email format!";
+            if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                return "Định dạng email không hợp lệ!";
+            }
 
-            if (password.length() < 6)
-                return "Password must be at least 6 characters long!";
+            if (password.length() < 6) {
+                return "Mật khẩu phải có ít nhất 6 ký tự!";
+            }
 
-            if (!phone.matches("^\\d{9,11}$"))
-                return "Phone number must contain 9 to 11 digits!";
+            if (!phone.matches("^\\d{9,11}$")) {
+                return "Số điện thoại phải gồm từ 9 đến 11 chữ số!";
+            }
 
             Date dob;
             try {
                 dob = Date.valueOf(dobString);
             } catch (IllegalArgumentException e) {
-                return "Invalid date of birth format!";
+                return "Ngày sinh không hợp lệ!";
             }
 
             int age = Period.between(dob.toLocalDate(), LocalDate.now()).getYears();
-            if (age < 18)
-                return "You must be at least 18 years old to register!";
+            if (age < 18 || age > 70) {
+                return "Độ tuổi hợp lệ để đăng ký là từ 18 đến 70 tuổi!";
+            }
 
-            if (!gender.equalsIgnoreCase("male") && !gender.equalsIgnoreCase("female") && !gender.equalsIgnoreCase("other"))
-                return "Invalid gender value!";
-
+            if (!gender.equalsIgnoreCase("male") && !gender.equalsIgnoreCase("female") && !gender.equalsIgnoreCase("other")) {
+                return "Giới tính không hợp lệ!";
+            }
 
             try {
                 Integer.parseInt(roleParam);
             } catch (NumberFormatException e) {
-                return "Invalid role selected!";
+                return "Vai trò được chọn không hợp lệ!";
             }
 
             return null;
         }
 
         /**
-         * ✅ Kiểm tra username/email trùng
+         * Kiểm tra username hoặc email trùng lặp.
          */
         public String checkDuplicate(String username, String email) {
-            if (userDAO.findUserByUsername(username) != null)
-                return "This username is already taken!";
-            if (userDAO.findUserByEmail(email) != null)
-                return "This email is already registered!";
+            if (userDAO.findUserByUsername(username) != null) {
+                return "Tên đăng nhập này đã được sử dụng!";
+            }
+            if (userDAO.findUserByEmail(email) != null) {
+                return "Email này đã được đăng ký!";
+            }
             return null;
         }
 
         /**
-         * ✅ Tạo User, Profile, Address và gửi OTP xác thực
+         * Gửi mã OTP xác thực đến email.
          */
         public void registerTempUser(String email) {
             String otp = String.format("%06d", new Random().nextInt(999999));
             VerificationCodeStore.saveCode(email, otp);
 
-            EmailUtil.sendEmail(email, "Your Rentaly Verification Code",
-                    "Your verification code is: <h2><b>" + otp + "</b></h2>");
+            EmailUtil.sendEmail(email, "Mã xác minh tài khoản Rentaly",
+                    "Mã xác minh của bạn là: <h2><b>" + otp + "</b></h2>");
         }
-
     }
 }
