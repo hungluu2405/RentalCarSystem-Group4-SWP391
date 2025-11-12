@@ -58,17 +58,39 @@
                             </c:if>
 
                             <form action="${pageContext.request.contextPath}/owner/addCar" method="post" enctype="multipart/form-data" class="p-4 bg-white rounded shadow-sm">
-                                <div class="text-center mb-4">
-                                    <img id="previewImage" src="${pageContext.request.contextPath}/images/default-car.png"
-                                         alt="Car Preview" class="img-fluid rounded shadow-sm" style="max-width: 300px;">
-                                    <div class="mt-3">
-                                        <label for="carImage" class="form-label fw-bold">Upload Car Image</label>
-                                        <input type="file" id="carImage" name="carImage" accept="image/*" class="form-control" required
-                                               onchange="previewFile(this)">
-                                    </div>
-                                </div>
 
-                                <div class="row g-3">
+                                    <!-- 🔧 HIỂN THỊ ẢNH -->
+                                    <div class="text-center mb-4">
+                                        <c:choose>
+                                            <%-- Nếu có ảnh tạm, hiển thị lại --%>
+                                            <c:when test="${not empty tempImagePath}">
+                                                <img id="previewImage"
+                                                     src="${pageContext.request.contextPath}/${tempImagePath}"
+                                                     alt="Car Preview"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="max-width: 300px;">
+                                            </c:when>
+
+                                            <%-- Nếu chưa có ảnh tạm, dùng ảnh mặc định --%>
+                                            <c:otherwise>
+                                                <img id="previewImage"
+                                                     src="${pageContext.request.contextPath}/images/default-car.png"
+                                                     alt="Car Preview"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="max-width: 300px;">
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <div class="mt-3">
+                                            <label for="carImage" class="form-label fw-bold">Upload Car Image</label>
+                                            <input type="file" id="carImage" name="carImage" accept="image/*"
+                                                   class="form-control" onchange="previewFile(this)">
+                                            <input type="hidden" name="tempImagePath" value="${tempImagePath}">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row g-3">
                                     <!-- BRAND -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-industry text-primary"></i> Brand</label>

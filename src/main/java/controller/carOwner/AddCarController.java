@@ -44,7 +44,6 @@ public class AddCarController extends HttpServlet {
 @Override
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-
     request.setCharacterEncoding("UTF-8");
     User user = (User) request.getSession().getAttribute("user");
     int ownerId = user.getUserId();
@@ -64,6 +63,18 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     int typeId = AddCarService.safeParseInt(request.getParameter("typeId"));
     BigDecimal pricePerDay = AddCarService.safeParseBigDecimal(request.getParameter("pricePerDay"));
 
+    // Nếu user không upload lại ảnh, dùng ảnh tạm cũ từ form
+    String tempImagePath = request.getParameter("tempImagePath");
+    for (Part part : request.getParts()) {
+        if ("carImage".equals(part.getName()) && part.getSize() > 0) {
+            String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
+            String tempDirPath = getServletContext().getRealPath("") + "images/temp";
+            new File(tempDirPath).mkdirs();
+            part.write(tempDirPath + File.separator + fileName);
+            tempImagePath = "images/temp/" + fileName;
+        }
+    }
+
     // Validate
     String validationError = addCarService.validateCarData(year, pricePerDay, capacity, licensePlate);
     if (validationError != null) {
@@ -80,6 +91,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         request.setAttribute("description", description);
         request.setAttribute("location", location);
         request.setAttribute("typeId", typeId > 0 ? typeId : "");
+        request.setAttribute("tempImagePath", tempImagePath);
 
         // Gắn lại dropdown
         request.setAttribute("carTypes", carDAO.getAllCarTypes());
@@ -108,18 +120,26 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     // Lưu xe và hình ảnh
     int carId = carDAO.addCarAndReturnId(car);
-    for (Part part : request.getParts()) {
-        if ("carImage".equals(part.getName()) && part.getSize() > 0) {
-            String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
-            String uploadPath = getServletContext().getRealPath("") + "images/cars";
-            new File(uploadPath).mkdirs();
-            part.write(uploadPath + File.separator + fileName);
-            carDAO.addCarImage(carId, "images/cars/" + fileName);
+
+    // Di chuyển ảnh từ thư mục tạm sang thư mục chính /images/cars
+    if (tempImagePath != null && tempImagePath.contains("images/temp/")) {
+        File tempFile = new File(getServletContext().getRealPath("") + tempImagePath);
+        if (tempFile.exists()) {
+            String newFileName = System.currentTimeMillis() + "_" + tempFile.getName();
+            String destDirPath = getServletContext().getRealPath("") + "images/cars";
+            File destDir = new File(destDirPath);
+            if (!destDir.exists()) destDir.mkdirs();
+
+            File destFile = new File(destDir, newFileName);
+            tempFile.renameTo(destFile);
+
+            String imageUrl = "images/cars/" + newFileName;
+            carDAO.addCarImage(carId, imageUrl);
         }
     }
 
     request.getSession().setAttribute("addedCarId", carId);
     response.sendRedirect(request.getContextPath() + "/add-car-success");
-}
+    }
 
 }
