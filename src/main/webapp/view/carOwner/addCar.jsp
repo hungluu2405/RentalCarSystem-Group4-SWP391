@@ -72,7 +72,7 @@
                                     <!-- BRAND -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-industry text-primary"></i> Brand</label>
-                                        <input type="text" name="brand" class="form-control" placeholder="Enter car brand..." required>
+                                        <input type="text" name="brand" class="form-control" placeholder="Enter car brand..." value="${brand}" required>
                                     </div>
 
                                     <!-- TRANSMISSION -->
@@ -81,7 +81,7 @@
                                         <select name="transmission" class="form-select" required>
                                             <option value="">Select transmission...</option>
                                             <c:forEach var="t" items="${transmissions}">
-                                                <option value="${t}">${t}</option>
+                                                <option value="${t}" <c:if test="${t == transmission}">selected</c:if>>${t}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -89,7 +89,7 @@
                                     <!-- MODEL -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-car text-primary"></i> Model</label>
-                                        <input type="text" name="model" class="form-control" placeholder="Enter car model..." required>
+                                        <input type="text" name="model" class="form-control" placeholder="Enter car model..." value="${model}" required>
                                     </div>
 
                                     <!-- FUEL TYPE -->
@@ -98,7 +98,7 @@
                                         <select name="fuelType" class="form-select" required>
                                             <option value="">Select fuel type...</option>
                                             <c:forEach var="f" items="${fuelTypes}">
-                                                <option value="${f}">${f}</option>
+                                                <option value="${f}" <c:if test="${f == fuelType}">selected</c:if>>${f}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -106,7 +106,7 @@
                                     <!-- YEAR -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-calendar text-primary"></i> Year</label>
-                                        <input type="number" name="year" class="form-control" placeholder="Enter manufacturing year..." required>
+                                        <input type="number" name="year" class="form-control" placeholder="Enter manufacturing year..." value="${year}" required>
                                     </div>
 
                                     <!-- PRICE -->
@@ -114,9 +114,10 @@
                                         <label class="form-label">
                                             <i class="fa fa-money-bill-wave text-primary"></i> Price/Day(vnd)
                                         </label>
-                                        <input type="text" id="pricePerDayDisplay" class="form-control" placeholder="Enter price per day...(VND)" required>
-                                        <!-- input hidden để gửi giá trị thật về server -->
-                                        <input type="hidden" name="pricePerDay" id="pricePerDay">
+                                        <input type="text" id="pricePerDayDisplay" class="form-control"
+                                               placeholder="Enter price per day...(VND)" value="${pricePerDay}" required>
+                                        <input type="hidden" name="pricePerDay" id="pricePerDay" value="${pricePerDay}">
+
                                     </div>
 
                                     <script>
@@ -138,13 +139,13 @@
                                     <!-- CAPACITY -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-users text-primary"></i> Capacity</label>
-                                        <input type="number" name="capacity" class="form-control" placeholder="Enter car capacity..." required>
+                                        <input type="number" name="capacity" class="form-control" placeholder="Enter car capacity..." value="${capacity}" required>
                                     </div>
 
                                     <!-- LICENSE PLATE -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-id-card text-primary"></i> License Plate</label>
-                                        <input type="text" name="licensePlate" class="form-control" placeholder="Enter license plate...(format: 29A-123.45)" required>
+                                        <input type="text" name="licensePlate" class="form-control" placeholder="Enter license plate...(format: 29A-123.45)" value="${licensePlate}" required>
                                     </div>
 
                                     <!-- CAR TYPE -->
@@ -153,7 +154,7 @@
                                         <select name="typeId" class="form-select" required>
                                             <option value="">Select car type...</option>
                                             <c:forEach var="c" items="${carTypes}">
-                                                <option value="${c.typeId}">${c.name}</option>
+                                                <option value="${c.typeId}" <c:if test="${c.typeId == typeId}">selected</c:if>>${c.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -161,13 +162,15 @@
                                     <!-- LOCATION -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Location</label>
-                                        <input type="text" name="location" class="form-control" placeholder="Enter car location...">
+                                        <input type="text" name="location" class="form-control" placeholder="Enter car location..." value="${location}">
                                     </div>
 
                                     <!-- DESCRIPTION -->
                                     <div class="col-12">
                                         <label class="form-label"><i class="fa fa-align-left text-primary"></i> Description</label>
-                                        <textarea name="description" class="form-control" rows="4" placeholder="Enter description about the car..."></textarea>
+                                        <textarea name="description" class="form-control" rows="4"
+                                                  placeholder="Enter description about the car...">${description}</textarea>
+
                                     </div>
 
                                     <!-- SUBMIT BUTTON -->
