@@ -104,11 +104,14 @@
             <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img" alt="">
             <div class="center-y text-center">
                 <div class="container">
-                    <h1>My Profile</h1>
+                    <h1>Promotion</h1>
                 </div>
             </div>
         </section>
 
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger text-center">${error}</div>
+        </c:if>
         <section id="section-settings" class="bg-gray-100">
             <div class="container">
                 <div class="row">
@@ -130,6 +133,8 @@
 
                     </div>
 
+
+
                     <!-- MAIN FORM -->
 
                     <div class="col-lg-9">
@@ -148,25 +153,27 @@
                                     <div class="col-lg-6 mb20">
                                         <h5>Mã Promotion</h5>
                                         <input type="text" name="code" class="form-control"
-                                               placeholder="Nhập mã khuyến mãi"
-                                               required>
+                                               value="${promotion.code}" placeholder="Nhập mã khuyến mãi" required>
+
                                     </div>
 
                                     <!-- DISCOUNT RATE -->
                                     <div class="col-lg-6 mb20">
                                         <h5>Mức Giảm (%)</h5>
-                                        <input type="number" name="rate" class="form-control"
-                                               placeholder="Ví dụ: 10"
-                                               step="0.01" min="0"
-                                               required>
+                                        <input type="number" name="rate" class="form-control" placeholder="Ví dụ: 10"
+                                               value="${promotion.discountRate}"
+                                               step="0.01" min="0" max="100" required>
+
+
                                     </div>
 
                                     <!-- DESCRIPTION -->
                                     <div class="col-lg-12 mb20">
                                         <h5>Mô Tả</h5>
-                                        <textarea name="description" class="form-control" rows="3"
-                                                  placeholder="Nhập mô tả khuyến mãi"
-                                                  required></textarea>
+                                        <textarea name="description" class="form-control" required>${promotion.description}</textarea>
+
+
+
                                     </div>
 
 
@@ -174,13 +181,13 @@
                                     <!-- START DATE -->
                                     <div class="col-lg-6 mb20">
                                         <h5>Ngày Bắt Đầu</h5>
-                                        <input type="date" name="start" class="form-control" required>
+                                        <input type="date" name="start" value="${promotion.startDate}">
                                     </div>
 
                                     <!-- END DATE -->
                                     <div class="col-lg-6 mb20">
                                         <h5>Ngày Kết Thúc</h5>
-                                        <input type="date" name="end" class="form-control" required>
+                                        <input type="date" name="end"   value="${promotion.endDate}">
                                     </div>
 
                                     <!-- ACTIVE -->
