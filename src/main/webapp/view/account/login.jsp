@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="zxx">
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 
 <!-- Mirrored from www.madebydesignesia.com/themes/rentaly/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Sep 2025 11:28:20 GMT -->
 
 <head>
-    <title>Rentaly - Multipurpose Vehicle Car Rental Website Template</title>
-    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
+    <title>Rentaly - Đăng nhập</title>
+    <link rel="icon" href="images/icon.png" type="image/gif" sizes="16x16">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Rentaly - Multipurpose Vehicle Car Rental Website Template" name="description">
@@ -14,13 +15,13 @@
     <meta content="" name="author">
     <!-- CSS Files
     ================================================== -->
-    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap">
-    <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css" id="mdb">
-    <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">
-    <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap">
+    <link href="css/mdb.min.css" rel="stylesheet" type="text/css" id="mdb">
+    <link href="css/plugins.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/coloring.css" rel="stylesheet" type="text/css">
     <!-- color scheme -->
-    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet" type="text/css">
+    <link id="colors" href="css/colors/scheme-01.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -65,8 +66,8 @@
                                 <!-- logo begin -->
                                 <div id="logo">
                                     <a href="${pageContext.request.contextPath}/home">
-                                        <img class="logo-1" src="${pageContext.request.contextPath}/images/logo-light.png" alt="">
-                                        <img class="logo-2" src="${pageContext.request.contextPath}/images/logo.png" alt="">
+                                        <img class="logo-1" src="images/logo-light.png" alt="">
+                                        <img class="logo-2" src="images/logo.png" alt="">
                                     </a>
                                 </div>
                                 <!-- logo close -->
@@ -74,16 +75,15 @@
                         </div>
                         <div class="de-flex-col header-col-mid">
                             <ul id="mainmenu">
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/home">Home</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/home">Trang chủ</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Car</a>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/cars">Danh sách xe</a>
 
                                 </li>
                                 <li><a class="menu-item"
-                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Contact</a>
+                                       href="${pageContext.request.contextPath}/view/contact/contact.jsp">Liên hệ</a>
                                 </li>
-                                <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">About
-                                    Us</a></li>
+                                <li><a class="menu-item" href="${pageContext.request.contextPath}/about.html">Về chúng tôi</a></li>
 
                             </ul>
                         </div>
@@ -102,19 +102,19 @@
                     <div class="row align-items-center">
                         <div class="col-lg-4 offset-lg-4">
                             <div class="padding40 rounded-3 shadow-soft" data-bgcolor="#ffffff">
-                                <h4>Login</h4>
+                                <h4>Đăng nhập</h4>
                                 <div class="spacer-10"></div>
 
-                                <%-- Hi?n th? th�ng b�o ??ng k� th�nh c�ng --%>
+                                <%-- Hi?n th? thï¿½ng bï¿½o ??ng kï¿½ thï¿½nh cï¿½ng --%>
                                 <% if ("success".equals(request.getParameter("register"))) { %>
-                                <p style="color:green;">Registration successful! You can now sign in.</p>
+                                <p style="color:green;">Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.</p>
                                 <% } %>
 
                                 <% if ("success".equals(request.getParameter("reset"))) { %>
-                                <p style="color:green;">Password has been reset successfully. Please log in.</p>
+                                <p style="color:green;">Mật khẩu đã được đặt lại thành công. Vui lòng đăng nhập.</p>
                                 <% } %>
 
-                                <%-- Hi?n th? th�ng b�o l?i ??ng nh?p --%>
+                                <%-- Hi?n th? thï¿½ng bï¿½o l?i ??ng nh?p --%>
                                 <p style="color:red;">${requestScope.error}</p>
 
                                 <form id="form_login" class="form-border" method="post"
@@ -122,17 +122,16 @@
 
                                     <div class="field-set mb-3">
                                         <input type="text" name="loginKey" id="loginKey" class="form-control"
-                                               placeholder="Email or Username" value='${formData.loginKey}' required/>
+                                               placeholder="Email hoặc tên đăng nhập" value='${formData.loginKey}' required/>
                                     </div>
 
                                     <div class="field-set">
                                         <input type="password" name="password" id="password" class="form-control"
-                                               placeholder="Your Password"  required/>
+                                               placeholder="Mật khẩu của bạn"  required/>
                                     </div>
 
                                     <div class="text-end mt-2">
-                                        <a href="${pageContext.request.contextPath}/forgot-password">Forgot
-                                            Password?</a>
+                                        <a href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
                                     </div>
                                     <div class="spacer-10"></div>
 
@@ -142,18 +141,24 @@
                                 </form>
 
                                 <div class="mt-3 text-center">
-                                    <span>Don't have an account? <a href="${pageContext.request.contextPath}/register">Sign Up</a></span>
+                                    <span>Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register">Đăng ký ngay</a></span>
                                 </div>
 
                                 <div class="spacer-10"></div>
 
-                                <div class="title-line">Or&nbsp;sign&nbsp;in&nbsp;with</div>
+                                <div class="title-line text-center" style="display:flex; align-items:center; text-align:center; color:#666;">
+                                    <hr style="flex:1; border:none; border-top:1px solid #ccc;">
+                                    <span style="margin:0 10px; white-space:nowrap;">Hoặc đăng nhập bằng</span>
+                                    <hr style="flex:1; border:none; border-top:1px solid #ccc;">
+                                </div>
+
+
                                 <div style="display: flex; justify-content: center; margin-top: 10px;">
                                     <a href="${pageContext.request.contextPath}/login-google"
                                        style="display: flex; align-items: center; justify-content: center;
-                                       position: relative; width: 200px; height: 40px;
-                                       background: #fff; border: 1px solid #dadce0; border-radius: 6px;
-                                       color: #3c4043; font-weight: 500; text-decoration: none;">
+                                               position: relative; width: 200px; height: 40px;
+                                               background: #fff; border: 1px solid #dadce0; border-radius: 6px;
+                                               color: #3c4043; font-weight: 500; text-decoration: none;">
                                         <img src="${pageContext.request.contextPath}/images/svg/google_icon.svg" alt=""
                                              style="width: 20px; height: 20px; margin-right: 10px;">
                                         Google
@@ -166,7 +171,7 @@
             </div>
         </section>
     </div>
-    
+
 
     <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
     <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
