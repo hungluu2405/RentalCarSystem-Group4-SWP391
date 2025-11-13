@@ -41,7 +41,7 @@ public class BookingService {
             return "❌ Không thể đặt xe trước quá 7 tháng!";
         }
 
-        LocalDate maxBooking = today.plusMonths(3);
+        LocalDate maxBooking = booking.getStartDate().plusMonths(3);
         if (booking.getEndDate().isAfter(maxBooking)) {
             return "❌ Thời gian thuê không được vượt quá 3 tháng!";
         }

@@ -39,9 +39,9 @@ public class CarListService {
                 return "❌ Không thể đặt xe trước quá 7 tháng!";
             }
 
-            // ❌ 3. Thời gian thuê kéo dài quá 7 tháng
-            if (endDT.isAfter(maxBookingDate)) {
-                return "❌ Thời gian thuê không được vượt quá 7 tháng!";
+            // ❌ 3. Thời gian thuê kéo dài quá 3 tháng
+            if (endDT.isAfter(startDT.plusMonths(3))) {
+                return "❌ Thời gian thuê không được vượt quá 3 tháng!";
             }
 
             // ❌ 4. Ngày trả xe < ngày nhận xe
