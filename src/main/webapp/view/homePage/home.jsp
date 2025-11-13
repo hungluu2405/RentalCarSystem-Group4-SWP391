@@ -11,7 +11,6 @@
     <meta charset="UTF-8">
     <title>Rentaly - Multipurpose Vehicle Car Rental Website Template</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/v4-shims.min.css">
     <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -1160,11 +1159,11 @@
                                             </div>
                                             <div class="d-price">
                                                 <h3 class="fw-bold mb-0">
-                                                    <fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="0" maxFractionDigits="0"/>đ
+                                                    $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </h3>
                                                 <a class="btn-main"
                                                    href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
-                                                    Thuê Ngay
+                                                    Rent Now
                                                 </a>
                                             </div>
                                         </div>
