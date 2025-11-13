@@ -26,41 +26,41 @@ public class BookingService {
 
 
         if (license == null) {
-            return "❌ You must upload your driver license before booking!";
+            return "❌ Bạn phải xác minh bằng lái trước khi thuê!";
         }
 
 
 
         if (booking.getStartDate().isBefore(today)) {
-            return "❌ The pickup date cannot be earlier than today!";
+            return "❌ Ngày đặt xe phải lớn hơn ngày hôm nay!";
         }
 
 
         LocalDate maxBookingDate = today.plusMonths(7);
         if (booking.getStartDate().isAfter(maxBookingDate)) {
-            return "❌ Cannot book more than 7 months in advance!";
+            return "❌ Không thể đặt xe trước quá 7 tháng!";
         }
 
-
-        if (booking.getEndDate().isAfter(maxBookingDate)) {
-            return "❌ Booking period cannot extend beyond 7 months!";
+        LocalDate maxBooking = today.plusMonths(3);
+        if (booking.getEndDate().isAfter(maxBooking)) {
+            return "❌ Thời gian thuê không được vượt quá 3 tháng!";
         }
 
         // Check return date > pickup date
         if (booking.getEndDate().isBefore(booking.getStartDate())) {
-            return "❌ Return date must be after pickup date!";
+            return "❌ Ngày trả xe phải sau ngày nhận xe!";
         }
 
         if (booking.getEndDate().equals(booking.getStartDate()) &&
                 booking.getDropoffTime().isBefore(booking.getPickupTime())) {
-            return "❌ Invalid time range!";
+            return "❌ Giờ trả xe phải sau giờ nhận xe!";
         }
 
         // ========== VALIDATION: TIMES ==========
         LocalTime pickupTime = booking.getPickupTime();
         LocalTime dropoffTime = booking.getDropoffTime();
         if (pickupTime == null || dropoffTime == null) {
-            return "❌ Pickup and dropoff times are required!";
+            return "❌ Vui lòng chọn giờ nhận và trả xe!";
         }
 
         LocalDateTime pickupDateTime = LocalDateTime.of(booking.getStartDate(), pickupTime);
@@ -68,7 +68,7 @@ public class BookingService {
 
         long totalHours = ChronoUnit.HOURS.between(pickupDateTime, returnDateTime);
         if (totalHours < 24) {
-            return "❌ Minimum rental period is 24 hours!";
+            return "❌ Thời gian thuê tối thiểu là 24h!";
         }
 
         // ========== VALIDATION: CAR ==========
@@ -80,7 +80,7 @@ public class BookingService {
 
 
         if (car.getOwnerId() == booking.getUserId()) {
-            return "❌ You cannot book your own car!";
+            return "❌ Bạn không thể tự book xe của chính bạn!";
         }
 
         // ========== VALIDATION: AVAILABILITY ==========
@@ -92,7 +92,7 @@ public class BookingService {
                 booking.getDropoffTime()
         );
         if (!available) {
-            return "❌ This car is already booked for the selected period!";
+            return "❌ Chiếc xe này đã bị book trong khoảng thời gian bạn chọn!";
         }
 
         // ========== PRICE CALCULATION ==========
@@ -156,7 +156,7 @@ public class BookingService {
         try {
             boolean bookingSuccess = bookingDAO.insert(booking);
             if (!bookingSuccess) {
-                return "❌ Booking failed. Please try again!";
+                return "❌ Thuê Thất Bại.Vui Lòng Thử Lại!";
             }
 
             // Insert promotion if applied

@@ -1164,7 +1164,7 @@
                                                 </h3>
                                                 <a class="btn-main"
                                                    href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
-                                                    Rent Now
+                                                    Thuê Ngay
                                                 </a>
                                             </div>
                                         </div>

@@ -52,16 +52,7 @@
                                 <p><strong>Số điện thoại:</strong> ${owner.phone}</p>
                                 <p><strong>Ngày sinh:</strong> ${owner.dob}</p>
                                 <p><strong>Giới tính:</strong> ${owner.gender}</p>
-                                <p><strong>Trạng thái xác minh:</strong>
-                                    <c:choose>
-                                        <c:when test="${owner.isVerified}">
-                                            <span class="text-success">Đã xác minh</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="text-danger">Chưa xác minh</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </p>
+
                             </div>
                         </div>
                     </div>
