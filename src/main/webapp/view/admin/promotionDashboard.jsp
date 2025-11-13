@@ -112,7 +112,15 @@
                                                     ${p.active ? "Deactivate" : "Activate"}
                                             </button>
                                         </a>
+                                        <a href="promotionDB?action=delete&id=${p.promoId}"
+                                           onclick="return confirm('Bạn có chắc rằng muốn xóa promotion này không?');">
+                                            <button class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </a>
                                     </td>
+
+
                                 </tr>
                             </c:forEach>
                             </tbody>
