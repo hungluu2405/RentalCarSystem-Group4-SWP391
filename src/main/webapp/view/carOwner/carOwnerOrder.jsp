@@ -273,6 +273,46 @@
             text-decoration: underline;
             color: #218838;
         }
+
+        .btn-apply-filter {
+            background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-apply-filter:hover {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-apply-filter:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear-filter {
+            background: transparent;
+            color: #6B7280;
+            border: none;
+            padding: 10px 0;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-clear-filter:hover {
+            color: #1F2937;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -395,14 +435,15 @@
 
                                         <!-- Buttons -->
                                         <div class="col-md-3 mb-3" style="display: flex; align-items: flex-end; gap: 5px;">
-                                            <button type="submit" class="btn btn-sm btn-primary" style="flex: 1;">
-                                                <i class="fa fa-search"></i> Filter
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-secondary" onclick="clearFilters()" style="flex: 1;">
-                                                <i class="fa fa-times"></i> Clear
-                                            </button>
+                                            <div class="filter-buttons-container">
+                                                <a href="#" onclick="clearFilters(); return false;" class="btn-clear-filter">
+                                                    Xóa bộ lọc
+                                                </a>
+                                                <button type="submit" class="btn-apply-filter">
+                                                    Áp dụng
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
 
                                     <!-- Date Range Filters (Collapsible) -->
                                     <div class="row" style="margin-top: 10px;">
@@ -863,7 +904,7 @@
     }
 
     function clearFilters() {
-        window.location.href = '${pageContext.request.contextPath}/customer/customerOrder?tab=${tab}&page=1';
+        window.location.href = '${pageContext.request.contextPath}/owner/myBooking?tab=${tab}&page=1';
     }
 
     function closeRateModal() {
