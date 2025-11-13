@@ -1026,9 +1026,10 @@ public class CarDAO extends DBContext {
             conn.commit(); // Hoàn tất transaction
             return rowsDeleted > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(
+                    "Bạn không thể xóa xe này. Xe này đang được xuất hiện trong danh sách đơn thuê của bạn!", e);
         }
+
     }
 
 
