@@ -443,15 +443,15 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Car Name</th>
-                                        <th>Location</th>
-                                        <th>Pick Up Date</th>
-                                        <th>Return Date</th>
-                                        <th>Price</th>
-                                        <th>Invoice</th>
-                                        <th>Status</th>
+                                        <th>Tên Xe</th>
+                                        <th>Địa Điểm </th>
+                                        <th>Thời gian lấy xe</th>
+                                        <th>Thời Gian trả xe</th>
+                                        <th>Giá Tiền</th>
+                                        <th>Hóa Đơn</th>
+                                        <th>Trạng Thái</th>
                                         <c:if test="${tab == 'current' || empty tab}">
-                                            <th>Actions</th>
+                                            <th>Thao Tác</th>
                                         </c:if>
                                     </tr>
                                     </thead>
@@ -533,32 +533,37 @@
                                                         <c:choose>
                                                             <c:when test="${order.status == 'Pending'}">
                                                                 <span class="badge bg-warning text-dark">
-                                                                    <i class="fa fa-clock-o"></i> Pending
+                                                                    <i class="fa fa-clock-o"></i> Chờ Duyệt
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Approved'}">
                                                                 <span class="badge bg-info-dark">
-                                                                    <i class="fa fa-check"></i> Approved
+                                                                    <i class="fa fa-check"></i> Được Chấp Nhận
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Paid'}">
                                                                 <span class="badge bg-primary-dark">
-                                                                    <i class="fa fa-credit-card"></i> Paid
+                                                                    <i class="fa fa-credit-card"></i> Đã Thanh Toán
+                                                                </span>
+                                                            </c:when>
+                                                            <c:when test="${order.status == 'Returning'}">
+                                                                <span class="badge bg-returning">
+                                                                    <i class="fa fa-undo"></i> Đang Trả Xe
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Completed'}">
                                                                 <span class="badge bg-success">
-                                                                    <i class="fa fa-check-circle"></i> Completed
+                                                                    <i class="fa fa-check-circle"></i> Đã Hoàn Tất
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Cancelled'}">
                                                                 <span class="badge bg-danger">
-                                                                    <i class="fa fa-times-circle"></i> Cancelled
+                                                                    <i class="fa fa-times-circle"></i> Đã hủy
                                                                 </span>
                                                             </c:when>
                                                             <c:when test="${order.status == 'Rejected'}">
                                                                 <span class="badge bg-danger">
-                                                                    <i class="fa fa-ban"></i> Rejected
+                                                                    <i class="fa fa-ban"></i>  Bị Từ Chối
                                                                 </span>
                                                             </c:when>
                                                             <c:otherwise>
@@ -573,23 +578,28 @@
                                                             <c:choose>
                                                                 <c:when test="${order.status == 'Pending'}">
                                                                     <a href="${pageContext.request.contextPath}/owner/cancelBooking?bookingId=${order.bookingId}"
-                                                                       onclick="return confirm('Are you sure you want to cancel this booking?');"
+                                                                       onclick="return confirm('Bạn có chắc chắn muốn hủy chuyến này?');"
                                                                        class="btn btn-sm btn-danger">
-                                                                        <i class="fa fa-times"></i> Cancel
+                                                                        <i class="fa fa-times"></i> Hủy
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Approved'}">
                                                                     <a href="${pageContext.request.contextPath}/owner/create-payment?bookingId=${order.bookingId}"
                                                                        class="btn btn-sm btn-info">
-                                                                        <i class="fa fa-credit-card"></i> Payment
+                                                                        <i class="fa fa-credit-card"></i> Thanh toán
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Paid'}">
                                                                     <a href="${pageContext.request.contextPath}/owner/returnCar?bookingId=${order.bookingId}"
                                                                        onclick="return confirm('Request to return this car?');"
                                                                        class="btn btn-sm btn-success">
-                                                                        <i class="fa fa-undo"></i> Return Car
+                                                                        <i class="fa fa-undo"></i> Trả xe
                                                                     </a>
+                                                                </c:when>
+                                                                <c:when test="${order.status == 'Returning'}">
+                                                                    <span class="text-warning" style="font-size: 13px;">
+                                                                        <i class="fa fa-clock-o"></i> Vui Lòng Chờ Chủ Xe...
+                                                                    </span>
                                                                 </c:when>
                                                             </c:choose>
                                                         </td>
@@ -652,11 +662,24 @@
     <jsp:include page="../common/carOwner/_footer_scriptsOwner.jsp"/>
 </div>
 
+<!-- ========== OWNER INFO MODAL ========== -->
+<div id="ownerModal" class="owner-modal">
+    <div class="owner-modal-content">
+        <div class="owner-modal-header">
+            <h3>Owner Contact Information</h3>
+            <span class="owner-modal-close" onclick="closeOwnerModal()">&times;</span>
+        </div>
+        <div class="owner-modal-body" id="ownerInfoContent">
+            <!-- Content loaded by JS -->
+        </div>
+    </div>
+</div>
+
 <!-- ========== RATE & REVIEW MODAL ========== -->
 <div id="rateModal" class="owner-modal">
     <div class="owner-modal-content">
         <div class="owner-modal-header">
-            <h3>Rate Your Trip</h3>
+            <h3>Đánh giá chuyến đi</h3>
             <span class="owner-modal-close" onclick="closeRateModal()">&times;</span>
         </div>
         <div class="owner-modal-body">
@@ -680,20 +703,91 @@
 
             <div style="text-align:center; margin-top:20px;">
                 <button class="btn btn-success" id="submitRatingBtn">
-                    <i class="fa fa-paper-plane"></i> Submit Rating
+                    <i class="fa fa-paper-plane"></i> Gửi
                 </button>
             </div>
         </div>
     </div>
 </div>
 
+
 <!-- ========== JAVASCRIPT ========== -->
 <script>
+    // ========== OWNER INFO MODAL FUNCTIONS ==========
+    function showOwnerInfo(bookingId, carName) {
+        const modal = document.getElementById('ownerModal');
+        const content = document.getElementById('ownerInfoContent');
+
+        content.innerHTML = `
+            <div class="loading-spinner">
+                <i class="fa fa-spinner fa-spin"></i>
+                <p style="margin-top: 15px; color: #666;">Loading owner information...</p>
+            </div>
+        `;
+        modal.style.display = 'block';
+
+        fetch('${pageContext.request.contextPath}/customer/owner-info?bookingId=' + bookingId)
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                const avatarUrl = data.avatar && data.avatar.trim() !== ''
+                    ? '${pageContext.request.contextPath}' + data.avatar
+                    : '${pageContext.request.contextPath}/images/profile/default.jpg';
+
+                content.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="` + avatarUrl + `"
+                             class="owner-avatar"
+                             onerror="this.src='${pageContext.request.contextPath}/images/profile/default.jpg'">
+                    </div>
+                    <div class="owner-info-item">
+                        <div class="owner-info-label">
+                            <i class="fa fa-car"></i> Car
+                        </div>
+                        <div class="owner-info-value">` + carName + `</div>
+                    </div>
+                    <div class="owner-info-item">
+                        <div class="owner-info-label">
+                            <i class="fa fa-user"></i> Owner Name
+                        </div>
+                        <div class="owner-info-value">` + (data.fullName || 'N/A') + `</div>
+                    </div>
+                    <div class="owner-info-item">
+                        <div class="owner-info-label">
+                            <i class="fa fa-phone"></i> Phone Number
+                        </div>
+                        <div class="owner-info-value">` + (data.phone || 'N/A') + `</div>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                content.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #dc3545;">
+                        <i class="fa fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <p style="font-weight: 600;">Failed to load owner information</p>
+                        <p style="color: #666; font-size: 14px;">Please try again later</p>
+                        <button onclick="closeOwnerModal()"
+                                style="margin-top: 20px; padding: 10px 30px; background: #6c757d;
+                                       color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Close
+                        </button>
+                    </div>
+                `;
+            });
+    }
+
+    function closeOwnerModal() {
+        document.getElementById('ownerModal').style.display = 'none';
+    }
+
     // ========== RATE & REVIEW MODAL FUNCTIONS ==========
     let selectedRating = 0;
     let currentBookingId = null;
 
-    // Event listener for car rate links
+    // Event listener cho car rate links
     document.addEventListener("click", function (e) {
         if (e.target.closest('.car-rate-link')) {
             e.preventDefault();
@@ -725,7 +819,7 @@
         const feedback = document.getElementById("feedbackText").value.trim();
 
         if (selectedRating === 0) {
-            alert("Please select a rating from 1 to 5 stars!");
+            alert("Vui lòng đánh giá từ 1 đến 5 sao");
             return;
         }
 
@@ -746,7 +840,6 @@
                 if (data.success) {
                     alert("Thank you for your feedback!");
                     closeRateModal();
-                    location.reload();
                 } else {
                     alert(data.message || "Failed to submit feedback. Please try again.");
                 }
@@ -757,41 +850,42 @@
             });
     });
 
-    // Toggle advanced filters
     function toggleAdvancedFilters() {
-        const advFilters = document.getElementById('advancedFilters');
+        const filters = document.getElementById('advancedFilters');
         const icon = document.getElementById('advancedFilterIcon');
-
-        if (advFilters.style.display === 'none') {
-            advFilters.style.display = 'block';
+        if (filters.style.display === 'none') {
+            filters.style.display = 'block';
             icon.className = 'fa fa-caret-up';
         } else {
-            advFilters.style.display = 'none';
+            filters.style.display = 'none';
             icon.className = 'fa fa-caret-down';
         }
     }
 
-    // Clear all filters
     function clearFilters() {
-        const tab = '${tab}';
-        window.location.href = '${pageContext.request.contextPath}/owner/myBooking?tab=' + tab + '&page=1';
+        window.location.href = '${pageContext.request.contextPath}/customer/customerOrder?tab=${tab}&page=1';
     }
 
     function closeRateModal() {
         document.getElementById("rateModal").style.display = "none";
     }
 
-    // Close modal when clicking outside
+    // ========== GLOBAL MODAL CLOSE HANDLERS ==========
     window.onclick = function (event) {
+        const ownerModal = document.getElementById('ownerModal');
         const rateModal = document.getElementById('rateModal');
+
+        if (event.target == ownerModal) {
+            closeOwnerModal();
+        }
         if (event.target == rateModal) {
             closeRateModal();
         }
     }
 
-    // Close modal on ESC key
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
+            closeOwnerModal();
             closeRateModal();
         }
     });
