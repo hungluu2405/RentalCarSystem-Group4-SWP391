@@ -53,7 +53,7 @@ public class CharacterEncodingFilter implements Filter {
 
         response.setCharacterEncoding(ENCODING);
 
-        response.setContentType("text/html; charset=UTF-8");
+//        response.setContentType("text/html; charset=UTF-8");
 
 
         // Tiếp tục xử lý request

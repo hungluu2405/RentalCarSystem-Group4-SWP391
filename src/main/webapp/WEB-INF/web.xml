@@ -1,80 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <web-app version="6.0"
-
          xmlns="https://jakarta.ee/xml/ns/jakartaee"
-
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
 
-
-
     <!-- ===== UTF-8 ENCODING FILTER ===== -->
-
-    <!-- Đảm bảo tất cả request/response đều dùng UTF-8 để hỗ trợ tiếng Việt -->
-
     <filter>
-
         <filter-name>CharacterEncodingFilter</filter-name>
-
         <filter-class>filter.CharacterEncodingFilter</filter-class>
     </filter>
 
-
-
     <filter-mapping>
-
         <filter-name>CharacterEncodingFilter</filter-name>
-
         <url-pattern>/*</url-pattern>
-
     </filter-mapping>
 
-
-
-    <!-- ===== SERVLETS ===== -->
-
-    <servlet>
-
-        <servlet-name>CarDBServlet</servlet-name>
-
-        <servlet-class>controller.admin.CarDBServlet</servlet-class>
-
-    </servlet>
-
-
-
+    <!-- ===== DEFAULT SERVLET STATIC RESOURCE FIX ===== -->
+    <!-- ÉP TOMCAT SERVE CSS/JS/IMG/ETC ĐÚNG MIME TYPE -->
     <servlet-mapping>
-
-        <servlet-name>CarDBServlet</servlet-name>
-
-        <url-pattern>/CarDB</url-pattern>
-
+        <servlet-name>default</servlet-name>
+        <url-pattern>/css/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/js/*</url-pattern>
+    </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/fonts/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/vendor/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ===== SERVLETS ===== -->
+    <servlet>
+        <servlet-name>CarDBServlet</servlet-name>
+        <servlet-class>controller.admin.CarDBServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CarDBServlet</servlet-name>
+        <url-pattern>/CarDB</url-pattern>
+    </servlet-mapping>
 
     <!-- ===== SESSION CONFIG ===== -->
-
     <session-config>
-
         <session-timeout>30</session-timeout>
-
     </session-config>
 
-
-
     <!-- ===== WELCOME FILE LIST ===== -->
-
     <welcome-file-list>
-
         <welcome-file>index.jsp</welcome-file>
-
         <welcome-file>index.html</welcome-file>
-
     </welcome-file-list>
-
-
 
 </web-app>
