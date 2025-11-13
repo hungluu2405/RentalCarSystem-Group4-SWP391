@@ -36,7 +36,8 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     if (name != null && !name.trim().isEmpty()
             && email != null && email.contains("@")
-            && message != null && !message.trim().isEmpty()) {
+            && message != null && !message.trim().isEmpty()
+            &&phone != null && !phone.trim().isEmpty()) {
 
         Contact contact = new Contact(userId, name, email, phone, message);
         success = contactDAO.insertContact(contact);
