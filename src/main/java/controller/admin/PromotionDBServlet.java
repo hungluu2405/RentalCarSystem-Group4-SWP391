@@ -1,6 +1,6 @@
 package controller.admin;
 
-import dao.implement.PromotionDAO;
+import dao.implement.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,8 +18,19 @@ public class PromotionDBServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        UserDAO userDAO = new UserDAO();
+        CarDAO carDAO = new CarDAO();
+        BookingDAO bookingDAO = new BookingDAO();
+        PaymentDAO paymentDAO = new PaymentDAO();
+        ContactDAO contactDAO = new ContactDAO();
+        Driver_LicenseDAO licenseDAO = new Driver_LicenseDAO();
         PromotionDAO promoDAO = new PromotionDAO();
 
+        int totalUsers = userDAO.countAllUsers();
+        int totalCars = carDAO.countAllCars();
+        int totalBookings = bookingDAO.countAllBookings();
+        int totalReports = paymentDAO.countAllReport();
+        int totalContacts = contactDAO.countUnresolvedContacts();
         String action = request.getParameter("action");
 
         // ===========================
@@ -36,7 +47,19 @@ public class PromotionDBServlet extends HttpServlet {
         List<Promotion> list = promoDAO.getAllPromotions();
 
         request.setAttribute("listP", list);
+        request.setAttribute("totalUsers",totalUsers);
+        request.setAttribute("totalCars",totalCars);
+        request.setAttribute("totalBookings",totalBookings);
+        request.setAttribute("totalReports",totalReports);
+        request.setAttribute("totalContacts", totalContacts);
         request.setAttribute("activePage", "promotion");
+        if ("delete".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            promoDAO.deletePromotion(id);
+            response.sendRedirect("promotionDB");
+            return;
+        }
+
 
         request.getRequestDispatcher("/view/admin/promotionDashboard.jsp")
                 .forward(request, response);
