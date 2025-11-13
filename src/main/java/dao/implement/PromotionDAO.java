@@ -70,6 +70,54 @@ public class PromotionDAO extends DBContext {
         }
         return list;
     }
+    public List<Promotion> getAllPromotions() {
+        List<Promotion> list = new ArrayList<>();
+
+        String sql = """
+                SELECT PROMO_ID, CODE, DESCRIPTION, DISCOUNT_RATE,
+                       DISCOUNT_TYPE, START_DATE, END_DATE, ACTIVE
+                FROM PROMOTION
+                ORDER BY PROMO_ID DESC
+                """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Promotion p = new Promotion();
+                p.setPromoId(rs.getInt("PROMO_ID"));
+                p.setCode(rs.getString("CODE"));
+                p.setDescription(rs.getString("DESCRIPTION"));
+                p.setDiscountRate(rs.getDouble("DISCOUNT_RATE"));
+                p.setDiscountType(rs.getString("DISCOUNT_TYPE"));
+                p.setStartDate(rs.getDate("START_DATE"));
+                p.setEndDate(rs.getDate("END_DATE"));
+                p.setActive(rs.getBoolean("ACTIVE"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public boolean updateActiveStatus(int promoId, boolean status) {
+        String sql = "UPDATE PROMOTION SET ACTIVE = ? WHERE PROMO_ID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setBoolean(1, status);
+            ps.setInt(2, promoId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
 
 
