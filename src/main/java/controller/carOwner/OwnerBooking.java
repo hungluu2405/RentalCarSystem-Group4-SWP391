@@ -35,8 +35,6 @@ public class OwnerBooking extends HttpServlet {
 
         int ownerId = owner.getUserId();
 
-
-
         // --- LẤY PAGE HIỆN TẠI ---
         String pageParam = request.getParameter("page");
         int currentPage = 1;
@@ -77,14 +75,12 @@ public class OwnerBooking extends HttpServlet {
                 bookings = bookingDAO.getHistoryBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 break;
             default: // pending
-                System.out.println("   ➡️ Loading PENDING tab (default)");
                 totalRecords = bookingDAO.countPendingBookingsByOwner(ownerId);
                 totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
                 bookings = bookingDAO.getPendingBookingsByOwner(ownerId, offset, PAGE_SIZE);
                 tab = "pending";
                 break;
         }
-
 
         // Thống kê
         int totalCars = carDAO.countCarsByOwner(ownerId);
@@ -94,7 +90,6 @@ public class OwnerBooking extends HttpServlet {
 
         // Lấy danh sách xe và booking
         List<CarViewModel> myCars = carDAO.getCarsByOwner(ownerId);
-
 
         // Gửi dữ liệu sang JSP
         request.setAttribute("totalCars", totalCars);
@@ -109,7 +104,6 @@ public class OwnerBooking extends HttpServlet {
         request.setAttribute("totalRecords", totalRecords);
 
         request.getRequestDispatcher("/view/carOwner/ownerBooking.jsp").forward(request, response);
-
 
     }
 

@@ -40,36 +40,4 @@ public class AddCarService {
         return carDAO.isLicensePlateExists(licensePlate);
     }
 
-
-    /**
-     * Chuyển chuỗi sang int an toàn (trả về 0 nếu null, rỗng, hoặc không phải số)
-     */
-    public static int safeParseInt(String value) {
-        if (value == null || value.trim().isEmpty()) return 0;
-        try {
-            return Integer.parseInt(value.trim());
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
-
-    /**
-     * Chuyển chuỗi sang BigDecimal an toàn (trả về null nếu không hợp lệ)
-     */
-    public static BigDecimal safeParseBigDecimal(String value) {
-        if (value == null || value.trim().isEmpty()) return null;
-        try {
-            value = value.replace(".", "").replace(",", "").trim();
-            return new BigDecimal(value);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Lấy chuỗi an toàn, loại bỏ khoảng trắng, trả về "" nếu null
-     */
-    public String safeGetString(String value) {
-        return (value == null) ? "" : value.trim();
-    }
 }
