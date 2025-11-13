@@ -90,7 +90,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Car Owner Booking Dashboard</h1></div>
+                        <div class="col-md-12 text-center"><h1>Trang quản lý đơn thuê xe</h1></div>
                     </div>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                                         <i class="fa id-color fa-2x fa-car"></i>
                                     </div>
                                     <span class="h1 mb0">${totalCars}</span><br>
-                                    <span class="text-gray">Total Cars</span>
+                                    <span class="text-gray">Tổng số xe</span>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-6 mb25">
@@ -125,7 +125,7 @@
                                         <i class="fa id-color fa-2x fa-calendar"></i>
                                     </div>
                                     <span class="h1 mb0">${totalBookings}</span><br>
-                                    <span class="text-gray">Total Bookings</span>
+                                    <span class="text-gray">Tổng số chuyến</span>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-6 mb25">
@@ -134,7 +134,7 @@
                                         <i class="fa id-color fa-2x fa-toggle-on"></i>
                                     </div>
                                     <span class="h1 mb0">${activeBookings}</span><br>
-                                    <span class="text-gray">Accepted Bookings</span>
+                                    <span class="text-gray">Tổng số chuyến đã chấp nhận</span>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-6 mb25">
@@ -143,16 +143,16 @@
                                         <i class="fa id-color fa-2x fa-ban"></i>
                                     </div>
                                     <span class="h1 mb0">${cancelledBookings}</span><br>
-                                    <span class="text-gray">Cancelled Bookings</span>
+                                    <span class="text-gray">Tổng số chuyến đã từ chối</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Tabs -->
                         <div class="tab-container">
-                                <button class="tab-btn ${tab == 'pending' ? 'active' : ''}" id="tabPending">Pending Orders</button>
-                                <button class="tab-btn ${tab == 'active' ? 'active' : ''}" id="tabActive">Active Orders</button>
-                                <button class="tab-btn ${tab == 'history' ? 'active' : ''}" id="tabHistory">History Orders</button>
+                                <button class="tab-btn ${tab == 'pending' ? 'active' : ''}" id="tabPending">Chuyến chờ xử lí</button>
+                                <button class="tab-btn ${tab == 'active' ? 'active' : ''}" id="tabActive">Chuyến được chấp nhận</button>
+                                <button class="tab-btn ${tab == 'history' ? 'active' : ''}" id="tabHistory">Lịch sử chuyến</button>
 
                         </div>
 
@@ -164,16 +164,16 @@
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Car</th>
-                                        <th>Customer</th>
-                                        <th>Phone</th>
-                                        <th>Pickup</th>
-                                        <th>Return car</th>
-                                        <th>Start</th>
-                                        <th>End</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Tên xe</th>
+                                        <th>Khách hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Thời gian lấy xe</th>
+                                        <th>Thời gian trả xe</th>
+                                        <th>Ngày lấy xe</th>
+                                        <th>Ngày trả xe</th>
+                                        <th>Giá tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -207,10 +207,10 @@
                                                         <input type="hidden" name="bookingId"
                                                                value="${order.bookingId}">
                                                         <button type="submit" name="action" value="accept"
-                                                                class="btn btn-success btn-sm">Accept
+                                                                class="btn btn-success btn-sm">Chấp nhận
                                                         </button>
                                                         <button type="submit" name="action" value="reject"
-                                                                class="btn btn-danger btn-sm">Reject
+                                                                class="btn btn-danger btn-sm">Từ chối
                                                         </button>
                                                     </form>
                                                 </td>
@@ -231,16 +231,16 @@
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Car</th>
-                                        <th>Customer</th>
-                                        <th>Phone</th>
-                                        <th>Pickup</th>
-                                        <th>Return car</th>
-                                        <th>Start</th>
-                                        <th>End</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Tên xe</th>
+                                        <th>Khách hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Thời gian lấy xe</th>
+                                        <th>Thời gian trả xe</th>
+                                        <th>Ngày lấy xe</th>
+                                        <th>Ngày trả xe</th>
+                                        <th>Giá tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -260,19 +260,19 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${order.status == 'Approved'}">
-                                                            <span class="badge bg-primary">Approved</span>
+                                                            <span class="badge bg-primary">Được chấp nhận</span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Completed'}">
-                                                            <span class="badge bg-success">Completed</span>
+                                                            <span class="badge bg-success">Đã hoàn thành</span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Rejected'}">
-                                                            <span class="badge bg-danger">Rejected</span>
+                                                            <span class="badge bg-danger">Đã từ chối</span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Paid'}">
-                                                            <span class="badge bg-info text-dark">Paid</span>
+                                                            <span class="badge bg-info text-dark">Đã thanh toán</span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Returning'}">
-                                                            <span class="badge bg-warning text-dark">Returning</span>
+                                                            <span class="badge bg-warning text-dark">Đang trả xe</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <span class="badge bg-secondary">${order.status}</span>
@@ -286,9 +286,9 @@
                                                               class="d-inline">
                                                             <input type="hidden" name="bookingId" value="${order.bookingId}">
                                                             <button type="submit" name="action" value="confirmReturn"
-                                                                    onclick="return confirm('Confirm that the car has been returned?');"
+                                                                    onclick="return confirm('Bạn chắc chắn đã nhận được xe?');"
                                                                     class="btn btn-success btn-sm">
-                                                                <i class="fa fa-check"></i> Confirm Return
+                                                                <i class="fa fa-check"></i> Chấp nhận trả xe
                                                             </button>
                                                         </form>
                                                     </c:if>
@@ -310,15 +310,16 @@
                                 <table class="table align-middle text-center">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Car</th>
-                                        <th>Customer</th>
-                                        <th>Phone</th>
-                                        <th>Pickup</th>
-                                        <th>Return car</th>
-                                        <th>Start</th>
-                                        <th>End</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
+                                        <th>Tên xe</th>
+                                        <th>Khách hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Thời gian lấy xe</th>
+                                        <th>Thời gian trả xe</th>
+                                        <th>Ngày lấy xe</th>
+                                        <th>Ngày trả xe</th>
+                                        <th>Giá tiền</th>
+                                        <th>Trạng thái</th>
+<%--                                        <th>Thao tác</th>--%>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -338,16 +339,16 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${order.status == 'Approved'}">
-                                                            <span class="badge bg-primary">Approved</span>
+                                                            <span class="badge bg-primary">Đã chấp nhận</span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Completed'}">
-                                                            <span class="badge bg-success">Completed</span>
+                                                            <span class="badge bg-success">Đã hoàn thành</span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Rejected'}">
-                                                            <span class="badge bg-danger">Rejected</span>
+                                                            <span class="badge bg-danger">Đã từ chối </span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Paid'}">
-                                                            <span class="badge bg-info text-dark">Paid</span>
+                                                            <span class="badge bg-info text-dark">Đã thanh toán</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <span class="badge bg-secondary">${order.status}</span>

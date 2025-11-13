@@ -33,49 +33,49 @@
 
         <li>
             <a href="${pageContext.request.contextPath}/owner/profile" class="${activePage == 'profile' ? 'active' : ''}">
-                <i class="fa fa-user"></i> My Profile
+                <i class="fa fa-user"></i> Thông tin của tôi
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/ownerBooking"
                class="${activePage == 'ownerBooking' ? 'active' : ''}">
-                <i class="fa fa-home"></i> View Booking
+                <i class="fa fa-home"></i> Quản lí đơn thuê xe
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/addCar" class="${activePage == 'addCar' ? 'active' : ''}">
-                <i class="fa fa-car"></i> Add car
+                <i class="fa fa-car"></i> Thêm xe mới
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/manageMyCar" class="${activePage == 'manageMyCar' ? 'active' : ''}">
-                <i class="fa fa-cogs"></i> Manage my car
+                <i class="fa fa-cogs"></i> Gara xe của tôi
             </a>
         </li>
 
         <li>
             <a href="${pageContext.request.contextPath}/owner/rental-calendar" class="${activePage == 'rental-calendar' ? 'active' : ''}">
-                <i class="fa fa-calendar"></i> View Rental Calendar
+                <i class="fa fa-calendar"></i> Lịch thuê xe
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/myBooking" class="${activePage == 'myBooking' ? 'active' : ''}">
-                <i class="fa fa-history"></i> My Booking
+                <i class="fa fa-history"></i> Chuyến của tôi
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/myCoupon" class="${activePage == 'myCoupon' ? 'active' : ''}">
-                <i class="fa fa-tag"></i> My Coupon
+                <i class="fa fa-tag"></i> Quà tặng
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/owner/license" class="${activePage == 'license' ? 'active' : ''}">
-                <i class="fa fa-id-card"></i> Update Driver License
+                <i class="fa fa-id-card"></i> Xác minh bằng lái xe
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/logout">
-                <i class="fa fa-sign-out"></i> Sign Out
+                <i class="fa fa-sign-out"></i> Đăng xuất
             </a>
         </li>
     </ul>
