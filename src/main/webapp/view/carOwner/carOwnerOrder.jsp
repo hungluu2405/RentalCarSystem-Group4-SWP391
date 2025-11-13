@@ -310,21 +310,21 @@
                             <div class="col-lg-4 col-6 mb25">
                                 <div class="card padding30 text-center rounded-5">
                                     <i class="fa fa-calendar-check-o fa-2x text-success mb10"></i>
-                                    <span class="h2 mb0">${upcoming}</span><br>Upcoming Orders
+                                    <span class="h2 mb0">${upcoming}</span><br>Chuyến sắp tới
                                 </div>
                             </div>
 
                             <div class="col-lg-4 col-6 mb25">
                                 <div class="card padding30 text-center rounded-5">
                                     <i class="fa fa-calendar fa-2x text-success mb10"></i>
-                                    <span class="h2 mb0">${total}</span><br>Total Orders
+                                    <span class="h2 mb0">${total}</span><br>Tổng số chuyến
                                 </div>
                             </div>
 
                             <div class="col-lg-4 col-6 mb25">
                                 <div class="card padding30 text-center rounded-5">
                                     <i class="fa fa-calendar-times-o fa-2x text-danger mb10"></i>
-                                    <span class="h2 mb0">${cancelled}</span><br>Cancel Orders
+                                    <span class="h2 mb0">${cancelled}</span><br>Số chuyến hủy
                                 </div>
                             </div>
                         </div>
@@ -336,11 +336,11 @@
                             <div class="tab-container">
                                 <button class="tab-btn ${tab == 'current' || empty tab ? 'active' : ''}"
                                         onclick="window.location.href='${pageContext.request.contextPath}/owner/myBooking?tab=current&page=1'">
-                                    Current Trips
+                                    Chuyến hiện tại
                                 </button>
                                 <button class="tab-btn ${tab == 'history' ? 'active' : ''}"
                                         onclick="window.location.href='${pageContext.request.contextPath}/owner/myBooking?tab=history&page=1'">
-                                    Trip History
+                                    Lịch sử chuyến
                                 </button>
                             </div>
 

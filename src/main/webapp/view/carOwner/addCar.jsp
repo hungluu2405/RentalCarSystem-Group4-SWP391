@@ -27,7 +27,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Add Car</h1></div>
+                        <div class="col-md-12 text-center"><h1>Thêm xe mới</h1></div>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
 
                         <!-- ADD CAR -->
                         <div class="card padding40 rounded-5 shadow-sm">
-                            <h3 class="mb-4"><i class="fa fa-plus-circle"></i> Add New Car</h3>
+                            <h3 class="mb-4"><i class="fa fa-plus-circle"></i>Thêm xe mới</h3>
 
                             <!-- Hiển thị thông báo lỗi (nếu có) -->
                             <c:if test="${not empty errorMessage}">
@@ -82,7 +82,7 @@
                                         </c:choose>
 
                                         <div class="mt-3">
-                                            <label for="carImage" class="form-label fw-bold">Upload Car Image</label>
+                                            <label for="carImage" class="form-label fw-bold">Tải ảnh xe</label>
                                             <input type="file" id="carImage" name="carImage" accept="image/*"
                                                    class="form-control" onchange="previewFile(this)">
                                             <input type="hidden" name="tempImagePath" value="${tempImagePath}">
@@ -93,15 +93,15 @@
                                     <div class="row g-3">
                                     <!-- BRAND -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-industry text-primary"></i> Brand</label>
-                                        <input type="text" name="brand" class="form-control" placeholder="Enter car brand..." value="${brand}" required>
+                                        <label class="form-label"><i class="fa fa-industry text-primary"></i>Tên hãng xe</label>
+                                        <input type="text" name="brand" class="form-control" placeholder="Nhập tên hãng xe..." value="${brand}" required>
                                     </div>
 
                                     <!-- TRANSMISSION -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-cogs text-primary"></i> Transmission</label>
+                                        <label class="form-label"><i class="fa fa-cogs text-primary"></i> Truyền động cơ</label>
                                         <select name="transmission" class="form-select" required>
-                                            <option value="">Select transmission...</option>
+                                            <option value="">Chọn truyền động cơ</option>
                                             <c:forEach var="t" items="${transmissions}">
                                                 <option value="${t}" <c:if test="${t == transmission}">selected</c:if>>${t}</option>
                                             </c:forEach>
@@ -110,15 +110,15 @@
 
                                     <!-- MODEL -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-car text-primary"></i> Model</label>
-                                        <input type="text" name="model" class="form-control" placeholder="Enter car model..." value="${model}" required>
+                                        <label class="form-label"><i class="fa fa-car text-primary"></i>Tên mẫu </label>
+                                        <input type="text" name="model" class="form-control" placeholder="Nhập tên mẫu xe..." value="${model}" required>
                                     </div>
 
                                     <!-- FUEL TYPE -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-gas-pump text-primary"></i> Fuel Type</label>
+                                        <label class="form-label"><i class="fa fa-gas-pump text-primary"></i>Loại nhiên liệu</label>
                                         <select name="fuelType" class="form-select" required>
-                                            <option value="">Select fuel type...</option>
+                                            <option value="">Chọn loại nhiên liệu...</option>
                                             <c:forEach var="f" items="${fuelTypes}">
                                                 <option value="${f}" <c:if test="${f == fuelType}">selected</c:if>>${f}</option>
                                             </c:forEach>
@@ -127,17 +127,17 @@
 
                                     <!-- YEAR -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-calendar text-primary"></i> Year</label>
-                                        <input type="number" name="year" class="form-control" placeholder="Enter manufacturing year..." value="${year}" required>
+                                        <label class="form-label"><i class="fa fa-calendar text-primary"></i>Năm sản xuất</label>
+                                        <input type="number" name="year" class="form-control" placeholder="Nhập năm sản xuất..." value="${year}" required>
                                     </div>
 
                                     <!-- PRICE -->
                                     <div class="col-md-6">
                                         <label class="form-label">
-                                            <i class="fa fa-money-bill-wave text-primary"></i> Price/Day(vnd)
+                                            <i class="fa fa-money-bill-wave text-primary"></i> Giá thuê trên ngày(VND)
                                         </label>
                                         <input type="text" id="pricePerDayDisplay" class="form-control"
-                                               placeholder="Enter price per day...(VND)" value="${pricePerDay}" required>
+                                               placeholder="Nhập giá thuê trên ngày...(VND)" value="${pricePerDay}" required>
                                         <input type="hidden" name="pricePerDay" id="pricePerDay" value="${pricePerDay}">
 
                                     </div>
@@ -160,21 +160,21 @@
 
                                     <!-- CAPACITY -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-users text-primary"></i> Capacity</label>
-                                        <input type="number" name="capacity" class="form-control" placeholder="Enter car capacity..." value="${capacity}" required>
+                                        <label class="form-label"><i class="fa fa-users text-primary"></i> Số ghế</label>
+                                        <input type="number" name="capacity" class="form-control" placeholder="Nhập số ghế..." value="${capacity}" required>
                                     </div>
 
                                     <!-- LICENSE PLATE -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-id-card text-primary"></i> License Plate</label>
-                                        <input type="text" name="licensePlate" class="form-control" placeholder="Enter license plate...(format: 29A-123.45)" value="${licensePlate}" required>
+                                        <label class="form-label"><i class="fa fa-id-card text-primary"></i> Biển số xe</label>
+                                        <input type="text" name="licensePlate" class="form-control" placeholder="Nhập số ghế xe...(format: 29A-123.45)" value="${licensePlate}" required>
                                     </div>
 
                                     <!-- CAR TYPE -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-tags text-primary"></i> Car Type</label>
+                                        <label class="form-label"><i class="fa fa-tags text-primary"></i> Loại xe</label>
                                         <select name="typeId" class="form-select" required>
-                                            <option value="">Select car type...</option>
+                                            <option value="">Chọn loại xe...</option>
                                             <c:forEach var="c" items="${carTypes}">
                                                 <option value="${c.typeId}" <c:if test="${c.typeId == typeId}">selected</c:if>>${c.name}</option>
                                             </c:forEach>
@@ -183,22 +183,22 @@
 
                                     <!-- LOCATION -->
                                     <div class="col-md-6">
-                                        <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Location</label>
-                                        <input type="text" name="location" class="form-control" placeholder="Enter car location..." value="${location}">
+                                        <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Địa chỉ nhận trả xe</label>
+                                        <input type="text" name="location" class="form-control" placeholder="Nhập địa chỉ..." value="${location}">
                                     </div>
 
                                     <!-- DESCRIPTION -->
                                     <div class="col-12">
-                                        <label class="form-label"><i class="fa fa-align-left text-primary"></i> Description</label>
+                                        <label class="form-label"><i class="fa fa-align-left text-primary"></i> Mô tả</label>
                                         <textarea name="description" class="form-control" rows="4"
-                                                  placeholder="Enter description about the car...">${description}</textarea>
+                                                  placeholder="Nhập mô tả của xe...">${description}</textarea>
 
                                     </div>
 
                                     <!-- SUBMIT BUTTON -->
                                     <div class="col-12 text-center mt-4">
                                         <button type="submit" class="btn btn-primary px-4 py-2">
-                                            <i class="fa fa-plus-circle"></i> Add Car
+                                            <i class="fa fa-plus-circle"></i> Thêm xe mới
                                         </button>
                                     </div>
                                 </div>
