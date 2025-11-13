@@ -29,10 +29,33 @@ public class AccessControlFilter extends HttpFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
         String contextPath = req.getContextPath() == null ? "" : req.getContextPath();
+        String uri = req.getRequestURI();
+
+        // ✅ BỎ QUA STATIC RESOURCES (CSS / JS / IMG / FONTS / VENDOR)
+        if (uri.startsWith(contextPath + "/css")
+                || uri.startsWith(contextPath + "/js")
+                || uri.startsWith(contextPath + "/images")
+                || uri.startsWith(contextPath + "/fonts")
+                || uri.startsWith(contextPath + "/vendor")
+                || uri.endsWith(".css")
+                || uri.endsWith(".js")
+                || uri.endsWith(".png")
+                || uri.endsWith(".jpg")
+                || uri.endsWith(".jpeg")
+                || uri.endsWith(".gif")
+                || uri.endsWith(".svg")
+                || uri.endsWith(".ico")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // === ROOT REDIRECT HANDLING ===
+
         String servletPath = req.getServletPath();
         String pathInfo = req.getPathInfo();
         String requestUri = req.getRequestURI();
@@ -58,6 +81,8 @@ public class AccessControlFilter extends HttpFilter {
             resp.sendRedirect(contextPath + "/home");
             return;
         }
+
+        // === ROLE RESTRICTION HANDLING ===
 
         String relativeUri = normalizedUri;
         if (relativeUri != null && !contextPath.isEmpty() && relativeUri.startsWith(contextPath)) {
