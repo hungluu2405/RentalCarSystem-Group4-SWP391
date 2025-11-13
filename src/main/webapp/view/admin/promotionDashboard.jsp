@@ -141,7 +141,6 @@
                                 <th>Code</th>
                                 <th>Miêu tả</th>
                                 <th>% Giảm giá</th>
-                                <th>Loại</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
                                 <th>Trạng thái</th>
@@ -156,7 +155,6 @@
                                     <td>${p.code}</td>
                                     <td>${p.description}</td>
                                     <td>${p.discountRate}</td>
-                                    <td>${p.discountType}</td>
                                     <td>${p.startDate}</td>
                                     <td>${p.endDate}</td>
 
