@@ -273,6 +273,40 @@
                                     </div>
                                 </div>
                             </c:forEach>
+
+                            <!-- ⭐ ADD: Pagination -->
+                            <c:if test="${totalPages > 1}">
+                                <ul class="pagination justify-content-center mt-4">
+
+                                    <!-- Previous -->
+                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           href="${pageContext.request.contextPath}/owner/manageMyCar?page=${currentPage - 1}">
+                                            «
+                                        </a>
+                                    </li>
+
+                                    <!-- Page numbers -->
+                                    <c:forEach begin="1" end="${totalPages}" var="i">
+                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                            <a class="page-link"
+                                               href="${pageContext.request.contextPath}/owner/manageMyCar?page=${i}">
+                                                    ${i}
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+
+                                    <!-- Next -->
+                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           href="${pageContext.request.contextPath}/owner/manageMyCar?page=${currentPage + 1}">
+                                            »
+                                        </a>
+                                    </li>
+                                </ul>
+                            </c:if>
+
+
                         </div>
                     </div>
                 </div>

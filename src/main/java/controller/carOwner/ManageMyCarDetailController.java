@@ -136,18 +136,25 @@ public class ManageMyCarDetailController extends HttpServlet {
                 request.setAttribute("error", "Failed to update car!");
                 request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
             }
-        }
-
-        else if ("delete".equals(action)) {
+        } else if ("delete".equals(action)) {
             try {
-                carDAO.deleteCar(carId);
-                response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
+                boolean deleted = carDAO.deleteCar(carId);
+
+                if (deleted) {
+                    response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
+                    return;
+                }
+
             } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("error", "Failed to delete car!");
+                request.setAttribute("error", e.getMessage());
+                request.setAttribute("car", carDAO.getCarSingleById(carId));
+                request.setAttribute("carTypes", carDAO.getAllCarTypes());
+                request.setAttribute("fuelTypes", carDAO.getAllFuelTypess());
+                request.setAttribute("transmissions", carDAO.getAllTransmissions());
                 request.getRequestDispatcher("/view/carOwner/manageMyCarDetail.jsp").forward(request, response);
             }
         }
+
     }
 }
 
