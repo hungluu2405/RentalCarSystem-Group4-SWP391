@@ -29,4 +29,16 @@
             <i class="fas fa-chart-bar"></i>
             <span>Report</span></a>
     </li>
+
+    <li class="nav-item <%= "support".equals(request.getAttribute("activePage")) ? "active" : "" %>">
+        <a class="nav-link" href="contactDB">
+            <i class="fas fa-envelope fa-fw"></i>
+            <span>Contact Support</span></a>
+    </li>
+
+    <li class="nav-item <%= "promotion".equals(request.getAttribute("activePage")) ? "active" : "" %>">
+        <a class="nav-link" href="promotionDB">
+            <i class="fas fa-pound-sign"></i>
+            <span>Promotion</span></a>
+    </li>
 </ul>

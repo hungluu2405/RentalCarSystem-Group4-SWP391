@@ -106,7 +106,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead class="thead-dark">
                 <tr>
-                    <th>Car ID</th>
+                    <th>Car IDssss</th>
                     <th>Model</th>
                     <th>Type</th>
                     <th>Brand</th>
