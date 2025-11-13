@@ -108,7 +108,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Car Owner Dashboard - My Profile</h1></div>
+                        <div class="col-md-12 text-center"><h1>Thông tin của tôi </h1></div>
                     </div>
                 </div>
             </div>
@@ -131,7 +131,7 @@
 
                                 <c:if test="${param.status == 'success'}">
                                     <div class="alert alert-success text-center mb-4">
-                                         Profile updated successfully!
+                                         Thay đổi thông tin thành công!
                                     </div>
                                 </c:if>
 
@@ -168,40 +168,40 @@
                                         </div>
 
                                         <p style="font-size: 14px; color: #777; margin-top: 10px;">
-                                            Click the camera icon to change your photo
+                                           Click vào ảnh để thay đổi ảnh đại diện
                                         </p>
                                     </div>
 
                                     <!-- ================= Thông tin cá nhân ================= -->
                                     <div class="row">
                                         <div class="col-lg-6 mb20">
-                                            <h5>Full Name</h5>
+                                            <h5>Tên đầy đủ</h5>
                                             <input type="text" name="fullName" class="form-control"
                                                    value="${sessionScope.user.userProfile.fullName}"
                                                    placeholder="Enter your full name">
                                         </div>
 
                                         <div class="col-lg-6 mb20">
-                                            <h5>Email Address</h5>
+                                            <h5>Email </h5>
                                             <input type="text" name="email" class="form-control"
                                                    value="${sessionScope.user.email}" readonly>
                                         </div>
 
                                         <div class="col-lg-6 mb20">
-                                            <h5>Phone Number</h5>
+                                            <h5>Số điện thoại </h5>
                                             <input type="text" name="phone" class="form-control"
                                                    value="${sessionScope.user.userProfile.phone}"
                                                    placeholder="Enter your phone number">
                                         </div>
 
                                         <div class="col-lg-6 mb20">
-                                            <h5>Date of Birth</h5>
+                                            <h5>Ngày sinh</h5>
                                             <input type="date" name="dob" class="form-control"
                                                    value="${sessionScope.user.userProfile.dob}">
                                         </div>
 
                                         <div class="col-lg-6 mb20">
-                                            <h5>Driver License Number</h5>
+                                            <h5>Bằng lái xe</h5>
 
                                             <input type="text"
                                                    class="form-control"
@@ -217,7 +217,7 @@
                                         </div>
 
                                         <div class="col-lg-6 mb20">
-                                            <h5>Gender</h5>
+                                            <h5>Giới tính</h5>
                                             <select name="gender" class="form-control">
                                                 <option value="">-- Select Gender --</option>
                                                 <option value="Male" ${sessionScope.user.userProfile.gender == 'Male' ? 'selected' : ''}>Male</option>
