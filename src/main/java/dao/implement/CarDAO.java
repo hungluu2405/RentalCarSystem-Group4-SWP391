@@ -900,7 +900,7 @@ public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int 
             "WHERE c.USER_ID = ? " +
             "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
             "c.TRANSMISSION, c.FUEL_TYPE, c.YEAR, t.NAME, c.AVAILABILITY " +
-            "ORDER BY c.CAR_ID " +                  
+            "ORDER BY c.CAR_ID " +
             "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
     try (Connection conn = getConnection();
@@ -941,8 +941,6 @@ public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int 
 
     return list;
 }
-
-
 
     public CarViewModel getCarSingleById(int carId) {
 

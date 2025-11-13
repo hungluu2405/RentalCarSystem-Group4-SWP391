@@ -28,6 +28,7 @@ public class ManageMyCarController extends HttpServlet {
         }
         int ownerId = user.getUserId();
 
+        // Pagination
         String pageParam = request.getParameter("page");
         int currentPage = 1;
 
@@ -41,7 +42,9 @@ public class ManageMyCarController extends HttpServlet {
         }
 
         int offset = (currentPage - 1) * PAGE_SIZE;
+
         List<CarViewModel> carList = carDAO.getCarsByOwnerWithPaging(ownerId, offset, PAGE_SIZE);
+
 
         // Lấy danh sách xe của chủ xe
         int totalCars = carDAO.countCarsByOwner(ownerId);
