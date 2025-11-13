@@ -114,7 +114,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     car.setLocation(location);
     car.setTypeId(typeId);
     car.setOwnerId(ownerId);
-    car.setAvailability(true);
+    car.setAvailability(false);
 
     // Lưu xe và hình ảnh
     int carId = carDAO.addCarAndReturnId(car);
