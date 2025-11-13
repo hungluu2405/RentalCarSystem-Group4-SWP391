@@ -48,86 +48,76 @@
                                 <p>Email của bạn đã được xác minh qua Google. Vui lòng cung cấp các thông tin còn lại và tạo mật khẩu cho tài khoản Rentaly của bạn.</p>
                             </div>
 
-                                    <p class="text-center text-danger fw-bold">${requestScope.error}</p>
+                            <p class="text-center text-danger fw-bold">${requestScope.error}</p>
 
                             <form name="completeForm" class="form-border" method="post"
                                   action="${pageContext.request.contextPath}/create-google-account">
                                 <div class="row">
-                                    <!-- Left column -->
+                                    <!-- Cột trái -->
                                     <div class="col-lg-6">
-                                        <h5>Thông Tin Cá Nhân</h5>
+                                        <h5>Thông tin cá nhân</h5>
 
                                         <div class="field-set">
-                                            <label>Họ Và Tên (from Google)<span class="text-danger">*</span></label>
+                                            <label>Họ và tên (từ Google)<span class="text-danger">*</span></label>
                                             <input type="text" name="full_name" class="form-control"
                                                    value="${sessionScope.googleUser.name}" required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Họ Và Tên <span class="text-danger">*</span></label>
+                                            <label>Tên đăng nhập <span class="text-danger">*</span></label>
                                             <input type="text" name="username" class="form-control"
                                                    value='${formData.username}' required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Số Điện Thoại <span class="text-danger">*</span></label>
+                                            <label>Số điện thoại <span class="text-danger">*</span></label>
                                             <input type="tel" name="phone" class="form-control"
                                                    value='${formData.phone}' required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Ngày Sinh <span class="text-danger">*</span></label>
+                                            <label>Ngày sinh <span class="text-danger">*</span></label>
                                             <input type="date" name="dob" class="form-control" value='${formData.dob}'
                                                    required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Giới Tính <span class="text-danger">*</span></label>
+                                            <label>Giới tính <span class="text-danger">*</span></label>
                                             <select name="gender" class="form-control" required>
                                                 <option value="">-- Chọn --</option>
-                                                <option value="Male" ${formData.gender == 'Male' ? 'selected' : ''}>
-                                                    Nam
-                                                </option>
-                                                <option value="Female" ${formData.gender == 'Female' ? 'selected' : ''}>
-                                                    Nữ
-                                                </option>
-                                                <option value="Other" ${formData.gender == 'Other' ? 'selected' : ''}>
-                                                    Khác
-                                                </option>
+                                                <option value="Male" ${formData.gender == 'Male' ? 'selected' : ''}>Nam</option>
+                                                <option value="Female" ${formData.gender == 'Female' ? 'selected' : ''}>Nữ</option>
+                                                <option value="Other" ${formData.gender == 'Other' ? 'selected' : ''}>Khác</option>
                                             </select>
                                         </div>
                                     </div>
 
-                                    <!-- Right column -->
+                                    <!-- Cột phải -->
                                     <div class="col-lg-6">
                                         <h5>Tài khoản & Địa chỉ</h5>
 
                                         <div class="field-set">
-                                            <label>Địa chỉ email (from Google)</label>
+                                            <label>Địa chỉ email (từ Google)</label>
                                             <input type="email" name="email" class="form-control"
                                                    value="${sessionScope.googleUser.email}" readonly>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Tạo Mật Khẩu <span class="text-danger">*</span></label>
+                                            <label>Tạo mật khẩu <span class="text-danger">*</span></label>
                                             <input type="password" name="password" class="form-control" required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Nhập Lại Mật Khẩu <span class="text-danger">*</span></label>
+                                            <label>Nhập lại mật khẩu <span class="text-danger">*</span></label>
                                             <input type="password" name="re_password" class="form-control" required>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Role <span class="text-danger">*</span></label>
+                                            <label>Vai trò <span class="text-danger">*</span></label>
                                             <select name="role_id" class="form-control" required>
-                                                <option value="">-- Select Role --</option>
-                                                <option value="3" ${formData.role_id == '3' ? 'selected' : ''}>
-                                                    Khách Hàng
-                                                </option>
-                                                <option value="2" ${formData.role_id == '2' ? 'selected' : ''}>
-                                                    Chủ Xe
-                                                </option>
+                                                <option value="">-- Chọn vai trò --</option>
+                                                <option value="3" ${formData.role_id == '3' ? 'selected' : ''}>Khách hàng</option>
+                                                <option value="2" ${formData.role_id == '2' ? 'selected' : ''}>Chủ xe</option>
                                             </select>
                                         </div>
 
@@ -137,64 +127,48 @@
                                                    value='${formData.address_line}' required>
                                         </div>
 
+                                        <div class="row">
+                                            <div class="col-md-6">
                                                 <div class="field-set">
                                                     <label>Thành phố / Tỉnh <span class="text-danger">*</span></label>
                                                     <input type='text' name='city' class="form-control"
                                                            value='${formData.city}' required>
                                                 </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="field-set">
-                                                            <label>City / Province <span class="text-danger">*</span></label>
-                                                            <input type='text' name='city' class="form-control"
-                                                                   value='${formData.city}' required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="field-set">
-                                                            <label>Country <span class="text-danger">*</span></label>
-                                                            <input type='text' name='country' class="form-control"
-                                                                   value='${formData.country != null ? formData.country : "Vietnam"}'
-                                                                   required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="field-set">
-                                                    <label>Quốc Gia <span class="text-danger">*</span></label>
+                                                    <label>Quốc gia <span class="text-danger">*</span></label>
                                                     <input type='text' name='country' class="form-control"
-                                                           value='${formData.country != null ? formData.country : "Vietnam"}'
+                                                           value='${formData.country != null ? formData.country : "Việt Nam"}'
                                                            required>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="field-set">
-                                            <label>Mã Bưu Điện</label>
+                                            <label>Mã bưu điện</label>
                                             <input type='text' name='postal_code' class="form-control"
                                                    value='${formData.postal_code}'>
                                         </div>
                                     </div>
 
-
                                     <div class="col-lg-12 text-center mt-4">
-                                        <input type="submit" value="Tạo Tài Khoản" class="btn-main btn-fullwidth rounded-3">
-
-                                            </div>
-                                        </div>
-                                    </form>
+                                        <input type="submit" value="Tạo tài khoản" class="btn-main btn-fullwidth rounded-3">
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
+        </section>
 
-            <footer class="text-light"></footer>
-        </div>
+    </div>
 
-        <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
-        <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
-    </body>
+    <footer class="text-light"></footer>
+</div>
+
+<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+<script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+</body>
 </html>
