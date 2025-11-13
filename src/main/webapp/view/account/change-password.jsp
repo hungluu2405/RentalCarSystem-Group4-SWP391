@@ -10,7 +10,7 @@
 
     <head>
         <title>Change Password - Rentaly</title>
-        <link rel="icon" href="images/icon.png" type="image/gif" sizes="16x16">
+        <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
@@ -33,8 +33,8 @@
                                 <div class="de-flex-col">
                                     <div id="logo">
                                         <a href="${pageContext.request.contextPath}/home">
-                                            <img class="logo-1" src="images/logo-light.png" alt="">
-                                            <img class="logo-2" src="images/logo.png" alt="">
+                                            <img class="logo-1" src="${pageContext.request.contextPath}/images/logo-light.png" alt="">
+                                            <img class="logo-2" src="${pageContext.request.contextPath}/images/logo.png" alt="">
                                         </a>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
 
             <div class="no-bottom no-top" id="content">
                 <section id="section-hero" class="jarallax">
-                    <img src="images/background/2.jpg" class="jarallax-img" alt="">
+                    <img src="${pageContext.request.contextPath}/images/background/2.jpg" class="jarallax-img" alt="">
                     <div class="v-center">
                         <div class="container">
                             <div class="row align-items-center">
