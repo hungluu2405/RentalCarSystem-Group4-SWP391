@@ -6,7 +6,7 @@
 
 <head>
     <title>Rentaly - Multipurpose Vehicle Car Rental Website Template</title>
-    <link rel="icon" href="images/icon.png" type="image/gif" sizes="16x16">
+    <link rel="icon" href="${pageContext.request.contextPath}/images/icon.png" type="image/gif" sizes="16x16">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Rentaly - Multipurpose Vehicle Car Rental Website Template" name="description">
@@ -65,8 +65,8 @@
                                 <!-- logo begin -->
                                 <div id="logo">
                                     <a href="${pageContext.request.contextPath}/home">
-                                        <img class="logo-1" src="images/logo-light.png" alt="">
-                                        <img class="logo-2" src="images/logo.png" alt="">
+                                        <img class="logo-1" src="${pageContext.request.contextPath}/images/logo-light.png" alt="">
+                                        <img class="logo-2" src="${pageContext.request.contextPath}/images/logo.png" alt="">
                                     </a>
                                 </div>
                                 <!-- logo close -->
