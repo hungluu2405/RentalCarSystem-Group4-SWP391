@@ -64,7 +64,6 @@ public class NotificationService {
     }
 
     // ==================== BOOKING NOTIFICATION METHODS ====================
-
     /**
      * Gửi thông báo khi tạo booking mới (Pending)
      */

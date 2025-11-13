@@ -489,6 +489,34 @@ public class UserDAO extends GenericDAO<User> {
         }
         return null;
     }
+    public List<UserProfile> getProfilesByIds(List<Integer> ids) {
+        List<UserProfile> list = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) return list;
+
+        // Tạo chuỗi dấu hỏi phù hợp với số lượng ID
+        String placeholders = String.join(",", java.util.Collections.nCopies(ids.size(), "?"));
+        String sql = "SELECT u.USER_ID, p.FULL_NAME, p.profileImage " +
+                "FROM [USER] u LEFT JOIN USER_PROFILE p ON u.USER_ID = p.USER_ID " +
+                "WHERE u.USER_ID IN (" + placeholders + ")";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            for (int i = 0; i < ids.size(); i++) {
+                ps.setInt(i + 1, ids.get(i));
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UserProfile profile = new UserProfile(
+                        rs.getInt("USER_ID"),
+                        rs.getString("FULL_NAME"),
+                        rs.getString("profileImage")
+                );
+                list.add(profile);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 
 }

@@ -73,7 +73,6 @@ public class ReviewDAO extends DBContext {
             sql.append(" AND r.RATING = ?");
         }
 
-
         sql.append(" ORDER BY r.CREATED_AT DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
 

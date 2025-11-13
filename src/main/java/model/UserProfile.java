@@ -11,16 +11,35 @@ public class UserProfile {
     private String gender;
     private String driverLicenseNumber;
     private boolean isVerified;
-    private String profileImage; // ✅ Thêm thuộc tính này
-    // Constructors
+    private String profileImage; // ✅ Ảnh đại diện (đường dẫn lưu trong DB)
+
+    // === Constructors ===
     public UserProfile() {
     }
 
+    // Constructor đầy đủ có userId
+    public UserProfile(int userId, String fullName, String phone, Date dob, String gender) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.dob = dob;
+        this.gender = gender;
+    }
+
+    // ✅ Constructor dùng khi đăng ký tài khoản (RegisterServlet)
+    // Không có userId vì người dùng mới tạo
     public UserProfile(String fullName, String phone, Date dob, String gender) {
         this.fullName = fullName;
         this.phone = phone;
         this.dob = dob;
         this.gender = gender;
+    }
+
+    // ✅ Constructor rút gọn cho ChatList (chỉ cần id, tên, ảnh)
+    public UserProfile(int userId, String fullName, String profileImage) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.profileImage = profileImage;
     }
 
     // === Getters & Setters ===
@@ -88,12 +107,20 @@ public class UserProfile {
         this.isVerified = isVerified;
     }
 
-    // ✅ Getter & Setter mới cho profileImage
     public String getProfileImage() {
         return profileImage;
     }
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "userId=" + userId +
+                ", fullName='" + fullName + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                '}';
     }
 }

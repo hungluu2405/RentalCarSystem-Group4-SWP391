@@ -52,16 +52,7 @@
                                 <p><strong>Số điện thoại:</strong> ${owner.phone}</p>
                                 <p><strong>Ngày sinh:</strong> ${owner.dob}</p>
                                 <p><strong>Giới tính:</strong> ${owner.gender}</p>
-                                <p><strong>Trạng thái xác minh:</strong>
-                                    <c:choose>
-                                        <c:when test="${owner.isVerified}">
-                                            <span class="text-success">Đã xác minh</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="text-danger">Chưa xác minh</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </p>
+
                             </div>
                         </div>
                     </div>
@@ -72,7 +63,7 @@
         <!-- ========== DANH SÁCH XE CỦA CHỦ XE ========== -->
         <section id="section-cars" class="py-5">
             <div class="container">
-                <h2 class="text-center mb-4">Xe do ${owner.fullName} sở hữu</h2>
+                <h2 class="text-center mb-4">Xe của ${owner.fullName}</h2>
                 <div class="row">
                     <c:if test="${empty carList}">
                         <div class="col-12 text-center">

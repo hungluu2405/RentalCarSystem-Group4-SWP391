@@ -47,34 +47,49 @@ public class RateCarController extends HttpServlet {
             String body = sb.toString();
             System.out.println("🟢 JSON BODY = " + body);
 
-            // Loại bỏ dấu { }, " và tách bằng dấu phẩy
-            body = body.replace("{", "").replace("}", "").replace("\"", "");
-            String[] parts = body.split(",");
+// ======================= FIX JSON PARSE (FINAL) =======================
 
+// Loại bỏ khoảng trắng thừa
+            body = body.trim();
+
+// ---- Lấy bookingId ----
             int bookingId = 0;
-            int rating = 0;
-            String feedback = "";
-
-            for (String part : parts) {
-                String[] kv = part.split(":");
-                if (kv.length < 2) continue;
-                String key = kv[0].trim();
-                String value = kv[1].trim();
-
-                switch (key) {
-                    case "bookingId":
-                        bookingId = Integer.parseInt(value);
-                        break;
-                    case "rating":
-                        rating = Integer.parseInt(value);
-                        break;
-                    case "feedback":
-                        // Nếu feedback có dấu :, nối lại phần còn lại
-                        if (kv.length > 2) value = part.substring(part.indexOf(":") + 1).trim();
-                        feedback = value;
-                        break;
-                }
+            {
+                String key = "\"bookingId\":";
+                int start = body.indexOf(key) + key.length();
+                int end = body.indexOf(",", start);
+                if (end == -1) end = body.indexOf("}", start);
+                bookingId = Integer.parseInt(body.substring(start, end).trim());
             }
+
+// ---- Lấy rating ----
+            int rating = 0;
+            {
+                String key = "\"rating\":";
+                int start = body.indexOf(key) + key.length();
+                int end = body.indexOf(",", start);
+                if (end == -1) end = body.indexOf("}", start);
+                rating = Integer.parseInt(body.substring(start, end).trim());
+            }
+
+// ---- Lấy feedback (dạng chuỗi) ----
+// feedback luôn nằm trong "" nên không bị lỗi khi có dấu phẩy
+            String feedback = "";
+            {
+                String key = "\"feedback\":";
+                int start = body.indexOf(key) + key.length();
+
+                // bỏ dấu "
+                while (body.charAt(start) == ' ' || body.charAt(start) == ':') start++;
+                if (body.charAt(start) == '"') start++;
+
+                int end = body.indexOf("\"", start);
+                feedback = body.substring(start, end);
+            }
+
+// ==================== END FIX JSON PARSE ======================
+
+
 
             System.out.println("✅ Parsed JSON → bookingId=" + bookingId + ", rating=" + rating + ", feedback=" + feedback);
 

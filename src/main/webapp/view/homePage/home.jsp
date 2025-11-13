@@ -321,7 +321,7 @@
         .chat-dropdown {
             position: fixed;
             bottom: 90px;
-            right: 25px;
+            right: 100px;
             width: 270px;
             background: #fff;
             border-radius: 12px;
@@ -375,7 +375,7 @@
         #chatDock {
             position: fixed;
             bottom: 25px;
-            right: 100px;
+            right: 25px;
             display: flex;
             gap: 12px;
             z-index: 10501;
@@ -453,6 +453,15 @@
         .chat-input button:hover {
             background: #24993f;
         }
+        .chat-head .actions button {
+            pointer-events: auto !important;
+            z-index: 999999 !important;
+        }
+        .chat-head {
+            position: relative;
+            z-index: 999999 !important;
+        }
+
 
         /* === Tin nhắn === */
         .chat-content .msg {
@@ -575,25 +584,30 @@
                                                         <%-- ✅ THÊM: NÚT ĐÁNH DẤU TẤT CẢ ĐÃ ĐỌC (Cần Servlet xử lý) --%>
                                                     <a href="${pageContext.request.contextPath}/mark-all-read">Mark All
                                                         Read</a>
+                                                    <a href="${pageContext.request.contextPath}/booking-noti">Booking Notification</a>
+
                                                 </div>
 
 
                                                 <ul id="notification-list">
                                                     <c:choose>
-                                                        <c:when test="${not empty sessionScope.latestNotifications}">
-                                                            <c:forEach var="noti"
-                                                                       items="${sessionScope.latestNotifications}">
-                                                                <%-- ✅ SỬA 1: DÙNG !noti.read ĐỂ GÁN CLASS "unread" --%>
+                                                        <c:when test="${not empty notifications}">
+                                                            <c:forEach var="noti" items="${notifications}">
+
+                                                            <%-- ✅ SỬA 1: DÙNG !noti.read ĐỂ GÁN CLASS "unread" --%>
                                                                 <li class="${!noti.read ? 'unread' : ''}">
 
                                                                         <%-- ✅ SỬA 2: LINK TỚI SERVLET XỬ LÝ MARK AS READ --%>
                                                                     <a href="${pageContext.request.contextPath}/mark-read?id=${noti.notificationId}&redirectUrl=${noti.linkUrl}">
                                                                         <strong>${noti.title}</strong>
                                                                         <p>${noti.content}</p>
-
                                                                         <span class="time">${TimeAgoUtil.formatTimeAgo(noti.createdAt)}</span>
+
                                                                     </a>
+
+
                                                                 </li>
+
                                                             </c:forEach>
                                                         </c:when>
                                                         <c:otherwise>
@@ -1434,7 +1448,7 @@
     })();
     </script>
 
-</script>
+
 <!-- 💬 Floating Chat Button -->
 <div id="floatingChatBtn">
     <i class="fa-solid fa-message"></i>
@@ -1446,9 +1460,7 @@
         <h5>Messages</h5>
     </div>
     <ul id="chatList">
-        <li data-user="Linh" data-avatar="images/users/linh.jpg">Linh</li>
-        <li data-user="Kiet" data-avatar="images/users/kiet.jpg">Kiet</li>
-        <li data-user="Admin" data-avatar="images/users/admin.jpg">Admin Support</li>
+
     </ul>
 </div>
 
@@ -1475,54 +1487,185 @@
         </div>
     </div>
 </template>
+
 <script>
+    // Ép luôn thành số bên server
+    const CURRENT_USER_ID = ${sessionScope.user != null ? sessionScope.user.userId : 0};
+
     const chatBtn = document.getElementById('floatingChatBtn');
     const chatDropdown = document.getElementById('chatDropdown');
     const chatList = document.getElementById('chatList');
     const chatDock = document.getElementById('chatDock');
     const chatTpl = document.getElementById('chatBoxTpl');
 
-    chatBtn.onclick = () => chatDropdown.classList.toggle('open');
+    chatBtn.onclick = async function () {
+        if (CURRENT_USER_ID <= 0) {
+            alert("Please sign in to chat.");
+            return;
+        }
 
-    // Click 1 người -> mở chat box nổi
-    chatList.addEventListener('click', e => {
-        if(e.target.tagName !== 'LI') return;
-        const name = e.target.dataset.user;
-        const avatar = e.target.dataset.avatar;
+        chatDropdown.classList.toggle('open');
+        if (chatList.dataset.loaded) return;
 
-        // Nếu box đã mở thì không tạo thêm
-        if (document.querySelector(`.chat-box[data-user="${name}"]`)) return;
+        try {
+            const res = await fetch('chat-users');
+            const users = await res.json();
+            chatList.innerHTML = '';
+
+            if (!users.length) {
+                chatList.innerHTML =
+                    '<li style="padding:10px;text-align:center;color:#777;">No previous chats</li>';
+                return;
+            }
+
+            users.forEach(function (u) {
+                const li = document.createElement('li');
+                li.dataset.userid = u.userId;
+                li.dataset.user = u.fullName;
+                li.dataset.avatar =
+                    u.profileImage || '${pageContext.request.contextPath}/images/users/default.jpg';
+
+                li.innerHTML =
+                    '<img src="' + li.dataset.avatar + '" alt="">' +
+                    '<span>' + u.fullName + '</span>';
+
+                chatList.appendChild(li);
+            });
+
+            chatList.dataset.loaded = 'true';
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    chatList.addEventListener('click', async function (e) {
+        const li = e.target.closest('li');
+        if (!li) return;
+
+        const partnerId = li.dataset.userid;
+        const name = li.dataset.user;
+        const avatar = li.dataset.avatar;
+
+        // Nếu đã có box của user này rồi thì chỉ focus
+        if (document.querySelector('.chat-box[data-userid="' + partnerId + '"]')) {
+            chatDropdown.classList.remove('open');
+            return;
+        }
 
         const box = chatTpl.content.cloneNode(true).querySelector('.chat-box');
-        box.dataset.user = name;
+        box.dataset.userid = partnerId;
         box.querySelector('.avatar').src = avatar;
         box.querySelector('.name').textContent = name;
 
-        // Sự kiện nút
-        box.querySelector('.close').onclick = () => box.remove();
-        box.querySelector('.minimize').onclick = () => {
-            const content = box.querySelector('.chat-content');
-            const input = box.querySelector('.chat-input');
-            const hidden = content.style.display === 'none';
-            content.style.display = hidden ? 'block' : 'none';
-            input.style.display = hidden ? 'flex' : 'none';
-        };
-        box.querySelector('.send').onclick = () => {
-            const input = box.querySelector('.msg-input');
-            const text = input.value.trim();
-            if(!text) return;
-            const msg = document.createElement('div');
-            msg.className = 'msg you';
-            msg.innerHTML = `<span>${text}</span>`;
-            box.querySelector('.chat-content').appendChild(msg);
-            input.value = '';
-        };
-
+        const contentEl = box.querySelector('.chat-content');
+        const inputEl = box.querySelector('.msg-input');
+        const sendBtn = box.querySelector('.send');
 
         chatDock.appendChild(box);
         chatDropdown.classList.remove('open');
+
+        // --- Load lịch sử chat ---
+        const res = await fetch('messages?partnerId=' + partnerId);
+        const msgs = await res.json();
+        let lastId = 0;
+
+        msgs.forEach(function (m) {
+            const who = (m.senderId === CURRENT_USER_ID) ? 'you' : 'other';
+            const div = document.createElement('div');
+            div.className = 'msg ' + who;
+            div.innerHTML = '<span>' + m.content + '</span>';
+            contentEl.appendChild(div);
+            if (m.messageId > lastId) {
+                lastId = m.messageId;
+            }
+        });
+
+        // --- Poll tin nhắn mới ---
+        const poll = async function () {
+            try {
+                const res = await fetch(
+                    'poll-messages?partnerId=' + partnerId + '&lastMsgId=' + lastId
+                );
+                const data = await res.json();
+
+                data.forEach(function (m) {
+                    const who = (m.senderId === CURRENT_USER_ID) ? 'you' : 'other';
+                    const div = document.createElement('div');
+                    div.className = 'msg ' + who;
+                    div.innerHTML = '<span>' + m.content + '</span>';
+                    contentEl.appendChild(div);
+                    if (m.messageId > lastId) {
+                        lastId = m.messageId;
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        // ✅ tạo interval + lưu lại để tí nữa clear
+        const pollTimer = setInterval(poll, 2000);
+
+        // ✅ lấy nút
+        const closeBtn = box.querySelector('.close');
+        const minimizeBtn = box.querySelector('.minimize');
+
+        // ✅ Nút đóng
+        closeBtn.onclick = function () {
+            clearInterval(pollTimer);
+            box.remove();
+        };
+
+        // ✅ Nút thu nhỏ / mở rộng
+        minimizeBtn.onclick = function () {
+            const content = box.querySelector('.chat-content');
+            const input = box.querySelector('.chat-input');
+
+            const isHidden = content.style.display === 'none';
+
+            if (isHidden) {
+                content.style.display = 'block';
+                input.style.display = 'flex';
+                this.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+            } else {
+                content.style.display = 'none';
+                input.style.display = 'none';
+                this.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+            }
+        };
+
+        // --- Gửi tin nhắn ---
+        const sendMsg = async function () {
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            inputEl.value = '';
+            contentEl.innerHTML += '<div class="msg you"><span>' + text + '</span></div>';
+
+            try {
+                await fetch('send-message', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'receiverId=' + encodeURIComponent(partnerId) +
+                        '&content=' + encodeURIComponent(text)
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        sendBtn.onclick = sendMsg;
+        inputEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                sendMsg();
+            }
+        });
+
     });
 </script>
+
+
+
 </body>
 
 </html>
