@@ -846,8 +846,6 @@ public class CarDAO extends DBContext {
     }
 
 
-
-
     public List<CarViewModel> getCarsByOwner(int ownerId) {
         List<CarViewModel> list = new ArrayList<>();
         String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
@@ -888,6 +886,62 @@ public class CarDAO extends DBContext {
         }
         return list;
     }
+
+// Lấy danh sách xe của chủ xe có phân trang
+public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int pageSize) {
+    List<CarViewModel> list = new ArrayList<>();
+
+    String sql = "SELECT c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
+            "c.TRANSMISSION, c.FUEL_TYPE, c.YEAR, t.NAME AS CAR_TYPE_NAME, " +
+            "MIN(i.IMAGE_URL) AS IMAGE_URL, c.AVAILABILITY " +
+            "FROM CAR c " +
+            "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
+            "LEFT JOIN CAR_IMAGE i ON c.CAR_ID = i.CAR_ID " +
+            "WHERE c.USER_ID = ? " +
+            "GROUP BY c.CAR_ID, c.BRAND, c.MODEL, c.LOCATION, c.PRICE_PER_DAY, c.CAPACITY, " +
+            "c.TRANSMISSION, c.FUEL_TYPE, c.YEAR, t.NAME, c.AVAILABILITY " +
+            "ORDER BY c.CAR_ID " +                  
+            "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, ownerId);
+        ps.setInt(2, offset);     // vị trí bắt đầu
+        ps.setInt(3, pageSize);   // số dòng cần lấy
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+
+            CarViewModel car = new CarViewModel();
+
+            car.setCarId(rs.getInt("CAR_ID"));
+            car.setBrand(rs.getString("BRAND"));
+            car.setModel(rs.getString("MODEL"));
+            car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+            car.setCapacity(rs.getInt("CAPACITY"));
+            car.setTransmission(rs.getString("TRANSMISSION"));
+            car.setFuelType(rs.getString("FUEL_TYPE"));
+            car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+            car.setLocation(rs.getString("LOCATION"));
+            car.setYear(rs.getInt("YEAR"));
+            car.setImageUrl(
+                    rs.getString("IMAGE_URL") != null
+                            ? rs.getString("IMAGE_URL")
+                            : "images/default.jpg"
+            );
+            car.setAvailability(rs.getInt("AVAILABILITY"));
+
+            list.add(car);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
 
 
     public CarViewModel getCarSingleById(int carId) {
