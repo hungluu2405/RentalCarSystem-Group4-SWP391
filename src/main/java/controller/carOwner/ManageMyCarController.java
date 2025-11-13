@@ -26,10 +26,21 @@ public class ManageMyCarController extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+        int ownerId = user.getUserId();
+
 
         // Lấy danh sách xe của chủ xe
-        List<CarViewModel> carList = carDAO.getCarsByOwner(user.getUserId());
+        List<CarViewModel> carList = carDAO.getCarsByOwner(ownerId);
+
+        int totalCars = carDAO.countCarsByOwner(ownerId);
+        int availableCars = carDAO.countAvailableCarsByOwner(ownerId);
+        int unavailableCars = carDAO.countUnavailableCarsByOwner(ownerId);
+
         request.setAttribute("carList", carList);
+        request.setAttribute("totalCars", totalCars);
+        request.setAttribute("availableCars", availableCars);
+        request.setAttribute("unavailableCars", unavailableCars);
+
 
         // Forward sang JSP hiển thị danh sách xe
         request.getRequestDispatcher("/view/carOwner/manageMyCar.jsp").forward(request, response);

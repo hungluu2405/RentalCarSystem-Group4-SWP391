@@ -752,7 +752,6 @@ public class CarDAO extends DBContext {
     // ĐẾM SỐ LƯỢNG BOOKING THEO CHỦ XE THEO SIDEBAROWNER
     // ==========================
 
-
     public int countCarsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM CAR WHERE USER_ID = ?";
         try (Connection conn = getConnection();
@@ -766,10 +765,33 @@ public class CarDAO extends DBContext {
         return 0;
     }
 
+    public int countAvailableCarsByOwner(int ownerId) {
+        String sql = "SELECT COUNT(*) FROM CAR WHERE USER_ID = ? AND availability = 1 ";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
-    //Hàm đếm tổng số lượng tất cả các booking (đặt xe)
+    public int countUnavailableCarsByOwner(int ownerId) {
+        String sql = "SELECT COUNT(*) FROM CAR WHERE USER_ID = ? AND availability = 0 ";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
-
+        //Hàm đếm tổng số lượng tất cả các booking (đặt xe)
     public int countTotalBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) " +
                 "FROM BOOKING b " +
@@ -1164,7 +1186,6 @@ public class CarDAO extends DBContext {
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-
             ps.setInt(1, car.getOwnerId());
             ps.setInt(2, car.getTypeId());
             ps.setString(3, car.getModel());
@@ -1179,7 +1200,6 @@ public class CarDAO extends DBContext {
             ps.setBoolean(12, car.isAvailability());
             ps.setString(13, car.getLocation());
             ps.executeUpdate();
-
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
