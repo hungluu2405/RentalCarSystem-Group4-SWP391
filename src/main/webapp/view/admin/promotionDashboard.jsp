@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,21 +73,79 @@
                 </div>
                 <div class="card-body">
 
+                    <a href="promotionCreate" class="btn btn-primary mb-3">
+                        <i class="fas fa-plus"></i> Tạo Promotion
+                    </a>
+
+                    <form action="promotionDB" method="get" class="form-inline mb-3">
+
+                        <!-- ACTIVE -->
+                        <label for="active" class="mr-2 font-weight-bold">
+                            <i class="fas fa-toggle-on mr-1"></i>Trạng thái:
+                        </label>
+                        <select name="active" id="active" class="form-control mr-3">
+                            <option value="" <c:if test="${param.active == ''}">selected</c:if>>Tất cả</option>
+                            <option value="true" <c:if test="${param.active == 'true'}">selected</c:if>>Áp dụng</option>
+                            <option value="false" <c:if test="${param.active == 'false'}">selected</c:if>>Hủy áp dụng</option>
+                        </select>
+
+
+                        <!-- DISCOUNT RATE -->
+                        <label for="rate" class="mr-2 font-weight-bold">
+                            <i class="fas fa-percent mr-1"></i>Discount:
+                        </label>
+                        <select name="rate" id="rate" class="form-control mr-3">
+                            <option value="" <c:if test="${param.rate == ''}">selected</c:if>>Tất cả</option>
+                            <option value="0" <c:if test="${param.rate == '0'}">selected</c:if>>0 đến 15%</option>
+                            <option value="1" <c:if test="${param.rate == '1'}">selected</c:if>>15 đến 30%</option>
+                            <option value="2" <c:if test="${param.rate == '2'}">selected</c:if>>Hơn 30%</option>
+                        </select>
+
+
+                        <!-- START DATE -->
+                        <label for="startDate" class="mr-2 font-weight-bold">
+                            <i class="fas fa-calendar-alt mr-1"></i>Ngày bắt đầu:
+                        </label>
+                        <input type="date" name="startDate" id="startDate"
+                               value="${param.startDate}"
+                               class="form-control mr-3"/>
+
+
+                        <!-- END DATE -->
+                        <label for="endDate" class="mr-2 font-weight-bold">
+                            <i class="fas fa-calendar-check mr-1"></i>Ngày kết thúc:
+                        </label>
+                        <input type="date" name="endDate" id="endDate"
+                               value="${param.endDate}"
+                               class="form-control mr-3"/>
+
+
+                        <!-- SEARCH BUTTON -->
+                        <button type="submit" class="btn btn-primary mr-2">
+                            <i class="fas fa-search"></i> Lọc
+                        </button>
+
+                        <!-- RESET -->
+                        <a href="promotionDB" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo"></i> Tạo mới
+                        </a>
+                    </form>
+
 
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
                             <thead class="thead-dark">
                             <tr>
-                                <th>Promo ID</th>
+                                <th>ID Mã</th>
                                 <th>Code</th>
-                                <th>Description</th>
-                                <th>Discount Rate</th>
-                                <th>Type</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Active</th>
-                                <th>Action</th>
+                                <th>Miêu tả</th>
+                                <th>% Giảm giá</th>
+                                <th>Loại</th>
+                                <th>Ngày bắt đầu</th>
+                                <th>Ngày kết thúc</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
                             </tr>
                             </thead>
 
@@ -109,13 +169,13 @@
                                     <td>
                                         <a href="promotionDB?action=toggle&id=${p.promoId}&status=${!p.active}">
                                             <button class="btn ${p.active ? 'btn-danger' : 'btn-success'} btn-sm">
-                                                    ${p.active ? "Deactivate" : "Activate"}
+                                                    ${p.active ? "Hủy áp dụng" : "Áp dụng"}
                                             </button>
                                         </a>
                                         <a href="promotionDB?action=delete&id=${p.promoId}"
                                            onclick="return confirm('Bạn có chắc rằng muốn xóa promotion này không?');">
                                             <button class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> Delete
+                                                <i class="fas fa-trash"></i> Xoá
                                             </button>
                                         </a>
                                     </td>
