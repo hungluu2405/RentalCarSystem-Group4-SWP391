@@ -174,7 +174,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>Manage My Car</h1>
+                            <h1>Quản lí xe của tôi</h1>
                         </div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
                                         <i class="fa id-color fa-2x fa-car"></i>
                                     </div>
                                     <span class="h1 mb0">${totalCars}</span><br>
-                                    <span class="text-gray">Total Cars</span>
+                                    <span class="text-gray">Tổng số xe của tôi </span>
                                 </div>
                             </div>
 
@@ -213,7 +213,7 @@
                                         <i class="fa id-color fa-2x fa-check-circle"></i>
                                     </div>
                                     <span class="h1 mb0">${availableCars}</span><br>
-                                    <span class="text-gray">Available Cars</span>
+                                    <span class="text-gray">Xe sẵn sàng để thuê</span>
                                 </div>
                             </div>
 
@@ -223,18 +223,18 @@
                                         <i class="fa id-color fa-2x fa-ban"></i>
                                     </div>
                                     <span class="h1 mb0">${unavailableCars}</span><br>
-                                    <span class="text-gray">Unavailable Cars</span>
+                                    <span class="text-gray">Xe chưa sẵn sàng để thuê</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="dashboard-content">
                             <h3 class="fw-bold mb-3 text-secondary">
-                                <i class="fa fa-car"></i> My Cars
+                                <i class="fa fa-car"></i> Gara của tôi
                             </h3>
 
                             <c:if test="${empty carList}">
-                                <p>You don't have any cars yet.</p>
+                                <p>Bạn chưa có xe nào trong gara.</p>
                             </c:if>
 
                             <c:forEach var="car" items="${carList}">
@@ -256,11 +256,11 @@
                                             </c:choose>
                                         </h3>
 
-                                        <p><strong>Seats:</strong> ${car.capacity}</p>
-                                        <p><strong>Fuel:</strong> ${car.fuelType}</p>
-                                        <p><strong>Transmission:</strong> ${car.transmission}</p>
-                                        <p><strong>Type:</strong> ${car.carTypeName}</p>
-                                        <p><strong>Location:</strong> ${car.location}</p>
+                                        <p><strong>Số ghế:</strong> ${car.capacity}</p>
+                                        <p><strong>Nhiên liệu:</strong> ${car.fuelType}</p>
+                                        <p><strong>Truyền động:</strong> ${car.transmission}</p>
+                                        <p><strong>Loại xe:</strong> ${car.carTypeName}</p>
+                                        <p><strong>Địa chỉ:</strong> ${car.location}</p>
                                     </div>
 
                                     <div class="car-price">
@@ -269,7 +269,7 @@
                                                               type="number" groupingUsed="true"
                                                               minFractionDigits="0" maxFractionDigits="0"/> ₫</h4>
                                         <a href="${pageContext.request.contextPath}/owner/manageCarDetail?carId=${car.carId}"
-                                           class="btn-view">View My Car</a>
+                                           class="btn-view">Xem chi tiết</a>
                                     </div>
                                 </div>
                             </c:forEach>

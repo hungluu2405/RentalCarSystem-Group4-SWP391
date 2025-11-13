@@ -65,11 +65,11 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String tempImagePath = request.getParameter("tempImagePath");
     for (Part part : request.getParts()) {
         if ("carImage".equals(part.getName()) && part.getSize() > 0) {
-            String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
-            String tempDirPath = getServletContext().getRealPath("") + "images/temp";
+            String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName(); // tạo file độc nhất với thời gian
+            String tempDirPath = getServletContext().getRealPath("") + "images/temp"; // tạo đường dẫn temp trên máy chủ
             new File(tempDirPath).mkdirs();
-            part.write(tempDirPath + File.separator + fileName);
-            tempImagePath = "images/temp/" + fileName;
+            part.write(tempDirPath + File.separator + fileName); //tạo 1 folder temp để lưu vào
+            tempImagePath = "images/temp/" + fileName; //hiển thị ở jsp
         }
     }
 
@@ -124,14 +124,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         File tempFile = new File(getServletContext().getRealPath("") + tempImagePath);
         if (tempFile.exists()) {
             String newFileName = System.currentTimeMillis() + "_" + tempFile.getName();
-            String destDirPath = getServletContext().getRealPath("") + "images/cars";
-            File destDir = new File(destDirPath);
+            String destDirPath = getServletContext().getRealPath("") + "images/cars";  // tạo đường dẫn thư mục chính có trên máy
+            File destDir = new File(destDirPath);  //tạo file đại diện cho thư mục image/cars
             if (!destDir.exists()) destDir.mkdirs();
 
-            File destFile = new File(destDir, newFileName);
+            File destFile = new File(destDir, newFileName); // tạo file ảnh mới cụ thể
             tempFile.renameTo(destFile);
 
-            String imageUrl = "images/cars/" + newFileName;
+            String imageUrl = "images/cars/" + newFileName; //tạo đường web
             carDAO.addCarImage(carId, imageUrl);
         }
     }
