@@ -1,3 +1,5 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -13,13 +15,15 @@
     <meta content="" name="author">
     <!-- CSS Files
     ================================================== -->
-    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css"
+          id="bootstrap">
     <link href="${pageContext.request.contextPath}/css/mdb.min.css" rel="stylesheet" type="text/css" id="mdb">
     <link href="${pageContext.request.contextPath}/css/plugins.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
     <!-- color scheme -->
-    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet" type="text/css">
+    <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"
+          type="text/css">
 </head>
 
 <body>
@@ -64,34 +68,38 @@
                         <form name="contactForm" id="contact_form" class="form-border" method="post"
                               action="<%= request.getContextPath() %>/contact">
 
-                        <div class="row">
+                            <div class="row">
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
+                                        <input type="text" name="name" id="name" class="form-control"
+                                               placeholder="Tên Của Bạn" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
-                                        <input type="text" name="email" id="email" class="form-control" placeholder="Your Email" required>
+                                        <input type="text" name="email" id="email" class="form-control"
+                                               placeholder="Email" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
-                                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Your Phone" required>
+                                        <input type="text" name="phone" id="phone" class="form-control"
+                                               placeholder="Số Điện Thoại" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="field-set mb20">
-                                <textarea name="message" id="message" class="form-control" placeholder="Your Message" required></textarea>
+                                <textarea name="message" id="message" class="form-control" placeholder="Câu Hỏi Của Bạn Dành Cho Chúng Tôi"
+                                          required></textarea>
                             </div>
 
                             <div id='submit' class="mt20">
-                                <input type='submit' id='send_message' value='Send Message' class="btn-main">
-                                
+                                <input type='submit' id='send_message' value='Gửi Câu Hỏi' class="btn-main">
+
 
                             </div>
-                                <p style="color: green;">${msg}</p>
+                            <p style="color: green;">${msg}</p>
                             <div id="success_message" class='success'>
                                 Yêu cầu hỗ trợ của bạn đã được gửi thành công.Vui lòng chờ admin liên hệ hỗ trợ.
                             </div>
@@ -106,9 +114,11 @@
                         <div class="de-box mb30">
                             <h4>Ha Noi Office</h4>
                             <address class="s1">
-                                <span><i class="id-color fa fa-map-marker fa-lg"></i>Thach Hoa, Thach That, Ha Noi</span>
+                                <span><i
+                                        class="id-color fa fa-map-marker fa-lg"></i>Thach Hoa, Thach That, Ha Noi</span>
                                 <span><i class="id-color fa fa-phone fa-lg"></i>1900 1080</span>
-                                <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">rentalyhanoi@gmail.com</a></span>
+                                <span><i class="id-color fa fa-envelope-o fa-lg"></i><a
+                                        href="mailto:contact@example.com">rentalyhanoi@gmail.com</a></span>
                             </address>
                         </div>
 
@@ -139,7 +149,6 @@
     <!-- footer close -->
 
 </div>
-
 
 
 <!-- Javascript Files
