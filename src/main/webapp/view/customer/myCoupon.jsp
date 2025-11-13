@@ -70,7 +70,7 @@
                                                         </c:choose>
                                                     </li>
                                                     <li>
-                                                        <span>Expires:</span>
+                                                        <span>Hết Hạn:</span>
                                                         <b class="text-danger">
                                                             <fmt:formatDate value="${promo.endDate}" pattern="dd/MM/yyyy"/>
                                                         </b>
