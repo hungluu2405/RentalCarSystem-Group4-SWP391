@@ -819,7 +819,7 @@
         const feedback = document.getElementById("feedbackText").value.trim();
 
         if (selectedRating === 0) {
-            alert("Please select a rating from 1 to 5 stars!");
+            alert("Vui lòng đánh giá từ 1 đến 5 sao");
             return;
         }
 
