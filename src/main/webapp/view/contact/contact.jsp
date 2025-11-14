@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
-
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!-- Mirrored from www.madebydesignesia.com/themes/rentaly/contact.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Sep 2025 11:28:19 GMT -->
 <head>
     <title>Rentaly - Multipurpose Vehicle Car Rental Website Template</title>
@@ -67,27 +66,27 @@
                         <div class="row">
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="Tên" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
-                                        <input type="text" name="email" id="email" class="form-control" placeholder="Your Email" required>
+                                        <input type="text" name="email" id="email" class="form-control" placeholder="Email" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb10">
                                     <div class="field-set">
-                                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Your Phone" required>
+                                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Số điện thoại" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="field-set mb20">
-                                <textarea name="message" id="message" class="form-control" placeholder="Your Message" required></textarea>
+                                <textarea name="message" id="message" class="form-control" placeholder="Liên hệ" required></textarea>
                             </div>
 
                             <div id='submit' class="mt20">
-                                <input type='submit' id='send_message' value='Send Message' class="btn-main">
+                                <input type='submit' id='send_message' value='Gửi liên hệ' class="btn-main">
                                 
 
                             </div>

@@ -14,10 +14,10 @@
                 <div class="card-body-icon">
                     <i class="fas fa-id-card"></i>
                 </div>
-                <div class="mr-5">${totalUsers} User Accounts</div>
+                <div class="mr-5">${totalUsers} Tài khoản người dùng</div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="${pageContext.request.contextPath}/accountDB">
-                <span class="float-left">View Details</span>
+                <span class="float-left">Xem chi tiết</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
@@ -30,10 +30,10 @@
                 <div class="card-body-icon">
                     <i class="fas fa-car"></i>
                 </div>
-                <div class="mr-5">${totalCars} Cars</div>
+                <div class="mr-5">${totalCars} Xe trong hệ thống</div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="${pageContext.request.contextPath}/carDB">
-                <span class="float-left">View Details</span>
+                <span class="float-left">Xem chi tiết</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
@@ -46,10 +46,10 @@
                 <div class="card-body-icon">
                     <i class="fas fa-fw fa-table"></i>
                 </div>
-                <div class="mr-5">${totalBookings} Bookings</div>
+                <div class="mr-5">${totalBookings} Đơn đặt</div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="${pageContext.request.contextPath}/bookingDB">
-                <span class="float-left">View Details</span>
+                <span class="float-left">Xem chi tiết</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>
@@ -62,10 +62,10 @@
                 <div class="card-body-icon">
                     <i class="fas fa-chart-bar"></i>
                 </div>
-                <div class="mr-5" >${totalReports} Report</div>
+                <div class="mr-5" >${totalReports} Đơn đã thanh toán</div>
             </div>
             <a class="card-footer text-white clearfix small z-1" href="${pageContext.request.contextPath}/reportDB">
-                <span class="float-left">View Details</span>
+                <span class="float-left">Xem chi tiết</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>
                 </span>

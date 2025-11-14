@@ -29,10 +29,10 @@
             <i class="fas fa-user-circle fa-fw" style="font-size: 20px;"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">Settings</a>
-            <a class="dropdown-item" href="#">Activity Log</a>
+            <a class="dropdown-item" href="${pageContext.request.contextPath}/promotionCreate">Tạo khuyến mãi nhanh</a>
+            <a class="dropdown-item" href="${pageContext.request.contextPath}/bookingDB">Xem đơn đặt</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Đăng xuất</a>
         </div>
     </li>
 </ul>

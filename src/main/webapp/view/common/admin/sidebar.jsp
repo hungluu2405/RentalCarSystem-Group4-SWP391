@@ -11,34 +11,34 @@
     <li class="nav-item <%= "account".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="accountDB">
             <i class="fas fa-id-card"></i>
-            <span>Account</span></a>
+            <span>Tài khoản người dùng</span></a>
     </li>
 
     <li class="nav-item <%= "car".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="CarDB">
             <i class="fas fa-car"></i>
-            <span>List car</span></a>
+            <span>Danh sách xe</span></a>
     </li>
     <li class="nav-item <%= "booking".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="bookingDB">
             <i class="fas fa-fw fa-table"></i>
-            <span>Booking history</span></a>
+            <span>Lịch sử đặt hàng</span></a>
     </li>
     <li class="nav-item <%= "report".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="reportDB">
             <i class="fas fa-chart-bar"></i>
-            <span>Report</span></a>
+            <span>Đơn đã thanh toán</span></a>
     </li>
 
     <li class="nav-item <%= "support".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="contactDB">
             <i class="fas fa-envelope fa-fw"></i>
-            <span>Contact Support</span></a>
+            <span>Liên hệ</span></a>
     </li>
 
     <li class="nav-item <%= "promotion".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="promotionDB">
             <i class="fas fa-pound-sign"></i>
-            <span>Promotion</span></a>
+            <span>Khuyến mãi</span></a>
     </li>
 </ul>

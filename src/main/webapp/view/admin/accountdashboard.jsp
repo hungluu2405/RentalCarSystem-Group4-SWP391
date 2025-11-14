@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -67,26 +68,26 @@
 <div class="card mb-3">
   <div class="card-header">
     <i class="fas fa-id-card"></i>
-    User Profile Table
+    Bảng thông tin người dùng
   </div>
     <div class="card-body">
 
         <form action="accountDB" method="get" class="form-inline mb-3">
             <label for="role" class="mr-2 font-weight-bold">
-                <i class="fas fa-filter mr-1"></i>Role:
+                <i class="fas fa-filter mr-1"></i>Vai trò:
             </label>
             <select name="role" id="role" class="form-control mr-2">
-                <option value="">All</option>
+                <option value="">Tất cả</option>
                 <option value="Admin" <c:if test="${selectedRole == 'Admin'}">selected</c:if>>Admin</option>
-                <option value="Customer" <c:if test="${selectedRole == 'Customer'}">selected</c:if>>Customer</option>
-                <option value="Car Owner" <c:if test="${selectedRole == 'Car Owner'}">selected</c:if>>Car Owner</option>
+                <option value="Customer" <c:if test="${selectedRole == 'Customer'}">selected</c:if>>Khách hàng</option>
+                <option value="Car Owner" <c:if test="${selectedRole == 'Car Owner'}">selected</c:if>>Chủ xe</option>
             </select>
 
             <button type="submit" class="btn btn-primary mr-2">
-                <i class="fas fa-search"></i> Search
+                <i class="fas fa-search"></i> Tìm kiếm
             </button>
             <a href="accountDB" class="btn btn-outline-secondary">
-                <i class="fas fa-undo"></i> Reset
+                <i class="fas fa-undo"></i> Tạo mới
             </a>
         </form>
 
@@ -97,16 +98,16 @@
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead class="thead-dark">
           <tr>
-            <th>Profile ID</th>
-            <th>Full Name</th>
-            <th>Role</th>
-            <th>Phone</th>
-            <th>Date of Birth</th>
-            <th>Gender</th>
-            <th>Driver License</th>
+            <th>ID người dùng</th>
+            <th>Tên đầy đủ</th>
+            <th>Vai trò</th>
+            <th>Số điện thoại</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Bằng lái</th>
             <th>Email</th>
-            <th>Created At</th>
-            <th>Action</th>
+            <th>Ngày tạo</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -127,13 +128,11 @@
               <td>${u.email}</td>
               <td>${u.createdAt}</td>
                 <td>
-
                     <a href="${pageContext.request.contextPath}/admin/manageUser?action=remove&userId=${u.userId}"
                        class="btn btn-sm btn-danger"
-                       onclick="return confirm('Are you sure you want to delete this user?');">
-                        <i class="fas fa-trash"></i> Remove
+                       onclick="return confirm('Bạn có chắc rằng muốn xóa tài khoản người dùng này?');">
+                        <i class="fas fa-trash"></i> Xóa
                     </a>
-
                 </td>
             </tr>
           </c:if>
