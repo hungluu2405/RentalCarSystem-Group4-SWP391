@@ -959,14 +959,6 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Hatchback</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Crossover</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
                         <span class="d-item-txt">Mui trần</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
@@ -975,31 +967,11 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Thể Thao</span>
+                        <span class="d-item-txt">Xe tải nhỏ</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
                         <span class="d-item-txt">Coupe</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Xe Bán Tải</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Station Wagon</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Xe Tải</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Minivans</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Xe Điện</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -1012,15 +984,7 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Hatchback</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Crossover</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Convertible</span>
+                        <span class="d-item-txt">Mui trần</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
@@ -1028,31 +992,11 @@
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
-                        <span class="d-item-txt">Sports Car</span>
+                        <span class="d-item-txt">Xe tải nhỏ</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>
                         <span class="d-item-txt">Coupe</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Minivan</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Station Wagon</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Truck</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Minivans</span>
-                        <span class="d-item-display">
-                                    <i class="d-item-dot"></i>
-                                </span>
-                        <span class="d-item-txt">Exotic Cars</span>
                         <span class="d-item-display">
                                     <i class="d-item-dot"></i>
                                 </span>

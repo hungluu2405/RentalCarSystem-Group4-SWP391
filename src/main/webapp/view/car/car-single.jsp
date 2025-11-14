@@ -9,6 +9,8 @@
 
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         .btn-main:disabled {
             opacity: 0.7;
@@ -841,7 +843,7 @@
 
                                         onclick="toggleFavourite(${car.carId}, this)">
 
-                                    <i class="${isFavourite ? 'fas' : 'far'} fa-star"></i>
+                                    <i class="${isFavourite ? 'fas' : 'far'} fas fa-star"></i>
 
                                 </button>
 
