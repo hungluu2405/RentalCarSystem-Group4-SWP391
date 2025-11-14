@@ -1,5 +1,6 @@
 package controller.car;
 
+import dao.implement.FavouriteCarDAO;
 import dao.implement.ReviewDAO;
 import dao.implement.UserProfileDAO;
 import jakarta.servlet.ServletException;
@@ -7,7 +8,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.CarViewModel;
+import model.User;
 import model.UserProfile;
 import service.car.CarSingleService;
 
@@ -19,6 +22,7 @@ import java.util.Map;
 public class CarSingleServlet extends HttpServlet {
 
     private final CarSingleService carService = new CarSingleService();
+    private final FavouriteCarDAO favouriteCarDAO = new FavouriteCarDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -58,7 +62,8 @@ public class CarSingleServlet extends HttpServlet {
             if (pageParam != null) {
                 try {
                     page = Integer.parseInt(pageParam);
-                } catch (NumberFormatException ignored) {}
+                } catch (NumberFormatException ignored) {
+                }
             }
             int offset = (page - 1) * pageSize;
 
@@ -68,8 +73,19 @@ public class CarSingleServlet extends HttpServlet {
             int totalReviews = reviewDAO.countReviewsByCarId(carId, ratingFilter);
             int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
 
-            // ✅ Gửi dữ liệu sang JSP
+            boolean isFavourite = false;
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                User user = (User) session.getAttribute("user");
+                if (user != null && user.getRoleId() == 3) { // Role 3 = Customer
+                    isFavourite = favouriteCarDAO.isFavourite(user.getUserId(), carId);
+                }
+            }
+
+
             request.setAttribute("car", car);
+
+            request.setAttribute("isFavourite", isFavourite);
             request.setAttribute("ownerProfile", ownerProfile);
             request.setAttribute("reviews", reviews);
             request.setAttribute("ratingFilter", ratingFilter);

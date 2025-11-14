@@ -1,15 +1,19 @@
 package controller.car;
 
 import dao.implement.CarDAO;
+import dao.implement.FavouriteCarDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.CarViewModel;
+import model.User;
 import service.car.CarListService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "CarListServlet", urlPatterns = {"/cars"})
@@ -17,7 +21,7 @@ public class CarListServlet extends HttpServlet {
 
     private final CarListService carListService = new CarListService();
     private final CarDAO carDAO = new CarDAO();
-
+    private final FavouriteCarDAO favouriteCarDAO = new FavouriteCarDAO();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -66,6 +70,21 @@ public class CarListServlet extends HttpServlet {
         );
 
         int totalPages = (int) Math.ceil((double) totalCars / pageSize);
+        List<Integer> favouriteCarIds = new ArrayList<>();
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+
+            User user = (User) session.getAttribute("user");
+
+            if (user != null && user.getRoleId() == 3) { // Role 3 = Customer
+
+                favouriteCarIds = favouriteCarDAO.getFavouriteCarIdsByUser(user.getUserId());
+
+            }
+
+        }
 
         // Gửi dữ liệu sang JSP
         request.setAttribute("brandList", carDAO.getAllBrands());
@@ -87,7 +106,7 @@ public class CarListServlet extends HttpServlet {
         request.setAttribute("pickupTime", pickupTime);
         request.setAttribute("endDate", endDate);
         request.setAttribute("dropoffTime", dropoffTime);
-
+        request.setAttribute("favouriteCarIds", favouriteCarIds);
         request.getRequestDispatcher("view/car/cars-list.jsp").forward(request, response);
     }
 }
