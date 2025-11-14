@@ -43,6 +43,12 @@
             </a>
         </li>
         <li>
+            <a href="${pageContext.request.contextPath}/customer/favourite/list"
+               class="${activePage == 'favourites' ? 'active' : ''}">
+                <i class="fa fa-star"></i> Xe Yêu Thích
+            </a>
+        </li>
+        <li>
             <a href="${pageContext.request.contextPath}/customer/license"
                class="${activePage == 'license' ? 'active' : ''}">
                 <i class="fa fa-id-card"></i> Xác Minh Bằng Lái Xe

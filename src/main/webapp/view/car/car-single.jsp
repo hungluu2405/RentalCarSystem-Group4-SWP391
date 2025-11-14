@@ -627,6 +627,83 @@
 
         }
 
+        .favourite-star-inline {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: white;
+
+            border: 2px solid #ffc107;
+
+            width: 46px;
+
+            height: 46px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            transition: all 0.3s;
+
+            margin-left: 15px;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        }
+
+
+
+        .favourite-star-inline:hover {
+
+            transform: scale(1.1);
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        }
+
+
+
+        .favourite-star-inline i {
+
+            font-size: 20px;
+
+            color: #ffc107;
+
+            transition: all 0.3s;
+
+        }
+
+
+
+        .favourite-star-inline.is-favourite i {
+
+            color: #ffc107;
+
+        }
+
+
+
+        .favourite-star-inline:not(.is-favourite) i {
+
+            color: #ddd;
+
+        }
+
+
+
+        .car-title-with-star {
+
+            display: flex;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+        }
     </style>
 
 </head>
@@ -748,7 +825,29 @@
 
                     <div class="col-lg-3">
 
-                        <h3 class="fw-bold mb-3">${car.model}</h3>
+                        <div class="car-title-with-star mb-3">
+
+                            <h3 class="fw-bold mb-0">${car.model}</h3>
+
+
+
+                            <%-- Nút Favourite Star (chỉ hiển thị cho Customer đã login) --%>
+
+                            <c:if test="${not empty sessionScope.user && sessionScope.user.roleId == 3}">
+
+                                <button class="favourite-star-inline ${isFavourite ? 'is-favourite' : ''}"
+
+                                        data-car-id="${car.carId}"
+
+                                        onclick="toggleFavourite(${car.carId}, this)">
+
+                                    <i class="${isFavourite ? 'fas' : 'far'} fa-star"></i>
+
+                                </button>
+
+                            </c:if>
+
+                        </div>
 
 
                         <!-- ✅ VND FORMAT -->
@@ -1263,7 +1362,10 @@
 
                         <h5>About Rentaly</h5>
 
-                        <p>Nơi chất lượng gặp gỡ sự tiết kiệm. Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần xe tốt mà còn phải thoải mái và hợp lý về chi phí. Vì thế, Rentaly luôn nỗ lực mang đến cho bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất, giúp bạn tận hưởng hành trình êm ái, an toàn và không lo về chi phí.</p>
+                        <p>Nơi chất lượng gặp gỡ sự tiết kiệm. Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần
+                            xe tốt mà còn phải thoải mái và hợp lý về chi phí. Vì thế, Rentaly luôn nỗ lực mang đến cho
+                            bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất, giúp bạn tận hưởng hành trình êm
+                            ái, an toàn và không lo về chi phí.</p>
 
                     </div>
 
@@ -2080,6 +2182,123 @@
         container.innerHTML = '<div class="promo-empty-state"><i class="fa fa-exclamation-triangle text-warning"></i><h4>Không thể tải mã khuyến mãi</h4><p>Vui lòng thử lại sau</p></div>';
 
     }
+    function toggleFavourite(carId, buttonElement) {
+
+        // Prevent default behavior
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+
+        // Check if user is logged in
+
+        const isLoggedIn = ${not empty sessionScope.user};
+
+        if (!isLoggedIn) {
+
+            alert('Vui lòng đăng nhập để sử dụng tính năng này');
+
+            window.location.href = '${pageContext.request.contextPath}/account/login';
+
+            return;
+
+        }
+
+
+
+        // Determine if car is currently favourite
+
+        const isFavourite = buttonElement.classList.contains('is-favourite');
+
+        const url = isFavourite
+
+            ? '${pageContext.request.contextPath}/customer/favourite/remove'
+
+            : '${pageContext.request.contextPath}/customer/favourite/add';
+
+
+
+        // Show loading state
+
+        buttonElement.disabled = true;
+
+
+
+        // Send request
+
+        fetch(url + '?carId=' + carId, {
+
+            method: 'POST',
+
+            headers: {
+
+                'Content-Type': 'application/json'
+
+            }
+
+        })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.success) {
+
+                    // Toggle button state
+
+                    buttonElement.classList.toggle('is-favourite');
+
+
+
+                    // Toggle icon (far = empty star, fas = filled star)
+
+                    const icon = buttonElement.querySelector('i');
+
+                    if (icon.classList.contains('far')) {
+
+                        icon.classList.remove('far');
+
+                        icon.classList.add('fas');
+
+                    } else {
+
+                        icon.classList.remove('fas');
+
+                        icon.classList.add('far');
+
+                    }
+
+
+
+                    // Show success message (optional)
+
+                    // console.log(data.message);
+
+                } else {
+
+                    alert(data.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error('Error:', error);
+
+                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+
+            })
+
+            .finally(() => {
+
+                buttonElement.disabled = false;
+
+            });
+
+    }
 
 
     // ============================================
@@ -2315,6 +2534,7 @@
     });
 
     </c:if>
+
 
 </script>
 

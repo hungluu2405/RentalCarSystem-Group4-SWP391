@@ -21,6 +21,101 @@
     <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"
           type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+
+        /* Favourite Star Button */
+
+        .d-img {
+
+            position: relative;
+
+        }
+
+
+
+        .favourite-star-btn {
+
+            position: absolute;
+
+            top: 15px;
+
+            right: 15px;
+
+            background: white;
+
+            border: none;
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+            transition: all 0.3s;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+            z-index: 10;
+
+        }
+
+
+
+        .favourite-star-btn:hover {
+
+            transform: scale(1.1);
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        }
+
+
+
+        .favourite-star-btn i {
+
+            font-size: 18px;
+
+            color: #ffc107;
+
+            transition: all 0.3s;
+
+        }
+
+
+
+        .favourite-star-btn.is-favourite i {
+
+            color: #ffc107;
+
+        }
+
+
+
+        .favourite-star-btn:not(.is-favourite) i {
+
+            color: #ddd;
+
+        }
+
+
+
+        /* Khi user chưa login, ẩn nút star */
+
+        .favourite-star-btn.hidden {
+
+            display: none;
+
+        }
+
+    </style>
 </head>
 
 <body>
@@ -392,6 +487,21 @@
                                                          alt="No Image">
                                                 </c:otherwise>
                                             </c:choose>
+                                                <%-- Nút Favourite Star (chỉ hiển thị cho Customer đã login) --%>
+
+                                            <c:if test="${not empty sessionScope.user && sessionScope.user.roleId == 3}">
+
+                                                <button class="favourite-star-btn ${favouriteCarIds.contains(car.carId) ? 'is-favourite' : ''}"
+
+                                                        data-car-id="${car.carId}"
+
+                                                        onclick="toggleFavourite(${car.carId}, this)">
+
+                                                    <i class="${favouriteCarIds.contains(car.carId) ? 'fas' : 'far'} fa-star"></i>
+
+                                                </button>
+
+                                            </c:if>
                                         </div>
 
                                         <div class="d-info">
@@ -621,6 +731,134 @@
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+<script>
 
+    /**
+
+     * Toggle Favourite Star
+
+     * Thêm/xóa xe khỏi danh sách yêu thích
+
+     */
+
+    function toggleFavourite(carId, buttonElement) {
+
+        // Prevent default behavior
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+
+        // Check if user is logged in
+
+        const isLoggedIn = ${not empty sessionScope.user};
+
+        if (!isLoggedIn) {
+
+            alert('Vui lòng đăng nhập để sử dụng tính năng này');
+
+            window.location.href = '${pageContext.request.contextPath}/account/login';
+
+            return;
+
+        }
+
+
+
+        // Determine if car is currently favourite
+
+        const isFavourite = buttonElement.classList.contains('is-favourite');
+
+        const url = isFavourite
+
+            ? '${pageContext.request.contextPath}/customer/favourite/remove'
+
+            : '${pageContext.request.contextPath}/customer/favourite/add';
+
+
+
+        // Show loading state
+
+        buttonElement.disabled = true;
+
+
+
+        // Send request
+
+        fetch(url + '?carId=' + carId, {
+
+            method: 'POST',
+
+            headers: {
+
+                'Content-Type': 'application/json'
+
+            }
+
+        })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.success) {
+
+                    // Toggle button state
+
+                    buttonElement.classList.toggle('is-favourite');
+
+
+
+                    // Toggle icon (far = empty star, fas = filled star)
+
+                    const icon = buttonElement.querySelector('i');
+
+                    if (icon.classList.contains('far')) {
+
+                        icon.classList.remove('far');
+
+                        icon.classList.add('fas');
+
+                    } else {
+
+                        icon.classList.remove('fas');
+
+                        icon.classList.add('far');
+
+                    }
+
+
+
+                    // Show success message (optional)
+
+                    // console.log(data.message);
+
+                } else {
+
+                    alert(data.message || 'Có lỗi xảy ra. Vui lòng thử lại.');
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error('Error:', error);
+
+                alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+
+            })
+
+            .finally(() => {
+
+                buttonElement.disabled = false;
+
+            });
+
+    }
+
+</script>
 </body>
 </html>
