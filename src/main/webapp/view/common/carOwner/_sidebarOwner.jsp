@@ -59,16 +59,6 @@
             </a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/owner/myBooking" class="${activePage == 'myBooking' ? 'active' : ''}">
-                <i class="fa fa-history"></i> Chuyến của tôi
-            </a>
-        </li>
-        <li>
-            <a href="${pageContext.request.contextPath}/owner/myCoupon" class="${activePage == 'myCoupon' ? 'active' : ''}">
-                <i class="fa fa-tag"></i> Quà tặng
-            </a>
-        </li>
-        <li>
             <a href="${pageContext.request.contextPath}/owner/license" class="${activePage == 'license' ? 'active' : ''}">
                 <i class="fa fa-id-card"></i> Xác minh bằng lái xe
             </a>

@@ -209,9 +209,9 @@
                                                    readonly>
 
                                             <small class="text-muted">
-                                                To update your license, please visit
+                                                Để xác minh bằng lái xe, vui lòng truy cập
                                                 <a href="${pageContext.request.contextPath}/owner/license" class="text-primary">
-                                                    License Management
+                                                    Xác minh bằng lái xe
                                                 </a>.
                                             </small>
                                         </div>
@@ -219,16 +219,16 @@
                                         <div class="col-lg-6 mb20">
                                             <h5>Giới tính</h5>
                                             <select name="gender" class="form-control">
-                                                <option value="">-- Select Gender --</option>
-                                                <option value="Male" ${sessionScope.user.userProfile.gender == 'Male' ? 'selected' : ''}>Male</option>
-                                                <option value="Female" ${sessionScope.user.userProfile.gender == 'Female' ? 'selected' : ''}>Female</option>
-                                                <option value="Other" ${sessionScope.user.userProfile.gender == 'Other' ? 'selected' : ''}>Other</option>
+                                                <option value="">-- Chọn giới tính --</option>
+                                                <option value="Male" ${sessionScope.user.userProfile.gender == 'Male' ? 'selected' : ''}>Nam</option>
+                                                <option value="Female" ${sessionScope.user.userProfile.gender == 'Female' ? 'selected' : ''}>Nữ</option>
+                                                <option value="Other" ${sessionScope.user.userProfile.gender == 'Other' ? 'selected' : ''}>Khác</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="text-center mt-4">
-                                        <input type="submit" class="btn-main" value="Update Profile">
+                                        <input type="submit" class="btn-main" value="Cập nhật tài khoản">
                                     </div>
                                 </form>
                             </div>
