@@ -1,255 +1,624 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setLocale value="vi_VN"/>
+
 <!DOCTYPE html>
-<html lang="zxx">
 
+<html lang="en">
 
-<!-- Mirrored from www.madebydesignesia.com/themes/rentaly/account-favorite.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Sep 2025 10:55:51 GMT -->
 <head>
+
     <jsp:include page="../common/customer/_head.jsp"/>
+
+    <title>Rentaly - Xe Yêu Thích</title>
+
+
+
+    <style>
+
+        /* Style cho nút remove favourite */
+
+        .remove-favourite-btn {
+
+            position: absolute;
+
+            top: 10px;
+
+            right: 10px;
+
+            background: white;
+
+            border: none;
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+            transition: all 0.3s;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+            z-index: 10;
+
+        }
+
+
+
+        .remove-favourite-btn:hover {
+
+            transform: scale(1.1);
+
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        }
+
+
+
+        .remove-favourite-btn i {
+
+            font-size: 16px;
+
+            color: #ffc107;
+
+        }
+
+
+
+        .de-item-list {
+
+            position: relative;
+
+        }
+
+
+
+        .de-item-list .d-img {
+
+            position: relative;
+
+        }
+
+
+
+        /* Empty state styling */
+
+        .empty-state-container {
+
+            text-align: center;
+
+            padding: 80px 20px;
+
+        }
+
+
+
+        .empty-state-container i {
+
+            font-size: 80px;
+
+            color: #ddd;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        .empty-state-container h3 {
+
+            font-size: 24px;
+
+            font-weight: 600;
+
+            color: #666;
+
+            margin-bottom: 15px;
+
+        }
+
+
+
+        .empty-state-container p {
+
+            color: #999;
+
+            margin-bottom: 30px;
+
+            font-size: 16px;
+
+        }
+
+    </style>
+
 </head>
 
+
+
 <body>
+
 <div id="wrapper">
 
+
+
     <!-- page preloader begin -->
+
     <div id="de-preloader"></div>
+
+    <!-- page preloader close -->
+
+
 
     <jsp:include page="../common/customer/_header.jsp"/>
 
+
+
     <div class="no-bottom no-top zebra" id="content">
+
         <div id="top"></div>
 
+
+
         <!-- section begin -->
+
         <section id="subheader" class="jarallax text-light">
-            <img src="images/background/14.jpg" class="jarallax-img" alt="">
+
+            <img src="${pageContext.request.contextPath}/images/background/14.jpg" class="jarallax-img" alt="">
+
             <div class="center-y relative text-center">
+
                 <div class="container">
+
                     <div class="row">
+
                         <div class="col-md-12 text-center">
-                            <h1>My Favorite Cars</h1>
+
+                            <h1>Xe Yêu Thích Của Tôi</h1>
+
                         </div>
+
                         <div class="clearfix"></div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
         <!-- section close -->
 
+
+
         <section id="section-settings" class="bg-gray-100">
+
             <div class="container">
+
                 <div class="row">
+
+                    <!-- Sidebar -->
+
                     <div class="col-lg-3 mb30">
-                        <div class="card padding30 rounded-5">
-                            <div class="profile_avatar">
-                                <div class="profile_img">
-                                    <img src="images/profile/1.jpg" alt="">
-                                </div>
-                                <div class="profile_name">
-                                    <h4>
-                                        Monica Lucas
-                                        <span class="profile_username text-gray">monica@rentaly.com</span>
-                                    </h4>
-                                </div>
-                            </div>
-                            <div class="spacer-20"></div>
-                            <ul class="menu-col">
-                                <li><a href="account-dashboard.html"><i class="fa fa-home"></i>Dashboard</a></li>
-                                <li><a href="account-profile.html"><i class="fa fa-user"></i>My Profile</a></li>
-                                <li><a href="account-booking.html"><i class="fa fa-calendar"></i>My Orders</a></li>
-                                <li><a href="account-favorite.html" class="active"><i class="fa fa-calendar"></i>My Favorite Cars</a></li>
-                                <li><a href="login.html"><i class="fa fa-sign-out"></i>Sign Out</a></li>
-                            </ul>
-                        </div>
+
+                        <jsp:include page="../common/customer/_sidebar.jsp">
+
+                            <jsp:param name="activePage" value="favourites"/>
+
+                        </jsp:include>
+
                     </div>
+
+
+
+                    <!-- Main Content -->
 
                     <div class="col-lg-9">
-                        <div class="de-item-list no-border mb30">
-                            <div class="d-img">
-                                <img src="images/cars/jeep-renegade.jpg" class="img-fluid" alt="">
-                            </div>
-                            <div class="d-info">
-                                <div class="d-text">
-                                    <h4>Jeep Renegade</h4>
-                                    <div class="d-atr-group">
-                                        <ul class="d-atr">
-                                            <li><span>Seats:</span>4</li>
-                                            <li><span>Luggage:</span>2</li>
-                                            <li><span>Doors:</span>4</li>
-                                            <li><span>Fuel:</span>Petrol</li>
-                                            <li><span>Horsepower:</span>500</li>
-                                            <li><span>Engine:</span>3000</li>
-                                            <li><span>Drive:</span>4x4</li>
-                                            <li><span>Type:</span>Hatchback</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-price">
-                                Daily rate from <span>$265</span>
-                                <a class="btn-main" href="car-single.html">Rent Now</a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
 
-                        <div class="de-item-list no-border mb30">
-                            <div class="d-img">
-                                <img src="images/cars/bmw-m5.jpg" class="img-fluid" alt="">
-                            </div>
-                            <div class="d-info">
-                                <div class="d-text">
-                                    <h4>BMW M2</h4>
-                                    <div class="d-atr-group">
-                                        <ul class="d-atr">
-                                            <li><span>Seats:</span>4</li>
-                                            <li><span>Luggage:</span>2</li>
-                                            <li><span>Doors:</span>4</li>
-                                            <li><span>Fuel:</span>Petrol</li>
-                                            <li><span>Horsepower:</span>500</li>
-                                            <li><span>Engine:</span>3000</li>
-                                            <li><span>Drive:</span>4x4</li>
-                                            <li><span>Type:</span>Hatchback</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-price">
-                                Daily rate from <span>$244</span>
-                                <a class="btn-main" href="car-single.html">Rent Now</a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
+                        <c:choose>
 
-                        <div class="de-item-list no-border mb30">
-                            <div class="d-img">
-                                <img src="images/cars/ferrari-enzo.jpg" class="img-fluid" alt="">
-                            </div>
-                            <div class="d-info">
-                                <div class="d-text">
-                                    <h4>Ferarri Enzo</h4>
-                                    <div class="d-atr-group">
-                                        <ul class="d-atr">
-                                            <li><span>Seats:</span>4</li>
-                                            <li><span>Luggage:</span>2</li>
-                                            <li><span>Doors:</span>4</li>
-                                            <li><span>Fuel:</span>Petrol</li>
-                                            <li><span>Horsepower:</span>500</li>
-                                            <li><span>Engine:</span>3000</li>
-                                            <li><span>Drive:</span>4x4</li>
-                                            <li><span>Type:</span>Hatchback</li>
-                                        </ul>
+                            <%-- Trường hợp có xe yêu thích --%>
+
+                            <c:when test="${not empty favouriteCars}">
+
+                                <c:forEach var="car" items="${favouriteCars}">
+
+                                    <div class="de-item-list no-border mb30">
+
+                                        <div class="d-img">
+
+                                                <%-- Hình ảnh xe --%>
+
+                                            <c:set var="imageUrl" value="${carImagesMap[car.carId]}"/>
+
+                                            <c:if test="${empty imageUrl}">
+
+                                                <c:set var="imageUrl" value="/images/cars/default-car.jpg"/>
+
+                                            </c:if>
+
+                                            <img src="${pageContext.request.contextPath}${imageUrl}"
+
+                                                 class="img-fluid" alt="${car.brand} ${car.model}">
+
+
+
+                                                <%-- Nút xóa yêu thích --%>
+
+                                            <button class="remove-favourite-btn"
+
+                                                    data-car-id="${car.carId}"
+
+                                                    onclick="removeFavourite(${car.carId})"
+
+                                                    title="Xóa khỏi yêu thích">
+
+                                                <i class="fas fa-star"></i>
+
+                                            </button>
+
+                                        </div>
+
+
+
+                                        <div class="d-info">
+
+                                            <div class="d-text">
+
+                                                <h4>${car.brand} ${car.model}</h4>
+
+                                                <div class="d-atr-group">
+
+                                                    <ul class="d-atr">
+
+                                                        <li><span>Số chỗ:</span>${car.capacity}</li>
+
+                                                        <li><span>Truyền động:</span>${car.transmission}</li>
+
+                                                        <li><span>Nhiên liệu:</span>${car.fuelType}</li>
+
+                                                        <li><span>Năm SX:</span>${car.year}</li>
+
+                                                        <li><span>Loại xe:</span>${car.typeName != null ? car.typeName : 'N/A'}</li>
+
+                                                        <li><span>Vị trí:</span>${car.location}</li>
+
+                                                        <li>
+
+                                                            <span>Trạng thái:</span>
+
+                                                            <c:choose>
+
+                                                                <c:when test="${car.availability}">
+
+                                                                    <span class="text-success">Sẵn sàng</span>
+
+                                                                </c:when>
+
+                                                                <c:otherwise>
+
+                                                                    <span class="text-danger">Không khả dụng</span>
+
+                                                                </c:otherwise>
+
+                                                            </c:choose>
+
+                                                        </li>
+
+                                                    </ul>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <div class="d-price">
+
+                                            Giá thuê theo ngày
+
+                                            <span>
+
+                                                <fmt:formatNumber value="${car.pricePerDay}"
+
+                                                                  type="number"
+
+                                                                  groupingUsed="true"
+
+                                                                  minFractionDigits="0"
+
+                                                                  maxFractionDigits="0"/> ₫
+
+                                            </span>
+
+                                            <a class="btn-main" href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
+
+                                                Xem Chi Tiết
+
+                                            </a>
+
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
                                     </div>
+
+                                </c:forEach>
+
+                            </c:when>
+
+
+
+                            <%-- Trường hợp chưa có xe yêu thích --%>
+
+                            <c:otherwise>
+
+                                <div class="card padding40 rounded-5">
+
+                                    <div class="empty-state-container">
+
+                                        <i class="far fa-star"></i>
+
+                                        <h3>Chưa Có Xe Yêu Thích</h3>
+
+                                        <p>Bạn chưa đánh dấu xe nào là yêu thích.<br>
+
+                                            Hãy khám phá và chọn những chiếc xe ưng ý nhất!</p>
+
+                                        <a href="${pageContext.request.contextPath}/cars" class="btn-main">
+
+                                            <i class="fa fa-car me-2"></i> Khám Phá Xe
+
+                                        </a>
+
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="d-price">
-                                Daily rate from <span>$167</span>
-                                <a class="btn-main" href="car-single.html">Rent Now</a>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
+
+                            </c:otherwise>
+
+                        </c:choose>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
-
     </div>
+
     <!-- content close -->
+
+
 
     <a href="#" id="back-to-top"></a>
 
+
+
     <!-- footer begin -->
+
     <footer class="text-light">
+
         <div class="container">
+
             <div class="row g-custom-x">
+
                 <div class="col-lg-3">
+
                     <div class="widget">
+
                         <h5>About Rentaly</h5>
-                        <p>Where quality meets affordability. We understand the importance of a smooth and enjoyable journey without the burden of excessive costs. That's why we have meticulously crafted our offerings to provide you with top-notch vehicles at minimum expense.</p>
+
+                        <p>Nơi chất lượng gặp gỡ sự tiết kiệm. Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần xe tốt mà còn phải thoải mái và hợp lý về chi phí. Vì thế, Rentaly luôn nỗ lực mang đến cho bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất, giúp bạn tận hưởng hành trình êm ái, an toàn và không lo về chi phí.</p>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="col-lg-3">
+
                     <div class="widget">
+
                         <h5>Contact Info</h5>
+
                         <address class="s1">
-                            <span><i class="id-color fa fa-map-marker fa-lg"></i>08 W 36th St, New York, NY 10001</span>
-                            <span><i class="id-color fa fa-phone fa-lg"></i>+1 333 9296</span>
+
+                            <span><i class="id-color fa fa-map-marker fa-lg"></i>VR9V+HGF, ĐT427B, Hòa Bình, Thường Tín, Hà Nội, Việt Nam</span>
+
+                            <span><i class="id-color fa fa-phone fa-lg"></i>+84 33 5821918</span>
+
                             <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
+
                             <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
+
                         </address>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="col-lg-3">
+
                     <h5>Quick Links</h5>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="widget">
-                                <ul>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="#">Blog</a></li>
-                                    <li><a href="#">Careers</a></li>
-                                    <li><a href="#">News</a></li>
-                                    <li><a href="#">Partners</a></li>
-                                </ul>
-                            </div>
-                        </div>
+
+                    <div class="widget">
+
+                        <ul>
+
+                            <li><a href="#">About</a></li>
+
+                            <li><a href="#">Blog</a></li>
+
+                            <li><a href="#">Careers</a></li>
+
+                            <li><a href="#">News</a></li>
+
+                            <li><a href="#">Partners</a></li>
+
+                        </ul>
+
                     </div>
+
                 </div>
 
+
+
                 <div class="col-lg-3">
+
                     <div class="widget">
+
                         <h5>Social Network</h5>
+
                         <div class="social-icons">
+
                             <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
+
                             <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
+
                             <a href="#"><i class="fa fa-linkedin fa-lg"></i></a>
+
                             <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
+
                             <a href="#"><i class="fa fa-rss fa-lg"></i></a>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
+
+
         <div class="subfooter">
+
             <div class="container">
+
                 <div class="row">
+
                     <div class="col-md-12">
+
                         <div class="de-flex">
+
                             <div class="de-flex-col">
-                                <a href="index.html">
-                                    Copyright 2025 - Rentaly by Designesia
-                                </a>
+
+                                <a href="#">© 2025 Rentaly by Designesia</a>
+
                             </div>
+
                             <ul class="menu-simple">
+
                                 <li><a href="#">Terms &amp; Conditions</a></li>
+
                                 <li><a href="#">Privacy Policy</a></li>
+
                             </ul>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </footer>
+
     <!-- footer close -->
 
 </div>
 
-<div id="selector">
-    <div id="demo-rtl" class="sc-opt">
-        <div class="sc-icon">RTL</div><span class="sc-val">Click to Enable</span>
-    </div>
-</div>
-<div id="purchase-now">
-    <a href="https://themeforest.net/cart/configure_before_adding/44940477" target="_blank"><span>$</span>25</a>
-    <div class="pn-hover">Buy Now</div>
-</div>
-<!-- Javascript Files
-================================================== -->
-<script src="js/plugins.js"></script>
-<script src="js/designesia.js"></script>
 
+
+<!-- Javascript Files -->
+
+<script src="${pageContext.request.contextPath}/js/plugins.js"></script>
+
+<script src="${pageContext.request.contextPath}/js/designesia.js"></script>
+
+
+
+<script>
+
+    /**
+
+     * Xóa xe khỏi danh sách yêu thích
+
+     */
+
+    function removeFavourite(carId) {
+
+        if (!confirm('Bạn có chắc muốn xóa xe này khỏi danh sách yêu thích?')) {
+
+            return;
+
+        }
+
+
+
+        fetch('${pageContext.request.contextPath}/customer/favourite/remove?carId=' + carId, {
+
+            method: 'POST',
+
+            headers: {
+
+                'Content-Type': 'application/json'
+
+            }
+
+        })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.success) {
+
+                    // Reload trang để cập nhật danh sách
+
+                    location.reload();
+
+                } else {
+
+                    alert(data.message || 'Không thể xóa xe khỏi danh sách yêu thích');
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error('Error:', error);
+
+                alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+            });
+    }
+</script>
 </body>
-
-
-<!-- Mirrored from www.madebydesignesia.com/themes/rentaly/account-favorite.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Sep 2025 10:55:51 GMT -->
 </html>

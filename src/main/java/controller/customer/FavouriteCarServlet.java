@@ -336,7 +336,7 @@ public class FavouriteCarServlet extends HttpServlet {
 
         for (Car car : favouriteCars) {
 
-            String imageUrl = carImageDAO.getImagesByCarId(car.getCarId()).toString();
+            String imageUrl = carImageDAO.getFirstImageUrlByCarId(car.getCarId());
 
             if (imageUrl != null && !imageUrl.isEmpty()) {
 

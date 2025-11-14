@@ -25,4 +25,19 @@ public class CarImageDAO extends DBContext {
         }
         return list;
     }
+
+    public String getFirstImageUrlByCarId(int carId) {
+        String sql = "SELECT TOP 1 IMAGE_URL FROM CAR_IMAGE WHERE CAR_ID = ? ORDER BY IMAGE_ID";
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("IMAGE_URL");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
