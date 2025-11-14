@@ -84,7 +84,7 @@
                                         <div class="mt-3">
                                             <label for="carImage" class="form-label fw-bold">Tải ảnh xe</label>
                                             <input type="file" id="carImage" name="carImage" accept="image/*"
-                                                   class="form-control" onchange="previewFile(this)">
+                                                   class="form-control" required onchange="previewFile(this)">
                                             <input type="hidden" name="tempImagePath" value="${tempImagePath}">
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                     <!-- BRAND -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-industry text-primary"></i>Tên hãng xe</label>
-                                        <input type="text" name="brand" class="form-control" placeholder="Nhập tên hãng xe..." value="${brand}" required>
+                                        <input type="text" name="brand" class="form-control" required placeholder="Nhập tên hãng xe..." value="${brand}" >
                                     </div>
 
                                     <!-- TRANSMISSION -->
@@ -111,7 +111,7 @@
                                     <!-- MODEL -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-car text-primary"></i>Tên mẫu </label>
-                                        <input type="text" name="model" class="form-control" placeholder="Nhập tên mẫu xe..." value="${model}" required>
+                                        <input type="text" name="model" class="form-control" required placeholder="Nhập tên mẫu xe..." value="${model}" >
                                     </div>
 
                                     <!-- FUEL TYPE -->
@@ -184,13 +184,13 @@
                                     <!-- LOCATION -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Địa chỉ nhận trả xe</label>
-                                        <input type="text" name="location" class="form-control" placeholder="Nhập địa chỉ..." value="${location}">
+                                        <input type="text" name="location" class="form-control" placeholder="Nhập địa chỉ..." value="${location}" required>
                                     </div>
 
                                     <!-- DESCRIPTION -->
                                     <div class="col-12">
                                         <label class="form-label"><i class="fa fa-align-left text-primary"></i> Mô tả</label>
-                                        <textarea name="description" class="form-control" rows="4"
+                                        <textarea name="description" class="form-control" rows="4" required
                                                   placeholder="Nhập mô tả của xe...">${description}</textarea>
 
                                     </div>

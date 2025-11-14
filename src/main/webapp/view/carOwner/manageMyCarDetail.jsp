@@ -258,7 +258,7 @@
                                     <!-- Description -->
                                     <div class="col-md-12 mb-3">
                                         <label>Mô tả</label>
-                                        <textarea name="description" rows="4" class="form-control">${car.description}</textarea>
+                                        <textarea name="description" rows="4" class="form-control" required >${car.description}</textarea>
                                     </div>
                                 </div>
 

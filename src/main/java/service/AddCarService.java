@@ -17,6 +17,11 @@ public class AddCarService {
         if (year > currentYear) {
             return "Năm sản xuất không được lớn hơn năm hiện tại!";
         }
+
+        if (currentYear - year > 20) {
+            return "Xe của bạn không được nhỏ hơn quá 20 năm tuổi.";
+        }
+
         if (pricePerDay == null || pricePerDay.compareTo(BigDecimal.ZERO) <= 0) {
             return "Giá thuê mỗi ngày phải lớn hơn 0!";
         }
