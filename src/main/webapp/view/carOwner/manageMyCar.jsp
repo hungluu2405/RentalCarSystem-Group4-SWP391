@@ -229,13 +229,42 @@
                         </div>
 
                         <div class="dashboard-content">
-                            <h3 class="fw-bold mb-3 text-secondary">
-                                <i class="fa fa-car"></i> Gara của tôi
-                            </h3>
+<%--                            <h3 class="fw-bold mb-3 text-secondary">--%>
+<%--                                <i class="fa fa-car"></i> Gara của tôi--%>
+<%--                            </h3>--%>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                <!-- Tiêu đề -->
+                                <h3 class="fw-bold text-secondary m-0">
+                                    <i class="fa fa-car"></i> Gara của tôi
+                                </h3>
+
+                                <!-- Bộ lọc -->
+                                <div class="btn-group">
+                                    <a href="${pageContext.request.contextPath}/owner/manageMyCar"
+                                       class="btn btn-outline-secondary ${availabilityFilter == null ? 'active' : ''}">
+                                        Tất cả
+                                    </a>
+
+                                    <a href="${pageContext.request.contextPath}/owner/manageMyCar?availability=1"
+                                       class="btn btn-outline-success ${availabilityFilter == 1 ? 'active' : ''}">
+                                        Sẵn sàng
+                                    </a>
+
+                                    <a href="${pageContext.request.contextPath}/owner/manageMyCar?availability=0"
+                                       class="btn btn-outline-danger ${availabilityFilter == 0 ? 'active' : ''}">
+                                        Không sẵn sàng
+                                    </a>
+                                </div>
+                            </div>
+
 
                             <c:if test="${empty carList}">
                                 <p>Bạn chưa có xe nào trong gara.</p>
                             </c:if>
+
+                            <c:if test="${not empty carList}">
 
                             <c:forEach var="car" items="${carList}">
                                 <div class="car-card">
@@ -264,7 +293,7 @@
                                     </div>
 
                                     <div class="car-price">
-                                        <p>Daily rate from</p>
+                                        <p>Giá trên ngày</p>
                                         <h4><fmt:formatNumber value="${car.pricePerDay}"
                                                               type="number" groupingUsed="true"
                                                               minFractionDigits="0" maxFractionDigits="0"/> ₫</h4>
@@ -273,15 +302,28 @@
                                     </div>
                                 </div>
                             </c:forEach>
+                            </c:if>
 
-                            <!-- ⭐ ADD: Pagination -->
+
+    <!-- ⭐ ADD: Pagination -->
                             <c:if test="${totalPages > 1}">
+
+                                <!-- === THAY ĐỔI: giữ availability khi chuyển trang === -->
+                                <c:choose>
+                                    <c:when test="${availabilityFilter != null}">
+                                        <c:set var="filterParam" value="&availability=${availabilityFilter}" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:set var="filterParam" value="" />
+                                    </c:otherwise>
+                                </c:choose>
+
                                 <ul class="pagination justify-content-center mt-4">
 
                                     <!-- Previous -->
                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                                         <a class="page-link"
-                                           href="${pageContext.request.contextPath}/owner/manageMyCar?page=${currentPage - 1}">
+                                           href="${pageContext.request.contextPath}/owner/manageMyCar?page=${currentPage - 1}${filterParam}">
                                             «
                                         </a>
                                     </li>
@@ -290,7 +332,7 @@
                                     <c:forEach begin="1" end="${totalPages}" var="i">
                                         <li class="page-item ${currentPage == i ? 'active' : ''}">
                                             <a class="page-link"
-                                               href="${pageContext.request.contextPath}/owner/manageMyCar?page=${i}">
+                                               href="${pageContext.request.contextPath}/owner/manageMyCar?page=${i}${filterParam}">
                                                     ${i}
                                             </a>
                                         </li>
@@ -299,10 +341,11 @@
                                     <!-- Next -->
                                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                                         <a class="page-link"
-                                           href="${pageContext.request.contextPath}/owner/manageMyCar?page=${currentPage + 1}">
+                                           href="${pageContext.request.contextPath}/owner/manageMyCar?page=${currentPage + 1}${filterParam}">
                                             »
                                         </a>
                                     </li>
+
                                 </ul>
                             </c:if>
 

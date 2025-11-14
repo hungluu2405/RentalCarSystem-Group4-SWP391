@@ -204,10 +204,7 @@
                                     <!-- Price -->
                                     <div class="col-md-3 mb-3">
                                         <label>Giá thuê trên ngày</label>
-                                        <fmt:formatNumber value="${car.pricePerDay}" type="number" maxFractionDigits="0" var="formattedPrice"/>
-<%--                                        <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" required>--%>
-                                        <input type="number" name="pricePerDay" value="${formattedPrice}" class="form-control" required>
-
+                                        <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" required>
                                     </div>
 
                                     <!-- Location -->

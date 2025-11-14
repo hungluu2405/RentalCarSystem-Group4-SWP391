@@ -941,6 +941,102 @@ public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int 
 
     return list;
 }
+    /* === LẤY DANH SÁCH XE THEO OWNER + PAGING + FILTER AVAILABILITY === */
+    public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int pageSize, Integer availability) {
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT c.CAR_ID, c.MODEL, c.BRAND, c.CAPACITY, c.TRANSMISSION, c.FUEL_TYPE, " +
+                        "c.PRICE_PER_DAY, c.AVAILABILITY, c.LOCATION, " +
+                        "(SELECT TOP 1 IMAGE_URL FROM CAR_IMAGE WHERE CAR_ID = c.CAR_ID) AS IMAGE_URL, " +
+                        "t.NAME AS CAR_TYPE_NAME " +
+                        "FROM CAR c " +
+                        "JOIN CAR_TYPE t ON c.TYPE_ID = t.TYPE_ID " +
+                        "WHERE c.USER_ID = ? "
+        );
+        if (availability != null) {
+            sql.append(" AND c.AVAILABILITY = ? ");
+        }
+        sql.append(" ORDER BY c.CAR_ID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        List<CarViewModel> list = new ArrayList<>();
+
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+            ps.setInt(idx++, ownerId);
+
+            if (availability != null) {
+                ps.setBoolean(idx++, availability == 1);
+            }
+
+            ps.setInt(idx++, offset);
+            ps.setInt(idx++, pageSize);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CarViewModel car = new CarViewModel();
+                car.setCarId(rs.getInt("CAR_ID"));
+                car.setModel(rs.getString("MODEL"));
+                car.setBrand(rs.getString("BRAND"));
+                car.setCapacity(rs.getInt("CAPACITY"));
+                car.setTransmission(rs.getString("TRANSMISSION"));
+                car.setFuelType(rs.getString("FUEL_TYPE"));
+                car.setPricePerDay(rs.getBigDecimal("PRICE_PER_DAY"));
+                car.setAvailability(rs.getInt("AVAILABILITY"));
+                car.setLocation(rs.getString("LOCATION"));
+                car.setImageUrl(rs.getString("IMAGE_URL"));
+                car.setCarTypeName(rs.getString("CAR_TYPE_NAME"));
+                list.add(car);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
+    /* === COUNT XE THEO OWNER + FILTER AVAILABILITY === */
+    public int countCarsByOwner(int ownerId, Integer availability) {
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT COUNT(*) FROM CAR WHERE USER_ID = ? "
+        );
+
+        if (availability != null) {
+            sql.append(" AND AVAILABILITY = ? ");
+        }
+
+        try (Connection con = getConnection();
+             PreparedStatement ps = con.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+
+            ps.setInt(idx++, ownerId);
+
+            if (availability != null) {
+                ps.setBoolean(idx++, availability == 1);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("message" +  e.getMessage()) ;
+        }
+
+        return 0;
+    }
+
+
+
 
     public CarViewModel getCarSingleById(int carId) {
 

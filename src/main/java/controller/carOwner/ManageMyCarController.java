@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/owner/manageMyCar")
@@ -42,12 +43,28 @@ public class ManageMyCarController extends HttpServlet {
         }
 
         int offset = (currentPage - 1) * PAGE_SIZE;
+        /* === THAY ĐỔI: Lấy bộ lọc availability từ request === */
+        String availabilityParam = request.getParameter("availability");
+        Integer availabilityFilter = null;
 
-        List<CarViewModel> carList = carDAO.getCarsByOwnerWithPaging(ownerId, offset, PAGE_SIZE);
+        if (availabilityParam != null && !availabilityParam.isEmpty()) {
+            try {
+                availabilityFilter = Integer.parseInt(availabilityParam);
+            } catch (Exception ignored) {}
+        }
 
+//        List<CarViewModel> carList = carDAO.getCarsByOwnerWithPaging(ownerId, offset, PAGE_SIZE);
+
+        /* === THAY ĐỔI: Lấy danh sách xe theo bộ lọc availability === */
+        List<CarViewModel> carList = carDAO.getCarsByOwnerWithPaging(
+                ownerId, offset, PAGE_SIZE, availabilityFilter
+        );
+        if (carList == null) carList = new ArrayList<>();
+        request.setAttribute("carList", carList);
 
         // Lấy danh sách xe của chủ xe
-        int totalCars = carDAO.countCarsByOwner(ownerId);
+//        int totalCars = carDAO.countCarsByOwner(ownerId);
+        int totalCars = carDAO.countCarsByOwner(ownerId, availabilityFilter);
         int totalPages = (int) Math.ceil((double) totalCars / PAGE_SIZE);
 
         int availableCars = carDAO.countAvailableCarsByOwner(ownerId);
@@ -59,6 +76,8 @@ public class ManageMyCarController extends HttpServlet {
         request.setAttribute("unavailableCars", unavailableCars);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
+
+        request.setAttribute("availabilityFilter", availabilityFilter);
 
         // Forward sang JSP hiển thị danh sách xe
         request.getRequestDispatcher("/view/carOwner/manageMyCar.jsp").forward(request, response);
