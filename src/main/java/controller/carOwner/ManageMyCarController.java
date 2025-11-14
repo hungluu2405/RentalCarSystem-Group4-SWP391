@@ -43,7 +43,7 @@ public class ManageMyCarController extends HttpServlet {
         }
 
         int offset = (currentPage - 1) * PAGE_SIZE;
-        /* === THAY ĐỔI: Lấy bộ lọc availability từ request === */
+        // Lấy bộ lọc availability từ request
         String availabilityParam = request.getParameter("availability");
         Integer availabilityFilter = null;
 
@@ -53,9 +53,6 @@ public class ManageMyCarController extends HttpServlet {
             } catch (Exception ignored) {}
         }
 
-//        List<CarViewModel> carList = carDAO.getCarsByOwnerWithPaging(ownerId, offset, PAGE_SIZE);
-
-        /* === THAY ĐỔI: Lấy danh sách xe theo bộ lọc availability === */
         List<CarViewModel> carList = carDAO.getCarsByOwnerWithPaging(
                 ownerId, offset, PAGE_SIZE, availabilityFilter
         );
@@ -63,7 +60,6 @@ public class ManageMyCarController extends HttpServlet {
         request.setAttribute("carList", carList);
 
         // Lấy danh sách xe của chủ xe
-//        int totalCars = carDAO.countCarsByOwner(ownerId);
         int totalCars = carDAO.countCarsByOwner(ownerId, availabilityFilter);
         int totalPages = (int) Math.ceil((double) totalCars / PAGE_SIZE);
 
