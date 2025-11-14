@@ -21,6 +21,9 @@ public class ManageCarDetailService {
         if (car.getYear() > currentYear) {
             return "Năm sản xuất không được lớn hơn năm hiện tại.";
         }
+        if (currentYear - car.getYear() > 20) {
+            return "Xe của bạn không được nhỏ hơn quá 20 năm tuổi.";
+        }
 
         //  Validate giá thuê
         if (car.getPricePerDay() == null || car.getPricePerDay().compareTo(BigDecimal.ZERO) <= 0) {

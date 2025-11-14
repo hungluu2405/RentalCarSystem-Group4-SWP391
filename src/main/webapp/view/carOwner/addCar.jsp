@@ -184,7 +184,7 @@
                                     <!-- LOCATION -->
                                     <div class="col-md-6">
                                         <label class="form-label"><i class="fa fa-map-location-dot text-primary"></i> Địa chỉ nhận trả xe</label>
-                                        <input type="text" name="location" class="form-control" placeholder="Nhập địa chỉ..." value="${location}">
+                                        <input type="text" name="location" class="form-control" placeholder="Nhập địa chỉ..." value="${location}" required>
                                     </div>
 
                                     <!-- DESCRIPTION -->
