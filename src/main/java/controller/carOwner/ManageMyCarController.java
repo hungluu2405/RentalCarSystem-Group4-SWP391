@@ -60,14 +60,16 @@ public class ManageMyCarController extends HttpServlet {
         request.setAttribute("carList", carList);
 
         // Lấy danh sách xe của chủ xe
-        int totalCars = carDAO.countCarsByOwner(ownerId, availabilityFilter);
+        int totalCars = carDAO.countCarsByOwners(ownerId, availabilityFilter);
         int totalPages = (int) Math.ceil((double) totalCars / PAGE_SIZE);
 
+        int totalOwnerCars = carDAO.countCarsByOwner(ownerId);
         int availableCars = carDAO.countAvailableCarsByOwner(ownerId);
         int unavailableCars = carDAO.countUnavailableCarsByOwner(ownerId);
 
         request.setAttribute("carList", carList);
         request.setAttribute("totalCars", totalCars);
+        request.setAttribute("totalOwnerCars", totalOwnerCars);
         request.setAttribute("availableCars", availableCars);
         request.setAttribute("unavailableCars", unavailableCars);
         request.setAttribute("currentPage", currentPage);

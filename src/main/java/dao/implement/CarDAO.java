@@ -1000,7 +1000,7 @@ public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int 
 
 
     /* === COUNT XE THEO OWNER + FILTER AVAILABILITY === */
-    public int countCarsByOwner(int ownerId, Integer availability) {
+    public int countCarsByOwners(int ownerId, Integer availability) {
 
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) FROM CAR WHERE USER_ID = ? "

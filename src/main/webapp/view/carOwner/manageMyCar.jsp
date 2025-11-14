@@ -202,7 +202,7 @@
                                     <div class="symbol mb40">
                                         <i class="fa id-color fa-2x fa-car"></i>
                                     </div>
-                                    <span class="h1 mb0">${totalCars}</span><br>
+                                    <span class="h1 mb0">${totalOwnerCars}</span><br>
                                     <span class="text-gray">Tổng số xe của tôi </span>
                                 </div>
                             </div>
