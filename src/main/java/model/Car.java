@@ -173,5 +173,40 @@ public class Car {
         this.typeName = typeName;
     }
 
+    public String getTypeNameVN() {
+        if (typeName == null) return "Không rõ";
+
+        String t = typeName.trim().toLowerCase();
+
+        switch (t) {
+            case "truck":
+                return "Xe tải";
+            case "coupe":
+                return "Xe hai chỗ";
+            default:
+                return typeName;
+        }
+    }
+
+    public String getFuelTypeVN() {
+        if (fuelType == null) return "Không rõ";
+
+        String f = fuelType.trim().toLowerCase();
+
+        switch (f) {
+            case "electric":
+                return "Điện";
+            case "gasoline":
+                return "Xăng";
+            case "biofuel":
+                return "Nguyên liệu sinh học";
+            case "hydrogen":
+                return "Pin hydro";
+            case "diesel":
+                return "Động cơ diesel";
+            default:
+                return fuelType;
+        }
+    }
 
 }

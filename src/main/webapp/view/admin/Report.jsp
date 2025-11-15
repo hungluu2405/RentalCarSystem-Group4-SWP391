@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,20 +66,21 @@
             <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
             <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+
             <!-- Cars Data Table -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h4 class="m-0 font-weight-bold text-primary">Report Revenue</h4>
+                    <h4 class="m-0 font-weight-bold text-primary">Báo cáo doanh thu</h4>
 
                     <!-- Bộ lọc chọn loại -->
                     <form action="reportDB" method="get" class="form-inline">
-                        <label for="type" class="mr-2 font-weight-bold">By:</label>
+                        <label for="type" class="mr-2 font-weight-bold">Theo:</label>
                         <select name="type" id="type" class="form-control mr-2">
-                            <option value="week" <c:if test="${type == 'week'}">selected</c:if>>Week</option>
-                            <option value="month" <c:if test="${type == 'month'}">selected</c:if>>Month</option>
+                            <option value="week" <c:if test="${type == 'week'}">selected</c:if>>Tuần</option>
+                            <option value="month" <c:if test="${type == 'month'}">selected</c:if>>Tháng</option>
                         </select>
-                        <button type="submit" class="btn btn-primary mr-2">Search</button>
-                        <a href="reportDB" class="btn btn-secondary">Reset</a>
+                        <button type="submit" class="btn btn-primary mr-2">Tìm kiếm</button>
+                        <a href="reportDB" class="btn btn-secondary">Tạo mới</a>
                     </form>
                 </div>
 
@@ -87,10 +89,10 @@
                     <c:if test="${not empty totalRevenue}">
                         <div class="alert alert-success mb-3">
                             <strong>
-                                Total Revenue
-                                (<c:out value="${type == 'week' ? 'By week' : 'By month'}"/>):
+                                Tổng tiền
+                                (<c:out value="${type == 'week' ? 'Theo tuần' : 'Theo tháng'}"/>):
                             </strong>
-                            <fmt:formatNumber value="${totalRevenue}" type="number" maxFractionDigits="0"/> $
+                            <fmt:formatNumber value="${totalRevenue}" type="number" maxFractionDigits="0"/> vnđ
                         </div>
                     </c:if>
 
@@ -99,13 +101,13 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
                             <tr>
-                                <th>Payment ID</th>
-                                <th>Booking ID</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Status</th>
-                                <th>Paid At</th>
-                                <th>PayPal Transaction ID</th>
+                                <th>ID thanh toán</th>
+                                <th>ID giao dịch</th>
+                                <th>Số tiền</th>
+                                <th>Hình thức</th>
+                                <th>Trạng thái</th>
+                                <th>Thanh toán lúc</th>
+                                <th>ID giao dịch payPal</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -113,9 +115,15 @@
                                 <tr>
                                     <td>${p.paymentId}</td>
                                     <td>${p.bookingId}</td>
-                                    <td>${p.amount} $</td>
+                                    <td>${p.amount} vnđ</td>
                                     <td>${p.method}</td>
-                                    <td>${p.status}</td>
+<%--                                    <td>${p.status}</td>--%>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${p.status == 'Paid'}">Đã thanh toán</c:when>
+                                            <c:otherwise>Chưa thanh toán</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                     <td>${p.paidAt}</td>
                                     <td>${p.paypalTransactionId}</td>
                                 </tr>

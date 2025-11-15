@@ -3,7 +3,7 @@ package service.homePage;
 import dao.implement.CarDAO;
 import model.CarViewModel;
 import model.Notification;
-import service.NotificationService;
+import service.booking.NotificationService;
 
 import java.util.List;
 

@@ -141,4 +141,29 @@ public class Booking {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public String getStatusVN() {
+        if (status == null) return "Không rõ";
+
+        String s = status.trim().toLowerCase();
+
+        switch (s) {
+            case "paid":
+                return "Đã thanh toán";
+            case "approved":
+                return "Đã xác nhận";
+            case "cancelled":
+                return "Đã hủy";
+            case "completed":
+                return "Hoàn thành";
+            case "returning":
+                return "Đang chờ trả xe";
+            case "pending":
+                return "Đang chờ duyệt";
+            default:
+                return status; // trả nguyên văn nếu muốn xem nó là gì
+        }
+    }
+
+
 }

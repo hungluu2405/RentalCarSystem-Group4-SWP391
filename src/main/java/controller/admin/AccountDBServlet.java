@@ -27,11 +27,9 @@ public class AccountDBServlet extends HttpServlet {
         String role = request.getParameter("role");
         List<User> listU;
 
-        if (role != null && !role.isEmpty()) {
+
             listU = userDAO.getUsers(role); // dùng hàm mới getUsers(role)
-        } else {
-            listU = userDAO.getAllUsersForAdmin();
-        }
+
 
 
         for (User u : listU) {

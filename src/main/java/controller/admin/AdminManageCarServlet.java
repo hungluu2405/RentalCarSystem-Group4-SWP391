@@ -54,7 +54,7 @@ public class AdminManageCarServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/carDB");
                     return;
                 } else {
-                    request.setAttribute("error", "This car is currently in booking and cannot be deleted !");
+                    request.setAttribute("error", "Xe đang được vận hành thì k thể xóa !");
                     CarViewModel car = carDAO.getCarByIdForAdmin(carId);
                     request.setAttribute("car", car);
                     request.getRequestDispatcher("/view/admin/viewCarDetails.jsp").forward(request, response);

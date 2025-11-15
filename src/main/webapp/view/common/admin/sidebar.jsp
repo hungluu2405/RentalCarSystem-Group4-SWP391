@@ -38,7 +38,7 @@
 
     <li class="nav-item <%= "promotion".equals(request.getAttribute("activePage")) ? "active" : "" %>">
         <a class="nav-link" href="promotionDB">
-            <i class="fas fa-pound-sign"></i>
+            <i class="fas fa-tag"></i>
             <span>Khuyến mãi</span></a>
     </li>
 </ul>

@@ -127,12 +127,6 @@
                     <div class="col-lg-9">
                         <div class="card padding40 rounded-5 shadow-sm">
 
-                            <c:if test="${param.status == 'success'}">
-                                <div class="alert alert-success text-center mb-4">
-                                    ✅ Profile updated successfully!
-                                </div>
-                            </c:if>
-
                             <form method="post"
                                   action="${pageContext.request.contextPath}/customer/profile"
                                   enctype="multipart/form-data"
@@ -169,41 +163,41 @@
                                 <!-- ================= Thông tin cá nhân ================= -->
                                 <div class="row">
                                     <div class="col-lg-6 mb20">
-                                        <h5>Full Name</h5>
+                                        <h5>Họ và tên</h5>
                                         <input type="text" name="fullName" class="form-control"
                                                value="${profile.fullName}"
-                                               placeholder="Enter your full name">
+                                               placeholder="Enter your full name" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Email Address</h5>
+                                        <h5>Địa chỉ Email</h5>
                                         <input type="text" name="email" class="form-control"
                                                value="${email}" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Phone Number</h5>
+                                        <h5>Số điện thoại</h5>
                                         <input type="text" name="phone" class="form-control"
                                                value="${profile.phone}"
-                                               placeholder="Enter your phone number">
+                                               placeholder="Enter your phone number" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Date of Birth</h5>
+                                        <h5>Ngày tháng năm sinh</h5>
                                         <input type="date" name="dob" class="form-control"
-                                               value="${profile.dob}">
+                                               value="${profile.dob}" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Driver License Number</h5>
+                                        <h5>Số bằng lái</h5>
                                         <input type="text" name="license" class="form-control"
                                                value="${license.license_number}"
-                                               placeholder="Enter your driver license number">
+                                               placeholder="Enter your driver license number" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb20">
-                                        <h5>Gender</h5>
-                                        <select name="gender" class="form-control">
+                                        <h5>Giới tính</h5>
+                                        <select name="gender" class="form-control" disabled>
                                             <option value="">-- Select Gender --</option>
                                             <option value="Male" ${profile.gender == 'Male' ? 'selected' : ''}>Male</option>
                                             <option value="Female" ${profile.gender == 'Female' ? 'selected' : ''}>Female</option>
@@ -217,11 +211,11 @@
 
 
                             <form>
-                                <a href="${pageContext.request.contextPath}/accountDB" class="btn btn-secondary">Back to list</a>
+                                <a href="${pageContext.request.contextPath}/accountDB" class="btn btn-secondary">Trở về danh sách</a>
                                 <a href="${pageContext.request.contextPath}/admin/manageUser?action=remove&userId=${profile.userId}"
                                    class="btn btn-danger ml-2"
                                    onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.');">
-                                    <i class="fas fa-trash-alt"></i> Delete
+                                    <i class="fas fa-trash-alt"></i> Xóa người dùng
                                 </a>
                             </form>
                             

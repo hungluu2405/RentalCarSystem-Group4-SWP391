@@ -1376,46 +1376,7 @@
     </script>
 
 </script>
-<!-- 💬 Floating Chat Button -->
-<div id="floatingChatBtn">
-    <i class="fa-solid fa-message"></i>
-</div>
 
-<!-- 💬 Dropdown danh sách hội thoại -->
-<div id="chatDropdown" class="chat-dropdown">
-    <div class="chat-dropdown-header">
-        <h5>Messages</h5>
-    </div>
-    <ul id="chatList">
-        <li data-user="Linh" data-avatar="images/users/linh.jpg">Linh</li>
-        <li data-user="Kiet" data-avatar="images/users/kiet.jpg">Kiet</li>
-        <li data-user="Admin" data-avatar="images/users/admin.jpg">Admin Support</li>
-    </ul>
-</div>
-
-<!-- 💬 Dock chứa các chat box nổi -->
-<div id="chatDock"></div>
-
-<!-- 💬 Template chat box -->
-<template id="chatBoxTpl">
-    <div class="chat-box">
-        <div class="chat-head">
-            <div class="left">
-                <img class="avatar" src="" alt="">
-                <span class="name"></span>
-            </div>
-            <div class="actions">
-                <button class="minimize"><i class="fa-solid fa-chevron-down"></i></button>
-                <button class="close"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-        </div>
-        <div class="chat-content"></div>
-        <div class="chat-input">
-            <input type="text" class="msg-input" placeholder="Type a message...">
-            <button class="send"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
-</template>
 <script>
     const chatBtn = document.getElementById('floatingChatBtn');
     const chatDropdown = document.getElementById('chatDropdown');

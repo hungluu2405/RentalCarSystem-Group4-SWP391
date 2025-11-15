@@ -194,8 +194,8 @@
                                     <div class="col-lg-6 mb20">
                                         <h5>Trạng Thái</h5>
                                         <select name="active" class="form-control">
-                                            <option value="true">Active</option>
-                                            <option value="false">Inactive</option>
+                                            <option value="true">Áp dụng</option>
+                                            <option value="false">Chưa áp dụng</option>
                                         </select>
                                     </div>
 

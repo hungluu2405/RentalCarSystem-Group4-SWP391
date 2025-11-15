@@ -139,7 +139,7 @@
                                     <div class="spacer-10"></div>
 
                                     <div id="submit">
-                                        <input type="submit" value="Sign In" class="btn-main btn-fullwidth rounded-3"/>
+                                        <input type="submit" value="Đăng nhập" class="btn-main btn-fullwidth rounded-3"/>
                                     </div>
                                 </form>
 

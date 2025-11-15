@@ -2,13 +2,12 @@ package controller.carOwner;
 
 import dao.implement.CarDAO;
 import jakarta.servlet.annotation.MultipartConfig;
-import model.Car;
 import model.CarType;
 import model.CarViewModel;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import service.ManageCarDetailService;
+import service.car.ManageCarDetailService;
 
 import java.io.File;
 import java.io.IOException;

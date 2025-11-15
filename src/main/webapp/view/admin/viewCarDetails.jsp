@@ -75,7 +75,7 @@
             <div class="center-y relative text-center">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12 text-center"><h1>Manage My Car Detail</h1></div>
+                        <div class="col-md-12 text-center"><h1>Xem chi tiết xe</h1></div>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                         </div>
                     </c:if>
                         <div class="card padding40 rounded-5 shadow-sm">
-                            <h3 class="mb-4"><i class="fa fa-car"></i>   Car Information</h3>
+                            <h3 class="mb-4"><i class="fa fa-car"></i>   Thông tin xe</h3>
 
                             <form method="post"
                                   action="${pageContext.request.contextPath}/owner/manageCarDetail"
@@ -114,7 +114,7 @@
                                          src="${pageContext.request.contextPath}/${car.imageUrl}"
                                          alt="Car Image"
                                          style="max-width: 100%; max-height: 300px; border-radius: 12px; object-fit: contain; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-                                    <p class="fw-bold mt-3">Car Image</p>
+                                    <p class="fw-bold mt-3">Ảnh xe</p>
 
                                 </div>
 
@@ -132,69 +132,69 @@
 
                                     <div class="col-12 mb-3">
                                         <label class="fw-bold">
-                                            <i class="fa fa-user text-primary me-2"></i>Owner
+                                            <i class="fa fa-user text-primary me-2"></i>Chủ xe
                                         </label>
                                         <input type="text" class="form-control" value="${car.carOwnerName}" readonly>
                                     </div>
                                     <!-- Brand -->
                                     <div class="col-md-6 mb-3">
-                                        <label>Brand</label>
-                                        <input type="text" name="brand" value="${car.brand}" class="form-control" required>
+                                        <label>Hãng</label>
+                                        <input type="text" name="brand" value="${car.brand}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Model -->
                                     <div class="col-md-6 mb-3">
                                         <label>Model</label>
-                                        <input type="text" name="model" value="${car.model}" class="form-control" required>
+                                        <input type="text" name="model" value="${car.model}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Fuel Type -->
                                     <div class="col-md-6 mb-3">
-                                        <label>Fuel Type</label>
-                                        <input type="text" name="model" value="${car.fuelType}" class="form-control" required>
+                                        <label>Loại nguyên liệu</label>
+                                        <input type="text" name="model" value="${car.fuelType}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Transmission -->
                                     <div class="col-md-6 mb-3">
                                         <label>Transmission</label>
-                                        <input type="text" name="model" value="${car.transmission}" class="form-control" required>
+                                        <input type="text" name="model" value="${car.transmission}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Car Type -->
                                     <div class="col-md-6 mb-3">
-                                        <label>Car Type</label>
-                                        <input type="text" name="model" value="${car.carTypeName}" class="form-control" required>
+                                        <label>Loại xe</label>
+                                        <input type="text" name="model" value="${car.carTypeName}" class="form-control" readonly>
 
                                     </div>
 
                                     <!-- Capacity -->
                                     <div class="col-md-3 mb-3">
-                                        <label>Capacity</label>
-                                        <input type="number" name="capacity" value="${car.capacity}" class="form-control" required>
+                                        <label>Số ghế</label>
+                                        <input type="number" name="capacity" value="${car.capacity}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Price -->
                                     <div class="col-md-3 mb-3">
-                                        <label>Price Per Day</label>
-                                        <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" required>
+                                        <label>Giá/ngày</label>
+                                        <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Location -->
                                     <div class="col-md-6 mb-3">
-                                        <label>Location</label>
-                                        <input type="text" name="location" value="${car.location}" class="form-control" required>
+                                        <label>Địa điểm</label>
+                                        <input type="text" name="location" value="${car.location}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Year -->
                                     <div class="col-md-3 mb-3">
-                                        <label>Year</label>
-                                        <input type="number" name="year" value="${car.year}" class="form-control" required>
+                                        <label>Năm phát hành</label>
+                                        <input type="number" name="year" value="${car.year}" class="form-control" readonly>
                                     </div>
 
                                     <!-- LicensePlate -->
                                     <div class="col-md-3 mb-3">
-                                        <label>License Plate</label>
-                                        <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" required>
+                                        <label>Biển số</label>
+                                        <input type="text" name="licensePlate" value="${car.licensePlate}" class="form-control" readonly>
                                     </div>
 
                                     <!-- Availability -->
@@ -215,31 +215,20 @@
                                         </label>
                                     </div>
 
-                                    <script>
-                                        // Thay đổi label khi gạt công tắc
-                                        const toggle = document.getElementById('availabilitySwitch');
-                                        const label = document.getElementById('availabilityLabel');
-                                        toggle.addEventListener('change', function () {
-                                            label.textContent = this.checked ? 'Available' : 'Not Available';
-                                        });
-                                    </script>
-                                    <input type="hidden" name="availability" value="0">
-                                    <input type="checkbox"
-                                           class="form-check-input"
-                                           id="availabilitySwitch"
-                                           name="availability"
-                                           value="1"
-                                           <c:if test="${car.availability == 1}">checked</c:if>>
+                                    <input type="hidden" name="availability" value="0" disabled>
+                                </br>
+                                    </br>
 
 
                                     <!-- Description -->
                                     <div class="col-md-12 mb-3">
                                         <label>Description</label>
-                                        <textarea name="description" rows="4" class="form-control">${car.description}</textarea>
+                                        <textarea name="description" rows="4" class="form-control" readonly>${car.description}</textarea>
                                     </div>
                                 </div>
                             </form>
                                 <!-- BUTTONS -->
+                            </br></br>
                             <form method="post" action="${pageContext.request.contextPath}/admin/manageCar" onsubmit="return confirm('Are you sure you want to delete this car ?');">
                                 <input type="hidden" name="deleteId" value="${car.carId}" />
                                 <button type="submit" class="btn btn-danger">Delete</button>

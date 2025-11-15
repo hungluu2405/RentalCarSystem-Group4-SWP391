@@ -63,42 +63,43 @@
 
 
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
 <!-- Cars Data Table -->
 <div class="card mb-3">
   <div class="card-header">
     <i class="fas fa-car"></i>
-    Car Management
+    Danh sách xe
   </div>
 
     <div class="card-body">
 
         <form action="carDB" method="get" class="form-inline mb-3">
             <label for="type" class="mr-2 font-weight-bold">
-                <i class="fas fa-filter mr-1"></i>Type:
+                <i class="fas fa-filter mr-1"></i>Loại:
             </label>
             <select name="type" id="type" class="form-control mr-3">
-                <option value="">All</option>
+                <option value="">Tất cả</option>
                 <option value="SUV" <c:if test="${selectedType == 'SUV'}">selected</c:if>>SUV</option>
                 <option value="Sedan" <c:if test="${selectedType == 'Sedan'}">selected</c:if>>Sedan</option>
-                <option value="Truck" <c:if test="${selectedType == 'Truck'}">selected</c:if>>Truck</option>
-                <option value="Coupe" <c:if test="${selectedType == 'Coupe'}">selected</c:if>>Coupe</option>
+                <option value="Truck" <c:if test="${selectedType == 'Truck'}">selected</c:if>>Xe tải</option>
+                <option value="Coupe" <c:if test="${selectedType == 'Coupe'}">selected</c:if>>Xe hai chỗ</option>
                 <option value="Convertible" <c:if test="${selectedType == 'Convertible'}">selected</c:if>>Convertible</option>
             </select>
 
-            <label for="price" class="mr-2 font-weight-bold">Price:</label>
+            <label for="price" class="mr-2 font-weight-bold">Giá:</label>
             <select name="price" id="price" class="form-control mr-3">
-                <option value="">All</option>
-                <option value="under1tr" <c:if test="${selectedPrice == 'under1tr'}">selected</c:if>>Under 1 000 000vnd/day</option>
-                <option value="1trto1tr5" <c:if test="${selectedPrice == '1trto1tr5'}">selected</c:if>>1 000 000vnd to 1 500 000vnd/day</option>
-                <option value="over1tr5" <c:if test="${selectedPrice == 'over1tr5'}">selected</c:if>>Over 1 500 000vnd/day</option>
+                <option value="">Tất cả</option>
+                <option value="under1tr" <c:if test="${selectedPrice == 'under1tr'}">selected</c:if>>Dưới 1 000 000vnd/Ngày</option>
+                <option value="1trto1tr5" <c:if test="${selectedPrice == '1trto1tr5'}">selected</c:if>>1 000 000vnd Tới 1 500 000vnd/Ngày</option>
+                <option value="over1tr5" <c:if test="${selectedPrice == 'over1tr5'}">selected</c:if>>Over 1 500 000vnd/Ngày</option>
             </select>
 
             <button type="submit" class="btn btn-primary mr-2">
-                <i class="fas fa-search"></i> Search
+                <i class="fas fa-search"></i> Tìm kiếm
             </button>
             <a href="carlist" class="btn btn-outline-secondary">
-                <i class="fas fa-undo"></i> Reset
+                <i class="fas fa-undo"></i> Tạo lại
             </a>
         </form>
 
@@ -106,17 +107,17 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead class="thead-dark">
                 <tr>
-                    <th>Car IDssss</th>
+                    <th>ID xe</th>
                     <th>Model</th>
-                    <th>Type</th>
-                    <th>Brand</th>
-                    <th>Owner Name</th>
-                    <th>Year</th>
-                    <th>License Plate</th>
-                    <th>Capacity</th>
-                    <th>Fuel Type</th>
-                    <th>Price/Day</th>
-                    <th>Availability</th>
+                    <th>Loại</th>
+                    <th>Hãng</th>
+                    <th>Tên chủ xe</th>
+                    <th>Năm</th>
+                    <th>Biển số xe</th>
+                    <th>Số chỗ ngồi</th>
+                    <th>Loại nguyên liệu</th>
+                    <th>Giá/Ngày</th>
+                    <th>Trạng thái</th>
                 </tr>
                 </thead>
 
@@ -125,22 +126,22 @@
                     <tr>
                         <td>${car.carId}</td>
                         <td><a href="${pageContext.request.contextPath}/admin/manageCar?id=${car.carId}">${car.model}</a></td>
-                        <td>${car.typeName}</td>
+                        <td>${car.typeNameVN}</td>
                         <td>${car.brand}</td>
                         <td>${car.carOwnerName}</td>
                         <td>${car.year}</td>
                         <td>${car.licensePlate}</td>
                         <td>${car.capacity}</td>
-                        <td>${car.fuelType}</td>
+                        <td>${car.fuelTypeVN}</td>
                         <td>${car.pricePerDay}</td>
 
                 <td>
                 <c:choose>
                   <c:when test="${car.availability}">
-                    <span class="badge badge-success">Available</span>
+                    <span class="badge badge-success">Sãn sàng</span>
                   </c:when>
                   <c:otherwise>
-                    <span class="badge badge-danger">Unavailable</span>
+                    <span class="badge badge-danger">Chưa sãn sàng</span>
                   </c:otherwise>
                 </c:choose>
               </td>

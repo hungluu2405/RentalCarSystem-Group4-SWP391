@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -62,44 +64,44 @@
 
 
 
-            <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
             <!-- Cars Data Table -->
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-fw fa-table"></i>
-                    Booking history
+                    Lịch sử giao dịch
                 </div>
 
                 <div class="card-body">
 
                     <form action="bookingDB" method="get" class="form-inline mb-3">
                         <label for="dateRange" class="mr-2 font-weight-bold">
-                            <i class="fas fa-calendar-alt mr-1"></i>Date:
+                            <i class="fas fa-calendar-alt mr-1"></i>Thời gian:
                         </label>
                         <select name="dateRange" id="dateRange" class="form-control mr-3">
-                            <option value="">All</option>
-                            <option value="today" <c:if test="${selectedDateRange == 'today'}">selected</c:if>>Today</option>
-                            <option value="week" <c:if test="${selectedDateRange == 'week'}">selected</c:if>>This Week</option>
-                            <option value="month" <c:if test="${selectedDateRange == 'month'}">selected</c:if>>This Month</option>
-                            <option value="year" <c:if test="${selectedDateRange == 'year'}">selected</c:if>>This Year</option>
+                            <option value="">Tất cả</option>
+                            <option value="today" <c:if test="${selectedDateRange == 'today'}">selected</c:if>>Hôm nay</option>
+                            <option value="week" <c:if test="${selectedDateRange == 'week'}">selected</c:if>>Tuần này</option>
+                            <option value="month" <c:if test="${selectedDateRange == 'month'}">selected</c:if>>Tháng này</option>
+                            <option value="year" <c:if test="${selectedDateRange == 'year'}">selected</c:if>>Năm nay</option>
                         </select>
 
                         <label for="price" class="mr-2 font-weight-bold">
-                            <i class="fas fa-tags mr-1"></i>Price:
+                            <i class="fas fa-tags mr-1"></i>Giá:
                         </label>
                         <select name="price" id="price" class="form-control mr-3">
-                            <option value="">All</option>
-                            <option value="under1tr" <c:if test="${selectedPrice == 'under1tr'}">selected</c:if>>Under 1,000,000 VND</option>
-                            <option value="1trto1tr5" <c:if test="${selectedPrice == '1trto1tr5'}">selected</c:if>>1,000,000 to 1,500,000 VND</option>
-                            <option value="over1tr5" <c:if test="${selectedPrice == 'over1tr5'}">selected</c:if>>Over 1,500,000 VND</option>
+                            <option value="">Tất cả</option>
+                            <option value="under1tr" <c:if test="${selectedPrice == 'under1tr'}">selected</c:if>>Dưới 1,000,000 VND</option>
+                            <option value="1trto1tr5" <c:if test="${selectedPrice == '1trto1tr5'}">selected</c:if>>1,000,000 tới 1,500,000 VND</option>
+                            <option value="over1tr5" <c:if test="${selectedPrice == 'over1tr5'}">selected</c:if>>Hơn 1,500,000 VND</option>
                         </select>
 
                         <button type="submit" class="btn btn-primary mr-2">
-                            <i class="fas fa-search"></i> Search
+                            <i class="fas fa-search"></i> Tìm kiếm
                         </button>
                         <a href="bookingDB" class="btn btn-outline-secondary">
-                            <i class="fas fa-undo"></i> Reset
+                            <i class="fas fa-undo"></i> Tạo lại
                         </a>
                     </form>
 
@@ -109,16 +111,16 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
                             <tr>
-                                <th>Booking ID</th>
-                                <th>User Name</th>
-                                <th>Car Model</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Pickup Time</th>
-                                <th>Dropoff Time</th>
-                                <th>Total Price</th>
-                                <th>Status</th>
-                                <th>Created At</th>
+                                <th>ID giao dịch</th>
+                                <th>Tên người giao dịch</th>
+                                <th>Tên xe</th>
+                                <th>Ngày bắt đầu</th>
+                                <th>Ngày kết thúc</th>
+                                <th>Giờ lấy xe</th>
+                                <th>Giờ trả xe</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Tạo lúc</th>
                             </tr>
                             </thead>
 
@@ -142,7 +144,7 @@
                                     <td>${b.pickupTime}</td>
                                     <td>${b.dropoffTime}</td>
                                     <td>${b.totalPrice}</td>
-                                    <td>${b.status}</td>
+                                    <td>${b.statusVN}</td>
                                     <td>${b.createdAt}</td>
                                 </tr>
                             </c:forEach>

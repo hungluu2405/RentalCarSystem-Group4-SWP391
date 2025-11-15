@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import model.Promotion;
-import service.PromotionService;
+import service.booking.PromotionService;
 
 import java.io.IOException;
 import java.sql.Date;

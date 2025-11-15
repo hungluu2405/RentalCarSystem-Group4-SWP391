@@ -171,7 +171,7 @@
                                             <label>Ảnh Mặt Trước:</label><br>
                                             <img id="frontImagePreview"
                                                  src="${pageContext.request.contextPath}${frontImageUrl}"
-                                                 alt="Front License"
+                                                 alt="Ảnh mặt trước bằng lái"
                                                  class="license-preview mb-2"
                                                  width="150">
                                             <input type="file" name="front_image" class="form-control">
@@ -181,7 +181,7 @@
                                             <label>Ảnh Mặt Sau:</label><br>
                                             <img id="backImagePreview"
                                                  src="${pageContext.request.contextPath}${backImageUrl}"
-                                                 alt="Back License"
+                                                 alt="Ảnh mặt sau bằng lái"
                                                  class="license-preview mb-2"
                                                  width="150">
                                             <input type="file" name="back_image" class="form-control">
