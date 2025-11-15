@@ -106,8 +106,11 @@
 
                                         <div class="mt-3">
                                             <label for="carImage" class="form-label fw-bold">Tải ảnh xe</label>
+
                                             <input type="file" id="carImage" name="carImage" accept="image/*"
-                                                   class="form-control" required onchange="previewFile(this)">
+                                                   class="form-control"
+                                                   <c:if test="${empty tempImagePath}">required</c:if>
+                                                   onchange="previewFile(this)">
                                             <input type="hidden" name="tempImagePath" value="${tempImagePath}">
                                         </div>
                                     </div>
@@ -171,7 +174,7 @@
 
                                         // Hàm định dạng số có dấu . hoặc , ngăn cách hàng nghìn
                                         function formatNumber(value) {
-                                            return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // hoặc dùng ',' nếu muốn
+                                            return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
                                         }
 
                                         displayInput.addEventListener('input', function (e) {

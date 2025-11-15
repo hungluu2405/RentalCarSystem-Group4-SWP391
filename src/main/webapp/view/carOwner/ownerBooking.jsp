@@ -376,7 +376,7 @@
                                                         <c:when test="${order.status == 'Completed'}">
                                                             <span class="badge bg-success">Đã hoàn thành</span>
                                                         </c:when>
-                                                        <c:when test="${order.status == 'Rejected'}"> Cancelled
+                                                        <c:when test="${order.status == 'Rejected'}">
                                                             <span class="badge bg-danger">Đã từ chối </span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Cancelled'}">
