@@ -39,7 +39,7 @@ public class InvoiceService {
             System.out.println("Creating invoice for bookingId: " + bookingId);
             System.out.println("Received paymentId parameter: " + paymentId);
 
-            // ✅ FIX: Nếu paymentId là null, tự động query từ database
+            // Nếu paymentId là null, tự động query từ database
             if (paymentId == null) {
 
                 Payment payment = paymentDAO.getPaymentByBookingId(bookingId);

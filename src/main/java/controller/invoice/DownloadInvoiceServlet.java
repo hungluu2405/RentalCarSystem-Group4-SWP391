@@ -50,7 +50,7 @@ public class DownloadInvoiceServlet extends HttpServlet {
             }
 
 
-            // Kiểm tra quyền: chỉ customer của booking này mới được xem
+
             if (booking.getUserId() != currentUser.getUserId()) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You don't have permission to view this invoice");
                 return;
