@@ -186,6 +186,13 @@ public class UpdateDriverLicenseServlet extends HttpServlet {
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
             filePart.write(uploadPath + File.separator + fileName);
+
+            File destFile = new File(uploadDir, fileName);
+            if (destFile.exists()) {
+                // Báo lỗi trùng file
+                throw new IOException("File " + fileName + " đã tồn tại. Vui lòng đổi tên file hoặc chọn file khác.");
+            }
+            filePart.write(destFile.getAbsolutePath());
             return fileName;
         }
         return null;
