@@ -1,4 +1,4 @@
-package service;
+package service.car;
 
 import dao.implement.CarDAO;
 
