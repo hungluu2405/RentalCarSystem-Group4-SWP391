@@ -191,8 +191,8 @@
   <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
 
   <!-- Demo scripts for this page-->
-  <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
   <script src="${pageContext.request.contextPath}/js/demo/chart-area-demo.js"></script>
+  <script src="${pageContext.request.contextPath}/js/demo/datatables-demo.js"></script>
   <script src="${pageContext.request.contextPath}/js/colReorder-dataTables-min.js"></script>
   <script src="${pageContext.request.contextPath}/js/colReorder-bootstrap4-min.js"></script>
 

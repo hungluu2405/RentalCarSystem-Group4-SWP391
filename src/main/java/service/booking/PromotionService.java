@@ -24,7 +24,7 @@ public class PromotionService {
 
         // 2) Nếu giảm theo phần trăm → không được quá 100%
         if ("percent".equalsIgnoreCase(p.getDiscountType())) {
-            if (p.getDiscountRate() > 100) {
+            if (p.getDiscountRate() >= 100) {
                 return "Mức giảm phần trăm không được lớn hơn 100%.";
             }
             if (p.getDiscountRate() < 0) {

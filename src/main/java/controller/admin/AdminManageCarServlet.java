@@ -49,12 +49,17 @@ public class AdminManageCarServlet extends HttpServlet {
         if (deleteId != null && !deleteId.isEmpty()) {
             try {
                 int carId = Integer.parseInt(deleteId);
-                boolean ok = carDAO.deleteCar(carId);
+                boolean ok ;
+                try {
+                    ok = carDAO.deleteCarAdmin(carId);
+                }catch (Exception e){
+                    ok = false;
+                }
                 if (ok) {
                     response.sendRedirect(request.getContextPath() + "/carDB");
                     return;
                 } else {
-                    request.setAttribute("error", "Xe đang được vận hành thì k thể xóa !");
+                    request.setAttribute("error", "Xe đang được vận hành thì không thể xóa !");
                     CarViewModel car = carDAO.getCarByIdForAdmin(carId);
                     request.setAttribute("car", car);
                     request.getRequestDispatcher("/view/admin/viewCarDetails.jsp").forward(request, response);
