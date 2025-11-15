@@ -22,7 +22,7 @@ public class RateCarController extends HttpServlet {
     private final Gson gson = new Gson(); // ✅ Tái sử dụng instance
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost (HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("application/json;charset=UTF-8");

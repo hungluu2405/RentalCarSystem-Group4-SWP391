@@ -1148,7 +1148,7 @@
 
                 <!-- Bộ lọc -->
 
-                <form method="get" class="row g-2 mb-4 justify-content-center">
+                <form method="get" action="${pageContext.request.contextPath}/car-single" class="row g-2 mb-4 justify-content-center">
 
                     <input type="hidden" name="id" value="${car.carId}">
 

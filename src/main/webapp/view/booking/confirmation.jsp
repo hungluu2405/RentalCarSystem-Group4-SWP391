@@ -8,7 +8,7 @@
 <head>
     <jsp:include page="/view/common/customer/_head.jsp"/>
 
-    <title>Booking Confirmation - Rentaly</title>
+    <title>Xác nhận đặt xe</title>
     <style>
         .container-content {
             max-width: 1200px;
