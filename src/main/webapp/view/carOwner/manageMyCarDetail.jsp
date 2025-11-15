@@ -225,7 +225,9 @@
                                     <!-- Price -->
                                     <div class="col-md-3 mb-3">
                                         <label>Giá thuê trên ngày</label>
-                                        <input type="number" step="0.01" name="pricePerDay" value="${car.pricePerDay}" class="form-control" required>
+                                        <input type="number" name="pricePerDay"
+                                               value="${car.pricePerDay.stripTrailingZeros().toPlainString()}"
+                                               class="form-control" required>
                                     </div>
 
                                     <!-- Location -->

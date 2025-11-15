@@ -212,7 +212,7 @@
                                         <c:set var="isHistory"
                                                value="${order.status == 'Paid' || order.status == 'Approved'}"/>
                                         <c:set var="isHistory"
-                                               value="${order.status == 'Completed' || order.status == 'Rejected'}"/>
+                                               value="${order.status == 'Completed' || order.status == 'Rejected' || order.status == 'Cancelled'}"/>
 
                                         <c:if test="${isPending}">
                                             <tr>
@@ -315,11 +315,13 @@
                                                               action="${pageContext.request.contextPath}/owner/ownerBooking"
                                                               class="d-inline">
                                                             <input type="hidden" name="bookingId" value="${order.bookingId}">
-                                                            <button type="submit" name="action" value="confirmReturn"
-                                                                    onclick="return confirm('Bạn chắc chắn đã nhận được xe?');"
-                                                                    class="btn btn-success btn-sm">
-                                                                <i class="fa fa-check"></i> Chấp nhận trả xe
+                                                            <div class="d-flex gap-2">
+                                                                <button type="submit" name="action" value="confirmReturn"
+                                                                        onclick="return confirm('Bạn chắc chắn đã nhận được xe?');"
+                                                                        class="btn btn-success btn-sm d-inline-flex align-items-center">
+                                                                <i class="fa fa-check me-1"></i> Chấp nhận trả xe
                                                             </button>
+                                                            </div>
                                                         </form>
                                                     </c:if>
                                                 </td>
@@ -376,6 +378,9 @@
                                                         </c:when>
                                                         <c:when test="${order.status == 'Rejected'}">
                                                             <span class="badge bg-danger">Đã từ chối </span>
+                                                        </c:when>
+                                                        <c:when test="${order.status == 'Cancelled'}">
+                                                            <span class="badge bg-secondary">Khách hàng từ chối </span>
                                                         </c:when>
                                                         <c:when test="${order.status == 'Paid'}">
                                                             <span class="badge bg-info text-dark">Đã thanh toán</span>

@@ -320,7 +320,7 @@ public class BookingDAO extends DBContext {
     public int countPendingBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
+                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
                 "WHERE C.USER_ID = ? AND B.STATUS = 'Pending'";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
@@ -350,8 +350,8 @@ public class BookingDAO extends DBContext {
     public int countHistoryBookingsByOwner(int ownerId) {
         String sql = "SELECT COUNT(*) FROM BOOKING B " +
                 "JOIN CAR C ON B.CAR_ID = C.CAR_ID " +
-                "        JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID"+
-                "WHERE C.USER_ID = ? AND (B.STATUS = 'Rejected' OR B.STATUS = 'Completed')";
+                "JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID " +
+                "WHERE C.USER_ID = ? AND B.STATUS IN ('Rejected', 'Completed', 'Cancelled')";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
             ResultSet rs = ps.executeQuery();
@@ -449,8 +449,6 @@ public class BookingDAO extends DBContext {
             ps.setInt(2, offset);
             ps.setInt(3, limit);
 
-            System.out.println("🔍 DEBUG getActiveBookingsByOwner - OwnerID: " + userId + ", Offset: " + offset + ", Limit: " + limit);
-
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 BookingDetail bd = new BookingDetail();
@@ -470,12 +468,8 @@ public class BookingDAO extends DBContext {
                 bd.setCustomerProfile(up);
                 list.add(bd);
 
-                System.out.println("   📋 Found booking: ID=" + bd.getBookingId() + ", Status=" + bd.getStatus() + ", Car=" + bd.getCarName());
-
             }
-            System.out.println("   ✅ Total active bookings found: " + list.size());
         } catch (SQLException e) {
-            System.err.println("❌ Error in getActiveBookingsByOwner: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -502,7 +496,7 @@ public class BookingDAO extends DBContext {
             JOIN CAR c ON b.CAR_ID = c.CAR_ID
             JOIN USER_PROFILE u ON b.USER_ID = u.USER_ID
             WHERE c.USER_ID = ?
-            AND b.STATUS IN ('Rejected', 'Completed')
+            AND b.STATUS IN ('Rejected', 'Completed', 'Cancelled')
             ORDER BY b.CREATED_AT DESC
              OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
         """;

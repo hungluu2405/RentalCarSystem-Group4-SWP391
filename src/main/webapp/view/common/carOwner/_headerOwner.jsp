@@ -163,20 +163,20 @@
 
                                             <a class="menu-item"
                                                href="${pageContext.request.contextPath}/owner/profile"
-                                               role="menuitem">My Account</a>
+                                               role="menuitem">Tài khoản của tôi</a>
 
 
                                             <a class="menu-item"
                                                href="${pageContext.request.contextPath}/change-password"
-                                               role="menuitem">Change Password</a>
+                                               role="menuitem">Thay đổi mật khẩu</a>
                                             <a class="menu-item" href="${pageContext.request.contextPath}/logout"
-                                               role="menuitem">Log Out</a>
+                                               role="menuitem">Đăng xuất</a>
                                         </div>
                                     </div>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="${pageContext.request.contextPath}/login" class="btn-main">Sign In</a>
-                                    <a href="${pageContext.request.contextPath}/register" class="btn-main">Sign Up</a>
+                                    <a href="${pageContext.request.contextPath}/login" class="btn-main">Đăng nhập</a>
+                                    <a href="${pageContext.request.contextPath}/register" class="btn-main">Đăng kí</a>
                                 </c:otherwise>
                             </c:choose>
                             <span id="menu-btn"></span>
