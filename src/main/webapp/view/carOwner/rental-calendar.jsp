@@ -179,31 +179,17 @@
             border-color: #28a745;
         }
 
-        .calendar-day.pending {
-            background-color: #fff3cd;
-            border-color: #ffc107;
-        }
-
-        .calendar-day.approved {
-            background-color: #cfe2ff;
-            border-color: #0d6efd;
-        }
-
-        .calendar-day.paid {
-            background-color: #d1ecf1;
-            border-color: #17a2b8;
-        }
-
-        .calendar-day.completed {
-            background-color: #d3d3d3;
-            border-color: #6c757d;
-        }
-
-        .calendar-day.cancelled,
-        .calendar-day.rejected {
+        .calendar-day.booked {
             background-color: #f8d7da;
             border-color: #dc3545;
         }
+
+
+
+
+
+
+
 
         .day-number {
             font-size: 20px;
@@ -256,24 +242,9 @@
             border-color: #28a745;
         }
 
-        .legend-color.pending {
-            background-color: #fff3cd;
-            border-color: #ffc107;
-        }
-
-        .legend-color.approved {
-            background-color: #cfe2ff;
-            border-color: #0d6efd;
-        }
-
-        .legend-color.paid {
-            background-color: #d1ecf1;
-            border-color: #17a2b8;
-        }
-
-        .legend-color.completed {
-            background-color: #d3d3d3;
-            border-color: #6c757d;
+        .legend-color.booked {
+            background-color: #f8d7da;
+            border-color: #dc3545;
         }
 
         /* ================= Month Picker Modal ================= */
@@ -533,20 +504,28 @@
                                         <%
                                             }
 
-                                            // Days of month
                                             for (int day = 1; day <= daysInMonth; day++) {
                                                 LocalDate date = yearMonth.atDay(day);
                                                 List<Booking> dayBookings = calendarData != null ? calendarData.get(date) : null;
 
                                                 String status = "available";
-                                                String statusText = "Available";
+                                                String statusText = "Trống";
+
 
                                                 if (dayBookings != null && !dayBookings.isEmpty()) {
                                                     Booking booking = dayBookings.get(0);
-                                                    if (booking != null && booking.getStatus() != null && !booking.getStatus().isEmpty()) {
-                                                        status = booking.getStatus().toLowerCase();
-                                                        statusText = booking.getStatus();
+                                                    String bookingStatus = booking.getStatus();
+
+
+                                                    if (bookingStatus != null &&
+                                                            (bookingStatus.equalsIgnoreCase("Pending") ||
+                                                                    bookingStatus.equalsIgnoreCase("Approved") ||
+                                                                    bookingStatus.equalsIgnoreCase("Paid") ||
+                                                                    bookingStatus.equalsIgnoreCase("Returning"))) {
+                                                        status = "booked";
+                                                        statusText = "Đã Đặt";
                                                     }
+                                                    // Các status khác (Completed, Cancelled, Rejected) = Trống
                                                 }
 
                                                 String cssClass = "calendar-day " + status;
@@ -585,16 +564,7 @@
                                         <span class="legend-color available"></span> Trống
                                     </div>
                                     <div class="legend-item">
-                                        <span class="legend-color pending"></span> Đang chờ duyệt
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-color approved"></span> Được Chấp Nhận
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-color paid"></span> Đã Thanh Toán
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-color completed"></span> Đã Hoàn Thành
+                                        <span class="legend-color booked"></span> Đã Đặt
                                     </div>
                                 </div>
                             </c:if>
