@@ -31,7 +31,6 @@ public class CreatePaymentServlet extends HttpServlet {
         try {
             int bookingId = Integer.parseInt(bookingIdStr);
 
-            // ========== BUILD RETURN & CANCEL URLs FOR CUSTOMER ==========
             String baseUrl = "http://localhost:8080" + contextPath;
             String returnUrl = baseUrl + "/customer/execute-payment?bookingId=" + bookingId;
             String cancelUrl = baseUrl + "/customer/customerOrder?payment=cancelled";

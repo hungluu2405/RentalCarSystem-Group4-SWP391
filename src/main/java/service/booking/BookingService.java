@@ -137,6 +137,10 @@ public class BookingService {
                 System.err.println("❌ Promo code expired: " + promoCode);
                 return "❌ Promo code expired!";
             }
+            if (bookingPromoDAO.hasUserUsedPromotion(booking.getUserId(), promo.getPromoId())) {
+                return "❌ Bạn đã sử dụng mã giảm giá này rồi!";
+
+            }
 
             double discountRate = promo.getDiscountRate();
             String discountType = promo.getDiscountType();
