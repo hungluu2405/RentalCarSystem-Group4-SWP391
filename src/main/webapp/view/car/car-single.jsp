@@ -2025,11 +2025,11 @@
 
             html += '<div class="promo-code-title">' + promo.code + '</div>';
 
-            html += '<div class="promo-description">' + discountText;
+            html += '<div class="promo-description">';
 
             if (promo.description) {
 
-                html += '. ' + promo.description;
+                html +=  promo.description;
 
             }
 
