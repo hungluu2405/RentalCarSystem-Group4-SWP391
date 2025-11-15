@@ -142,7 +142,7 @@
 
                             <c:if test="${param.status == 'success'}">
                                 <div class="alert alert-success text-center mb-4">
-                                    ✅ Profile updated successfully!
+                                    ✅ Cập nhật bằng lái thành công!
                                 </div>
                             </c:if>
 
@@ -168,20 +168,20 @@
                                                value="${license.back_image_url != null ? license.back_image_url : '/images/license/default-back.jpg'}"/>
 
                                         <div class="mb-3">
-                                            <label>Front Image:</label><br>
+                                            <label>Ảnh trước:</label><br>
                                             <img id="frontImagePreview"
                                                  src="${pageContext.request.contextPath}${frontImageUrl}"
-                                                 alt="Front License"
+                                                 alt="Ảnh mặt trước bằng lái"
                                                  class="license-preview mb-2"
                                                  width="150">
                                             <input type="file" name="front_image" class="form-control">
                                         </div>
 
                                         <div class="mb-3">
-                                            <label>Back Image:</label><br>
+                                            <label>Ảnh sau:</label><br>
                                             <img id="backImagePreview"
                                                  src="${pageContext.request.contextPath}${backImageUrl}"
-                                                 alt="Back License"
+                                                 alt="Ảnh mặt sau bằng lái"
                                                  class="license-preview mb-2"
                                                  width="150">
                                             <input type="file" name="back_image" class="form-control">
@@ -192,21 +192,21 @@
                                 <!-- License & User Info -->
                                 <div class="row">
                                     <div class="col-lg-6 mb-3">
-                                        <label for="fullName" class="form-label">Full Name:</label>
+                                        <label for="fullName" class="form-label">Họ và tên:</label>
                                         <input type="text" id="fullName" name="fullName"
                                                class="form-control"
                                                value="${license.fullName}" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="gender" class="form-label">Gender:</label>
+                                        <label for="gender" class="form-label">Giới tính:</label>
                                         <input type="text" id="gender" name="gender"
                                                class="form-control"
                                                value="${license.gender}" readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="dob" class="form-label">Date of Birth:</label>
+                                        <label for="dob" class="form-label">Ngày tháng năm sinh:</label>
                                         <input type="date" id="dob" name="dob"
                                                class="form-control"
                                                value="<fmt:formatDate value='${license.dob}' pattern='yyyy-MM-dd'/>"
@@ -215,42 +215,42 @@
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="license_number" class="form-label">License Number:</label>
+                                        <label for="license_number" class="form-label">Bằng lái:</label>
                                         <input type="text" id="license_number" name="license_number"
                                                class="form-control"
                                                value="${license.license_number}" required>
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="issue_date" class="form-label">Issue Date:</label>
+                                        <label for="issue_date" class="form-label">Ngày cấp:</label>
                                         <input type="date" id="issue_date" name="issue_date"
                                                class="form-control"
                                                value="<fmt:formatDate value='${license.issue_date}' pattern='yyyy-MM-dd'/>">
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="expiry_date" class="form-label">Expiry Date:</label>
+                                        <label for="expiry_date" class="form-label">Ngày hết hạn:</label>
                                         <input type="date" id="expiry_date" name="expiry_date"
                                                class="form-control"
                                                value="<fmt:formatDate value='${license.expiry_date}' pattern='yyyy-MM-dd'/>">
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="license_class" class="form-label">Class:</label>
+                                        <label for="license_class" class="form-label">Hạng bằng:</label>
                                         <input type="text" id="license_class" name="license_class"
                                                class="form-control"
                                                value="${license.licenseClass}">
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="address" class="form-label">Address:</label>
+                                        <label for="address" class="form-label">Nơi cư trú:</label>
                                         <input type="text" id="address" name="address"
                                                class="form-control"
                                                value="${license.address}">
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="nationality" class="form-label">Nationality:</label>
+                                        <label for="nationality" class="form-label">Quốc tịch:</label>
                                         <input type="text" id="nationality" name="nationality"
                                                class="form-control"
                                                value="${license.nationality}">
@@ -258,7 +258,7 @@
                                 </div>
 
                                 <div class="text-center mt-4">
-                                    <button type="submit" class="btn-main">Update License</button>
+                                    <button type="submit" class="btn-main">Cập nhật bằng lái</button>
                                 </div>
                             </form>
 
