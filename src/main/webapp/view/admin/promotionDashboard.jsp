@@ -68,13 +68,13 @@
             <!-- DataTables Example -->
             <div class="card mb-3">
                 <div class="card-header">
-                    <i class="fas fa-id-card"></i>
-                    User Profile Table
+                    <i class="fas fa-tag"></i>
+                    Quản lý khuyến mãi
                 </div>
                 <div class="card-body">
 
                     <a href="promotionCreate" class="btn btn-primary mb-3">
-                        <i class="fas fa-plus"></i> Tạo Promotion
+                        <i class="fas fa-plus"></i> Tạo khuyến mãi
                     </a>
 
                     <form action="promotionDB" method="get" class="form-inline mb-3">
@@ -92,7 +92,7 @@
 
                         <!-- DISCOUNT RATE -->
                         <label for="rate" class="mr-2 font-weight-bold">
-                            <i class="fas fa-percent mr-1"></i>Discount:
+                            <i class="fas fa-percent mr-1"></i>Giảm giá:
                         </label>
                         <select name="rate" id="rate" class="form-control mr-3">
                             <option value="" <c:if test="${param.rate == ''}">selected</c:if>>Tất cả</option>
@@ -160,7 +160,7 @@
 
                                     <td>
                     <span class="badge ${p.active ? 'badge-success' : 'badge-danger'}">
-                            ${p.active ? 'Active' : 'Inactive'}
+                            ${p.active ? 'Áp dụng' : 'Chưa áp dụng'}
                     </span>
                                     </td>
 

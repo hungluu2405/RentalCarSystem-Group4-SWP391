@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -68,26 +69,26 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-comments"></i>
-                    Support Table
+                    Yêu cầu hỗ trợ
                 </div>
 
                 <div class="card-body">
 
                     <form action="contactDB" method="get" class="form-inline mb-3">
                         <label for="status" class="mr-2 font-weight-bold">
-                            <i class="fas fa-filter mr-1"></i>Status:
+                            <i class="fas fa-filter mr-1"></i>Trạng thái:
                         </label>
                         <select name="status" id="status" class="form-control mr-3">
-                            <option value="">All</option>
-                            <option value="todo" <c:if test="${selectedStatus == 'todo'}">selected</c:if>>To do</option>
-                            <option value="done" <c:if test="${selectedStatus == 'done'}">selected</c:if>>Done</option>
+                            <option value="">Tất cả</option>
+                            <option value="todo" <c:if test="${selectedStatus == 'todo'}">selected</c:if>>Cần hoàn thành</option>
+                            <option value="done" <c:if test="${selectedStatus == 'done'}">selected</c:if>>Đã hoàn thành</option>
                         </select>
 
                         <button type="submit" class="btn btn-primary mr-2">
-                            <i class="fas fa-search"></i> Search
+                            <i class="fas fa-search"></i> Tìm kiếm
                         </button>
                         <a href="contactDB" class="btn btn-outline-secondary">
-                            <i class="fas fa-undo"></i> Reset
+                            <i class="fas fa-undo"></i> Làm mới
                         </a>
                     </form>
 
@@ -96,14 +97,13 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="thead-dark">
                             <tr>
-                                <th>Ticket ID</th>
-                                <th>Name</th>
-                                <th>Phone</th>
+                                <th>ID yêu cầu</th>
+                                <th>Tên</th>
+                                <th>Số điện thoại</th>
                                 <th>Email</th>
-                                <th>Message</th>
-                                <th>Created At</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Lời nhắn</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
                             </tr>
                             </thead>
 
@@ -115,16 +115,14 @@
                                     <td>${c.phoneNumber}</td>
                                     <td>${c.email}</td>
                                     <td>${c.message}</td>
-                                    <td>
-                                        <fmt:formatDate value="${c.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" />
-                                    </td>
+
                                     <td>
                                         <c:choose>
                                             <c:when test="${c.status}">
-                                                <span class="badge badge-success">Done</span>
+                                                <span class="badge badge-success">Đã hoàn thành</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="badge badge-danger">To Do</span>
+                                                <span class="badge badge-danger">Cần hoàn thành</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -138,8 +136,8 @@
                                     <c:otherwise>btn-success</c:otherwise>
                                 </c:choose>">
                                                 <c:choose>
-                                                    <c:when test="${c.status}">To Do</c:when>
-                                                    <c:otherwise>Done</c:otherwise>
+                                                    <c:when test="${c.status}">Cần làm</c:when>
+                                                    <c:otherwise>Đã làm</c:otherwise>
                                                 </c:choose>
                                             </button>
                                         </form>

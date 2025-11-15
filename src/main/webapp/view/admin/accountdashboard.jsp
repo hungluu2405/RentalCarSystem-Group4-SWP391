@@ -123,7 +123,14 @@
               <td>${u.roleName}</td>
               <td>${u.userProfile.phone}</td>
               <td>${u.userProfile.dob}</td>
-              <td>${u.userProfile.gender}</td>
+<%--              <td>${u.userProfile.gender}</td>--%>
+                <td>
+                    <c:choose>
+                        <c:when test="${u.userProfile.gender == 'Male'}">Nam</c:when>
+                        <c:when test="${u.userProfile.gender == 'Female'}">Nữ</c:when>
+                        <c:otherwise>Khác</c:otherwise>
+                    </c:choose>
+                </td>
               <td>${u.userProfile.driverLicenseNumber}</td>
               <td>${u.email}</td>
               <td>${u.createdAt}</td>
