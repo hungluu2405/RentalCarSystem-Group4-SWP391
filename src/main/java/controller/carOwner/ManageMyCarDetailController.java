@@ -104,13 +104,11 @@ public class ManageMyCarDetailController extends HttpServlet {
 
                     imagePart.write(uploadPath + File.separator + fileName);
 
-                    // Lưu đường dẫn tương đối
                     car.setImageUrl("images/cars/" + fileName);
                 } else {
                     // Nếu không upload ảnh mới, giữ nguyên ảnh cũ
                     car.setImageUrl(request.getParameter("oldImageUrl"));
                 }
-                // 🔹 Đã chỉnh: gọi service để kiểm tra hợp lệ
                 String error = carService.validateCarUpdate(car);
                 if (error != null) {
                     request.setAttribute("error", error);
@@ -122,7 +120,6 @@ public class ManageMyCarDetailController extends HttpServlet {
                     return;
                 }
 
-                // 🔹 Đã chỉnh: chỉ update nếu validate pass
                 boolean updated = carDAO.updateCar(car);
                 if (updated) {
                     response.sendRedirect(request.getContextPath() + "/owner/manageMyCar");
