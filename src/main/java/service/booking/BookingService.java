@@ -2,7 +2,6 @@ package service.booking;
 
 import dao.implement.*;
 import model.*;
-import service.NotificationService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -238,18 +237,7 @@ public class BookingService {
         return success;
     }
 
-    public boolean completeBooking(int bookingId) {
-        boolean success = bookingDAO.updateStatus(bookingId, "Completed");
-        if (success) {
-            try {
-                notificationService.notifyBookingCompleted(bookingId);
-            } catch (Exception e) {
-                System.err.println("⚠️ Warning: Failed to send completion notification");
-                e.printStackTrace();
-            }
-        }
-        return success;
-    }
+
 
     public boolean returnBooking(int bookingId) {
         boolean success = bookingDAO.updateStatus(bookingId, "Returning");

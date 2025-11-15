@@ -183,52 +183,79 @@ public class BookingController extends HttpServlet {
         request.setAttribute("input_dropoffTime", dropoffTimeStr);
         request.setAttribute("input_location", location);
         request.setAttribute("input_appliedPromoCode", appliedPromoCode);
-        request.setAttribute("input_calculatedDiscount", calculatedDiscount);
-        request.setAttribute("input_finalCalculatedPrice", finalCalculatedPrice);
+
+        // ✅ VALIDATE trước khi set attribute
+        double discount = 0;
+        double finalPrice = 0;
+
+        if (calculatedDiscount != null && !calculatedDiscount.trim().isEmpty()) {
+            try {
+                discount = Double.parseDouble(calculatedDiscount);
+            } catch (NumberFormatException e) {
+                System.err.println("⚠️ Invalid discount value: " + calculatedDiscount);
+            }
+        }
+
+        if (finalCalculatedPrice != null && !finalCalculatedPrice.trim().isEmpty()) {
+            try {
+                finalPrice = Double.parseDouble(finalCalculatedPrice);
+            } catch (NumberFormatException e) {
+                System.err.println("⚠️ Invalid price value: " + finalCalculatedPrice);
+            }
+        }
+
+        request.setAttribute("input_calculatedDiscount", discount);
+        request.setAttribute("input_finalCalculatedPrice", finalPrice);
 
         if (carIdStr != null && !carIdStr.isEmpty()) {
             try {
                 int carId = Integer.parseInt(carIdStr);
 
-                //  Load thông tin xe
+                // Load thông tin xe
                 CarViewModel car = carDAO.getCarById(carId);
                 request.setAttribute("car", car);
 
-                //. Load thông tin chủ xe
+                // Load thông tin chủ xe
                 UserProfileDAO profileDAO = new UserProfileDAO();
                 UserProfile ownerProfile = profileDAO.findByUserId(car.getOwnerId());
                 request.setAttribute("ownerProfile", ownerProfile);
 
                 // Lấy tham số lọc rating
                 String ratingParam = request.getParameter("rating");
-                Integer ratingFilter = (ratingParam != null && !ratingParam.isEmpty())
-                        ? Integer.parseInt(ratingParam)
-                        : null;
+                Integer ratingFilter = null;
+                if (ratingParam != null && !ratingParam.trim().isEmpty()) {
+                    try {
+                        ratingFilter = Integer.parseInt(ratingParam);
+                    } catch (NumberFormatException e) {
+                        // Ignore invalid rating
+                    }
+                }
 
                 // Thiết lập phân trang cho reviews
                 int page = 1;
                 int pageSize = 5;
                 String pageParam = request.getParameter("page");
-                if (pageParam != null) {
+                if (pageParam != null && !pageParam.trim().isEmpty()) {
                     try {
                         page = Integer.parseInt(pageParam);
-                    } catch (NumberFormatException ignored) {
+                    } catch (NumberFormatException e) {
+                        page = 1;
                     }
                 }
                 int offset = (page - 1) * pageSize;
 
-                //  Load danh sách review với phân trang
+                // Load danh sách review với phân trang
                 ReviewDAO reviewDAO = new ReviewDAO();
                 List<Map<String, Object>> reviews = reviewDAO.getReviewsByCarId(carId, ratingFilter, offset, pageSize);
                 int totalReviews = reviewDAO.countReviewsByCarId(carId, ratingFilter);
                 int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
 
-                //  Kiểm tra trạng thái favourite
+                // Kiểm tra trạng thái favourite
                 boolean isFavourite = false;
                 HttpSession session = request.getSession(false);
                 if (session != null) {
                     User user = (User) session.getAttribute("user");
-                    if (user != null && user.getRoleId() == 3) { // Role 3 = Customer
+                    if (user != null && user.getRoleId() == 3) {
                         FavouriteCarDAO favouriteCarDAO = new FavouriteCarDAO();
                         isFavourite = favouriteCarDAO.isFavourite(user.getUserId(), carId);
                     }

@@ -2,7 +2,6 @@ package controller.carOwner;
 
 import dao.implement.CarDAO;
 import model.Car;
-import model.CarViewModel;
 import model.User;
 import model.CarType;
 
@@ -10,7 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import service.AddCarService;
+import service.car.AddCarService;
 
 import java.io.File;
 import java.io.IOException;

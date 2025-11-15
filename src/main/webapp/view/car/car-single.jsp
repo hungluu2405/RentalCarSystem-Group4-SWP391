@@ -1567,7 +1567,13 @@
 
     const ORIGINAL_PRICE_PER_DAY = parseFloat(document.getElementById("originalPrice").value) || 0;
 
-    let appliedPromo = ${not empty input_appliedPromoCode ? '{"code": "' + input_appliedPromoCode + '", "rate": 0}' : 'null'};
+    let appliedPromo = null;
+    <c:if test="${not empty input_appliedPromoCode && input_appliedPromoCode != ''}">
+    appliedPromo = {
+        code: "${input_appliedPromoCode}",
+        rate: 0
+    };
+    </c:if>
 
 
     // =============== CALCULATION ===============

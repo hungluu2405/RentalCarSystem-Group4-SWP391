@@ -12,7 +12,7 @@ import java.io.BufferedReader;
 
 import dao.implement.BookingDAO;
 import model.User;
-import service.ReviewService;
+import service.booking.ReviewService;
 
 @WebServlet("/customer/rateCar")
 public class RateCarController extends HttpServlet {

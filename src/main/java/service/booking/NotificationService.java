@@ -1,4 +1,4 @@
-package service;
+package service.booking;
 
 import dao.implement.BookingDAO;
 import dao.implement.CarDAO;
@@ -17,7 +17,6 @@ public class NotificationService {
     private final BookingDAO bookingDAO = new BookingDAO();
     private final CarDAO carDAO = new CarDAO();
     private final UserDAO userDAO = new UserDAO();
-
 
 
     public List<Notification> getHeaderNotifications(int userId) {
@@ -76,8 +75,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_PENDING",
-                    "Your car booking has been received!",
-                    "Your car booking has been received! Please wait for the Owner to approve it.",
+                    "Yêu cầu thuê xe đã được gửi!",
+                    "Yêu cầu thuê xe của bạn đã được gửi đến chủ xe. Vui lòng chờ chủ xe xác nhận..",
                     customerUrl
             ));
 
@@ -85,9 +84,9 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_NEW",
-                    "New car booking request!",
-                    "A new booking has been made for " + carModel + ". Please review the request.",
-                    "/owner/ownerBooking"  // ← BỎ ?id=
+                    "Có yêu cầu thuê xe mới!",
+                    "Bạn có yêu cầu thuê xe mới cho xe " + carModel + ". Vui lòng xem chi tiết và xác nhận.",
+                    "/owner/ownerBooking"
             ));
 
         } catch (Exception e) {
@@ -104,15 +103,15 @@ public class NotificationService {
             Booking booking = bookingDAO.getBookingById(bookingId);
             Car car = carDAO.findById(booking.getCarId());
 
-            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
+
             String customerUrl = getBookingUrl(booking.getUserId(), bookingId);
 
             notificationDAO.insertNotification(new Notification(
                     booking.getUserId(),
                     "BOOKING_APPROVED",
-                    "The booking has been approved!",
-                    "Your booking for " + car.getModel() + " has been approved! Please proceed to payment.",
-                    customerUrl  // ← SỬA
+                    "Yêu cầu thuê xe được chấp nhận!",
+                    "Yêu cầu thuê xe " + car.getModel() + " đã được chấp thuận! Vui lòng bắt đầu thanh toán.",
+                    customerUrl
             ));
 
         } catch (Exception e) {
@@ -132,9 +131,9 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     booking.getUserId(),
                     "BOOKING_REJECTED",
-                    "The booking has been rejected.",
-                    "Your booking for " + car.getModel() + " was rejected by the Owner.",
-                    "/home"  // ← GIỮ NGUYÊN (redirect về home)
+                    "Yêu cầu thuê xe đã bị từ chối.",
+                    "Yêu cầu thuê xe " + car.getModel() + " đã bị từ chối bởi chủ xe.",
+                    "/home"
             ));
 
         } catch (Exception e) {
@@ -154,24 +153,23 @@ public class NotificationService {
             int customerId = booking.getUserId();
             int ownerId = car.getOwnerId();
 
-            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
             String customerUrl = getBookingUrl(customerId, bookingId);
 
             // Thông báo cho Customer/Owner (người đặt xe)
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_CANCELLED",
-                    "Booking Cancelled Successfully.",
-                    "You have successfully cancelled your booking for " + car.getModel() + ".",
-                    customerUrl  // ← SỬA
+                    "Đã hủy yêu cầu thuê xe.",
+                    "Bạn đã hủy yêu cầu thuê xe " + car.getModel() + "thành công",
+                    customerUrl
             ));
 
             // Thông báo cho Owner (chủ xe)
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_CANCELLED",
-                    "Customer Cancelled Booking!",
-                    "The booking for " + car.getModel() + " has been cancelled by the Customer.",
+                    "Khách hàng đã hủy đặt xe!",
+                    "Yêu cầu thuê xe " + car.getModel() + " đã bị hủy bởi khách hàng.",
                     "/owner/ownerBooking?id=" + bookingId
             ));
 
@@ -199,8 +197,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_PAID",
-                    "Payment Successful!",
-                    "Your payment for " + car.getModel() + " has been confirmed. Enjoy your trip!",
+                    "Thanh toán thành công!",
+                    "Thanh toán cho xe " + car.getModel() + " đã hoàn tất. Chúc bạn có chuyến đi vui vẻ!",
                     customerUrl  // ← SỬA
             ));
 
@@ -208,8 +206,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_PAID",
-                    "Payment Received!",
-                    "Customer has paid for the booking of " + car.getModel() + ". Prepare the car for pickup.",
+                    "Khách hàng thanh toán thành công!",
+                    "Khách hàng đã thanh toán thành công cho xe" + car.getModel() + ". Vui lòng chuẩn bị xe và liên hệ khách để giao xe.",
                     "/owner/ownerBooking?id=" + bookingId
             ));
 
@@ -219,43 +217,7 @@ public class NotificationService {
         }
     }
 
-    /**
-     * Gửi thông báo khi booking hoàn thành
-     */
-    public void notifyBookingCompleted(int bookingId) {
-        try {
-            Booking booking = bookingDAO.getBookingById(bookingId);
-            Car car = carDAO.findById(booking.getCarId());
 
-            int customerId = booking.getUserId();
-            int ownerId = car.getOwnerId();
-
-            // ===== THAY ĐỔI: Dùng getBookingUrl() =====
-            String customerUrl = getBookingUrl(customerId, bookingId);
-
-            // Thông báo cho Customer/Owner (người đặt xe)
-            notificationDAO.insertNotification(new Notification(
-                    customerId,
-                    "BOOKING_COMPLETED",
-                    "Car Returned Successfully!",
-                    "Your trip with " + car.getModel() + " has been completed. Thank you for using Rentaly!",
-                    customerUrl  // ← SỬA
-            ));
-
-            // Thông báo cho Owner (chủ xe)
-            notificationDAO.insertNotification(new Notification(
-                    ownerId,
-                    "BOOKING_COMPLETED",
-                    "Trip Completed by Customer!",
-                    "Customer has done the trip with " + car.getModel() + ". Please check the car after trip.",
-                    "/owner/ownerBooking?id=" + bookingId
-            ));
-
-        } catch (Exception e) {
-            System.err.println("❌ Error sending booking completed notification: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Gửi thông báo khi customer request return car (status = Returning)
@@ -274,8 +236,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "BOOKING_RETURNING",
-                    "Return Request Sent!",
-                    "Your return request for " + car.getModel() + " has been sent. Waiting for owner confirmation.",
+                    "Yêu cầu trả xe đã gửi!",
+                    "Yêu cầu trả xe " + car.getModel() + " đã được gửi. Vui lòng chờ chủ xe xác nhận.",
                     customerUrl
             ));
 
@@ -283,8 +245,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "BOOKING_RETURNING",
-                    "Customer Requesting to Return Car!",
-                    "Customer wants to return " + car.getModel() + ". Please confirm the car return.",
+                    "Khách yêu cầu trả xe!",
+                    "Khách hàng muốn trả xe " + car.getModel() + ". Vui lòng xác nhận việc nhận xe lại.",
                     "/owner/ownerBooking"
             ));
 
@@ -311,8 +273,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     customerId,
                     "RETURN_CONFIRMED",
-                    "Return Confirmed!",
-                    "Owner has confirmed the return of " + car.getModel() + ". Your trip is now completed!",
+                    "Chủ xe đã xác nhận nhận lại xe!",
+                    "Chủ xe đã xác nhận nhận lại xe " + car.getModel() + ". Chuyến đi của bạn đã hoàn thành!",
                     customerUrl
             ));
 
@@ -320,8 +282,8 @@ public class NotificationService {
             notificationDAO.insertNotification(new Notification(
                     ownerId,
                     "RETURN_CONFIRMED",
-                    "You Confirmed Car Return!",
-                    "You have confirmed the return of " + car.getModel() + ". Trip completed successfully.",
+                    "Bạn đã xác nhận nhận lại xe!",
+                    "Bạn đã xác nhận nhận lại xe " + car.getModel() + ". Chuyến đi đã hoàn thành thành công.",
                     "/owner/ownerBooking"
             ));
 

@@ -1,9 +1,8 @@
-package service;
+package service.booking;
 
 import dao.implement.PromotionDAO;
 import model.Promotion;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class PromotionService {

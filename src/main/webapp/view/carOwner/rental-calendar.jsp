@@ -419,7 +419,7 @@
 
                                 <!-- Car Selection -->
                                 <div style="display: flex; align-items: center; gap: 10px;">
-                                    <label for="carSelect">Car:</label>
+                                    <label for="carSelect">Xe:</label>
                                     <select name="carId" id="carSelect" onchange="this.form.submit()"
                                             style="min-width: 200px;">
                                         <c:if test="${empty ownerCars}">
@@ -446,18 +446,18 @@
                                     <!-- Current Month Display -->
                                     <span style="font-weight: bold; font-size: 16px; min-width: 120px; text-align: center;">
                                         <c:choose>
-                                            <c:when test="${selectedMonth == 1}">January</c:when>
-                                            <c:when test="${selectedMonth == 2}">February</c:when>
-                                            <c:when test="${selectedMonth == 3}">March</c:when>
-                                            <c:when test="${selectedMonth == 4}">April</c:when>
-                                            <c:when test="${selectedMonth == 5}">May</c:when>
-                                            <c:when test="${selectedMonth == 6}">June</c:when>
-                                            <c:when test="${selectedMonth == 7}">July</c:when>
-                                            <c:when test="${selectedMonth == 8}">August</c:when>
-                                            <c:when test="${selectedMonth == 9}">September</c:when>
-                                            <c:when test="${selectedMonth == 10}">October</c:when>
-                                            <c:when test="${selectedMonth == 11}">November</c:when>
-                                            <c:when test="${selectedMonth == 12}">December</c:when>
+                                            <c:when test="${selectedMonth == 1}">Tháng 1</c:when>
+                                            <c:when test="${selectedMonth == 2}">Tháng 2</c:when>
+                                            <c:when test="${selectedMonth == 3}">Tháng 3</c:when>
+                                            <c:when test="${selectedMonth == 4}">Tháng 4</c:when>
+                                            <c:when test="${selectedMonth == 5}">Tháng 5</c:when>
+                                            <c:when test="${selectedMonth == 6}">Tháng 6</c:when>
+                                            <c:when test="${selectedMonth == 7}">Tháng 7</c:when>
+                                            <c:when test="${selectedMonth == 8}">Tháng 8</c:when>
+                                            <c:when test="${selectedMonth == 9}">Tháng 9</c:when>
+                                            <c:when test="${selectedMonth == 10}">Tháng 10</c:when>
+                                            <c:when test="${selectedMonth == 11}">Tháng 11</c:when>
+                                            <c:when test="${selectedMonth == 12}">Tháng 12</c:when>
                                         </c:choose>
                                         ${selectedYear}
                                     </span>
@@ -475,7 +475,7 @@
 
                                     <!-- Today Button -->
                                     <button type="button" class="btn-today" onclick="goToToday()" title="Hôm Nay">
-                                        <i class="fa fa-calendar-day"></i> Today
+                                        <i class="fa fa-calendar-day"></i> Hôm Nay
                                     </button>
 
                                     <!-- Hidden Month Input -->
