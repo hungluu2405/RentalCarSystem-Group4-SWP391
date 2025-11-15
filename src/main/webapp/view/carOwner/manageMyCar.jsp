@@ -250,9 +250,6 @@
                         </div>
 
                         <div class="dashboard-content">
-<%--                            <h3 class="fw-bold mb-3 text-secondary">--%>
-<%--                                <i class="fa fa-car"></i> Gara của tôi--%>
-<%--                            </h3>--%>
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
 
@@ -326,7 +323,7 @@
                             </c:if>
 
 
-    <!-- ⭐ ADD: Pagination -->
+    <!-- ADD: Pagination -->
                             <c:if test="${totalPages > 1}">
 
                                 <!-- === THAY ĐỔI: giữ availability khi chuyển trang === -->

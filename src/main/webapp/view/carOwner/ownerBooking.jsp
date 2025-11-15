@@ -198,6 +198,15 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+
+                                    <c:if test="${empty bookings}">
+                                        <tr>
+                                            <td colspan="10" class="text-center py-4 text-muted">
+                                                Bạn hiện không có đơn đặt thuê xe nào.
+                                            </td>
+                                        </tr>
+                                    </c:if>
+
                                     <c:forEach var="order" items="${bookings}">
                                         <c:set var="isPending" value="${order.status == 'Pending'}"/>
                                         <c:set var="isHistory"

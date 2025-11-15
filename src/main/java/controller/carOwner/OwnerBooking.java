@@ -131,12 +131,6 @@ public class OwnerBooking extends HttpServlet {
                     break;
                 case "confirmreturn":
                     result = bookingService.confirmReturnBooking(bookingId);
-                    if (result) {
-                        request.getSession().setAttribute("successMessage", "✅ Bạn đã xác nhận xe được trả thành công!");
-                    } else {
-                        request.getSession().setAttribute("errorMessage", "❌ Không thể xác nhận trả xe.");
-                    }
-                    break;
                 default:
                     break;
             }

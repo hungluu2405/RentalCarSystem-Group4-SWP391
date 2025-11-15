@@ -796,8 +796,7 @@ public class CarDAO extends DBContext {
         String sql = "SELECT COUNT(*) " +
                 "FROM BOOKING b " +
                 "JOIN CAR c ON b.CAR_ID = c.CAR_ID " +
-                " JOIN USER_PROFILE up ON b.USER_ID = up.USER_ID " +
-                "WHERE c.USER_ID = ?";
+                "WHERE b.USER_ID = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
