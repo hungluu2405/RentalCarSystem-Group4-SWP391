@@ -97,7 +97,7 @@ public class PayPalService {
                     executedPayment.getTransactions().get(0).getAmount().getTotal()
             );
 
-            // Convert về VND để lưu DB (giữ consistency với data khác)
+            // Convert về VND để lưu DB
             double paidAmountVND = paidAmountUSD * VND_TO_USD_RATE;
 
             String paypalTransactionId = executedPayment.getId();

@@ -34,17 +34,17 @@ public class PromotionApiController extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         PrintWriter out = resp.getWriter();
         try {
-            // Get all available promotions
+
             List<Promotion> promotions = promoDAO.getAvailablePromotions();
-            // Create response object
+
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("promotions", promotions);
-            // Convert to JSON and send
+
             out.print(gson.toJson(response));
         } catch (Exception e) {
             e.printStackTrace();
-            // Error response
+
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
             errorResponse.put("error", "Failed to load promotions");

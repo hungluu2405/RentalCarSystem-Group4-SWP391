@@ -41,19 +41,19 @@ public class BookingController extends HttpServlet {
         String location = request.getParameter("location");
         String appliedPromoCode = request.getParameter("appliedPromoCode");
 
-        // ✅ LẤY DISCOUNT VÀ FINAL PRICE TỪ HIDDEN INPUTS
+        //  LẤY DISCOUNT VÀ FINAL PRICE TỪ HIDDEN INPUTS
         String calculatedDiscountStr = request.getParameter("calculatedDiscount");
         String finalCalculatedPriceStr = request.getParameter("finalCalculatedPrice");
 
         try {
-            // Validation
+
             if (carIdStr == null || startDateStr == null || endDateStr == null ||
                     pickupTimeStr == null || dropoffTimeStr == null ||
                     carIdStr.isEmpty() || startDateStr.isEmpty() ||
                     endDateStr.isEmpty() || pickupTimeStr.isEmpty() ||
                     dropoffTimeStr.isEmpty()) {
 
-                forwardWithError(request, response, "Please fill in all required fields!",
+                forwardWithError(request, response, "Vui Lòng Điền Đầy Đủ Thông Tin!",
                         carIdStr, startDateStr, endDateStr, pickupTimeStr,
                         dropoffTimeStr, location, appliedPromoCode,
                         calculatedDiscountStr, finalCalculatedPriceStr);
@@ -91,7 +91,7 @@ public class BookingController extends HttpServlet {
                 return;
             }
 
-            // ✅ PARSE DISCOUNT VÀ FINAL PRICE
+            //  PARSE DISCOUNT VÀ FINAL PRICE
             double discountAmount = 0.0;
             double finalPrice = 0.0;
 
@@ -137,11 +137,11 @@ public class BookingController extends HttpServlet {
                     return;
                 }
 
-                // ✅ LẤY SESSION
+                // LẤY SESSION
                 HttpSession session = request.getSession();
                 session.setAttribute("confirmedBooking", booking);
 
-                // ✅ TÍNH GIÁ GỐC (ORIGINAL PRICE) - QUAN TRỌNG!
+                // TÍNH GIÁ GỐC (ORIGINAL PRICE) - QUAN TRỌNG!
                 try {
                     CarViewModel car = carDAO.getCarById(booking.getCarId());
 
