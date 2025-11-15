@@ -84,7 +84,7 @@
                                             <label>Ảnh Mặt Trước:</label><br>
                                             <img id="frontImagePreview"
                                                  src="${pageContext.request.contextPath}${frontImageUrl}"
-                                                 alt="Front License"
+                                                 alt="Ảnh mặt trước bằng lái"
                                                  class="license-preview mb-2"
                                                  width="150">
                                             <input type="file" name="front_image" class="form-control">
@@ -94,7 +94,7 @@
                                             <label>Ảnh Mặt Sau:</label><br>
                                             <img id="backImagePreview"
                                                  src="${pageContext.request.contextPath}${backImageUrl}"
-                                                 alt="Back License"
+                                                 alt="Ảnh mặt sau bằng lái"
                                                  class="license-preview mb-2"
                                                  width="150">
                                             <input type="file" name="back_image" class="form-control">
@@ -133,7 +133,7 @@
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="issue_date" class="form-label">Ngày Phát Hành:</label>
+                                        <label for="issue_date" class="form-label">Ngày Cấp:</label>
                                         <input type="date" id="issue_date" name="issue_date"
                                                class="form-control"
                                                value="<fmt:formatDate value='${license.issue_date}' pattern='yyyy-MM-dd'/>">
@@ -154,7 +154,7 @@
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
-                                        <label for="address" class="form-label">Địa Chỉ:</label>
+                                        <label for="address" class="form-label">Nơi Cư trú:</label>
                                         <input type="text" id="address" name="address"
                                                class="form-control"
                                                value="${license.address}">

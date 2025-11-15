@@ -19,7 +19,8 @@ public class ContactDAO extends DBContext {
         String sql = "INSERT INTO SUPPORT_TICKET_REQUIREMENT (USER_ID, MESSAGE, PHONE_NUMBER, EMAIL, NAME) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = this.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            conn.setAutoCommit(true);
 
             if (contact.getUserId() == null) {
                 ps.setNull(1, java.sql.Types.INTEGER);
