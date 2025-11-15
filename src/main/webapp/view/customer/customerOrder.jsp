@@ -776,14 +776,14 @@
                                                                 <c:when test="${order.status == 'Approved'}">
                                                                     <a href="${pageContext.request.contextPath}/customer/create-payment?bookingId=${order.bookingId}"
                                                                        class="btn btn-sm btn-info">
-                                                                        <i class="fa fa-credit-card"></i> Thanh Toán
+                                                                        <i class="fa fa-credit-card"></i>&nbsp;Thanh&nbsp;Toán
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Paid'}">
                                                                     <a href="${pageContext.request.contextPath}/customer/returnCar?bookingId=${order.bookingId}"
                                                                        onclick="return confirm('Request to return this car? Owner will need to confirm.');"
                                                                        class="btn btn-sm btn-success">
-                                                                        <i class="fa fa-undo"></i> Trả Xe
+                                                                        <i class="fa fa-undo"></i>&nbsp;Trả&nbsp;Xe
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Returning'}">

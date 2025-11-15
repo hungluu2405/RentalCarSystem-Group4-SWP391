@@ -1,5 +1,6 @@
 package controller.booking;
 
+import dao.implement.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -7,20 +8,24 @@ import model.Booking;
 import model.CarViewModel;
 import model.User;
 import service.booking.BookingService;
-import dao.implement.CarDAO;
-
+import model.UserProfile;
+import dao.implement.ReviewDAO;
+import model.Review;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Map;
 
 @WebServlet("/booking")
 public class BookingController extends HttpServlet {
 
     private final BookingService bookingService = new BookingService();
     private final CarDAO carDAO = new CarDAO();
+    Review review = new Review();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -184,10 +189,61 @@ public class BookingController extends HttpServlet {
         if (carIdStr != null && !carIdStr.isEmpty()) {
             try {
                 int carId = Integer.parseInt(carIdStr);
+
+                //  Load thông tin xe
                 CarViewModel car = carDAO.getCarById(carId);
                 request.setAttribute("car", car);
+
+                //. Load thông tin chủ xe
+                UserProfileDAO profileDAO = new UserProfileDAO();
+                UserProfile ownerProfile = profileDAO.findByUserId(car.getOwnerId());
+                request.setAttribute("ownerProfile", ownerProfile);
+
+                // Lấy tham số lọc rating
+                String ratingParam = request.getParameter("rating");
+                Integer ratingFilter = (ratingParam != null && !ratingParam.isEmpty())
+                        ? Integer.parseInt(ratingParam)
+                        : null;
+
+                // Thiết lập phân trang cho reviews
+                int page = 1;
+                int pageSize = 5;
+                String pageParam = request.getParameter("page");
+                if (pageParam != null) {
+                    try {
+                        page = Integer.parseInt(pageParam);
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+                int offset = (page - 1) * pageSize;
+
+                //  Load danh sách review với phân trang
+                ReviewDAO reviewDAO = new ReviewDAO();
+                List<Map<String, Object>> reviews = reviewDAO.getReviewsByCarId(carId, ratingFilter, offset, pageSize);
+                int totalReviews = reviewDAO.countReviewsByCarId(carId, ratingFilter);
+                int totalPages = (int) Math.ceil((double) totalReviews / pageSize);
+
+                //  Kiểm tra trạng thái favourite
+                boolean isFavourite = false;
+                HttpSession session = request.getSession(false);
+                if (session != null) {
+                    User user = (User) session.getAttribute("user");
+                    if (user != null && user.getRoleId() == 3) { // Role 3 = Customer
+                        FavouriteCarDAO favouriteCarDAO = new FavouriteCarDAO();
+                        isFavourite = favouriteCarDAO.isFavourite(user.getUserId(), carId);
+                    }
+                }
+
+                // Set tất cả attributes
+                request.setAttribute("isFavourite", isFavourite);
+                request.setAttribute("reviews", reviews);
+                request.setAttribute("ratingFilter", ratingFilter);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPages);
+
             } catch (Exception e) {
-                System.err.println("❌ Error loading car: " + e.getMessage());
+                System.err.println("❌ Error loading car details: " + e.getMessage());
+                e.printStackTrace();
             }
         }
 
