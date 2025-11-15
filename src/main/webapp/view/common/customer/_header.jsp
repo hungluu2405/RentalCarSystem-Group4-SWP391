@@ -269,16 +269,7 @@
                     </div>
                 </div>
             </div>
-            <div class="topbar-right">
-                <div class="social-icons">
-                    <a href="#"><i class="fa fa-facebook fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-twitter fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-youtube fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-pinterest fa-lg"></i></a>
-                    <a href="#"><i class="fa fa-instagram fa-lg"></i></a>
 
-                </div>
-            </div>
             <div class="clearfix"></div>
         </div>
     </div>

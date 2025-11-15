@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Review {
     private int reviewId;
@@ -9,7 +10,8 @@ public class Review {
     private String comment;
     private LocalDateTime createdAt;
 
-    public Review() {}
+    public Review() {
+    }
 
     public Review(int bookingId, int rating, String comment) {
         this.bookingId = bookingId;
@@ -55,5 +57,11 @@ public class Review {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getFormattedCreatedAt() {
+        if (createdAt == null) return "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return createdAt.format(formatter);
     }
 }

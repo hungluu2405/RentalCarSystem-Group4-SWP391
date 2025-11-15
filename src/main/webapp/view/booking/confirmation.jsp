@@ -7,6 +7,7 @@
 <html lang="en">
 <head>
     <jsp:include page="/view/common/customer/_head.jsp"/>
+
     <title>Booking Confirmation - Rentaly</title>
     <style>
         .container-content {

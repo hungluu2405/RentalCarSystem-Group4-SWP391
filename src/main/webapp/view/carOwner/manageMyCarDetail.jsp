@@ -14,6 +14,27 @@
     <jsp:include page="../common/carOwner/_headOwner.jsp"/>
     <title>Manage Car Detail</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p, span, div {
+            font-family: 'Inter', sans-serif;
+        }
         .car-form {
             max-width: 800px;
             margin: 40px auto;
