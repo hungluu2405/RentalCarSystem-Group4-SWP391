@@ -101,22 +101,22 @@ public class BookingDAO extends DBContext {
 
                 if (isOverlap) {
                     conflictCount++;
-                    System.out.println("⚠️ Conflict found:");
+                    System.out.println(" Conflict found:");
                     System.out.println("   Existing: " + existingStartDateTime + " → " + existingEndDateTime);
                 }
             }
 
             if (conflictCount > 0) {
-                System.out.println("⚠️ Car " + carId + " is NOT available! Conflicts: " + conflictCount);
+                System.out.println(" Car " + carId + " is NOT available! Conflicts: " + conflictCount);
                 System.out.println("   Request: " + requestStart + " → " + requestEnd);
             } else {
-                System.out.println("✅ Car " + carId + " is available!");
+                System.out.println(" Car " + carId + " is available!");
             }
 
             return conflictCount == 0;
 
         } catch (SQLException e) {
-            System.err.println("❌ Error: " + e.getMessage());
+            System.err.println(" Error: " + e.getMessage());
             e.printStackTrace();
         }
         return false;

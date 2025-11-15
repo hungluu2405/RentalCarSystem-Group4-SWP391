@@ -76,8 +76,6 @@ public class BookingService {
             return "❌ The selected car does not exist!";
         }
 
-
-
         if (car.getOwnerId() == booking.getUserId()) {
             return "❌ Bạn không thể tự book xe của chính bạn!";
         }
@@ -121,7 +119,7 @@ public class BookingService {
         Promotion promo = null;
 
         if (promoCode != null && !promoCode.trim().isEmpty()) {
-            System.out.println("🎫 Applying promo code: " + promoCode);
+            System.out.println(" Applying promo code: " + promoCode);
 
             promo = promoDAO.findByCode(promoCode.trim());
             if (promo == null) {
@@ -129,13 +127,13 @@ public class BookingService {
                 return "❌ Promo code not found!";
             }
             if (!promo.isActive()) {
-                System.err.println("❌ Promo code not active: " + promoCode);
+                System.err.println("❌ Mã giảm giá đang không có hiệu lực: " + promoCode);
                 return "❌ Promo code is not active!";
             }
             if (promo.getStartDate().toLocalDate().isAfter(today) ||
                     promo.getEndDate().toLocalDate().isBefore(today)) {
                 System.err.println("❌ Promo code expired: " + promoCode);
-                return "❌ Promo code expired!";
+                return "❌ Mã giảm giá đã hết hạn!";
             }
             if (bookingPromoDAO.hasUserUsedPromotion(booking.getUserId(), promo.getPromoId())) {
                 return "❌ Bạn đã sử dụng mã giảm giá này rồi!";
@@ -148,7 +146,7 @@ public class BookingService {
 
             if (discountType == null || discountType.trim().isEmpty()) {
                 discountType = "PERCENT";
-                System.out.println(" DiscountType is null, defaulting to PERCENT");
+
             }
 
             System.out.println(" Discount rate: " + discountRate + "%, Type: " + discountType);

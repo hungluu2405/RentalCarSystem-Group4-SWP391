@@ -33,7 +33,7 @@ public class CreatePaymentServlet extends HttpServlet {
 
             String baseUrl = "http://localhost:8080" + contextPath;
             String returnUrl = baseUrl + "/customer/execute-payment?bookingId=" + bookingId;
-            String cancelUrl = baseUrl + "/customer/customerOrder?payment=cancelled";
+            String cancelUrl = baseUrl + "/customer/customerOrder?id=" + bookingId + "&payment=cancelled";
 
             // Create payment with custom URLs
             Payment payment = paypalService.createOrder(bookingId, contextPath, returnUrl, cancelUrl);
