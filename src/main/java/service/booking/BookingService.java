@@ -120,21 +120,39 @@ public class BookingService {
         BigDecimal finalPrice = finalPriceBeforeDiscount;
         Promotion promo = null;
 
-        // ========== PROMOTION ==========
         if (promoCode != null && !promoCode.trim().isEmpty()) {
+            System.out.println("🎫 Applying promo code: " + promoCode);
+
             promo = promoDAO.findByCode(promoCode.trim());
-            if (promo == null) return "❌ Promo code not found!";
-            if (!promo.isActive()) return "❌ Promo code is not active!";
+            if (promo == null) {
+                System.err.println("❌ Promo code not found: " + promoCode);
+                return "❌ Promo code not found!";
+            }
+            if (!promo.isActive()) {
+                System.err.println("❌ Promo code not active: " + promoCode);
+                return "❌ Promo code is not active!";
+            }
             if (promo.getStartDate().toLocalDate().isAfter(today) ||
                     promo.getEndDate().toLocalDate().isBefore(today)) {
+                System.err.println("❌ Promo code expired: " + promoCode);
                 return "❌ Promo code expired!";
             }
 
             double discountRate = promo.getDiscountRate();
-            if ("PERCENT".equalsIgnoreCase(promo.getDiscountType())) {
+            String discountType = promo.getDiscountType();
+
+
+            if (discountType == null || discountType.trim().isEmpty()) {
+                discountType = "PERCENT";
+                System.out.println(" DiscountType is null, defaulting to PERCENT");
+            }
+
+            System.out.println(" Discount rate: " + discountRate + "%, Type: " + discountType);
+
+            if ("PERCENT".equalsIgnoreCase(discountType)) {
                 discountAmount = finalPriceBeforeDiscount.multiply(BigDecimal.valueOf(discountRate))
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-            } else if ("FIXED".equalsIgnoreCase(promo.getDiscountType())) {
+            } else if ("FIXED".equalsIgnoreCase(discountType)) {
                 discountAmount = BigDecimal.valueOf(discountRate);
             }
 
@@ -145,6 +163,8 @@ public class BookingService {
             if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 finalPrice = BigDecimal.ZERO;
             }
+
+
         }
 
         booking.setTotalPrice(finalPrice.doubleValue());

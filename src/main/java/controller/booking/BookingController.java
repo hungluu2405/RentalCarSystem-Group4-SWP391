@@ -12,11 +12,14 @@ import model.UserProfile;
 import dao.implement.ReviewDAO;
 import model.Review;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +28,6 @@ public class BookingController extends HttpServlet {
 
     private final BookingService bookingService = new BookingService();
     private final CarDAO carDAO = new CarDAO();
-    Review review = new Review();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -116,8 +118,6 @@ public class BookingController extends HttpServlet {
             booking.setStatus("Pending");
             booking.setCreatedAt(LocalDateTime.now());
 
-
-
             String finalPromoCode = (appliedPromoCode != null && !appliedPromoCode.trim().isEmpty())
                     ? appliedPromoCode.trim()
                     : null;
@@ -137,18 +137,63 @@ public class BookingController extends HttpServlet {
                     return;
                 }
 
-                // ✅ LƯU VÀO SESSION
+                // ✅ LẤY SESSION
                 HttpSession session = request.getSession();
                 session.setAttribute("confirmedBooking", booking);
 
-                // ✅ LƯU DISCOUNT (QUAN TRỌNG!)
+                // ✅ TÍNH GIÁ GỐC (ORIGINAL PRICE) - QUAN TRỌNG!
+                try {
+                    CarViewModel car = carDAO.getCarById(booking.getCarId());
+
+                    // Tính lại giá gốc (giống logic trong BookingService)
+                    LocalDateTime pickupDateTime = LocalDateTime.of(booking.getStartDate(), booking.getPickupTime());
+                    LocalDateTime returnDateTime = LocalDateTime.of(booking.getEndDate(), booking.getDropoffTime());
+                    long totalHours = ChronoUnit.HOURS.between(pickupDateTime, returnDateTime);
+
+                    BigDecimal pricePerDay = car.getPricePerDay();
+                    long fullDays = totalHours / 24;
+                    long remainingHours = totalHours % 24;
+
+                    BigDecimal basePrice = pricePerDay.multiply(BigDecimal.valueOf(fullDays));
+                    BigDecimal hourlyRate = pricePerDay.divide(BigDecimal.valueOf(24), 2, RoundingMode.HALF_UP);
+                    BigDecimal extraFee = BigDecimal.ZERO;
+
+                    if (remainingHours <= 1) {
+                        extraFee = BigDecimal.ZERO;
+                    } else if (remainingHours > 1 && remainingHours <= 6) {
+                        long chargeableHours = remainingHours - 1;
+                        extraFee = hourlyRate.multiply(BigDecimal.valueOf(1.2))
+                                .multiply(BigDecimal.valueOf(chargeableHours))
+                                .setScale(2, RoundingMode.HALF_UP);
+                    } else {
+                        extraFee = pricePerDay;
+                    }
+
+                    BigDecimal originalPrice = basePrice.add(extraFee);
+
+                    // Lưu giá gốc vào session
+                    session.setAttribute("bookingOriginalPrice", originalPrice.doubleValue());
+                    System.out.println("💰 Saved original price: " + originalPrice.doubleValue());
+
+                } catch (Exception e) {
+                    System.err.println("⚠️ Error calculating original price: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+                // LƯU DISCOUNT
                 if (discountAmount > 0) {
                     session.setAttribute("bookingDiscount", discountAmount);
                     System.out.println("💰 Saved discount: " + discountAmount);
+                } else {
+                    // Nếu discount = 0, XÓA discount khỏi session
+                    session.removeAttribute("bookingDiscount");
                 }
+
 
                 if (finalPromoCode != null) {
                     session.setAttribute("bookingPromoCode", finalPromoCode);
+                } else {
+                    session.removeAttribute("bookingPromoCode");
                 }
 
                 response.sendRedirect(request.getContextPath() + "/booking-confirmation");
@@ -184,7 +229,7 @@ public class BookingController extends HttpServlet {
         request.setAttribute("input_location", location);
         request.setAttribute("input_appliedPromoCode", appliedPromoCode);
 
-        // ✅ VALIDATE trước khi set attribute
+
         double discount = 0;
         double finalPrice = 0;
 

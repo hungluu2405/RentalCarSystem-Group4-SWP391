@@ -44,9 +44,11 @@ public class BookingConfirmationServlet extends HttpServlet {
         // Lấy discount và promoCode nếu có
         Double discount = (Double) session.getAttribute("bookingDiscount");
         String promoCode = (String) session.getAttribute("bookingPromoCode");
+        Double originalPrice = (Double) session.getAttribute("bookingOriginalPrice");
 
         System.out.println("💰 Discount (session): " + discount);
         System.out.println("🎫 Promo Code (session): " + promoCode);
+        System.out.println("💵 Original Price (session): " + originalPrice);
 
         if (discount != null && discount > 0) {
             request.setAttribute("discount", discount);
@@ -54,11 +56,15 @@ public class BookingConfirmationServlet extends HttpServlet {
         if (promoCode != null && !promoCode.isEmpty()) {
             request.setAttribute("promoCode", promoCode);
         }
+        if (originalPrice != null) { // ✅ THÊM
+            request.setAttribute("originalPrice", originalPrice);
+        }
 
-        // Xoá session tạm
+// Xoá session tạm
         session.removeAttribute("confirmedBooking");
         session.removeAttribute("bookingDiscount");
         session.removeAttribute("bookingPromoCode");
+        session.removeAttribute("bookingOriginalPrice"); //
 
 
         // === FORWARD ===
