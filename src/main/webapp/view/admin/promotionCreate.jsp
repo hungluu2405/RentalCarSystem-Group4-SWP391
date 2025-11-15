@@ -162,9 +162,7 @@
                                         <h5>Mức Giảm (%)</h5>
                                         <input type="number" name="rate" class="form-control" placeholder="Ví dụ: 10"
                                                value="${promotion.discountRate}"
-                                               step="0.01" min="0" max="100" required>
-
-
+                                               step="0.01" min="0" max="99.9" required>
                                     </div>
 
                                     <!-- DESCRIPTION -->

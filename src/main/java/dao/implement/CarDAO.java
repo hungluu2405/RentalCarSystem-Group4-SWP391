@@ -1559,6 +1559,30 @@ public List<CarViewModel> getCarsByOwnerWithPaging(int ownerId, int offset, int 
         return cars;
     }
 
+    public boolean deleteCarAdmin(int carId) {
+        String sqlImage = "DELETE FROM CAR_IMAGE WHERE CAR_ID = ?";
+        String sqlCar = "DELETE FROM CAR WHERE CAR_ID = ?";
+
+        try (Connection conn = getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement psImg = conn.prepareStatement(sqlImage)) {
+                psImg.setInt(1, carId);
+                psImg.executeUpdate();
+            }
+
+            int rowsDeleted;
+            try (PreparedStatement psCar = conn.prepareStatement(sqlCar)) {
+                psCar.setInt(1, carId);
+                rowsDeleted = psCar.executeUpdate();
+            }
+
+            conn.commit();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            return false; // ❗ KHÔNG throw
+        }
+    }
 
 
 
