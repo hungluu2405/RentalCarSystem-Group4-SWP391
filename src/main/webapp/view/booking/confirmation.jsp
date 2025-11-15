@@ -113,9 +113,20 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <%-- ✅ SET BIẾN DISCOUNT (nếu null thì = 0) --%>
+                        <%-- ✅ LOGIC MỚI: Sử dụng originalPrice từ session --%>
                         <c:set var="discountValue" value="${discount != null ? discount : 0}" />
-                        <c:set var="rentalFee" value="${booking.totalPrice + discountValue}" />
+
+                        <c:choose>
+                            <c:when test="${originalPrice != null && originalPrice > 0}">
+                                <c:set var="rentalFee" value="${originalPrice}" />
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="rentalFee" value="${booking.totalPrice + discountValue}" />
+                            </c:otherwise>
+                        </c:choose>
+
+                        <%-- ✅ QUAN TRỌNG: Tính lại finalPrice = rentalFee - discount --%>
+                        <c:set var="finalPriceCalculated" value="${rentalFee - discountValue}" />
 
                         <div class="success-box">
                             <div class="success-icon">✓</div>
@@ -145,27 +156,27 @@
                                     <div class="info-row">
                                         <span class="info-label">Thời Gian Lấy Xe:</span>
                                         <span class="info-value">
-                                            ${booking.startDate} ${booking.pickupTime}
-                                        </span>
+                    ${booking.startDate} ${booking.pickupTime}
+                </span>
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">Thời Gian Trả Xe:</span>
                                         <span class="info-value">
-                                            ${booking.endDate} ${booking.dropoffTime}
-                                        </span>
+                    ${booking.endDate} ${booking.dropoffTime}
+                </span>
                                     </div>
                                     <div class="info-row">
                                         <span class="info-label">Địa Điểm:</span>
                                         <span class="info-value">
-                                            <c:choose>
-                                                <c:when test="${not empty booking.location}">
-                                                    ${booking.location}
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${car.location}
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </span>
+                    <c:choose>
+                        <c:when test="${not empty booking.location}">
+                            ${booking.location}
+                        </c:when>
+                        <c:otherwise>
+                            ${car.location}
+                        </c:otherwise>
+                    </c:choose>
+                </span>
                                     </div>
                                 </div>
                             </div>
@@ -195,10 +206,10 @@
                                     <div class="info-row">
                                         <span class="info-label">Đơn Giá Thuê:</span>
                                         <span class="info-value">
-                                              <fmt:formatNumber value="${rentalFee}"
-                                                                type="number" groupingUsed="true"
-                                                                minFractionDigits="0" maxFractionDigits="0"/> ₫
-                                        </span>
+                    <fmt:formatNumber value="${rentalFee}"
+                                      type="number" groupingUsed="true"
+                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                </span>
                                     </div>
 
                                     <!-- Discount (CHỈ HIỂN THỊ NẾU > 0) -->
@@ -206,21 +217,21 @@
                                         <div class="info-row" style="color: #dc2626;">
                                             <span class="info-label">Khuyến Mãi:</span>
                                             <span class="info-value">
-                                                  -<fmt:formatNumber value="${discountValue}"
-                                                                    type="number" groupingUsed="true"
-                                                                    minFractionDigits="0" maxFractionDigits="0"/> ₫
-                                            </span>
+                        -<fmt:formatNumber value="${discountValue}"
+                                           type="number" groupingUsed="true"
+                                           minFractionDigits="0" maxFractionDigits="0"/> ₫
+                    </span>
                                         </div>
                                     </c:if>
 
-                                    <!-- Total Price (GIÁ CUỐI CÙNG) -->
+                                    <!-- ✅ SỬA: Total Price (GIÁ CUỐI CÙNG) - Dùng finalPriceCalculated -->
                                     <div class="info-row total-price-row">
                                         <span class="info-label">Thành Tiền:</span>
                                         <span class="info-value">
-                                            <fmt:formatNumber value="${booking.totalPrice}"
-                                                              type="number" groupingUsed="true"
-                                                              minFractionDigits="0" maxFractionDigits="0"/> ₫
-                                        </span>
+                    <fmt:formatNumber value="${finalPriceCalculated}"
+                                      type="number" groupingUsed="true"
+                                      minFractionDigits="0" maxFractionDigits="0"/> ₫
+                </span>
                                     </div>
                                 </div>
                             </div>
