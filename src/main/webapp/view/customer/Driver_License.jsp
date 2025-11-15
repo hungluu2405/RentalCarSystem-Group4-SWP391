@@ -7,22 +7,111 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
-    <title>Rentaly - My Profile</title>
+    <title>Rentaly - Xác Minh Bằng Lái</title>
 
     <style>
 
-        .profile-avatar-container { position: relative; display: inline-block; text-align: center; }
-        .profile-avatar { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid #28a745; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; }
-        .profile-avatar-container:hover .profile-avatar { opacity: 0.9; }
-        .change-photo-btn { position: absolute; bottom: 5px; right: 5px; background-color: #28a745; color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
-        .change-photo-btn:hover { background-color: #218838; transform: scale(1.1); }
-        h5 { font-weight: 600; margin-bottom: 6px; }
-        .form-control { border-radius: 8px; border: 1px solid #ccc; padding: 10px; transition: 0.2s ease; }
-        .form-control:focus { border-color: #28a745; box-shadow: 0 0 5px rgba(40, 167, 69, 0.3); }
-        .btn-main { background-color: #28a745; color: white; border: none; border-radius: 8px; padding: 10px 25px; font-weight: 600; transition: all 0.3s; }
-        .btn-main:hover { background-color: #218838; }
-        .alert-success { border-radius: 8px; }
-        .alert-danger { border-radius: 8px; }
+        .profile-avatar-container {
+            position: relative;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #28a745;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar-container:hover .profile-avatar {
+            opacity: 0.9;
+        }
+
+        .change-photo-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #28a745;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-photo-btn:hover {
+            background-color: #218838;
+            transform: scale(1.1);
+        }
+
+        h5 {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-main {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-main:hover {
+            background-color: #218838;
+        }
+
+        .alert-success {
+            border-radius: 8px;
+        }
+
+        .alert-danger {
+            border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p, span, div {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
 
@@ -76,9 +165,9 @@
                                 <div class="text-center mb-4">
                                     <div class="license-image-container">
                                         <c:set var="frontImageUrl"
-                                               value="${license.front_image_url != null ? license.front_image_url : '/images/license/default-front.jpg'}" />
+                                               value="${license.front_image_url != null ? license.front_image_url : '/images/license/default-front.jpg'}"/>
                                         <c:set var="backImageUrl"
-                                               value="${license.back_image_url != null ? license.back_image_url : '/images/license/default-back.jpg'}" />
+                                               value="${license.back_image_url != null ? license.back_image_url : '/images/license/default-back.jpg'}"/>
 
                                         <div class="mb-3">
                                             <label>Ảnh Mặt Trước:</label><br>
@@ -122,7 +211,8 @@
                                         <label for="dob" class="form-label">Ngày Sinh:</label>
                                         <input type="date" id="dob" name="dob"
                                                class="form-control"
-                                               value="<fmt:formatDate value='${license.dob}' pattern='yyyy-MM-dd'/>" readonly>
+                                               value="<fmt:formatDate value='${license.dob}' pattern='yyyy-MM-dd'/>"
+                                               readonly>
                                     </div>
 
                                     <div class="col-lg-6 mb-3">
@@ -174,17 +264,15 @@
                             </form>
 
 
-
-
                             <script>
-                                document.querySelector('input[name="front_image"]').addEventListener('change', function(e) {
+                                document.querySelector('input[name="front_image"]').addEventListener('change', function (e) {
                                     const file = e.target.files[0];
                                     if (file) {
                                         document.getElementById('frontImagePreview').src = URL.createObjectURL(file);
                                     }
                                 });
 
-                                document.querySelector('input[name="back_image"]').addEventListener('change', function(e) {
+                                document.querySelector('input[name="back_image"]').addEventListener('change', function (e) {
                                     const file = e.target.files[0];
                                     if (file) {
                                         document.getElementById('backImagePreview').src = URL.createObjectURL(file);

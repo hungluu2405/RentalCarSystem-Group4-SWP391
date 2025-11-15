@@ -57,7 +57,6 @@
         }
 
 
-
         .remove-favourite-btn:hover {
 
             transform: scale(1.1);
@@ -65,7 +64,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
         }
-
 
 
         .remove-favourite-btn i {
@@ -77,7 +75,6 @@
         }
 
 
-
         .de-item-list {
 
             position: relative;
@@ -85,13 +82,11 @@
         }
 
 
-
         .de-item-list .d-img {
 
             position: relative;
 
         }
-
 
 
         /* Empty state styling */
@@ -105,7 +100,6 @@
         }
 
 
-
         .empty-state-container i {
 
             font-size: 80px;
@@ -115,7 +109,6 @@
             margin-bottom: 20px;
 
         }
-
 
 
         .empty-state-container h3 {
@@ -131,7 +124,6 @@
         }
 
 
-
         .empty-state-container p {
 
             color: #999;
@@ -142,16 +134,36 @@
 
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p, span, div {
+            font-family: 'Inter', sans-serif;
+        }
+
     </style>
 
 </head>
 
 
-
 <body>
 
 <div id="wrapper">
-
 
 
     <!-- page preloader begin -->
@@ -161,15 +173,12 @@
     <!-- page preloader close -->
 
 
-
     <jsp:include page="../common/customer/_header.jsp"/>
-
 
 
     <div class="no-bottom no-top zebra" id="content">
 
         <div id="top"></div>
-
 
 
         <!-- section begin -->
@@ -203,7 +212,6 @@
         <!-- section close -->
 
 
-
         <section id="section-settings" class="bg-gray-100">
 
             <div class="container">
@@ -221,7 +229,6 @@
                         </jsp:include>
 
                     </div>
-
 
 
                     <!-- Main Content -->
@@ -255,7 +262,6 @@
                                                  class="img-fluid" alt="${car.brand} ${car.model}">
 
 
-
                                                 <%-- Nút xóa yêu thích --%>
 
                                             <button class="remove-favourite-btn"
@@ -271,7 +277,6 @@
                                             </button>
 
                                         </div>
-
 
 
                                         <div class="d-info">
@@ -292,7 +297,9 @@
 
                                                         <li><span>Năm SX:</span>${car.year}</li>
 
-                                                        <li><span>Loại xe:</span>${car.typeName != null ? car.typeName : 'N/A'}</li>
+                                                        <li>
+                                                            <span>Loại xe:</span>${car.typeName != null ? car.typeName : 'N/A'}
+                                                        </li>
 
                                                         <li><span>Vị trí:</span>${car.location}</li>
 
@@ -327,7 +334,6 @@
                                         </div>
 
 
-
                                         <div class="d-price">
 
                                             Giá thuê theo ngày
@@ -346,7 +352,8 @@
 
                                             </span>
 
-                                            <a class="btn-main" href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
+                                            <a class="btn-main"
+                                               href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
 
                                                 Xem Chi Tiết
 
@@ -361,7 +368,6 @@
                                 </c:forEach>
 
                             </c:when>
-
 
 
                             <%-- Trường hợp chưa có xe yêu thích --%>
@@ -382,7 +388,7 @@
 
                                         <a href="${pageContext.request.contextPath}/cars" class="btn-main">
 
-                                            <i class="fa fa-car me-2"></i> Khám Phá Xe
+                                            Khám Phá Xe
 
                                         </a>
 
@@ -407,9 +413,7 @@
     <!-- content close -->
 
 
-
     <a href="#" id="back-to-top"></a>
-
 
 
     <!-- footer begin -->
@@ -426,12 +430,14 @@
 
                         <h5>About Rentaly</h5>
 
-                        <p>Nơi chất lượng gặp gỡ sự tiết kiệm. Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần xe tốt mà còn phải thoải mái và hợp lý về chi phí. Vì thế, Rentaly luôn nỗ lực mang đến cho bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất, giúp bạn tận hưởng hành trình êm ái, an toàn và không lo về chi phí.</p>
+                        <p>Nơi chất lượng gặp gỡ sự tiết kiệm. Chúng tôi hiểu rằng một chuyến đi trọn vẹn không chỉ cần
+                            xe tốt mà còn phải thoải mái và hợp lý về chi phí. Vì thế, Rentaly luôn nỗ lực mang đến cho
+                            bạn những chiếc xe chất lượng cao với mức giá tối ưu nhất, giúp bạn tận hưởng hành trình êm
+                            ái, an toàn và không lo về chi phí.</p>
 
                     </div>
 
                 </div>
-
 
 
                 <div class="col-lg-3">
@@ -448,14 +454,14 @@
 
                             <span><i class="id-color fa fa-envelope-o fa-lg"></i><a href="mailto:contact@example.com">contact@example.com</a></span>
 
-                            <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a href="#">Download Brochure</a></span>
+                            <span><i class="id-color fa fa-file-pdf-o fa-lg"></i><a
+                                    href="#">Download Brochure</a></span>
 
                         </address>
 
                     </div>
 
                 </div>
-
 
 
                 <div class="col-lg-3">
@@ -481,7 +487,6 @@
                     </div>
 
                 </div>
-
 
 
                 <div class="col-lg-3">
@@ -511,7 +516,6 @@
             </div>
 
         </div>
-
 
 
         <div class="subfooter">
@@ -555,13 +559,11 @@
 </div>
 
 
-
 <!-- Javascript Files -->
 
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
-
 
 
 <script>
@@ -579,7 +581,6 @@
             return;
 
         }
-
 
 
         fetch('${pageContext.request.contextPath}/customer/favourite/remove?carId=' + carId, {

@@ -1,5 +1,8 @@
 package controller.customer;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -8,7 +11,6 @@ import java.io.PrintWriter;
 import java.io.BufferedReader;
 
 import dao.implement.BookingDAO;
-import model.Review;
 import model.User;
 import service.ReviewService;
 
@@ -16,7 +18,8 @@ import service.ReviewService;
 public class RateCarController extends HttpServlet {
 
     private final ReviewService reviewService = new ReviewService();
-    private final BookingDAO bookingDAO = new BookingDAO(); // ✅ gọi trực tiếp DAO vì DAO đã có sẵn hàm kiểm tra
+    private final BookingDAO bookingDAO = new BookingDAO();
+    private final Gson gson = new Gson(); // ✅ Tái sử dụng instance
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -25,7 +28,7 @@ public class RateCarController extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        // ==== 1️⃣Kiểm tra user đăng nhập ====
+        // ==== Kiểm tra user đăng nhập ====
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             out.print("{\"success\":false, \"message\":\"Unauthorized\"}");
@@ -35,7 +38,7 @@ public class RateCarController extends HttpServlet {
         User currentUser = (User) session.getAttribute("user");
 
         try {
-            // ====  Đọc JSON từ body mà không dùng thư viện ====
+            // ==== Đọc JSON body ====
             StringBuilder sb = new StringBuilder();
             String line;
             try (BufferedReader reader = request.getReader()) {
@@ -47,38 +50,26 @@ public class RateCarController extends HttpServlet {
             String body = sb.toString();
             System.out.println("🟢 JSON BODY = " + body);
 
-            // Loại bỏ dấu { }, " và tách bằng dấu phẩy
-            body = body.replace("{", "").replace("}", "").replace("\"", "");
-            String[] parts = body.split(",");
+            // ==== Parse JSON ====
+            JsonObject json = gson.fromJson(body, JsonObject.class);
 
-            int bookingId = 0;
-            int rating = 0;
-            String feedback = "";
-
-            for (String part : parts) {
-                String[] kv = part.split(":");
-                if (kv.length < 2) continue;
-                String key = kv[0].trim();
-                String value = kv[1].trim();
-
-                switch (key) {
-                    case "bookingId":
-                        bookingId = Integer.parseInt(value);
-                        break;
-                    case "rating":
-                        rating = Integer.parseInt(value);
-                        break;
-                    case "feedback":
-                        // Nếu feedback có dấu :, nối lại phần còn lại
-                        if (kv.length > 2) value = part.substring(part.indexOf(":") + 1).trim();
-                        feedback = value;
-                        break;
-                }
+            // ✅ Validate JSON structure
+            if (json == null || !json.has("bookingId") || !json.has("rating") || !json.has("feedback")) {
+                out.print("{\"success\":false, \"message\":\"Missing required fields\"}");
+                return;
             }
 
-            System.out.println("✅ Parsed JSON → bookingId=" + bookingId + ", rating=" + rating + ", feedback=" + feedback);
+            int bookingId = json.get("bookingId").getAsInt();
+            int rating = json.get("rating").getAsInt();
+            String feedback = json.get("feedback").getAsString();
 
+            // ✅ Sanitize feedback
+            if (feedback == null) feedback = "";
+            feedback = feedback.trim();
 
+            System.out.println("✅ Parsed → bookingId=" + bookingId +
+                    ", rating=" + rating +
+                    ", feedback=[" + feedback + "]");
 
             // ==== Validate rating ====
             if (rating < 1 || rating > 5) {
@@ -86,9 +77,8 @@ public class RateCarController extends HttpServlet {
                 return;
             }
 
-            // ====  Kiểm tra quyền sở hữu booking ====
-            boolean owns = bookingDAO.isBookingOwnedByUser(bookingId, currentUser.getUserId());
-            if (!owns) {
+            // ==== Kiểm tra quyền sở hữu booking ====
+            if (!bookingDAO.isBookingOwnedByUser(bookingId, currentUser.getUserId())) {
                 out.print("{\"success\":false, \"message\":\"You are not authorized to review this booking\"}");
                 return;
             }
@@ -108,9 +98,14 @@ public class RateCarController extends HttpServlet {
                 out.print("{\"success\":false, \"message\":\"Failed to save review\"}");
             }
 
+        } catch (JsonSyntaxException e) {
+            System.err.println("❌ Invalid JSON: " + e.getMessage());
+            out.print("{\"success\":false, \"message\":\"Invalid JSON format\"}");
         } catch (NumberFormatException e) {
+            System.err.println("❌ Invalid number: " + e.getMessage());
             out.print("{\"success\":false, \"message\":\"Invalid number format\"}");
         } catch (Exception e) {
+            System.err.println("❌ Server error:");
             e.printStackTrace();
             out.print("{\"success\":false, \"message\":\"Server error\"}");
         }

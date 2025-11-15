@@ -25,6 +25,9 @@
     <link href="${pageContext.request.contextPath}/css/coloring.css" rel="stylesheet" type="text/css">
     <link id="colors" href="${pageContext.request.contextPath}/css/colors/scheme-01.css" rel="stylesheet"
           type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* === CSS CŨ (USER ICON & MAIN BUTTONS) === */
         .user-icon {
@@ -37,7 +40,27 @@
             background-color: #6c63ff;
             transition: all 0.3s ease;
         }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p, span, div {
+            font-family: 'Inter', sans-serif;
+        }
         .user-icon a {
             color: white;
             font-size: 20px;
@@ -1103,11 +1126,11 @@
                                             </div>
                                             <div class="d-price">
                                                 <h3 class="fw-bold mb-0">
-                                                    $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                                                    $<fmt:formatNumber value="${car.pricePerDay}" type="number" minFractionDigits="0" maxFractionDigits="0"/>
                                                 </h3>
                                                 <a class="btn-main"
                                                    href="${pageContext.request.contextPath}/car-single?id=${car.carId}">
-                                                    Rent Now
+                                                    Thuê Ngay
                                                 </a>
                                             </div>
                                         </div>

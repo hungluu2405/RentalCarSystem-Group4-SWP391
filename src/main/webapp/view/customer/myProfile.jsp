@@ -9,18 +9,107 @@
 
     <style>
 
-        .profile-avatar-container { position: relative; display: inline-block; text-align: center; }
-        .profile-avatar { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid #28a745; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); transition: all 0.3s ease; }
-        .profile-avatar-container:hover .profile-avatar { opacity: 0.9; }
-        .change-photo-btn { position: absolute; bottom: 5px; right: 5px; background-color: #28a745; color: white; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
-        .change-photo-btn:hover { background-color: #218838; transform: scale(1.1); }
-        h5 { font-weight: 600; margin-bottom: 6px; }
-        .form-control { border-radius: 8px; border: 1px solid #ccc; padding: 10px; transition: 0.2s ease; }
-        .form-control:focus { border-color: #28a745; box-shadow: 0 0 5px rgba(40, 167, 69, 0.3); }
-        .btn-main { background-color: #28a745; color: white; border: none; border-radius: 8px; padding: 10px 25px; font-weight: 600; transition: all 0.3s; }
-        .btn-main:hover { background-color: #218838; }
-        .alert-success { border-radius: 8px; }
-        .alert-danger { border-radius: 8px; }
+        .profile-avatar-container {
+            position: relative;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #28a745;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar-container:hover .profile-avatar {
+            opacity: 0.9;
+        }
+
+        .change-photo-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #28a745;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-photo-btn:hover {
+            background-color: #218838;
+            transform: scale(1.1);
+        }
+
+        h5 {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-main {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-main:hover {
+            background-color: #218838;
+        }
+
+        .alert-success {
+            border-radius: 8px;
+        }
+
+        .alert-danger {
+            border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p, span, div {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
 
@@ -74,7 +163,7 @@
 
 
                                         <c:set var="profileImageUrl"
-                                               value="${sessionScope.user.userProfile.profileImage != null ? sessionScope.user.userProfile.profileImage : '/images/profile/default.jpg'}" />
+                                               value="${sessionScope.user.userProfile.profileImage != null ? sessionScope.user.userProfile.profileImage : '/images/profile/default.jpg'}"/>
 
                                         <img id="profileImagePreview"
                                              src="${pageContext.request.contextPath}${profileImageUrl}"
@@ -132,7 +221,8 @@
 
                                         <small class="text-muted">
                                             Để Xác Minh Bằng Lái Xe,Vui Lòng Bấm
-                                            <a href="${pageContext.request.contextPath}/customer/license" class="text-primary">
+                                            <a href="${pageContext.request.contextPath}/customer/license"
+                                               class="text-primary">
                                                 Xác Minh Bằng Lái Xe
                                             </a>.
                                         </small>
@@ -142,14 +232,18 @@
                                     <div class="col-lg-6 mb20">
 
                                         <c:set var="currentGender"
-                                               value="${not empty input_gender ? input_gender : sessionScope.user.userProfile.gender}" />
+                                               value="${not empty input_gender ? input_gender : sessionScope.user.userProfile.gender}"/>
 
                                         <h5>Giới Tính</h5>
                                         <select name="gender" class="form-control">
-                                            <option value="" ${empty currentGender ? 'selected' : ''}>-- Giới Tính --</option>
-                                            <option value="Male" ${currentGender == 'Male' ? 'selected' : ''}>Nam</option>
-                                            <option value="Female" ${currentGender == 'Female' ? 'selected' : ''}>Nữ</option>
-                                            <option value="Other" ${currentGender == 'Other' ? 'selected' : ''}>Khác</option>
+                                            <option value="" ${empty currentGender ? 'selected' : ''}>-- Giới Tính --
+                                            </option>
+                                            <option value="Male" ${currentGender == 'Male' ? 'selected' : ''}>Nam
+                                            </option>
+                                            <option value="Female" ${currentGender == 'Female' ? 'selected' : ''}>Nữ
+                                            </option>
+                                            <option value="Other" ${currentGender == 'Other' ? 'selected' : ''}>Khác
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

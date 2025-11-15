@@ -6,7 +6,30 @@
 <html lang="en">
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
-    <title>My Coupons | Rentaly</title>
+    <title>Quà của tôi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+            'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        p, span, div {
+            font-family: 'Inter', sans-serif;
+        }
+        </style>
 </head>
 
 <body>
@@ -24,7 +47,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <h1>My Coupons</h1>
+                            <h1>Quà của tôi</h1>
                         </div>
                     </div>
                 </div>
@@ -51,7 +74,7 @@
 
                                         <div class="d-info">
                                             <div class="d-text">
-                                                <h4>Coupon: <span class="text-primary">${promo.code}</span></h4>
+                                                <h4>Mã: <span class="text-primary">${promo.code}</span></h4>
                                                 <ul class="d-atr">
                                                     <li>
                                                         <span>Khuyến Mãi:</span>

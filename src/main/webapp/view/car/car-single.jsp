@@ -10,7 +10,9 @@
 <head>
     <jsp:include page="../common/customer/_head.jsp"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         .btn-main:disabled {
             opacity: 0.7;
@@ -781,6 +783,7 @@
                             </p>
 
                         </div>
+                        
 
 
                         <!-- ========== THÔNG TIN CHỦ XE ========== -->
@@ -1120,7 +1123,7 @@
                             </div>
 
 
-                            <button type="submit" class="btn-main btn-fullwidth">Booking Now</button>
+                            <button type="submit" class="btn-main btn-fullwidth">Thuê Ngay</button>
 
 
                         </form>
@@ -1211,8 +1214,7 @@
 
                                                     <small class="text-muted">
 
-                                                            ${fn:replace(r.review.createdAt, 'T', ' ')}
-
+                                                            ${r.review.formattedCreatedAt}
                                                     </small>
 
                                                 </div>
