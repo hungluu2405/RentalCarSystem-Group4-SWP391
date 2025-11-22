@@ -84,7 +84,7 @@
             <version>1.14.0</version>
         </dependency>
 
-        <!-- Dùng để gửi request HTTP đến Google API -->
+        <!-- Dùng để gửi request HTTP đến Google API & Gemini -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -94,13 +94,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
             <version>4.5.13</version>
-        </dependency>
-
-        <!-- Google Generative AI (Gemini) SDK -->
-        <dependency>
-            <groupId>com.google.ai.client.generativeai</groupId>
-            <artifactId>generativeai</artifactId>
-            <version>0.3.0</version>
         </dependency>
     </dependencies>
 

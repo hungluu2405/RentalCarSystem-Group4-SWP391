@@ -218,12 +218,12 @@ Monitor Tomcat logs for:
 ## Dependencies
 
 The chatbot uses:
-- Google Gemini AI (`generativeai:0.3.0`)
-- Gson for JSON processing
-- Apache HttpClient for API calls
-- Jakarta Servlet 5.0
+- **Google Gemini REST API** (via direct HTTP calls)
+- **Gson** (`2.10.1`) for JSON processing
+- **Apache HttpClient** (`4.5.13`) for API calls
+- **Jakarta Servlet** (`5.0.0`)
 
-All dependencies are already added to `pom.xml`.
+All dependencies are already in your `pom.xml`. No additional dependencies needed!
 
 ## Support
 
