@@ -64,5 +64,9 @@
         </div>
     </div>
 </footer>
+
+<!-- Gemini AI Chatbot Widget -->
+<jsp:include page="/view/common/chatbot/chatbot-widget.jsp"/>
+
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>

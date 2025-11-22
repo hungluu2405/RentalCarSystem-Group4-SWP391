@@ -95,6 +95,13 @@
             <artifactId>fluent-hc</artifactId>
             <version>4.5.13</version>
         </dependency>
+
+        <!-- Google Generative AI (Gemini) SDK -->
+        <dependency>
+            <groupId>com.google.ai.client.generativeai</groupId>
+            <artifactId>generativeai</artifactId>
+            <version>0.3.0</version>
+        </dependency>
     </dependencies>
 
     <build>
