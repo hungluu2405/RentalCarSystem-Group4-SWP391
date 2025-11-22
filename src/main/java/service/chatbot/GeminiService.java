@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -23,6 +24,17 @@ public class GeminiService {
     public GeminiService(String apiKey) {
         this.apiKey = apiKey;
         this.gson = new Gson();
+
+        // Log masked API key to verify it's loaded
+        if (apiKey != null && apiKey.length() > 10) {
+            String masked = apiKey.substring(0, 10) + "..." + apiKey.substring(apiKey.length() - 4);
+            System.out.println("GeminiService initialized with API key: " + masked);
+        } else {
+            System.err.println("WARNING: API key is null or too short!");
+        }
+
+        // List available models on first init
+        listAvailableModels();
     }
 
     public String generateResponse(String userMessage) {
@@ -39,6 +51,36 @@ public class GeminiService {
             System.err.println("Error generating response: " + e.getMessage());
             e.printStackTrace();
             return "Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Vui lòng thử lại.";
+        }
+    }
+
+    private void listAvailableModels() {
+        try {
+            System.out.println("=== Listing Available Gemini Models ===");
+
+            String[] endpoints = {
+                "https://generativelanguage.googleapis.com/v1beta/models",
+                "https://generativelanguage.googleapis.com/v1/models"
+            };
+
+            for (String endpoint : endpoints) {
+                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    HttpGet request = new HttpGet(endpoint + "?key=" + apiKey);
+
+                    try (CloseableHttpResponse response = httpClient.execute(request)) {
+                        String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                        System.out.println("\nEndpoint: " + endpoint);
+                        System.out.println("Status: " + response.getStatusLine().getStatusCode());
+                        System.out.println("Response: " + responseBody.substring(0, Math.min(500, responseBody.length())));
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error listing models from " + endpoint + ": " + e.getMessage());
+                }
+            }
+
+            System.out.println("=======================================\n");
+        } catch (Exception e) {
+            System.err.println("Error in listAvailableModels: " + e.getMessage());
         }
     }
 
