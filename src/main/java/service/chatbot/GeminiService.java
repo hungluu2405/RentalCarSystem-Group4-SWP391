@@ -15,7 +15,8 @@ import java.nio.charset.StandardCharsets;
 
 public class GeminiService {
 
-    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    // Try v1 instead of v1beta, and use -latest suffix
+    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent";
     private final String apiKey;
     private final Gson gson;
 
