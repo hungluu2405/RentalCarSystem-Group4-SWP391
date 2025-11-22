@@ -95,7 +95,7 @@ public class ChatbotServlet extends HttpServlet {
             // Save bot response
             ChatMessage botMsg = chatbotDAO.createMessage(
                 conversation.getConversationId(),
-                "model",
+                "assistant",
                 botResponse,
                 null,
                 (int) responseTime
