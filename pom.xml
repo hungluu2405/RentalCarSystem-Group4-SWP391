@@ -84,7 +84,7 @@
             <version>1.14.0</version>
         </dependency>
 
-        <!-- Dùng để gửi request HTTP đến Google API -->
+        <!-- Dùng để gửi request HTTP đến Google API & Gemini -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
