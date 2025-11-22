@@ -143,11 +143,17 @@ public class GeminiService {
 
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                int statusCode = response.getStatusLine().getStatusCode();
 
-                if (response.getStatusLine().getStatusCode() == 200) {
+                System.out.println("=== Gemini API Response ===");
+                System.out.println("Status Code: " + statusCode);
+                System.out.println("Response Body: " + responseBody);
+                System.out.println("===========================");
+
+                if (statusCode == 200) {
                     return extractTextFromResponse(responseBody);
                 } else {
-                    System.err.println("API Error: " + response.getStatusLine().getStatusCode());
+                    System.err.println("API Error: " + statusCode);
                     System.err.println("Response: " + responseBody);
                     return null;
                 }
@@ -159,26 +165,57 @@ public class GeminiService {
         try {
             JsonObject jsonResponse = gson.fromJson(responseBody, JsonObject.class);
 
+            System.out.println("=== Parsing Gemini Response ===");
+            System.out.println("Has candidates: " + jsonResponse.has("candidates"));
+
             if (jsonResponse.has("candidates")) {
                 JsonArray candidates = jsonResponse.getAsJsonArray("candidates");
+                System.out.println("Candidates count: " + candidates.size());
+
                 if (candidates.size() > 0) {
                     JsonObject firstCandidate = candidates.get(0).getAsJsonObject();
+                    System.out.println("First candidate: " + firstCandidate);
+
                     if (firstCandidate.has("content")) {
                         JsonObject content = firstCandidate.getAsJsonObject("content");
+                        System.out.println("Content: " + content);
+
                         if (content.has("parts")) {
                             JsonArray parts = content.getAsJsonArray("parts");
+                            System.out.println("Parts count: " + parts.size());
+
                             if (parts.size() > 0) {
                                 JsonObject firstPart = parts.get(0).getAsJsonObject();
+                                System.out.println("First part: " + firstPart);
+
                                 if (firstPart.has("text")) {
-                                    return firstPart.get("text").getAsString();
+                                    String text = firstPart.get("text").getAsString();
+                                    System.out.println("Extracted text: " + text);
+                                    System.out.println("==============================");
+                                    return text;
+                                } else {
+                                    System.err.println("No 'text' field in first part");
                                 }
+                            } else {
+                                System.err.println("Parts array is empty");
                             }
+                        } else {
+                            System.err.println("No 'parts' field in content");
                         }
+                    } else {
+                        System.err.println("No 'content' field in candidate");
                     }
+                } else {
+                    System.err.println("Candidates array is empty");
                 }
+            } else {
+                System.err.println("No 'candidates' field in response");
             }
+
+            System.out.println("==============================");
         } catch (Exception e) {
             System.err.println("Error parsing response: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
