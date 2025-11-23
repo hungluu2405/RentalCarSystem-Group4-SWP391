@@ -68,5 +68,8 @@
 <!-- Gemini AI Chatbot Widget -->
 <jsp:include page="/view/common/chatbot/chatbot-widget.jsp"/>
 
+<!-- User-to-User Chat Widget (Customer <-> Owner) -->
+<jsp:include page="/view/common/userchat/user-chatbox.jsp"/>
+
 <script src="${pageContext.request.contextPath}/js/plugins.js"></script>
 <script src="${pageContext.request.contextPath}/js/designesia.js"></script>
