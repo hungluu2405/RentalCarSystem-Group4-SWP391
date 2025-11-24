@@ -779,7 +779,8 @@
                                                                         <i class="fa fa-credit-card"></i>&nbsp;Thanh&nbsp;Toán
                                                                     </a>
                                                                     <br/>
-                                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                    <button type="button"
+                                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
                                                                             class="btn btn-sm btn-success mt-1"
                                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
                                                                             title="Chat với chủ xe">
@@ -793,7 +794,8 @@
                                                                         <i class="fa fa-undo"></i>&nbsp;Trả&nbsp;Xe
                                                                     </a>
                                                                     <br/>
-                                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                    <button type="button"
+                                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
                                                                             class="btn btn-sm btn-success mt-1"
                                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
                                                                             title="Chat với chủ xe">
@@ -805,7 +807,8 @@
                                                                         <i class="fa fa-clock-o"></i> Vui Lòng Chờ Chủ Xe...
                                                                     </span>
                                                                     <br/>
-                                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                    <button type="button"
+                                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
                                                                             class="btn btn-sm btn-success mt-1"
                                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
                                                                             title="Chat với chủ xe">
@@ -1100,5 +1103,9 @@
         }
     });
 </script>
+
+<!-- Include User Chat Widget -->
+<jsp:include page="/view/common/userchat/user-chatbox.jsp" />
+
 </body>
 </html>
