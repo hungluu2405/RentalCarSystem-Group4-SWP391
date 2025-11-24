@@ -86,11 +86,17 @@
         opacity: 0.9;
     }
 
-    #user-chat-close {
+    .chat-header-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .chat-header-btn {
         background: none;
         border: none;
         color: white;
-        font-size: 24px;
+        font-size: 20px;
         cursor: pointer;
         padding: 0;
         width: 30px;
@@ -102,8 +108,22 @@
         transition: background 0.2s;
     }
 
-    #user-chat-close:hover {
+    .chat-header-btn:hover {
         background: rgba(255, 255, 255, 0.2);
+    }
+
+    #user-chat-close {
+        font-size: 24px;
+    }
+
+    #user-chat-end {
+        font-size: 18px;
+        color: #ffcccc;
+    }
+
+    #user-chat-end:hover {
+        background: rgba(220, 53, 69, 0.3);
+        color: white;
     }
 
     /* Messages Area */
@@ -339,7 +359,12 @@
             <h3 id="user-chat-title">Chat</h3>
             <div class="chat-info" id="user-chat-info"></div>
         </div>
-        <button id="user-chat-close">×</button>
+        <div class="chat-header-buttons">
+            <button class="chat-header-btn" id="user-chat-end" title="Đóng chat vĩnh viễn">
+                <i class="fa fa-trash"></i>
+            </button>
+            <button class="chat-header-btn" id="user-chat-close" title="Thu gọn">×</button>
+        </div>
     </div>
 
     <div id="user-chat-messages">
@@ -387,6 +412,44 @@
     let typingTimeout = null;
     let isTyping = false;
 
+    // LocalStorage key for persistent chat
+    const CHAT_STORAGE_KEY = 'userChatActive';
+
+    // Load chat data from localStorage
+    function loadChatFromStorage() {
+        try {
+            const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+            if (stored) {
+                const data = JSON.parse(stored);
+                console.log('[User Chat] Found stored chat data:', data);
+                return data;
+            }
+        } catch (error) {
+            console.error('[User Chat] Error loading from localStorage:', error);
+        }
+        return null;
+    }
+
+    // Save chat data to localStorage
+    function saveChatToStorage(data) {
+        try {
+            localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(data));
+            console.log('[User Chat] Saved to localStorage:', data);
+        } catch (error) {
+            console.error('[User Chat] Error saving to localStorage:', error);
+        }
+    }
+
+    // Clear chat data from localStorage
+    function clearChatStorage() {
+        try {
+            localStorage.removeItem(CHAT_STORAGE_KEY);
+            console.log('[User Chat] Cleared localStorage');
+        } catch (error) {
+            console.error('[User Chat] Error clearing localStorage:', error);
+        }
+    }
+
     // Initialize chat from URL parameter (bookingId)
     function initChatFromBooking(bookingId) {
         console.log('[User Chat] Initializing chat with bookingId:', bookingId);
@@ -405,6 +468,15 @@
 
                     chatTitle.textContent = otherUserName;
                     chatInfo.textContent = 'Về: ' + data.carName;
+
+                    // Save to localStorage for persistence
+                    saveChatToStorage({
+                        conversationId: currentConversationId,
+                        bookingId: currentBookingId,
+                        otherUserId: otherUserId,
+                        otherUserName: otherUserName,
+                        carName: data.carName
+                    });
 
                     // Show chat button
                     chatButton.style.display = 'flex';
@@ -431,16 +503,46 @@
             });
     }
 
+    // Restore chat from stored data
+    function restoreChatFromStorage(stored) {
+        console.log('[User Chat] Restoring chat from storage');
+        currentConversationId = stored.conversationId;
+        currentBookingId = stored.bookingId;
+        otherUserId = stored.otherUserId;
+        otherUserName = stored.otherUserName;
+
+        chatTitle.textContent = otherUserName;
+        chatInfo.textContent = 'Về: ' + stored.carName;
+
+        // Show chat button
+        chatButton.style.display = 'flex';
+        console.log('[User Chat] ✅ Chat button displayed (restored)!');
+
+        // Load messages
+        loadMessages();
+
+        // Start polling
+        startPolling();
+    }
+
     // Check if current page has bookingId (e.g., in booking details page)
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get('bookingId');
     console.log('[User Chat] BookingId from URL:', bookingId);
 
+    // Priority: URL bookingId > localStorage
     if (bookingId) {
         console.log('[User Chat] Auto-initializing with bookingId from URL');
         initChatFromBooking(bookingId);
     } else {
-        console.log('[User Chat] No bookingId in URL. Chat button hidden. Call window.initUserChat(bookingId) to show.');
+        // Check localStorage for persistent chat
+        const storedChat = loadChatFromStorage();
+        if (storedChat) {
+            console.log('[User Chat] Restoring chat from localStorage');
+            restoreChatFromStorage(storedChat);
+        } else {
+            console.log('[User Chat] No active chat. Chat button hidden. Call window.initUserChat(bookingId) to show.');
+        }
     }
 
     // Also expose global function for manual init
@@ -462,6 +564,34 @@
 
     chatClose.addEventListener('click', function() {
         chatContainer.classList.remove('show');
+    });
+
+    // End chat permanently
+    const chatEnd = document.getElementById('user-chat-end');
+    chatEnd.addEventListener('click', function() {
+        if (confirm('Bạn có chắc muốn đóng chat này vĩnh viễn? Widget sẽ không hiển thị cho đến khi bạn bắt đầu chat mới.')) {
+            // Clear localStorage
+            clearChatStorage();
+
+            // Hide chat
+            chatContainer.classList.remove('show');
+            chatButton.style.display = 'none';
+
+            // Stop polling
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+
+            // Reset state
+            currentConversationId = null;
+            currentBookingId = null;
+            otherUserId = null;
+            otherUserName = '';
+            lastMessageId = 0;
+
+            console.log('[User Chat] Chat ended and cleared from storage');
+        }
     });
 
     // Enable send button when input has text
