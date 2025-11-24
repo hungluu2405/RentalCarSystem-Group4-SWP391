@@ -62,9 +62,10 @@ public class UserChatServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            System.err.println("Error in UserChatServlet: " + e.getMessage());
+            System.err.println("Error in UserChatServlet POST: " + e.getClass().getName() + " - " + e.getMessage());
             e.printStackTrace();
-            sendErrorResponse(response, "Server error: " + e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            String errorMsg = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+            sendErrorResponse(response, "Server error: " + errorMsg, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -126,11 +127,22 @@ public class UserChatServlet extends HttpServlet {
             sb.append(line);
         }
 
-        JsonObject requestData = gson.fromJson(sb.toString(), JsonObject.class);
+        String jsonString = sb.toString();
+        System.out.println("[UserChatServlet] Received JSON for send message: " + jsonString);
+
+        JsonObject requestData = gson.fromJson(jsonString, JsonObject.class);
+
+        if (!requestData.has("conversationId")) {
+            sendErrorResponse(response, "Missing conversationId in request", HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         int conversationId = requestData.get("conversationId").getAsInt();
         String content = requestData.has("content") ? requestData.get("content").getAsString() : null;
         String attachmentUrl = requestData.has("attachmentUrl") ? requestData.get("attachmentUrl").getAsString() : null;
         String attachmentType = requestData.has("attachmentType") ? requestData.get("attachmentType").getAsString() : null;
+
+        System.out.println("[UserChatServlet] Parsed - conversationId: " + conversationId + ", content: " + content);
 
         // Verify user has access to this conversation
         if (!chatDAO.canUserAccessConversation(conversationId, currentUser.getUserId())) {
