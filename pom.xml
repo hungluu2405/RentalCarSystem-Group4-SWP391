@@ -98,7 +98,7 @@
     </dependencies>
 
     <build>
-        <finalName>CarRentalSystem</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
             <!-- Compiler Plugin -->
             <plugin>
