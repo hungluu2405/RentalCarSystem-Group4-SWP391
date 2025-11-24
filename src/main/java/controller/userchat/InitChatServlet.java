@@ -50,10 +50,12 @@ public class InitChatServlet extends HttpServlet {
             int bookingId = Integer.parseInt(bookingIdStr);
 
             // Verify booking exists and get customer_id and owner_id
+            // BOOKING.USER_ID = Customer (person who booked)
+            // CAR.USER_ID = Owner (car owner)
             int customerId = 0;
             int ownerId = 0;
 
-            String sql = "SELECT b.CUSTOMER_ID, c.OWNER_ID " +
+            String sql = "SELECT b.USER_ID as customer_id, c.USER_ID as owner_id " +
                         "FROM BOOKING b " +
                         "JOIN CAR c ON b.CAR_ID = c.CAR_ID " +
                         "WHERE b.BOOKING_ID = ?";
@@ -64,8 +66,8 @@ public class InitChatServlet extends HttpServlet {
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()) {
-                    customerId = rs.getInt("CUSTOMER_ID");
-                    ownerId = rs.getInt("OWNER_ID");
+                    customerId = rs.getInt("customer_id");
+                    ownerId = rs.getInt("owner_id");
                     System.out.println("[InitChatServlet] Found booking: customerId=" + customerId + ", ownerId=" + ownerId);
                 } else {
                     System.out.println("[InitChatServlet] ❌ Booking not found: " + bookingId);
