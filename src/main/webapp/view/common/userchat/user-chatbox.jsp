@@ -1,20 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!-- User-to-User Chat Widget -->
+<!-- Multi-Conversation User Chat Widget (Like Messenger) -->
 <style>
-    /* Chat Button - Different from AI chatbot */
+    /* Chat Button */
     #user-chat-button {
         position: fixed;
-        bottom: 100px;  /* Different position from AI chatbot */
+        bottom: 100px;
         right: 25px;
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #4DC0B5, #28a745);  /* Reversed gradient */
+        background: linear-gradient(135deg, #4DC0B5, #28a745);
         color: white;
         border: 2px solid #fff;
         cursor: pointer;
         box-shadow: 0 4px 20px rgba(77, 192, 181, 0.4);
-        display: none;  /* Hidden by default, shown when chat is available */
+        display: none;
         align-items: center;
         justify-content: center;
         font-size: 24px;
@@ -47,7 +47,7 @@
     /* Chat Container */
     #user-chat-container {
         position: fixed;
-        bottom: 175px;  /* Different position */
+        bottom: 175px;
         right: 25px;
         width: 380px;
         height: 550px;
@@ -65,7 +65,18 @@
         display: flex;
     }
 
-    /* Chat Header */
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Header */
     #user-chat-header {
         background: linear-gradient(135deg, #4DC0B5, #28a745);
         color: white;
@@ -73,6 +84,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-shrink: 0;
     }
 
     #user-chat-header h3 {
@@ -81,9 +93,24 @@
         font-weight: 600;
     }
 
-    #user-chat-header .chat-info {
-        font-size: 12px;
-        opacity: 0.9;
+    .chat-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #back-to-list-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 5px;
+        display: none;
+    }
+
+    #back-to-list-btn:hover {
+        opacity: 0.8;
     }
 
     .chat-header-buttons {
@@ -112,21 +139,141 @@
         background: rgba(255, 255, 255, 0.2);
     }
 
-    #user-chat-close {
-        font-size: 24px;
+    /* Conversation List View */
+    #conversation-list-view {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
 
-    #user-chat-end {
-        font-size: 18px;
-        color: #ffcccc;
+    #conversation-list-view.hidden {
+        display: none;
     }
 
-    #user-chat-end:hover {
-        background: rgba(220, 53, 69, 0.3);
+    .conversation-list {
+        flex: 1;
+        overflow-y: auto;
+        background: #f8f9fa;
+    }
+
+    .conversation-item {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e9ecef;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .conversation-item:hover {
+        background: #e9ecef;
+    }
+
+    .conversation-item.active {
+        background: #d4edda;
+    }
+
+    .conversation-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4DC0B5, #28a745);
         color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        flex-shrink: 0;
     }
 
-    /* Messages Area */
+    .conversation-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .conversation-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 4px;
+    }
+
+    .conversation-car {
+        font-size: 12px;
+        color: #666;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .conversation-last-msg {
+        font-size: 12px;
+        color: #999;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 2px;
+    }
+
+    .conversation-badge {
+        background: #dc3545;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .conversation-remove {
+        color: #dc3545;
+        font-size: 16px;
+        padding: 5px;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .conversation-item:hover .conversation-remove {
+        opacity: 1;
+    }
+
+    .empty-conversations {
+        padding: 60px 20px;
+        text-align: center;
+        color: #999;
+    }
+
+    .empty-conversations i {
+        font-size: 48px;
+        color: #ddd;
+        margin-bottom: 15px;
+    }
+
+    /* Chat View */
+    #chat-view {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    #chat-view.active {
+        display: flex;
+    }
+
+    .chat-info-bar {
+        padding: 10px 20px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 13px;
+        color: #666;
+        text-align: center;
+    }
+
     #user-chat-messages {
         flex: 1;
         overflow-y: auto;
@@ -148,6 +295,17 @@
         display: flex;
         gap: 10px;
         animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .user-chat-message.sent {
@@ -259,6 +417,15 @@
         animation: typing 1.4s infinite;
     }
 
+    @keyframes typing {
+        0%, 60%, 100% {
+            transform: translateY(0);
+        }
+        30% {
+            transform: translateY(-10px);
+        }
+    }
+
     .user-typing-indicator span:nth-child(2) {
         animation-delay: 0.2s;
     }
@@ -272,6 +439,7 @@
         padding: 16px;
         background: white;
         border-top: 1px solid #e9ecef;
+        flex-shrink: 0;
     }
 
     #user-chat-input-row {
@@ -332,7 +500,6 @@
         transform: none;
     }
 
-    /* File upload */
     #chat-file-input {
         display: none;
     }
@@ -354,34 +521,53 @@
 
 <!-- Chat Container -->
 <div id="user-chat-container">
+    <!-- Header -->
     <div id="user-chat-header">
-        <div>
-            <h3 id="user-chat-title">Chat</h3>
-            <div class="chat-info" id="user-chat-info"></div>
+        <div class="chat-header-left">
+            <button id="back-to-list-btn">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+            <div>
+                <h3 id="user-chat-title">Tin nhắn</h3>
+                <div class="chat-info" id="user-chat-info" style="font-size: 12px; opacity: 0.9;"></div>
+            </div>
         </div>
         <div class="chat-header-buttons">
-            <button class="chat-header-btn" id="user-chat-end" title="Đóng chat vĩnh viễn">
-                <i class="fa fa-trash"></i>
-            </button>
             <button class="chat-header-btn" id="user-chat-close" title="Thu gọn">×</button>
         </div>
     </div>
 
-    <div id="user-chat-messages">
-        <div class="user-typing-indicator">
-            <span></span><span></span><span></span>
+    <!-- Conversation List View -->
+    <div id="conversation-list-view">
+        <div class="conversation-list" id="conversation-list">
+            <div class="empty-conversations">
+                <i class="fa fa-comments"></i>
+                <p>Chưa có cuộc hội thoại nào</p>
+                <p style="font-size: 12px;">Bấm "Chat" trong booking để bắt đầu!</p>
+            </div>
         </div>
     </div>
 
-    <div id="user-chat-input-area">
-        <div id="user-chat-input-row">
-            <button class="chat-action-btn" id="chat-attach-btn" title="Đính kèm file/hình ảnh">
-                <i class="fa fa-paperclip"></i>
-            </button>
-            <textarea id="user-chat-input" placeholder="Nhập tin nhắn..."></textarea>
-            <button id="user-chat-send" disabled>
-                <i class="fa fa-paper-plane"></i>
-            </button>
+    <!-- Chat View (Single Conversation) -->
+    <div id="chat-view">
+        <div class="chat-info-bar" id="chat-info-bar"></div>
+
+        <div id="user-chat-messages">
+            <div class="user-typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <div id="user-chat-input-area">
+            <div id="user-chat-input-row">
+                <button class="chat-action-btn" id="chat-attach-btn" title="Đính kèm file/hình ảnh">
+                    <i class="fa fa-paperclip"></i>
+                </button>
+                <textarea id="user-chat-input" placeholder="Nhập tin nhắn..."></textarea>
+                <button id="user-chat-send" disabled>
+                    <i class="fa fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -390,259 +576,263 @@
 
 <script>
 (function() {
+    // DOM Elements
     const chatButton = document.getElementById('user-chat-button');
     const chatContainer = document.getElementById('user-chat-container');
     const chatClose = document.getElementById('user-chat-close');
+    const chatTitle = document.getElementById('user-chat-title');
+    const chatInfo = document.getElementById('user-chat-info');
     const chatInput = document.getElementById('user-chat-input');
     const chatSend = document.getElementById('user-chat-send');
     const chatMessages = document.getElementById('user-chat-messages');
-    const chatTitle = document.getElementById('user-chat-title');
-    const chatInfo = document.getElementById('user-chat-info');
     const typingIndicator = document.querySelector('.user-typing-indicator');
     const attachBtn = document.getElementById('chat-attach-btn');
     const fileInput = document.getElementById('chat-file-input');
     const unreadBadge = chatButton.querySelector('.unread-badge');
 
-    let currentConversationId = null;
-    let currentBookingId = null;
-    let otherUserId = null;
-    let otherUserName = '';
-    let lastMessageId = 0;
-    let pollInterval = null;
+    const conversationListView = document.getElementById('conversation-list-view');
+    const conversationList = document.getElementById('conversation-list');
+    const chatView = document.getElementById('chat-view');
+    const backToListBtn = document.getElementById('back-to-list-btn');
+    const chatInfoBar = document.getElementById('chat-info-bar');
+
+    // State
+    let conversations = {}; // { conversationId: { ... } }
+    let activeConversationId = null;
+    let pollIntervals = {}; // { conversationId: intervalId }
     let typingTimeout = null;
     let isTyping = false;
 
-    // LocalStorage key for persistent chat
-    const CHAT_STORAGE_KEY = 'userChatActive';
+    const STORAGE_KEY = 'userChatConversations';
+    const currentUserId = ${sessionScope.user != null ? sessionScope.user.userId : 0};
 
-    // Load chat data from localStorage
-    function loadChatFromStorage() {
+    // ========== STORAGE FUNCTIONS ==========
+    function loadConversationsFromStorage() {
         try {
-            const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+            const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
-                const data = JSON.parse(stored);
-                console.log('[User Chat] Found stored chat data:', data);
-                return data;
+                conversations = JSON.parse(stored);
+                console.log('[Multi Chat] Loaded conversations:', conversations);
+                return true;
             }
         } catch (error) {
-            console.error('[User Chat] Error loading from localStorage:', error);
+            console.error('[Multi Chat] Error loading storage:', error);
         }
-        return null;
+        return false;
     }
 
-    // Save chat data to localStorage
-    function saveChatToStorage(data) {
+    function saveConversationsToStorage() {
         try {
-            localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(data));
-            console.log('[User Chat] Saved to localStorage:', data);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+            console.log('[Multi Chat] Saved conversations');
         } catch (error) {
-            console.error('[User Chat] Error saving to localStorage:', error);
+            console.error('[Multi Chat] Error saving storage:', error);
         }
     }
 
-    // Clear chat data from localStorage
-    function clearChatStorage() {
-        try {
-            localStorage.removeItem(CHAT_STORAGE_KEY);
-            console.log('[User Chat] Cleared localStorage');
-        } catch (error) {
-            console.error('[User Chat] Error clearing localStorage:', error);
+    function addConversation(data) {
+        conversations[data.conversationId] = {
+            conversationId: data.conversationId,
+            bookingId: data.bookingId,
+            otherUserId: data.otherUserId,
+            otherUserName: data.otherUserName,
+            carName: data.carName,
+            lastMessageId: 0,
+            unreadCount: 0,
+            lastMessage: '',
+            lastMessageTime: Date.now()
+        };
+        saveConversationsToStorage();
+        renderConversationList();
+    }
+
+    function removeConversation(conversationId) {
+        if (pollIntervals[conversationId]) {
+            clearInterval(pollIntervals[conversationId]);
+            delete pollIntervals[conversationId];
+        }
+        delete conversations[conversationId];
+        saveConversationsToStorage();
+        renderConversationList();
+
+        if (activeConversationId === conversationId) {
+            showConversationList();
         }
     }
 
-    // Initialize chat from URL parameter (bookingId)
-    function initChatFromBooking(bookingId) {
-        console.log('[User Chat] Initializing chat with bookingId:', bookingId);
-        fetch('${pageContext.request.contextPath}/api/init-chat?bookingId=' + bookingId)
-            .then(response => {
-                console.log('[User Chat] Init response status:', response.status);
-                return response.json();
-            })
-            .then(data => {
-                console.log('[User Chat] Init response data:', data);
-                if (data.success) {
-                    currentConversationId = data.conversationId;
-                    currentBookingId = data.bookingId;
-                    otherUserId = data.otherUserId;
-                    otherUserName = data.otherUserName;
+    // ========== UI FUNCTIONS ==========
+    function renderConversationList() {
+        const convArray = Object.values(conversations);
 
-                    chatTitle.textContent = otherUserName;
-                    chatInfo.textContent = 'Về: ' + data.carName;
+        if (convArray.length === 0) {
+            conversationList.innerHTML = `
+                <div class="empty-conversations">
+                    <i class="fa fa-comments"></i>
+                    <p>Chưa có cuộc hội thoại nào</p>
+                    <p style="font-size: 12px;">Bấm "Chat" trong booking để bắt đầu!</p>
+                </div>
+            `;
+            chatButton.style.display = 'none';
+            return;
+        }
 
-                    // Save to localStorage for persistence
-                    saveChatToStorage({
-                        conversationId: currentConversationId,
-                        bookingId: currentBookingId,
-                        otherUserId: otherUserId,
-                        otherUserName: otherUserName,
-                        carName: data.carName
-                    });
+        // Show chat button
+        chatButton.style.display = 'flex';
 
-                    // Show chat button
-                    chatButton.style.display = 'flex';
-                    console.log('[User Chat] ✅ Chat button displayed!');
+        // Sort by last message time
+        convArray.sort((a, b) => b.lastMessageTime - a.lastMessageTime);
 
-                    // Load messages
-                    loadMessages();
+        let html = '';
+        let totalUnread = 0;
 
-                    // Start polling
-                    startPolling();
+        convArray.forEach(conv => {
+            const initial = conv.otherUserName ? conv.otherUserName.charAt(0).toUpperCase() : 'U';
+            const isActive = activeConversationId === conv.conversationId;
 
-                    // Auto-open chat widget
-                    chatContainer.classList.add('show');
-                    chatInput.focus();
-                    console.log('[User Chat] ✅ Chat widget auto-opened!');
+            html += `
+                <div class="conversation-item ${isActive ? 'active' : ''}" data-conversation-id="${conv.conversationId}">
+                    <div class="conversation-avatar">${initial}</div>
+                    <div class="conversation-info">
+                        <div class="conversation-name">${conv.otherUserName || 'Unknown'}</div>
+                        <div class="conversation-car"><i class="fa fa-car"></i> ${conv.carName || 'N/A'}</div>
+                        ${conv.lastMessage ? '<div class="conversation-last-msg">' + conv.lastMessage + '</div>' : ''}
+                    </div>
+                    ${conv.unreadCount > 0 ? '<div class="conversation-badge">' + conv.unreadCount + '</div>' : ''}
+                    <i class="fa fa-times conversation-remove" data-conversation-id="${conv.conversationId}" title="Xóa cuộc hội thoại"></i>
+                </div>
+            `;
+
+            totalUnread += conv.unreadCount;
+        });
+
+        conversationList.innerHTML = html;
+
+        // Update total unread badge
+        if (totalUnread > 0) {
+            unreadBadge.textContent = totalUnread;
+            unreadBadge.style.display = 'flex';
+        } else {
+            unreadBadge.style.display = 'none';
+        }
+
+        // Add click listeners
+        conversationList.querySelectorAll('.conversation-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.classList.contains('conversation-remove')) {
+                    const convId = parseInt(e.target.dataset.conversationId);
+                    if (confirm('Xóa cuộc hội thoại này?')) {
+                        removeConversation(convId);
+                    }
                 } else {
-                    console.error('[User Chat] ❌ Failed to init chat:', data.error);
+                    const convId = parseInt(this.dataset.conversationId);
+                    openConversation(convId);
+                }
+            });
+        });
+    }
+
+    function showConversationList() {
+        conversationListView.classList.remove('hidden');
+        chatView.classList.remove('active');
+        chatTitle.textContent = 'Tin nhắn';
+        chatInfo.textContent = '';
+        backToListBtn.style.display = 'none';
+        activeConversationId = null;
+    }
+
+    function openConversation(conversationId) {
+        const conv = conversations[conversationId];
+        if (!conv) return;
+
+        activeConversationId = conversationId;
+
+        conversationListView.classList.add('hidden');
+        chatView.classList.add('active');
+        backToListBtn.style.display = 'block';
+
+        chatTitle.textContent = conv.otherUserName;
+        chatInfo.textContent = '';
+        chatInfoBar.innerHTML = '<i class="fa fa-car"></i> Về: ' + conv.carName;
+
+        // Clear messages
+        const messages = chatMessages.querySelectorAll('.user-chat-message');
+        messages.forEach(msg => msg.remove());
+
+        // Load messages
+        loadMessages(conversationId);
+
+        // Mark as read
+        conv.unreadCount = 0;
+        saveConversationsToStorage();
+        renderConversationList();
+
+        // Start polling if not already
+        if (!pollIntervals[conversationId]) {
+            startPolling(conversationId);
+        }
+    }
+
+    // ========== API FUNCTIONS ==========
+    function initChatFromBooking(bookingId) {
+        console.log('[Multi Chat] Init chat for bookingId:', bookingId);
+
+        fetch('${pageContext.request.contextPath}/api/init-chat?bookingId=' + bookingId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Check if conversation already exists
+                    const existing = Object.values(conversations).find(c => c.bookingId === data.bookingId);
+
+                    if (!existing) {
+                        addConversation(data);
+                        startPolling(data.conversationId);
+                    }
+
+                    // Open this conversation
+                    chatContainer.classList.add('show');
+                    openConversation(data.conversationId);
+                } else {
                     alert('Không thể khởi tạo chat: ' + (data.error || 'Unknown error'));
                 }
             })
             .catch(error => {
-                console.error('[User Chat] ❌ Error initializing chat:', error);
+                console.error('[Multi Chat] Error:', error);
                 alert('Lỗi kết nối API: ' + error.message);
             });
     }
 
-    // Restore chat from stored data
-    function restoreChatFromStorage(stored) {
-        console.log('[User Chat] Restoring chat from storage');
-        currentConversationId = stored.conversationId;
-        currentBookingId = stored.bookingId;
-        otherUserId = stored.otherUserId;
-        otherUserName = stored.otherUserName;
+    function loadMessages(conversationId) {
+        const conv = conversations[conversationId];
+        if (!conv) return;
 
-        chatTitle.textContent = otherUserName;
-        chatInfo.textContent = 'Về: ' + stored.carName;
-
-        // Show chat button
-        chatButton.style.display = 'flex';
-        console.log('[User Chat] ✅ Chat button displayed (restored)!');
-
-        // Load messages
-        loadMessages();
-
-        // Start polling
-        startPolling();
+        fetch('${pageContext.request.contextPath}/api/user-chat?action=messages&conversationId=' + conversationId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    data.messages.reverse().forEach(msg => {
+                        addMessageToUI(msg, msg.senderId === currentUserId);
+                        if (msg.messageId > conv.lastMessageId) {
+                            conv.lastMessageId = msg.messageId;
+                        }
+                    });
+                    scrollToBottom();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading messages:', error);
+            });
     }
-
-    // Check if current page has bookingId (e.g., in booking details page)
-    const urlParams = new URLSearchParams(window.location.search);
-    const bookingId = urlParams.get('bookingId');
-    console.log('[User Chat] BookingId from URL:', bookingId);
-
-    // Priority: URL bookingId > localStorage
-    if (bookingId) {
-        console.log('[User Chat] Auto-initializing with bookingId from URL');
-        initChatFromBooking(bookingId);
-    } else {
-        // Check localStorage for persistent chat
-        const storedChat = loadChatFromStorage();
-        if (storedChat) {
-            console.log('[User Chat] Restoring chat from localStorage');
-            restoreChatFromStorage(storedChat);
-        } else {
-            console.log('[User Chat] No active chat. Chat button hidden. Call window.initUserChat(bookingId) to show.');
-        }
-    }
-
-    // Also expose global function for manual init
-    window.initUserChat = initChatFromBooking;
-    console.log('[User Chat] Global function window.initUserChat() is ready');
-
-    // Toggle chatbox
-    chatButton.addEventListener('click', function() {
-        const isVisible = chatContainer.classList.contains('show');
-        if (isVisible) {
-            chatContainer.classList.remove('show');
-        } else {
-            chatContainer.classList.add('show');
-            chatInput.focus();
-            markAsRead();
-            unreadBadge.style.display = 'none';
-        }
-    });
-
-    chatClose.addEventListener('click', function() {
-        chatContainer.classList.remove('show');
-    });
-
-    // End chat permanently
-    const chatEnd = document.getElementById('user-chat-end');
-    chatEnd.addEventListener('click', function() {
-        if (confirm('Bạn có chắc muốn đóng chat này vĩnh viễn? Widget sẽ không hiển thị cho đến khi bạn bắt đầu chat mới.')) {
-            // Clear localStorage
-            clearChatStorage();
-
-            // Hide chat
-            chatContainer.classList.remove('show');
-            chatButton.style.display = 'none';
-
-            // Stop polling
-            if (pollInterval) {
-                clearInterval(pollInterval);
-                pollInterval = null;
-            }
-
-            // Reset state
-            currentConversationId = null;
-            currentBookingId = null;
-            otherUserId = null;
-            otherUserName = '';
-            lastMessageId = 0;
-
-            console.log('[User Chat] Chat ended and cleared from storage');
-        }
-    });
-
-    // Enable send button when input has text
-    chatInput.addEventListener('input', function() {
-        chatSend.disabled = this.value.trim() === '';
-
-        // Typing indicator
-        if (!isTyping && this.value.trim() !== '') {
-            isTyping = true;
-            updateTypingStatus(true);
-        }
-
-        clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => {
-            if (isTyping) {
-                isTyping = false;
-                updateTypingStatus(false);
-            }
-        }, 3000);
-    });
-
-    // Send on Enter (Shift+Enter for new line)
-    chatInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey && !chatSend.disabled) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    chatSend.addEventListener('click', () => sendMessage());
-
-    // File attachment
-    attachBtn.addEventListener('click', () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            uploadFile(file);
-        }
-        fileInput.value = ''; // Reset
-    });
 
     function sendMessage(attachmentUrl = null, attachmentType = null) {
         const message = chatInput.value.trim();
         if (!message && !attachmentUrl) return;
-        if (!currentConversationId) return;
+        if (!activeConversationId) return;
+
+        const conv = conversations[activeConversationId];
+        if (!conv) return;
 
         const data = {
-            conversationId: currentConversationId,
+            conversationId: activeConversationId,
             content: message
         };
 
@@ -653,60 +843,39 @@
 
         fetch('${pageContext.request.contextPath}/api/user-chat?action=send', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                addMessage(data.message, true);
+                addMessageToUI(data.message, true);
                 chatInput.value = '';
                 chatSend.disabled = true;
-                lastMessageId = data.message.messageId;
+
+                // Update conversation
+                conv.lastMessageId = data.message.messageId;
+                conv.lastMessage = message || '[File]';
+                conv.lastMessageTime = Date.now();
+                saveConversationsToStorage();
             } else {
                 alert('Lỗi gửi tin nhắn: ' + (data.error || 'Unknown error'));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Không thể gửi tin nhắn. Vui lòng thử lại.');
+            alert('Không thể gửi tin nhắn.');
         });
     }
 
-    function loadMessages() {
-        if (!currentConversationId) return;
-
-        fetch('${pageContext.request.contextPath}/api/user-chat?action=messages&conversationId=' + currentConversationId)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Clear messages (except typing indicator)
-                    const messages = chatMessages.querySelectorAll('.user-chat-message');
-                    messages.forEach(msg => msg.remove());
-
-                    // Add messages in correct order (reverse since we get DESC from server)
-                    data.messages.reverse().forEach(msg => {
-                        addMessage(msg, msg.senderId === ${sessionScope.user != null ? sessionScope.user.userId : 0});
-                        if (msg.messageId > lastMessageId) {
-                            lastMessageId = msg.messageId;
-                        }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error loading messages:', error);
-            });
-    }
-
-    function addMessage(message, isSent) {
+    function addMessageToUI(message, isSent) {
+        const conv = conversations[activeConversationId];
         const messageDiv = document.createElement('div');
         messageDiv.className = 'user-chat-message ' + (isSent ? 'sent' : 'received');
 
         const avatar = document.createElement('div');
         avatar.className = 'user-chat-avatar';
-        avatar.textContent = isSent ? 'B' : (otherUserName ? otherUserName.charAt(0).toUpperCase() : 'U');
+        avatar.textContent = isSent ? 'B' : (conv.otherUserName ? conv.otherUserName.charAt(0).toUpperCase() : 'U');
 
         const bubble = document.createElement('div');
         bubble.className = 'user-chat-bubble';
@@ -717,7 +886,6 @@
             bubble.appendChild(contentText);
         }
 
-        // Handle attachments
         if (message.attachmentUrl) {
             const attachment = document.createElement('div');
             attachment.className = 'chat-attachment';
@@ -745,11 +913,84 @@
         scrollToBottom();
     }
 
+    function startPolling(conversationId) {
+        if (pollIntervals[conversationId]) return;
+
+        pollIntervals[conversationId] = setInterval(() => {
+            pollNewMessages(conversationId);
+            checkTypingStatus(conversationId);
+        }, 2000);
+    }
+
+    function pollNewMessages(conversationId) {
+        const conv = conversations[conversationId];
+        if (!conv || !conv.lastMessageId) return;
+
+        fetch('${pageContext.request.contextPath}/api/user-chat?action=poll&conversationId=' + conversationId + '&lastMessageId=' + conv.lastMessageId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.count > 0) {
+                    data.messages.forEach(msg => {
+                        if (activeConversationId === conversationId) {
+                            addMessageToUI(msg, msg.senderId === currentUserId);
+                        } else {
+                            // Increase unread count
+                            conv.unreadCount += 1;
+                        }
+
+                        conv.lastMessageId = msg.messageId;
+                        conv.lastMessage = msg.content || '[File]';
+                        conv.lastMessageTime = Date.now();
+                    });
+
+                    saveConversationsToStorage();
+                    renderConversationList();
+                }
+            })
+            .catch(error => {
+                console.error('Poll error:', error);
+            });
+    }
+
+    function checkTypingStatus(conversationId) {
+        if (activeConversationId !== conversationId) return;
+
+        fetch('${pageContext.request.contextPath}/api/user-chat?action=checkTyping&conversationId=' + conversationId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.isTyping) {
+                        typingIndicator.classList.add('show');
+                        scrollToBottom();
+                    } else {
+                        typingIndicator.classList.remove('show');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Check typing error:', error);
+            });
+    }
+
+    function updateTypingStatus(typing) {
+        if (!activeConversationId) return;
+
+        fetch('${pageContext.request.contextPath}/api/user-chat?action=typing', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                conversationId: activeConversationId,
+                isTyping: typing
+            })
+        }).catch(error => {
+            console.error('Typing status error:', error);
+        });
+    }
+
     function uploadFile(file) {
         const formData = new FormData();
         formData.append('file', file);
 
-        // Show progress
         const progress = document.createElement('div');
         progress.className = 'upload-progress';
         progress.textContent = 'Đang tải lên: ' + file.name + '...';
@@ -772,99 +1013,11 @@
         .catch(error => {
             progress.remove();
             console.error('Upload error:', error);
-            alert('Không thể tải file. Vui lòng thử lại.');
+            alert('Không thể tải file.');
         });
     }
 
-    function startPolling() {
-        if (pollInterval) clearInterval(pollInterval);
-
-        pollInterval = setInterval(() => {
-            pollNewMessages();
-            checkTypingStatus();
-        }, 2000); // Poll every 2 seconds
-    }
-
-    function pollNewMessages() {
-        if (!currentConversationId || !lastMessageId) return;
-
-        fetch('${pageContext.request.contextPath}/api/user-chat?action=poll&conversationId=' + currentConversationId + '&lastMessageId=' + lastMessageId)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.count > 0) {
-                    data.messages.forEach(msg => {
-                        addMessage(msg, msg.senderId === ${sessionScope.user != null ? sessionScope.user.userId : 0});
-                        lastMessageId = msg.messageId;
-                    });
-
-                    // Show unread badge if chat is closed
-                    if (!chatContainer.classList.contains('show')) {
-                        const currentCount = parseInt(unreadBadge.textContent) || 0;
-                        unreadBadge.textContent = currentCount + data.count;
-                        unreadBadge.style.display = 'flex';
-                    } else {
-                        markAsRead();
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Poll error:', error);
-            });
-    }
-
-    function updateTypingStatus(typing) {
-        if (!currentConversationId) return;
-
-        fetch('${pageContext.request.contextPath}/api/user-chat?action=typing', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                conversationId: currentConversationId,
-                isTyping: typing
-            })
-        }).catch(error => {
-            console.error('Typing status error:', error);
-        });
-    }
-
-    function checkTypingStatus() {
-        if (!currentConversationId) return;
-
-        fetch('${pageContext.request.contextPath}/api/user-chat?action=checkTyping&conversationId=' + currentConversationId)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    if (data.isTyping) {
-                        typingIndicator.classList.add('show');
-                        scrollToBottom();
-                    } else {
-                        typingIndicator.classList.remove('show');
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Check typing error:', error);
-            });
-    }
-
-    function markAsRead() {
-        if (!currentConversationId) return;
-
-        fetch('${pageContext.request.contextPath}/api/user-chat?action=markRead', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                conversationId: currentConversationId
-            })
-        }).catch(error => {
-            console.error('Mark read error:', error);
-        });
-    }
-
+    // ========== HELPERS ==========
     function formatTime(timestamp) {
         const date = new Date(timestamp);
         const now = new Date();
@@ -881,9 +1034,90 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Cleanup on page unload
+    // ========== EVENT LISTENERS ==========
+    chatButton.addEventListener('click', function() {
+        const isVisible = chatContainer.classList.contains('show');
+        if (isVisible) {
+            chatContainer.classList.remove('show');
+        } else {
+            chatContainer.classList.add('show');
+            if (Object.keys(conversations).length > 0) {
+                showConversationList();
+            }
+        }
+    });
+
+    chatClose.addEventListener('click', function() {
+        chatContainer.classList.remove('show');
+    });
+
+    backToListBtn.addEventListener('click', function() {
+        showConversationList();
+    });
+
+    chatInput.addEventListener('input', function() {
+        chatSend.disabled = this.value.trim() === '';
+
+        if (!isTyping && this.value.trim() !== '') {
+            isTyping = true;
+            updateTypingStatus(true);
+        }
+
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            if (isTyping) {
+                isTyping = false;
+                updateTypingStatus(false);
+            }
+        }, 3000);
+    });
+
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey && !chatSend.disabled) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    chatSend.addEventListener('click', () => sendMessage());
+
+    attachBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            uploadFile(file);
+        }
+        fileInput.value = '';
+    });
+
+    // ========== INITIALIZATION ==========
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingId = urlParams.get('bookingId');
+
+    // Load from storage first
+    loadConversationsFromStorage();
+    renderConversationList();
+
+    // Start polling for all conversations
+    Object.keys(conversations).forEach(convId => {
+        startPolling(parseInt(convId));
+    });
+
+    // If URL has bookingId, init that chat
+    if (bookingId) {
+        initChatFromBooking(bookingId);
+    }
+
+    // Expose global function
+    window.initUserChat = initChatFromBooking;
+    console.log('[Multi Chat] Ready! Conversations:', Object.keys(conversations).length);
+
+    // Cleanup
     window.addEventListener('beforeunload', () => {
-        if (pollInterval) clearInterval(pollInterval);
+        Object.values(pollIntervals).forEach(intervalId => clearInterval(intervalId));
         if (isTyping) updateTypingStatus(false);
     });
 })();
