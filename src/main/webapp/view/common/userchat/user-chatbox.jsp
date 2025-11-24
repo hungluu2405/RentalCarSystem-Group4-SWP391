@@ -415,6 +415,11 @@
 
                     // Start polling
                     startPolling();
+
+                    // Auto-open chat widget
+                    chatContainer.classList.add('show');
+                    chatInput.focus();
+                    console.log('[User Chat] ✅ Chat widget auto-opened!');
                 } else {
                     console.error('[User Chat] ❌ Failed to init chat:', data.error);
                     alert('Không thể khởi tạo chat: ' + (data.error || 'Unknown error'));

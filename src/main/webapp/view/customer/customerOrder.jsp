@@ -780,7 +780,7 @@
                                                                     </a>
                                                                     <br/>
                                                                     <button type="button"
-                                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                            onclick="console.log('Chat button clicked! BookingId:', ${order.bookingId}); window.initUserChat(${order.bookingId}); return false;"
                                                                             class="btn btn-sm btn-success mt-1"
                                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
                                                                             title="Chat với chủ xe">
@@ -795,7 +795,7 @@
                                                                     </a>
                                                                     <br/>
                                                                     <button type="button"
-                                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                            onclick="console.log('Chat button clicked! BookingId:', ${order.bookingId}); window.initUserChat(${order.bookingId}); return false;"
                                                                             class="btn btn-sm btn-success mt-1"
                                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
                                                                             title="Chat với chủ xe">
@@ -808,7 +808,7 @@
                                                                     </span>
                                                                     <br/>
                                                                     <button type="button"
-                                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                            onclick="console.log('Chat button clicked! BookingId:', ${order.bookingId}); window.initUserChat(${order.bookingId}); return false;"
                                                                             class="btn btn-sm btn-success mt-1"
                                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
                                                                             title="Chat với chủ xe">

@@ -244,7 +244,7 @@
                                                         </button>
                                                     </form>
                                                     <button type="button"
-                                                            onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                            onclick="console.log('Chat button clicked! BookingId:', ${order.bookingId}); window.initUserChat(${order.bookingId}); return false;"
                                                             class="btn btn-sm mt-1"
                                                             style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none; color: white;"
                                                             title="Chat với khách hàng">
@@ -333,7 +333,7 @@
                                                     </c:if>
                                                     <c:if test="${order.status == 'Approved' || order.status == 'Paid' || order.status == 'Returning'}">
                                                         <button type="button"
-                                                                onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                onclick="console.log('Chat button clicked! BookingId:', ${order.bookingId}); window.initUserChat(${order.bookingId}); return false;"
                                                                 class="btn btn-sm"
                                                                 style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none; color: white;"
                                                                 title="Chat với khách hàng">
