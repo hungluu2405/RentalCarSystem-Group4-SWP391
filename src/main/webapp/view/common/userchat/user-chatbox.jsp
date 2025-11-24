@@ -959,6 +959,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // Check if conversation was deleted on backend
+                    if (data.conversationDeleted) {
+                        console.log('[Multi Chat] Conversation deleted on backend, removing from localStorage');
+                        removeConversation(conversationId);
+                        return;
+                    }
+
                     if (data.isTyping) {
                         typingIndicator.classList.add('show');
                         scrollToBottom();

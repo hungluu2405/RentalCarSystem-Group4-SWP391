@@ -313,6 +313,17 @@ public class UserChatServlet extends HttpServlet {
 
         // Get conversation to find the other user
         UserConversation conv = chatDAO.getConversationById(conversationId);
+
+        // Check if conversation exists
+        if (conv == null) {
+            JsonObject responseData = new JsonObject();
+            responseData.addProperty("success", true);
+            responseData.addProperty("isTyping", false);
+            responseData.addProperty("conversationDeleted", true);
+            sendJsonResponse(response, responseData);
+            return;
+        }
+
         int otherUserId = (conv.getCustomerId() == currentUser.getUserId())
                 ? conv.getOwnerId() : conv.getCustomerId();
 
