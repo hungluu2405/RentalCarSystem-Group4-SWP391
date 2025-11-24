@@ -523,19 +523,27 @@
     }
 
     // Load chat history on page load
+    console.log('[AI Chatbot] Loading chat history...');
     fetch('${pageContext.request.contextPath}/api/chatbot?action=history')
-        .then(response => response.json())
+        .then(response => {
+            console.log('[AI Chatbot] History response status:', response.status);
+            return response.json();
+        })
         .then(data => {
+            console.log('[AI Chatbot] History data:', data);
             if (data.success && data.messages && data.messages.length > 0) {
+                console.log('[AI Chatbot] Loading', data.messages.length, 'messages');
                 welcomeMessage.style.display = 'none';
                 isFirstMessage = false;
                 data.messages.forEach(msg => {
                     addMessage(msg.role === 'user' ? 'user' : 'bot', msg.content);
                 });
+            } else {
+                console.log('[AI Chatbot] No history or empty messages');
             }
         })
         .catch(error => {
-            console.error('Error loading chat history:', error);
+            console.error('[AI Chatbot] Error loading chat history:', error);
         });
 })();
 </script>

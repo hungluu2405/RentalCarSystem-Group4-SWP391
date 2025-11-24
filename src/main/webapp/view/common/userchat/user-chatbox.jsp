@@ -389,9 +389,14 @@
 
     // Initialize chat from URL parameter (bookingId)
     function initChatFromBooking(bookingId) {
+        console.log('[User Chat] Initializing chat with bookingId:', bookingId);
         fetch('${pageContext.request.contextPath}/api/init-chat?bookingId=' + bookingId)
-            .then(response => response.json())
+            .then(response => {
+                console.log('[User Chat] Init response status:', response.status);
+                return response.json();
+            })
             .then(data => {
+                console.log('[User Chat] Init response data:', data);
                 if (data.success) {
                     currentConversationId = data.conversationId;
                     currentBookingId = data.bookingId;
@@ -403,6 +408,7 @@
 
                     // Show chat button
                     chatButton.style.display = 'flex';
+                    console.log('[User Chat] ✅ Chat button displayed!');
 
                     // Load messages
                     loadMessages();
@@ -410,23 +416,31 @@
                     // Start polling
                     startPolling();
                 } else {
-                    console.error('Failed to init chat:', data.error);
+                    console.error('[User Chat] ❌ Failed to init chat:', data.error);
+                    alert('Không thể khởi tạo chat: ' + (data.error || 'Unknown error'));
                 }
             })
             .catch(error => {
-                console.error('Error initializing chat:', error);
+                console.error('[User Chat] ❌ Error initializing chat:', error);
+                alert('Lỗi kết nối API: ' + error.message);
             });
     }
 
     // Check if current page has bookingId (e.g., in booking details page)
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get('bookingId');
+    console.log('[User Chat] BookingId from URL:', bookingId);
+
     if (bookingId) {
+        console.log('[User Chat] Auto-initializing with bookingId from URL');
         initChatFromBooking(bookingId);
+    } else {
+        console.log('[User Chat] No bookingId in URL. Chat button hidden. Call window.initUserChat(bookingId) to show.');
     }
 
     // Also expose global function for manual init
     window.initUserChat = initChatFromBooking;
+    console.log('[User Chat] Global function window.initUserChat() is ready');
 
     // Toggle chatbox
     chatButton.addEventListener('click', function() {

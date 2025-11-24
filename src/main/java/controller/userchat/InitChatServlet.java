@@ -32,14 +32,17 @@ public class InitChatServlet extends HttpServlet {
 
         User currentUser = (User) request.getSession().getAttribute("user");
         if (currentUser == null) {
+            System.out.println("[InitChatServlet] ❌ Unauthorized: User not logged in");
             sendErrorResponse(response, "Unauthorized", HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         try {
             String bookingIdStr = request.getParameter("bookingId");
+            System.out.println("[InitChatServlet] Request from userId=" + currentUser.getUserId() + ", bookingId=" + bookingIdStr);
 
             if (bookingIdStr == null) {
+                System.out.println("[InitChatServlet] ❌ Missing bookingId parameter");
                 sendErrorResponse(response, "Missing bookingId", HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
@@ -63,7 +66,9 @@ public class InitChatServlet extends HttpServlet {
                 if (rs.next()) {
                     customerId = rs.getInt("CUSTOMER_ID");
                     ownerId = rs.getInt("OWNER_ID");
+                    System.out.println("[InitChatServlet] Found booking: customerId=" + customerId + ", ownerId=" + ownerId);
                 } else {
+                    System.out.println("[InitChatServlet] ❌ Booking not found: " + bookingId);
                     sendErrorResponse(response, "Booking not found", HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
@@ -71,17 +76,23 @@ public class InitChatServlet extends HttpServlet {
 
             // Verify current user is either customer or owner
             if (currentUser.getUserId() != customerId && currentUser.getUserId() != ownerId) {
+                System.out.println("[InitChatServlet] ❌ Access denied: userId=" + currentUser.getUserId() + " not in customerId=" + customerId + " or ownerId=" + ownerId);
                 sendErrorResponse(response, "Access denied. You are not part of this booking.", HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
+
+            System.out.println("[InitChatServlet] ✅ Access granted for userId=" + currentUser.getUserId());
 
             // Get or create conversation
             UserConversation conversation = chatDAO.getOrCreateConversation(bookingId, customerId, ownerId);
 
             if (conversation == null) {
+                System.out.println("[InitChatServlet] ❌ Failed to create conversation");
                 sendErrorResponse(response, "Failed to create conversation", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
+
+            System.out.println("[InitChatServlet] ✅ Conversation created/found: conversationId=" + conversation.getConversationId());
 
             // Get the other user's info
             int otherUserId = (currentUser.getUserId() == customerId) ? ownerId : customerId;
@@ -97,6 +108,7 @@ public class InitChatServlet extends HttpServlet {
             responseData.addProperty("otherUserName", otherUserName);
             responseData.addProperty("carName", carName);
 
+            System.out.println("[InitChatServlet] ✅ Success response sent");
             sendJsonResponse(response, responseData);
 
         } catch (Exception e) {
