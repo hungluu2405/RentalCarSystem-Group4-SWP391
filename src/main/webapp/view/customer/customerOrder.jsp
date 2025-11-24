@@ -778,6 +778,13 @@
                                                                        class="btn btn-sm btn-info">
                                                                         <i class="fa fa-credit-card"></i>&nbsp;Thanh&nbsp;Toán
                                                                     </a>
+                                                                    <br/>
+                                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                            class="btn btn-sm btn-success mt-1"
+                                                                            style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
+                                                                            title="Chat với chủ xe">
+                                                                        <i class="fa fa-comments"></i> Chat
+                                                                    </button>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Paid'}">
                                                                     <a href="${pageContext.request.contextPath}/customer/returnCar?bookingId=${order.bookingId}"
@@ -785,11 +792,25 @@
                                                                        class="btn btn-sm btn-success">
                                                                         <i class="fa fa-undo"></i>&nbsp;Trả&nbsp;Xe
                                                                     </a>
+                                                                    <br/>
+                                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                            class="btn btn-sm btn-success mt-1"
+                                                                            style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
+                                                                            title="Chat với chủ xe">
+                                                                        <i class="fa fa-comments"></i> Chat
+                                                                    </button>
                                                                 </c:when>
                                                                 <c:when test="${order.status == 'Returning'}">
                                                                     <span class="text-warning" style="font-size: 13px;">
                                                                         <i class="fa fa-clock-o"></i> Vui Lòng Chờ Chủ Xe...
                                                                     </span>
+                                                                    <br/>
+                                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                            class="btn btn-sm btn-success mt-1"
+                                                                            style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none;"
+                                                                            title="Chat với chủ xe">
+                                                                        <i class="fa fa-comments"></i> Chat
+                                                                    </button>
                                                                 </c:when>
                                                             </c:choose>
                                                         </td>

@@ -243,6 +243,12 @@
                                                                 class="btn btn-danger btn-sm">Từ chối
                                                         </button>
                                                     </form>
+                                                    <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                            class="btn btn-sm mt-1"
+                                                            style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none; color: white;"
+                                                            title="Chat với khách hàng">
+                                                        <i class="fa fa-comments"></i> Chat
+                                                    </button>
                                                 </td>
                                             </tr>
                                         </c:if>
@@ -315,7 +321,7 @@
                                                               action="${pageContext.request.contextPath}/owner/ownerBooking"
                                                               class="d-inline">
                                                             <input type="hidden" name="bookingId" value="${order.bookingId}">
-                                                            <div class="d-flex gap-2">
+                                                            <div class="d-flex gap-2 mb-1">
                                                                 <button type="submit" name="action" value="confirmReturn"
                                                                         onclick="return confirm('Bạn chắc chắn đã nhận được xe?');"
                                                                         class="btn btn-success btn-sm d-inline-flex align-items-center">
@@ -323,6 +329,14 @@
                                                             </button>
                                                             </div>
                                                         </form>
+                                                    </c:if>
+                                                    <c:if test="${order.status == 'Approved' || order.status == 'Paid' || order.status == 'Returning'}">
+                                                        <button onclick="window.initUserChat(${order.bookingId}); return false;"
+                                                                class="btn btn-sm"
+                                                                style="background: linear-gradient(135deg, #4DC0B5, #28a745); border: none; color: white;"
+                                                                title="Chat với khách hàng">
+                                                            <i class="fa fa-comments"></i> Chat
+                                                        </button>
                                                     </c:if>
                                                 </td>
                                             </tr>
