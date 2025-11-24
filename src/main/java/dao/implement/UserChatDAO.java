@@ -75,10 +75,10 @@ public class UserChatDAO extends DBContext {
         List<UserConversation> conversations = new ArrayList<>();
         String sql = "SELECT c.*, " +
                     "CASE " +
-                    "  WHEN c.customer_id = ? THEN (SELECT FULL_NAME FROM [USER] WHERE user_id = c.owner_id) " +
-                    "  ELSE (SELECT FULL_NAME FROM [USER] WHERE user_id = c.customer_id) " +
+                    "  WHEN c.customer_id = ? THEN (SELECT up.FULL_NAME FROM USER_PROFILE up WHERE up.USER_ID = c.owner_id) " +
+                    "  ELSE (SELECT up.FULL_NAME FROM USER_PROFILE up WHERE up.USER_ID = c.customer_id) " +
                     "END AS other_user_name, " +
-                    "(SELECT TOP 1 TITLE FROM CAR WHERE CAR_ID = (SELECT CAR_ID FROM BOOKING WHERE BOOKING_ID = c.booking_id)) AS car_name, " +
+                    "(SELECT TOP 1 (car.BRAND + ' ' + car.MODEL) FROM CAR car WHERE car.CAR_ID = (SELECT CAR_ID FROM BOOKING WHERE BOOKING_ID = c.booking_id)) AS car_name, " +
                     "(SELECT TOP 1 content FROM USER_MESSAGE WHERE conversation_id = c.conversation_id ORDER BY created_at DESC) AS last_message, " +
                     "(SELECT COUNT(*) FROM USER_MESSAGE WHERE conversation_id = c.conversation_id AND sender_id != ? AND is_read = 0) AS unread_count " +
                     "FROM USER_CONVERSATION c " +
@@ -160,9 +160,10 @@ public class UserChatDAO extends DBContext {
     }
 
     public UserMessage getMessageById(int messageId) {
-        String sql = "SELECT m.*, u.FULL_NAME as sender_name " +
+        String sql = "SELECT m.*, up.FULL_NAME as sender_name " +
                     "FROM USER_MESSAGE m " +
                     "LEFT JOIN [USER] u ON m.sender_id = u.user_id " +
+                    "LEFT JOIN USER_PROFILE up ON u.user_id = up.USER_ID " +
                     "WHERE m.message_id = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -181,9 +182,10 @@ public class UserChatDAO extends DBContext {
 
     public List<UserMessage> getMessages(int conversationId, int limit, int offset) {
         List<UserMessage> messages = new ArrayList<>();
-        String sql = "SELECT m.*, u.FULL_NAME as sender_name " +
+        String sql = "SELECT m.*, up.FULL_NAME as sender_name " +
                     "FROM USER_MESSAGE m " +
                     "LEFT JOIN [USER] u ON m.sender_id = u.user_id " +
+                    "LEFT JOIN USER_PROFILE up ON u.user_id = up.USER_ID " +
                     "WHERE m.conversation_id = ? " +
                     "ORDER BY m.created_at DESC " +
                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
@@ -209,9 +211,10 @@ public class UserChatDAO extends DBContext {
 
     public List<UserMessage> getNewMessages(int conversationId, int lastMessageId) {
         List<UserMessage> messages = new ArrayList<>();
-        String sql = "SELECT m.*, u.FULL_NAME as sender_name " +
+        String sql = "SELECT m.*, up.FULL_NAME as sender_name " +
                     "FROM USER_MESSAGE m " +
                     "LEFT JOIN [USER] u ON m.sender_id = u.user_id " +
+                    "LEFT JOIN USER_PROFILE up ON u.user_id = up.USER_ID " +
                     "WHERE m.conversation_id = ? AND m.message_id > ? " +
                     "ORDER BY m.created_at ASC";
 

@@ -121,7 +121,7 @@ public class InitChatServlet extends HttpServlet {
     }
 
     private String getUserName(int userId) {
-        String sql = "SELECT FULL_NAME FROM [USER] WHERE user_id = ?";
+        String sql = "SELECT up.FULL_NAME FROM USER_PROFILE up WHERE up.USER_ID = ?";
         try (Connection conn = chatDAO.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -136,7 +136,7 @@ public class InitChatServlet extends HttpServlet {
     }
 
     private String getCarName(int bookingId) {
-        String sql = "SELECT c.TITLE FROM CAR c " +
+        String sql = "SELECT (c.BRAND + ' ' + c.MODEL) AS car_name FROM CAR c " +
                     "JOIN BOOKING b ON c.CAR_ID = b.CAR_ID " +
                     "WHERE b.BOOKING_ID = ?";
         try (Connection conn = chatDAO.getConnection();
@@ -144,7 +144,7 @@ public class InitChatServlet extends HttpServlet {
             ps.setInt(1, bookingId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("TITLE");
+                return rs.getString("car_name");
             }
         } catch (Exception e) {
             System.err.println("Error getting car name: " + e.getMessage());
