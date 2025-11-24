@@ -138,11 +138,22 @@ public class UserChatServlet extends HttpServlet {
         }
 
         int conversationId = requestData.get("conversationId").getAsInt();
-        String content = requestData.has("content") ? requestData.get("content").getAsString() : null;
-        String attachmentUrl = requestData.has("attachmentUrl") ? requestData.get("attachmentUrl").getAsString() : null;
-        String attachmentType = requestData.has("attachmentType") ? requestData.get("attachmentType").getAsString() : null;
+        String content = requestData.has("content") && !requestData.get("content").isJsonNull()
+                ? requestData.get("content").getAsString() : null;
 
-        System.out.println("[UserChatServlet] Parsed - conversationId: " + conversationId + ", content: " + content);
+        // Handle attachmentUrl - it might be a string, object, or null
+        String attachmentUrl = null;
+        if (requestData.has("attachmentUrl") && !requestData.get("attachmentUrl").isJsonNull()) {
+            if (requestData.get("attachmentUrl").isJsonPrimitive()) {
+                attachmentUrl = requestData.get("attachmentUrl").getAsString();
+            }
+            // If it's a JsonObject (like {"isTrusted":true}), ignore it
+        }
+
+        String attachmentType = requestData.has("attachmentType") && !requestData.get("attachmentType").isJsonNull()
+                ? requestData.get("attachmentType").getAsString() : null;
+
+        System.out.println("[UserChatServlet] Parsed - conversationId: " + conversationId + ", content: " + content + ", attachmentUrl: " + attachmentUrl);
 
         // Verify user has access to this conversation
         if (!chatDAO.canUserAccessConversation(conversationId, currentUser.getUserId())) {

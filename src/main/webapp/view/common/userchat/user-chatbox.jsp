@@ -491,7 +491,7 @@
         }
     });
 
-    chatSend.addEventListener('click', sendMessage);
+    chatSend.addEventListener('click', () => sendMessage());
 
     // File attachment
     attachBtn.addEventListener('click', () => {
