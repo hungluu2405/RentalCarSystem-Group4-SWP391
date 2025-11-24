@@ -22,7 +22,8 @@ public class UserChatDAO extends DBContext {
         // Create new conversation
         String sql = "INSERT INTO USER_CONVERSATION (booking_id, customer_id, owner_id, created_at, last_message_at, is_active) " +
                     "VALUES (?, ?, ?, GETDATE(), GETDATE(), 1)";
-        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, bookingId);
             ps.setInt(2, customerId);
             ps.setInt(3, ownerId);
@@ -42,7 +43,8 @@ public class UserChatDAO extends DBContext {
 
     public UserConversation getConversationByBookingId(int bookingId) {
         String sql = "SELECT * FROM USER_CONVERSATION WHERE booking_id = ? AND is_active = 1";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, bookingId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -56,7 +58,8 @@ public class UserChatDAO extends DBContext {
 
     public UserConversation getConversationById(int conversationId) {
         String sql = "SELECT * FROM USER_CONVERSATION WHERE conversation_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -82,7 +85,8 @@ public class UserChatDAO extends DBContext {
                     "WHERE (c.customer_id = ? OR c.owner_id = ?) AND c.is_active = 1 " +
                     "ORDER BY c.last_message_at DESC";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, userId);
             ps.setInt(3, userId);
@@ -106,7 +110,8 @@ public class UserChatDAO extends DBContext {
 
     public void updateConversationLastMessage(int conversationId) {
         String sql = "UPDATE USER_CONVERSATION SET last_message_at = GETDATE() WHERE conversation_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -120,7 +125,8 @@ public class UserChatDAO extends DBContext {
                                    String attachmentUrl, String attachmentType) {
         String sql = "INSERT INTO USER_MESSAGE (conversation_id, sender_id, content, attachment_url, attachment_type, created_at, is_read) " +
                     "VALUES (?, ?, ?, ?, ?, GETDATE(), 0)";
-        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, senderId);
 
@@ -158,7 +164,8 @@ public class UserChatDAO extends DBContext {
                     "FROM USER_MESSAGE m " +
                     "LEFT JOIN [USER] u ON m.sender_id = u.user_id " +
                     "WHERE m.message_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, messageId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -181,7 +188,8 @@ public class UserChatDAO extends DBContext {
                     "ORDER BY m.created_at DESC " +
                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, offset);
             ps.setInt(3, limit);
@@ -207,7 +215,8 @@ public class UserChatDAO extends DBContext {
                     "WHERE m.conversation_id = ? AND m.message_id > ? " +
                     "ORDER BY m.created_at ASC";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, lastMessageId);
             ResultSet rs = ps.executeQuery();
@@ -227,7 +236,8 @@ public class UserChatDAO extends DBContext {
         String sql = "UPDATE USER_MESSAGE " +
                     "SET is_read = 1, read_at = GETDATE() " +
                     "WHERE conversation_id = ? AND sender_id != ? AND is_read = 0";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, userId);
             ps.executeUpdate();
@@ -239,7 +249,8 @@ public class UserChatDAO extends DBContext {
     public int getUnreadCount(int conversationId, int userId) {
         String sql = "SELECT COUNT(*) FROM USER_MESSAGE " +
                     "WHERE conversation_id = ? AND sender_id != ? AND is_read = 0";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, userId);
             ResultSet rs = ps.executeQuery();
@@ -259,7 +270,8 @@ public class UserChatDAO extends DBContext {
         String updateSql = "UPDATE TYPING_STATUS " +
                           "SET is_typing = ?, last_updated = GETDATE() " +
                           "WHERE conversation_id = ? AND user_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(updateSql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(updateSql)) {
             ps.setBoolean(1, isTyping);
             ps.setInt(2, conversationId);
             ps.setInt(3, userId);
@@ -269,7 +281,7 @@ public class UserChatDAO extends DBContext {
             if (rowsAffected == 0) {
                 String insertSql = "INSERT INTO TYPING_STATUS (conversation_id, user_id, is_typing, last_updated) " +
                                   "VALUES (?, ?, ?, GETDATE())";
-                try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
+                try (PreparedStatement insertPs = conn.prepareStatement(insertSql)) {
                     insertPs.setInt(1, conversationId);
                     insertPs.setInt(2, userId);
                     insertPs.setBoolean(3, isTyping);
@@ -285,7 +297,8 @@ public class UserChatDAO extends DBContext {
         String sql = "SELECT is_typing FROM TYPING_STATUS " +
                     "WHERE conversation_id = ? AND user_id = ? " +
                     "AND DATEDIFF(SECOND, last_updated, GETDATE()) < 5";  // Consider typing if updated within last 5 seconds
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, userId);
             ResultSet rs = ps.executeQuery();
@@ -303,7 +316,8 @@ public class UserChatDAO extends DBContext {
     public boolean canUserAccessConversation(int conversationId, int userId) {
         String sql = "SELECT COUNT(*) FROM USER_CONVERSATION " +
                     "WHERE conversation_id = ? AND (customer_id = ? OR owner_id = ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, conversationId);
             ps.setInt(2, userId);
             ps.setInt(3, userId);
