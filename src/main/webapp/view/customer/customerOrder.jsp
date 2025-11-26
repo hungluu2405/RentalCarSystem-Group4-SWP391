@@ -1104,8 +1104,5 @@
     });
 </script>
 
-<!-- Include User Chat Widget -->
-<jsp:include page="/view/common/userchat/user-chatbox.jsp" />
-
 </body>
 </html>
