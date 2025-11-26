@@ -611,12 +611,36 @@
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
-                conversations = JSON.parse(stored);
+                const parsed = JSON.parse(stored);
+                console.log('[Multi Chat] Raw loaded data:', parsed);
+
+                // Validate and clean data - remove conversations with "false" strings
+                let cleaned = false;
+                Object.keys(parsed).forEach(key => {
+                    const conv = parsed[key];
+                    if (conv.otherUserName === 'false' || conv.carName === 'false' ||
+                        conv.otherUserName === false || conv.carName === false ||
+                        !conv.otherUserName || !conv.carName) {
+                        console.warn('[Multi Chat] Removing corrupted conversation:', conv);
+                        delete parsed[key];
+                        cleaned = true;
+                    }
+                });
+
+                conversations = parsed;
+
+                if (cleaned) {
+                    console.log('[Multi Chat] Cleaned corrupted data, saving...');
+                    saveConversationsToStorage();
+                }
+
                 console.log('[Multi Chat] Loaded conversations:', conversations);
                 return true;
             }
         } catch (error) {
             console.error('[Multi Chat] Error loading storage:', error);
+            // Clear corrupted localStorage
+            localStorage.removeItem(STORAGE_KEY);
         }
         return false;
     }
@@ -631,17 +655,27 @@
     }
 
     function addConversation(data) {
+        console.log('[Multi Chat] Adding conversation with data:', data);
+
+        // Validate data to prevent storing "false" strings
+        if (!data || !data.conversationId) {
+            console.error('[Multi Chat] Invalid conversation data:', data);
+            return;
+        }
+
         conversations[data.conversationId] = {
             conversationId: data.conversationId,
-            bookingId: data.bookingId,
-            otherUserId: data.otherUserId,
-            otherUserName: data.otherUserName,
-            carName: data.carName,
+            bookingId: data.bookingId || 0,
+            otherUserId: data.otherUserId || 0,
+            otherUserName: data.otherUserName || 'Unknown User',
+            carName: data.carName || 'Unknown Car',
             lastMessageId: 0,
             unreadCount: 0,
             lastMessage: '',
             lastMessageTime: Date.now()
         };
+
+        console.log('[Multi Chat] Stored conversation:', conversations[data.conversationId]);
         saveConversationsToStorage();
         renderConversationList();
     }
@@ -775,28 +809,48 @@
     // ========== API FUNCTIONS ==========
     function initChatFromBooking(bookingId) {
         console.log('[Multi Chat] Init chat for bookingId:', bookingId);
+        console.log('[Multi Chat] Current conversations:', conversations);
 
         fetch('${pageContext.request.contextPath}/api/init-chat?bookingId=' + bookingId)
-            .then(response => response.json())
+            .then(response => {
+                console.log('[Multi Chat] Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error('HTTP error! status: ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log('[Multi Chat] API Response:', data);
+
                 if (data.success) {
+                    // Validate response data
+                    if (!data.conversationId || !data.otherUserName || !data.carName) {
+                        console.error('[Multi Chat] Incomplete API response:', data);
+                        alert('Lỗi: Dữ liệu không đầy đủ từ server');
+                        return;
+                    }
+
                     // Check if conversation already exists
                     const existing = Object.values(conversations).find(c => c.bookingId === data.bookingId);
 
                     if (!existing) {
+                        console.log('[Multi Chat] Creating new conversation');
                         addConversation(data);
                         startPolling(data.conversationId);
+                    } else {
+                        console.log('[Multi Chat] Conversation already exists:', existing);
                     }
 
                     // Open this conversation
                     chatContainer.classList.add('show');
                     openConversation(data.conversationId);
                 } else {
+                    console.error('[Multi Chat] API returned error:', data.error);
                     alert('Không thể khởi tạo chat: ' + (data.error || 'Unknown error'));
                 }
             })
             .catch(error => {
-                console.error('[Multi Chat] Error:', error);
+                console.error('[Multi Chat] Fetch Error:', error);
                 alert('Lỗi kết nối API: ' + error.message);
             });
     }
@@ -1119,8 +1173,13 @@
     }
 
     // Expose global function
-    window.initUserChat = initChatFromBooking;
+    window.initUserChat = function(bookingId) {
+        console.log('[Multi Chat] window.initUserChat called with bookingId:', bookingId);
+        return initChatFromBooking(bookingId);
+    };
+
     console.log('[Multi Chat] Ready! Conversations:', Object.keys(conversations).length);
+    console.log('[Multi Chat] window.initUserChat is:', typeof window.initUserChat);
 
     // Cleanup
     window.addEventListener('beforeunload', () => {
