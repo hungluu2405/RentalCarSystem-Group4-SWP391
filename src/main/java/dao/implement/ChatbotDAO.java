@@ -66,6 +66,21 @@ public class ChatbotDAO extends DBContext {
         return null;
     }
 
+    public ChatConversation getActiveConversationByUserId(int userId) {
+        String sql = "SELECT * FROM CHAT_CONVERSATION WHERE user_id = ? AND is_active = 1 " +
+                    "ORDER BY last_message_at DESC";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapConversation(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting active conversation by user: " + e.getMessage());
+        }
+        return null;
+    }
+
     public void updateConversationLastMessage(int conversationId) {
         String sql = "UPDATE CHAT_CONVERSATION SET last_message_at = GETDATE() WHERE conversation_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -73,6 +88,17 @@ public class ChatbotDAO extends DBContext {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error updating conversation: " + e.getMessage());
+        }
+    }
+
+    public void updateConversationSessionId(int conversationId, String sessionId) {
+        String sql = "UPDATE CHAT_CONVERSATION SET session_id = ? WHERE conversation_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, sessionId);
+            ps.setInt(2, conversationId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating conversation session ID: " + e.getMessage());
         }
     }
 

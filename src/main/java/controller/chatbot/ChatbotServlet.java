@@ -136,8 +136,28 @@ public class ChatbotServlet extends HttpServlet {
                 // Get conversation history
                 HttpSession session = request.getSession();
                 String sessionId = session.getId();
+                User user = (User) session.getAttribute("user");
 
-                ChatConversation conversation = chatbotDAO.getActiveConversationBySessionId(sessionId);
+                ChatConversation conversation = null;
+
+                // For logged-in users, try to get conversation by user_id first
+                if (user != null && user.getUserId() != null) {
+                    conversation = chatbotDAO.getActiveConversationByUserId(user.getUserId());
+
+                    // If found by user_id, update session_id to current session
+                    if (conversation != null && !sessionId.equals(conversation.getSessionId())) {
+                        System.out.println("[ChatbotServlet] Updating session ID for conversation " +
+                            conversation.getConversationId() + " from " + conversation.getSessionId() +
+                            " to " + sessionId);
+                        updateConversationSessionId(conversation.getConversationId(), sessionId);
+                    }
+                }
+
+                // Fall back to session-based lookup (for anonymous users or if no user conversation found)
+                if (conversation == null) {
+                    conversation = chatbotDAO.getActiveConversationBySessionId(sessionId);
+                }
+
                 if (conversation != null) {
                     List<ChatMessage> messages = chatbotDAO.getMessagesByConversationId(
                         conversation.getConversationId()
@@ -163,6 +183,14 @@ public class ChatbotServlet extends HttpServlet {
             System.err.println("Error getting chat history: " + e.getMessage());
             e.printStackTrace();
             sendErrorResponse(response, "An error occurred while retrieving chat history");
+        }
+    }
+
+    private void updateConversationSessionId(int conversationId, String newSessionId) {
+        try {
+            chatbotDAO.updateConversationSessionId(conversationId, newSessionId);
+        } catch (Exception e) {
+            System.err.println("Error updating conversation session ID: " + e.getMessage());
         }
     }
 
