@@ -509,7 +509,7 @@
     </style>
 </head>
 
-<body onload="initialize()">
+<body>
 <div id="wrapper">
 
     <div id="de-preloader"></div>
@@ -1373,57 +1373,6 @@
             }
         });
     })();
-    </script>
-
-</script>
-
-<script>
-    const chatBtn = document.getElementById('floatingChatBtn');
-    const chatDropdown = document.getElementById('chatDropdown');
-    const chatList = document.getElementById('chatList');
-    const chatDock = document.getElementById('chatDock');
-    const chatTpl = document.getElementById('chatBoxTpl');
-
-    chatBtn.onclick = () => chatDropdown.classList.toggle('open');
-
-    // Click 1 người -> mở chat box nổi
-    chatList.addEventListener('click', e => {
-        if(e.target.tagName !== 'LI') return;
-        const name = e.target.dataset.user;
-        const avatar = e.target.dataset.avatar;
-
-        // Nếu box đã mở thì không tạo thêm
-        if (document.querySelector(`.chat-box[data-user="${name}"]`)) return;
-
-        const box = chatTpl.content.cloneNode(true).querySelector('.chat-box');
-        box.dataset.user = name;
-        box.querySelector('.avatar').src = avatar;
-        box.querySelector('.name').textContent = name;
-
-        // Sự kiện nút
-        box.querySelector('.close').onclick = () => box.remove();
-        box.querySelector('.minimize').onclick = () => {
-            const content = box.querySelector('.chat-content');
-            const input = box.querySelector('.chat-input');
-            const hidden = content.style.display === 'none';
-            content.style.display = hidden ? 'block' : 'none';
-            input.style.display = hidden ? 'flex' : 'none';
-        };
-        box.querySelector('.send').onclick = () => {
-            const input = box.querySelector('.msg-input');
-            const text = input.value.trim();
-            if(!text) return;
-            const msg = document.createElement('div');
-            msg.className = 'msg you';
-            msg.innerHTML = `<span>${text}</span>`;
-            box.querySelector('.chat-content').appendChild(msg);
-            input.value = '';
-        };
-
-
-        chatDock.appendChild(box);
-        chatDropdown.classList.remove('open');
-    });
 </script>
 </body>
 

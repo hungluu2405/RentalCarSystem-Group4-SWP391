@@ -144,15 +144,29 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
  */
 var placeSearch,autocomplete;
 function initialize() {
-  autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), { types: [ 'geocode' ] });
-  google.maps.event.addListener(autocomplete, 'place_changed', function() {
-    fillInAddress();
-  });
+  // Check if Google Maps API is loaded
+  if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
+    console.warn('Google Maps API not loaded. Skipping autocomplete initialization.');
+    return;
+  }
 
-  autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('autocomplete2'), { types: [ 'geocode' ] });
-  google.maps.event.addListener(autocomplete2, 'place_changed', function() {
-    fillInAddress();
-  });
+  // Check if elements exist
+  var autocompleteElement = document.getElementById('autocomplete');
+  var autocomplete2Element = document.getElementById('autocomplete2');
+
+  if (autocompleteElement) {
+    autocomplete = new google.maps.places.Autocomplete(autocompleteElement, { types: [ 'geocode' ] });
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      fillInAddress();
+    });
+  }
+
+  if (autocomplete2Element) {
+    autocomplete2 = new google.maps.places.Autocomplete(autocomplete2Element, { types: [ 'geocode' ] });
+    google.maps.event.addListener(autocomplete2, 'place_changed', function() {
+      fillInAddress();
+    });
+  }
 }
 function fillInAddress() {
   var place = autocomplete.getPlace();
