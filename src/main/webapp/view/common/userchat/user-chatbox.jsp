@@ -19,7 +19,7 @@
         justify-content: center;
         font-size: 24px;
         transition: all 0.3s ease;
-        z-index: 9997;
+        z-index: 10000;
     }
 
     #user-chat-button:hover {
@@ -57,7 +57,7 @@
         display: none;
         flex-direction: column;
         overflow: hidden;
-        z-index: 9996;
+        z-index: 9999;
         animation: slideUp 0.3s ease-out;
     }
 
@@ -1172,14 +1172,26 @@
         initChatFromBooking(bookingId);
     }
 
-    // Expose global function
+    // Expose global functions
     window.initUserChat = function(bookingId) {
         console.log('[Multi Chat] window.initUserChat called with bookingId:', bookingId);
         return initChatFromBooking(bookingId);
     };
 
+    // Expose function to clear corrupted localStorage
+    window.clearUserChatData = function() {
+        localStorage.removeItem(STORAGE_KEY);
+        conversations = {};
+        Object.values(pollIntervals).forEach(intervalId => clearInterval(intervalId));
+        pollIntervals = {};
+        renderConversationList();
+        console.log('[Multi Chat] ✅ Cleared all conversation data');
+        alert('Chat data cleared! Please refresh the page.');
+    };
+
     console.log('[Multi Chat] Ready! Conversations:', Object.keys(conversations).length);
     console.log('[Multi Chat] window.initUserChat is:', typeof window.initUserChat);
+    console.log('[Multi Chat] To clear corrupted data, run: window.clearUserChatData()');
 
     // Cleanup
     window.addEventListener('beforeunload', () => {

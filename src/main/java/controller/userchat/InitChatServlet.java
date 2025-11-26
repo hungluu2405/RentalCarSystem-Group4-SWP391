@@ -121,22 +121,23 @@ public class InitChatServlet extends HttpServlet {
     }
 
     private String getUserName(int userId) {
-        String sql = "SELECT up.FULL_NAME FROM USER_PROFILE up WHERE up.USER_ID = ?";
+        String sql = "SELECT ISNULL(up.FULL_NAME, 'Unknown User') as user_name FROM USER_PROFILE up WHERE up.USER_ID = ?";
         try (Connection conn = chatDAO.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("FULL_NAME");
+                String userName = rs.getString("user_name");
+                return (userName != null && !userName.trim().isEmpty()) ? userName : "Unknown User";
             }
         } catch (Exception e) {
             System.err.println("Error getting user name: " + e.getMessage());
         }
-        return "Unknown";
+        return "Unknown User";
     }
 
     private String getCarName(int bookingId) {
-        String sql = "SELECT (c.BRAND + ' ' + c.MODEL) AS car_name FROM CAR c " +
+        String sql = "SELECT (ISNULL(c.BRAND, 'Unknown') + ' ' + ISNULL(c.MODEL, 'Car')) AS car_name FROM CAR c " +
                     "JOIN BOOKING b ON c.CAR_ID = b.CAR_ID " +
                     "WHERE b.BOOKING_ID = ?";
         try (Connection conn = chatDAO.getConnection();
@@ -144,7 +145,8 @@ public class InitChatServlet extends HttpServlet {
             ps.setInt(1, bookingId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getString("car_name");
+                String carName = rs.getString("car_name");
+                return (carName != null && !carName.trim().isEmpty()) ? carName : "Unknown Car";
             }
         } catch (Exception e) {
             System.err.println("Error getting car name: " + e.getMessage());
