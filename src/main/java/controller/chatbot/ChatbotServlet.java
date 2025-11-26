@@ -141,7 +141,7 @@ public class ChatbotServlet extends HttpServlet {
                 ChatConversation conversation = null;
 
                 // For logged-in users, try to get conversation by user_id first
-                if (user != null && user.getUserId() != null) {
+                if (user != null) {
                     conversation = chatbotDAO.getActiveConversationByUserId(user.getUserId());
 
                     // If found by user_id, update session_id to current session
